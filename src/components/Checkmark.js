@@ -3,19 +3,6 @@ import { IoClose, IoCheckmarkSharp } from 'react-icons/io5';
 
 import { useData } from '../hooks';
 const Checkmark = ({ barcode, isNinetySix = false, style }) => {
-  if (barcode?.result === 'invalid' && barcode?.label === 'NTC') {
-    return (
-      <div
-        className={`checkmark`}
-        style={{
-          backgroundColor: 'var(--green)',
-          ...style,
-        }}
-      >
-        <IoCheckmarkSharp />
-      </div>
-    );
-  }
   if (barcode?.result != 'invalid' && barcode?.label === 'NTC') {
     return (
       <div
