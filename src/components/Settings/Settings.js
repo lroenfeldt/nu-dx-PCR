@@ -1,0 +1,116 @@
+import React, { useCallback } from 'react';
+import { FiLogOut } from 'react-icons/fi';
+import ArrowBox from '../ArrowBox/ArrowBox';
+import deFlag from '../../assets/images/flags/de.png';
+import enFlag from '../../assets/images/flags/en.png';
+import frFlag from '../../assets/images/flags/fr.png';
+import { GrEject, GrUpdate } from 'react-icons/gr';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useData, useTranslation, useWindowDimensions } from '../../hooks';
+import Dropdown from '../Dropdown/Dropdown';
+import Switch from '../Switch/Switch';
+import defaultBarcodes from '../../utils/defaultBarcodes';
+import './css/settings.css';
+function Settings({ visible }) {
+  const {
+    setBarcodes,
+    saveSettings,
+    settings,
+    setIsModal,
+    setMenuOpen,
+    clearSettings,
+    updateAvailable,
+    setUpdateAvailable,
+    resetBarcodes,
+    reboot,
+  } = useData();
+
+  const { t, setLocale, locale } = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const resetDevice = async () => {
+    setMenuOpen(null);
+    await clearSettings();
+    window.api.logEvents(`Settings loaded: ${JSON.stringify(settings)}`, 'logInfos.txt');
+    navigate('/');
+  };
+  const handleWellCount = useCallback(async () => {
+    const newSettings = settings;
+    newSettings.device.wellCount = settings.device.wellCount === '96' ? '16' : '96';
+    newSettings.user.ntcPos = newSettings.device.wellCount === '96' ? 'B01' : 'A02';
+    setBarcodes(defaultBarcodes(newSettings));
+    await saveSettings(newSettings);
+  }, []);
+  const handleLocale = useCallback(
+    async (locale) => {
+      setLocale(locale);
+      const newSettings = settings;
+      newSettings.user.locale = locale;
+      await saveSettings(newSettings);
+    },
+    [locale]
+  );
+  return (
+    <div>
+      <ArrowBox direction={`top ${visible ? 'active' : ''}`} className={`container `}>
+        <div className="settingsContent">
+          <b style={{ fontSize: 20 }}>{settings.account.data.name}</b>
+          <span style={{ fontSize: 12 }}>{settings.account.initialized && settings.account.data.email}</span>
+          <div className="settings">
+            <div>
+              <Dropdown>
+                <div onClick={() => handleLocale('de')}>
+                  Deutsch <img width={20} height={10} src={deFlag} />
+                </div>
+                <div onClick={() => handleLocale('en')}>
+                  English <img width={20} height={10} src={enFlag} />
+                </div>
+                <div onClick={() => handleLocale('fr')}>
+                  Français <img width={20} height={10} src={frFlag} />
+                </div>
+              </Dropdown>
+            </div>
+
+            <button className="settings-item" onClick={() => resetDevice()} style={{ color: 'red' }}>
+              {t('default.common.logout')} <FiLogOut />
+            </button>
+            {updateAvailable && (
+              <button
+                onClick={async () => {
+                  setUpdateAvailable(false);
+                  setMenuOpen(null);
+                  await window.api.relaunchApp();
+                }}
+                className="settings-item"
+              >
+                {t('default.common.update')} <GrUpdate />
+              </button>
+            )}
+          </div>
+          {settings.isDev && (
+            <Switch
+              label={settings.device.wellCount}
+              onClick={handleWellCount}
+              checked={settings.device.wellCount === '96'}
+            />
+          )}
+          <span>S/N: {settings.device?.serialNumber}</span>
+          <div
+            style={{
+              marginTop: 10,
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            <span>
+              {t('default.common.hardwareId')}:{' ' + settings.device.hardwareId}
+            </span>
+            <span>v{settings.version}</span>
+          </div>
+        </div>
+      </ArrowBox>
+    </div>
+  );
+}
+
+export default Settings;

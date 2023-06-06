@@ -1,0 +1,24 @@
+.status {
+	padding: 5;
+	border-radius: 5;
+	width: 100;
+	border: 1px solid #fff;
+}
+
+.positive {
+	background-color: #80c180;
+	border-color: #80c180;
+	color: "white";
+}
+
+.negative {
+	background-color: #ce0808;
+	border-color: #ce0808;
+	color: "white";
+}
+
+.invalid {
+	background-color: #e28337;
+	border-color: #e28337;
+	color: "white";
+}

@@ -1,0 +1,95 @@
+.container {
+  padding: 10px 40px;
+  position: relative;
+  background-color: inherit;
+  z-index: 999;
+  color: #000;
+}
+
+.left::before {
+  content: ' ';
+  height: 0;
+  position: absolute;
+  top: 45%;
+  width: 0;
+  z-index: 1;
+  right: 30px;
+  border: medium solid rgba(255, 255, 255, 0.8);
+  border-width: 10px 0 10px 10px;
+  border-color: transparent transparent transparent rgba(255, 255, 255, 0.8);
+}
+
+.right::before {
+  content: ' ';
+  height: 0;
+  position: absolute;
+  top: 45%;
+  width: 0;
+  z-index: 1;
+  left: 30px;
+  border: medium solid rgb(9 30 66 / 13%);
+  border-width: 10px 10px 10px 0;
+  border-color: transparent rgb(9 30 66 / 13%) transparent transparent;
+}
+.left.active {
+  display: block;
+}
+.container.right {
+  position: relative;
+  top: 0;
+}
+.right.active {
+  display: block;
+}
+.top::before {
+  content: ' ';
+  height: 0;
+  position: absolute;
+  top: 0px;
+  width: 0;
+  z-index: 1;
+  left: 55%;
+  border: medium solid rgba(255, 255, 255, 0.8);
+  border-width: 0 10px 10px 10px;
+  border-color: rgba(255, 255, 255, 0.8) transparent rgba(255, 255, 255, 0.8) transparent;
+}
+.top-power::before {
+  content: ' ';
+  height: 0;
+  position: absolute;
+  top: 0px;
+  width: 0;
+  z-index: 1;
+  left: 80%;
+  border: medium solid rgba(255, 255, 255, 0.8);
+  border-width: 0 10px 10px 10px;
+  border-color: rgba(255, 255, 255, 0.8) transparent rgba(255, 255, 255, 0.8) transparent;
+}
+.container.top-power {
+  position: absolute;
+  right: 0px;
+  top: 7vh;
+  width: 50vh;
+}
+.top-power.active {
+  display: block;
+}
+.bottom::before {
+  content: ' ';
+  height: 0;
+  position: absolute;
+  bottom: 0px;
+  width: 0;
+  z-index: 1;
+  left: 45%;
+  border: medium solid rgba(255, 255, 255, 0.8);
+  border-width: 10px 10px 0px 10px;
+  border-color: rgba(255, 255, 255, 0.8) transparent rgba(255, 255, 255, 0.8) transparent;
+}
+.content {
+  padding: 20px 30px;
+  background-color: rgba(255, 255, 255, 0.8);
+  position: relative;
+  border-radius: 15px;
+  box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+}

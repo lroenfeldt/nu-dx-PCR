@@ -1,0 +1,54 @@
+.shutdown-notification {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 20px;
+  padding: 20px;
+  background-color: #fff; /* Red */
+  border-radius: 10px;
+  z-index: 1000; /* Ensure it appears above other elements */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: Adds a slight shadow */
+  width: 300px;
+  font-size: smaller;
+  border: 1px solid red;
+}
+
+.shutdown-notification p {
+  margin: 0 0 10px;
+}
+
+.shutdown-notification button {
+  padding: 10px;
+  margin: 6px 0 0 6px;
+  border: 2px solid var(--primary);
+  font-size: smaller;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.shutdown-notification button:last-child {
+  margin-right: 0;
+}
+
+.shutdown-notification button:nth-child(1):hover {
+  background-color: #0099cc;
+}
+
+.shutdown-notification button:nth-child(2) {
+  background-color: var(--primary);
+  color: #fff;
+}
+
+.shutdown-notification button:nth-child(2):hover {
+  opacity: 0.8;
+}
+
+.shutdown-notification strong {
+  font-weight: bold;
+  background-color: var(--red);
+  padding: 2px;
+  border-radius: 50%;
+  color: #fff;
+  width: 20px;
+  height: 20px;
+}
