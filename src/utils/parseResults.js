@@ -14,10 +14,7 @@ export const extractBarcodes = (resultFile) => {
   const resultsDataStart = parsedResults.indexOf('Quan. Result') + 1;
   let resultsData = parsedResults
     .slice(resultsDataStart)
-    .filter(
-      (row) =>
-        row !== '' && row !== 'Well,Sample ID,Property,Target,Dye,Ct,Ct Mean,Ct SD,Concentration,Aver. Con.,Con. SD'
-    )
+    .filter((row) => row !== '' && row.substring(0, 4) != 'Well')
     .map((row) => row.split(','));
   //Validate File
   if (!resultsData) {
@@ -68,12 +65,7 @@ export const parseResults = (resultFile, testid, testConfig, testmethod, overrid
   const resultsRawDataEnd = parsedResults.indexOf('Quan. Result');
   let resultsRawData = parsedResults
     .slice(resultsRawDataStart, resultsRawDataEnd)
-    .filter(
-      (row) =>
-        row !== '' &&
-        row !==
-          'Well,Property,Std. Con.,Target,Dye,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40'
-    )
+    .filter((row) => row !== '' && row.substring(0, 4) != 'Well')
     .map((row) => row.split(','));
 
   //Validate File
@@ -167,15 +159,30 @@ export const parseResults = (resultFile, testid, testConfig, testmethod, overrid
     //parse result conditions
     testmethod.results.forEach((resultType) => {
       let conditions = resultType.conditions
-        .replaceAll(',', ' && ')
         .replaceAll('(', '("')
         .replaceAll(')', '")')
         .replaceAll('hecThresh', 'hecThreshFl')
         .replaceAll('virusThresh', 'virusThreshFl')
         .replaceAll('=', '==')
-        .replaceAll('\n', '');
+        .replaceAll('\n', '')
+        .split(',')
+        .map((s) => '(' + s.trim() + ')')
+        .join(' && ');
       const passed = eval(conditions);
-
+      console.log(
+        'position->' +
+          parsedResultsData[position].label +
+          '->evaluating: ' +
+          conditions +
+          ' = ' +
+          passed +
+          ' -> ' +
+          resultType.name +
+          "CT('VIC') -> " +
+          CT('VIC'),
+        "CT('FAM') -> " + CT('FAM'),
+        "CT('ROX) ->" + CT('ROX')
+      );
       if (passed) {
         parsedResultsData[position].result = resultType.name;
         parsedResultsData[position].oldResult = resultType.name;

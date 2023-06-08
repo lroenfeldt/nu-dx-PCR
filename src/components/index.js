@@ -22,6 +22,7 @@ import AlteredResult from './AlteredResult';
 import ResultsFooter from './ResultsFooter';
 import RackVisualRows from './RackVisualRows';
 import TestStatus from './TestStatus/TestStatus';
+import ActivateKeyboard from './ActivateKeyboard';
 import RackVisualization from './RackVisualization';
 import SelectTestResults from './SelectTestResults/SelectTestResults';
 export {
@@ -49,6 +50,7 @@ export {
   ChangeResults,
   ResultsFooter,
   RackVisualRows,
+  ActivateKeyboard,
   RackVisualization,
   SelectTestResults,
 };

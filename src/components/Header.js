@@ -150,6 +150,7 @@ const Header = () => {
       {menuOpen && <div className="clickAnywhere" onClick={() => openMenu(null)}></div>}
       {openResults && (
         <SelectTestResults
+          isVisible={openResults}
           onClose={() => setOpenResults(false)}
           onSelect={() => {
             setOpenResults(false);

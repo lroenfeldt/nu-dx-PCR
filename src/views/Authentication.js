@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FcOk, FcCancel } from 'react-icons/fc';
 import { useData, useTranslation } from '../hooks';
 import ArrowBox from '../components/ArrowBox/ArrowBox';
-import { Block, Keyboard } from '../components';
+import { Block, Keyboard, ActivateKeyboard } from '../components';
 import { vi } from 'date-fns/locale';
 
 function Authentication() {
@@ -24,7 +24,8 @@ function Authentication() {
 
   const handleChange = useCallback(
     (e) => {
-      const value = e?.target?.value || e;
+      let value = e?.target?.value;
+      if (value == 'undefined') value = e;
       setPassword(value);
       setSignal(value.length > 0);
       console.log(value);
@@ -61,12 +62,20 @@ function Authentication() {
       <div className="inputContainer">
         <form action="" onSubmit={(e) => console.log(e)}>
           <div
-            className="inputContainer"
             style={{
               display: 'flex',
               flexDirection: 'row',
+              transition: 'all 0.5s ease',
+              marginBottom: !visible ? 0 : -100,
+              maxHeight: 40,
             }}
           >
+            <ActivateKeyboard
+              onClick={() => {
+                setVisible(!visible);
+                textInput.current.focus();
+              }}
+            />
             <input
               ref={textInput}
               autoFocus
@@ -75,10 +84,9 @@ function Authentication() {
               placeholder={'237c97x2'}
               onChange={handleChange}
               onKeyDown={handleKeyPress}
-              onFocus={() => setVisible(true)}
               style={{
-                transition: 'all 0.5s ease',
-                marginBottom: !visible ? 0 : -100,
+                borderTopLeftRadius: 0,
+                borderBottomLeftRadius: 0,
               }}
             />
 
@@ -86,10 +94,13 @@ function Authentication() {
               <ArrowBox
                 direction={`right ${signal ? 'active' : ''}`}
                 style={{
-                  zIndex: 0,
-                  minWidth: 500,
-
-                  marginBottom: !visible ? 0 : -110,
+                  right: 40,
+                  width: 400,
+                  zIndex: 100,
+                  minWidth: 400,
+                  position: 'absolute',
+                  top: visible ? '60%' : '48%',
+                  transition: 'all 0.5s ease 0s',
                 }}
               >
                 {isUser ? (

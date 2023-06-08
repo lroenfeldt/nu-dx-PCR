@@ -23,7 +23,7 @@ export function DataProvider({ children }) {
   const [currentUser, setCurrentUser] = useState({});
   const [pairingCode, setPairingCode] = useState(null);
   const [settings, setSettings] = useState(window.api.getConfig());
-  const [submitFilter, setSubmitFilter] = useState(true);
+  const [submitFilter, setSubmitFilter] = useState(false);
   const [resultsSubmitted, setSubmitted] = useState(false);
   const [barcodes, setBarcodes] = useState(defaultBarcodes(settings));
   const [updateAvailable, setUpdateAvailable] = useState(false);
@@ -184,6 +184,9 @@ export function DataProvider({ children }) {
 
   const openLid = () => {
     let newErrors = errors.filter((error) => error.type !== 'lid');
+    if (status === 'RUNNING') {
+      setIsLidOpen(false);
+    }
     if (isNinetySix) {
       // Try to open the lid
       if (!window.api.openLid()) {
@@ -193,7 +196,7 @@ export function DataProvider({ children }) {
           message: t('default.errors.errorOpenLid'),
         });
       } else {
-        setIsLidOpen(true);
+        setIsLidOpen(!isLidOpen);
       }
     } else {
       if (!window.api.openLid()) {
@@ -202,12 +205,10 @@ export function DataProvider({ children }) {
           message: t('default.errors.errorCloseLid'),
         });
       } else {
-        setIsLidOpen(!isLidOpen);
+        setIsLidOpen(true);
       }
     }
-    if (status === 'RUNNING') {
-      setIsLidOpen(false);
-    }
+
     setErrors(newErrors);
   };
 

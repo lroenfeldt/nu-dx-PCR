@@ -756,7 +756,6 @@ input {
 }
 .resultContainer .resultBadge {
   border-radius: 10px;
-  padding: 0.5em 1em;
   color: var(--black);
   font-size: 1.2em;
   font-weight: 600;
@@ -784,7 +783,7 @@ input {
 .resultContainer .resultBadge.ct {
   border: 1px solid var(--black);
   color: var(--black);
-  width: 130px;
+  width: 180px;
 }
 .ct {
   position: relative;
@@ -1253,4 +1252,15 @@ form {
   justify-content: center;
   align-items: center;
   transition: 0.3s;
+}
+.activateKeyboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--primary);
+  color: white;
+  padding: 0 5px;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+  cursor: pointer;
 }

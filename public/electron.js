@@ -416,14 +416,17 @@ ipcMain.handle('getResult', async (event, testid, done) => {
     filepath = path.resolve(app.getPath('userData'), 'runs', 'done', testid, testid + '.csv');
     configPath = path.resolve(app.getPath('userData'), 'runs', 'done', testid, 'config.json');
     launchFilePath = path.resolve(app.getPath('userData'), 'runs', 'done', testid, 'lineGeneSetup.xml');
+    override = fs.existsSync(path.resolve(app.getPath('userData'), 'runs', 'done', testid, 'override.json'))
+      ? fs.readFileSync(path.resolve(app.getPath('userData'), 'runs', 'done', testid, 'override.json'), 'utf-8')
+      : false;
   } else {
     filepath = path.resolve(app.getPath('userData'), 'runs', testid, testid + '.csv');
     configPath = path.resolve(app.getPath('userData'), 'runs', testid, 'config.json');
     launchFilePath = path.resolve(app.getPath('userData'), 'runs', testid, 'lineGeneSetup.xml');
+    override = fs.existsSync(path.resolve(app.getPath('userData'), 'runs', testid, 'override.json'))
+      ? fs.readFileSync(path.resolve(app.getPath('userData'), 'runs', testid, 'override.json'), 'utf-8')
+      : false;
   }
-  override = fs.existsSync(path.resolve(app.getPath('userData'), 'runs', testid, 'override.json'))
-    ? fs.readFileSync(path.resolve(app.getPath('userData'), 'runs', testid, 'override.json'), 'utf-8')
-    : false;
   let resultFile = {};
   let configFile = {};
   let testStarted;
@@ -921,9 +924,12 @@ ipcMain.handle('downloadApp', async (event) => {
 /** Edit test results */
 ipcMain.handle('editResults', async (event, testid, results) => {
   try {
-    const destPath = path.resolve(app.getPath('userData'), 'runs', testid, 'override.json');
+    let destPath = path.resolve(app.getPath('userData'), 'runs', testid, 'override.json');
     if (!fs.existsSync(destPath)) {
-      fs.writeFileSync(destPath, JSON.stringify([]));
+      destPath = path.resolve(app.getPath('userData'), 'runs', 'done', testid, 'override.json');
+      if (!fs.existsSync(destPath)) {
+        fs.writeFileSync(destPath, JSON.stringify([]));
+      }
     }
     const lastResults = JSON.parse(fs.readFileSync(destPath, 'utf8'));
     const newResults = { ...lastResults, ...results };

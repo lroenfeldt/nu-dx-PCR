@@ -277,7 +277,7 @@ const ViewResults = () => {
                             testmethod={testmethod}
                             style={{
                               right: -1,
-                              top: 0,
+                              top: -1,
                             }}
                           />
                           <Checkmark

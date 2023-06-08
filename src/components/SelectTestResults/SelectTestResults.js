@@ -3,7 +3,7 @@ import { useData, useTranslation } from '../../hooks';
 import { VscChromeClose } from 'react-icons/vsc';
 import './css/SelectTestResults.css';
 import Block from '../Block';
-const SelectTestResults = ({ onSelect, onClose }) => {
+const SelectTestResults = ({ onSelect, onClose, isVisible }) => {
   const {
     testid,
     barcodes,
@@ -77,8 +77,8 @@ const SelectTestResults = ({ onSelect, onClose }) => {
 
   return (
     <>
-      <div id="modal" className="overlay" onClick={onClose}></div>
-      <div className="overlay-body">
+      <div id="modal" className={'overlay'} onClick={onClose}></div>
+      <div className={`overlay-body " ${isVisible ? 'visible' : ''}`}>
         <div className="overlay-header">
           <h2>{t('common.selectResult')}</h2>
 

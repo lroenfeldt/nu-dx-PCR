@@ -91,10 +91,6 @@ function useBackgroundProcesses() {
       }
 
       setIdleTimestamp(Date.now()); // Reset idleTimestamp after shutdown
-    } else {
-      console.log('auto shutdown not working', { deviceStatus }, settings?.account?.autoShutdownMinutes, {
-        idleTimestamp,
-      });
     }
   }, [deviceStatus, settings?.account?.autoShutdownMinutes, idleTimestamp]);
 
@@ -141,7 +137,6 @@ function useBackgroundProcesses() {
 
     let autoShutdownInterval = setInterval(() => {
       autoShutdown();
-      console.log('auto shutdown interval');
     }, settings?.account?.autoCloseLidMinutes * 60 * 1000);
 
     return () => {

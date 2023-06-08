@@ -1,10 +1,9 @@
-import { Block, Errors, Keyboard, Controller, WellVisual, RackVisualRows } from '../components';
+import { Block, Errors, Keyboard, Controller, WellVisual, RackVisualRows, ActivateKeyboard } from '../components';
 import React, { useState, useRef, useEffect, useMemo, memo, useCallback } from 'react';
 import axios from 'axios';
 import urls from '../config/settings';
 import { useNavigate } from 'react-router-dom';
 import { useData, useTranslation } from '../hooks';
-
 import { IoMdCloseCircle } from 'react-icons/io';
 const BarcodeInput = () => {
   const {
@@ -549,14 +548,24 @@ const BarcodeInput = () => {
           )}
           <form action="" onSubmit={(e) => handleBarcodeSubmit(e)}>
             {isNinetySix && (
-              <Block column gap={10} shadow radius={10} padding={30} marginBottom={keyboardActive ? -180 : null}>
+              <Block column gap={10} shadow radius={10} padding={12} marginBottom={keyboardActive ? -180 : null}>
                 <div className="inputBlock">
+                  <ActivateKeyboard
+                    onClick={() => {
+                      setKeyboardActive(!keyboardActive);
+                      textInput.current.focus();
+                    }}
+                  />
                   <input
                     ref={textInput}
                     autoFocus
                     type="text"
                     value={getBarcode(active).value || ''}
                     onChange={(e) => updateBarcode(e)}
+                    style={{
+                      borderTopLeftRadius: 0,
+                      borderBottomLeftRadius: 0,
+                    }}
                   />
                   {getBarcode(active).value != '' && (
                     <div className="icon" onClick={() => handleReset()}>
@@ -569,13 +578,23 @@ const BarcodeInput = () => {
             )}
             {!isNinetySix && (
               <div className="inputBlock">
+                <ActivateKeyboard
+                  onClick={() => {
+                    setKeyboardActive(!keyboardActive);
+                    textInput.current.focus();
+                  }}
+                />
+
                 <input
                   ref={textInput}
                   autoFocus
-                  onFocus={() => setKeyboardActive(true)}
                   type="text"
                   value={getBarcode(active).value}
                   onChange={(e) => updateBarcode(e)}
+                  style={{
+                    borderTopLeftRadius: 0,
+                    borderBottomLeftRadius: 0,
+                  }}
                 />
                 {getBarcode(active).value != '' && (
                   <div className="icon" onClick={() => handleReset()}>

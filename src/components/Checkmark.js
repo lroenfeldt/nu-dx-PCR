@@ -3,7 +3,7 @@ import { IoClose, IoCheckmarkSharp } from 'react-icons/io5';
 
 import { useData } from '../hooks';
 const Checkmark = ({ barcode, isNinetySix = false, style }) => {
-  if (barcode?.result != 'invalid' && barcode?.label === 'NTC') {
+  if (barcode?.result == 'invalid' && barcode?.label === 'NTC') {
     return (
       <div
         className={`checkmark`}
@@ -25,7 +25,11 @@ const Checkmark = ({ barcode, isNinetySix = false, style }) => {
           ...style,
         }}
       >
-        <IoCheckmarkSharp />
+        <IoCheckmarkSharp
+          style={{
+            fontSize: 'smaller',
+          }}
+        />
       </div>
     );
   }
