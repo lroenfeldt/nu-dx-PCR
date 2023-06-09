@@ -24,8 +24,8 @@ function Authentication() {
 
   const handleChange = useCallback(
     (e) => {
-      let value = e?.target?.value;
-      if (value == 'undefined') value = e;
+      const { value } = e.target;
+
       setPassword(value);
       setSignal(value.length > 0);
       console.log(value);
@@ -55,6 +55,34 @@ function Authentication() {
     },
     [settings, selectedMethod, setCurrentUser]
   );
+  const onKeyPress = (value) => {
+    setPassword(value);
+    setSignal(value.length > 0);
+    console.log(value);
+    const user = settings.account.users.find((user) => user.id == value);
+    const isCertified = user?.certifiedTestprocedureIds?.includes(selectedMethod);
+    console.log(user, isCertified, selectedMethod);
+    setCurrentUser(user);
+    if (user) {
+      setVisible(false);
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+      setVisible(false);
+    }
+    if (user && isCertified) {
+      setIsUser(true);
+      setVisible(false);
+    } else {
+      setIsUser(false);
+      setVisible(true);
+    }
+    if (user && !isCertified) {
+      setIsUser(true);
+      setIsValid(false);
+      setVisible(false);
+    }
+  };
 
   return (
     <Block height={400} column center padding={10} gap={20}>
@@ -66,7 +94,7 @@ function Authentication() {
               display: 'flex',
               flexDirection: 'row',
               transition: 'all 0.5s ease',
-              marginBottom: !visible ? 0 : -100,
+              marginBottom: !visible ? 0 : -170,
               maxHeight: 40,
             }}
           >
@@ -99,7 +127,7 @@ function Authentication() {
                   zIndex: 100,
                   minWidth: 400,
                   position: 'absolute',
-                  top: visible ? '60%' : '48%',
+                  top: visible ? '69%' : '48%',
                   transition: 'all 0.5s ease 0s',
                 }}
               >
@@ -148,7 +176,14 @@ function Authentication() {
           </div>
         </form>
       </div>
-      <Keyboard visible={visible} setVisible={setVisible} onChange={handleChange} />
+      <Keyboard
+        visible={visible}
+        setVisible={setVisible}
+        onChange={onKeyPress}
+        style={{
+          height: '83%',
+        }}
+      />
       <div className="buttonArea">
         <button onClick={() => navigate('/selectMethod')}>{t('default.common.cancel')}</button>
         <button className={!isValid || !isUser ? 'disabled' : ''} onClick={() => navigate('/enterBarcodes')}>

@@ -278,6 +278,10 @@ const ViewResults = () => {
                             style={{
                               right: -1,
                               top: -1,
+                              bottom: -1,
+                              borderRadius: 4,
+                              borderTopLeftRadius: 0,
+                              borderBottomLeftRadius: 0,
                             }}
                           />
                           <Checkmark

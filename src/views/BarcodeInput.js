@@ -11,7 +11,7 @@ const BarcodeInput = () => {
     reset,
     errors,
     reboot,
-    openLid,
+    toggleLid,
     offlineMode,
     loading,
     barcodes,
@@ -492,7 +492,7 @@ const BarcodeInput = () => {
 
   //open lid and select first active well on startup
   useEffect(() => {
-    openLid();
+    toggleLid();
     nextWell(true);
   }, []);
 
@@ -622,7 +622,7 @@ const BarcodeInput = () => {
       <div className="buttonArea">
         <button
           onClick={() => {
-            isNinetySix && openLid();
+            isNinetySix && toggleLid();
             reset();
             navigate('/selectMethod');
           }}

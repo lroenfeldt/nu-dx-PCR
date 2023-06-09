@@ -52,7 +52,7 @@ export function DataProvider({ children }) {
    * Resets values to default
    * @returns {void}
    **/
-  const reset = () => {
+  const reset = useCallback(() => {
     setIsStatus(false);
     setBarcodes(defaultBarcodes(settings));
     setRemTime(0);
@@ -64,23 +64,23 @@ export function DataProvider({ children }) {
     setTestDone(null);
     setSelectedMethod(null);
     setDeviceStatus('IDLE');
-  };
+  }, [settings]);
 
-  const resetBarcodes = () => {
+  const resetBarcodes = useCallback(() => {
     setBarcodes(defaultBarcodes(settings));
-  };
+  }, [settings]);
 
-  const handleError = (type, message) => {
+  const handleError = useCallback((type, message) => {
     if (!message) {
     }
 
     setErrors((prevErrors) => prevErrors.filter((error) => error.type !== type).concat({ type, message }));
-  };
+  }, []);
 
   /**
    * Sets the value of the data state
    **/
-  const loadSettings = async () => {
+  const loadSettings = useCallback(async () => {
     let newSettings = await window.api.getConfig();
     setSettings(newSettings);
     console.log('settings loaded:');
@@ -88,7 +88,7 @@ export function DataProvider({ children }) {
     window.api.logEvents(`Settings loaded: ${JSON.stringify(newSettings)}`, 'logInfos.txt');
     setIsStatus(true);
     return newSettings;
-  };
+  }, []);
 
   useEffect(() => {
     setBarcodes(defaultBarcodes(settings));
@@ -116,27 +116,23 @@ export function DataProvider({ children }) {
     [errors, setErrors]
   );
 
-  const toggleDemo = () => {
-    if (demo) {
-      setDemo(false);
-    } else {
-      setDemo(true);
-    }
-  };
+  const toggleDemo = useCallback(() => {
+    setDemo(!demo);
+  }, [demo]);
 
-  const shutdown = () => {
+  const shutdown = useCallback(() => {
     window.api.power();
-  };
+  }, []);
 
-  const reboot = () => {
+  const reboot = useCallback(() => {
     window.api.power('reboot');
-  };
+  }, []);
 
-  const exit = () => {
+  const exit = useCallback(() => {
     window.api.exit();
-  };
+  }, []);
 
-  const clearSettings = async () => {
+  const clearSettings = useCallback(async () => {
     let newErrors = errors.filter((error) => error.type !== 'settings');
     let response = true;
     const clear = await window.api.clearConfig();
@@ -154,7 +150,7 @@ export function DataProvider({ children }) {
     }
     setErrors(newErrors);
     return response;
-  };
+  }, [errors, setErrors, setSettings]);
 
   const saveSettings = useCallback(
     async (settings) => {
@@ -182,35 +178,21 @@ export function DataProvider({ children }) {
     [settings?.device?.wellCount, errors, isNinetySix, barcodes]
   );
 
-  const openLid = () => {
+  const toggleLid = useCallback(() => {
     let newErrors = errors.filter((error) => error.type !== 'lid');
-    if (status === 'RUNNING') {
-      setIsLidOpen(false);
-    }
-    if (isNinetySix) {
-      // Try to open the lid
-      if (!window.api.openLid()) {
-        // If the lid fails to open, push a new 'lid' error into newErrors
-        newErrors.push({
-          type: 'lid',
-          message: t('default.errors.errorOpenLid'),
-        });
-      } else {
-        setIsLidOpen(!isLidOpen);
-      }
+    if (status == 'RUNNING') return;
+    if (window.api.toggleLid()) {
+      setIsLidOpen(!isNinetySix ? true : !isLidOpen);
     } else {
-      if (!window.api.openLid()) {
-        newErrors.push({
-          type: 'lid',
-          message: t('default.errors.errorCloseLid'),
-        });
-      } else {
-        setIsLidOpen(true);
-      }
+      let errorType = isNinetySix ? 'errorOpenLid' : 'errorCloseLid';
+      newErrors.push({
+        type: 'lid',
+        message: t(`default.errors.${errorType}`),
+      });
     }
 
     setErrors(newErrors);
-  };
+  }, [status, isNinetySix, isLidOpen, errors]);
 
   const handleOpenEdit = useCallback(
     (barcode) => {
@@ -248,7 +230,7 @@ export function DataProvider({ children }) {
       exit,
       clearSettings,
       saveSettings,
-      openLid,
+      toggleLid,
       setErrors,
       setDemo,
       setSettings,
@@ -339,7 +321,7 @@ export function DataProvider({ children }) {
       exit,
       clearSettings,
       saveSettings,
-      openLid,
+      toggleLid,
       setErrors,
       setDemo,
       setSettings,

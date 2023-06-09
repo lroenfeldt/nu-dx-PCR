@@ -14,7 +14,7 @@ const Header = () => {
   const {
     demo,
     reboot,
-    openLid,
+    toggleLid,
     offlineMode,
     loading,
     shutdown,
@@ -128,7 +128,7 @@ const Header = () => {
           )}
 
           {location.pathname !== '/testRunning' && !menuOpen && (
-            <div className="menu-item" onClick={() => openLid()}>
+            <div className="menu-item" onClick={() => toggleLid()}>
               <BsEject />
             </div>
           )}

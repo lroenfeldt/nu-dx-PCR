@@ -67,7 +67,7 @@ const ResultsFooter = ({ activeBarcode, testmethod, settings, barcodes, locale =
               barcode={barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]}
               style={{
                 right: 0,
-                fontSize: 30,
+                fontSize: 20,
                 maxWidth: 50,
               }}
             />

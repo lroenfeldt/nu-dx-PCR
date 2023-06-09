@@ -15,7 +15,7 @@ const RunTest = () => {
     settings,
     selectedMethod,
     setDeviceStatus,
-    openLid,
+    toggleLid,
     checkForTestResultFile,
     setCheckForTestResultFile,
   } = useData();
@@ -79,7 +79,7 @@ const RunTest = () => {
           window.api.endLineGene();
 
           setTimeout(() => {
-            window.api.openLid();
+            window.api.toggleLid();
             if (!window.api.moveResultFile(testid)) {
               console.log('result for test ' + testid + ' could not be moved');
               window.api.logEvents(`Result for test ${testid} could not be moved`, 'logInfos.txt');

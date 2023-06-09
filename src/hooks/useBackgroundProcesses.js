@@ -9,7 +9,7 @@ function useBackgroundProcesses() {
     settings,
     deviceStatus,
     isLidOpen,
-    openLid,
+    toggleLid,
     shutdown,
     loadSettings,
     resultList,
@@ -66,14 +66,14 @@ function useBackgroundProcesses() {
       settings?.account?.autoCloseLidMinutes &&
       settings?.account?.autoCloseLidMinutes > 0
     ) {
-      openLid(); // openLid can both open and close the lid
+      toggleLid(); // toggleLid can both open and close the lid
     }
   }, [
     deviceStatus,
     isLidOpen,
     settings?.account?.autoCloseLidMinutes,
     settings?.account?.autoCloseLidMinutes,
-    openLid,
+    toggleLid,
   ]);
 
   const autoShutdown = useCallback(() => {

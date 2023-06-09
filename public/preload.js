@@ -36,8 +36,8 @@ contextBridge.exposeInMainWorld('api', {
   endLineGene: () => {
     return ipcRenderer.sendSync('endLineGene');
   },
-  openLid: () => {
-    return ipcRenderer.invoke('openLid');
+  toggleLid: () => {
+    return ipcRenderer.invoke('toggleLid');
   },
   moveFiles: (testid) => {
     return ipcRenderer.invoke('moveFiles', testid);

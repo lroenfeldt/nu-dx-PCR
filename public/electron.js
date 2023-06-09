@@ -13,6 +13,7 @@ const os = require('os');
 const macaddress = require('macaddress');
 const { spawn } = require('./spawn');
 const { logger } = require('./logger');
+const { el } = require('date-fns/locale');
 let mainWindow;
 let splash;
 let lineGenePath;
@@ -537,7 +538,7 @@ ipcMain.on('endLineGene', (event) => {
 /**
  * Open Lid via Serial Port
  * */
-ipcMain.handle('openLid', (event) => {
+ipcMain.handle('toggleLid', (event) => {
   const buffer = [0x7b, 0x7c, 0x0, 0x2, 0x4d, 0x1, 0x0, 0x4c, 0x7c, 0x7d];
 
   if (isDev) {
@@ -925,10 +926,17 @@ ipcMain.handle('downloadApp', async (event) => {
 ipcMain.handle('editResults', async (event, testid, results) => {
   try {
     let destPath = path.resolve(app.getPath('userData'), 'runs', testid, 'override.json');
-    if (!fs.existsSync(destPath)) {
+    if (!fs.existsSync(destPath) && !fs.existsSync(path.resolve(app.getPath('userData'), 'runs', testid))) {
       destPath = path.resolve(app.getPath('userData'), 'runs', 'done', testid, 'override.json');
       if (!fs.existsSync(destPath)) {
         fs.writeFileSync(destPath, JSON.stringify([]));
+      }
+    } else if (fs.existsSync(path.resolve(app.getPath('userData'), 'runs', testid))) {
+      destPath = path.resolve(app.getPath('userData'), 'runs', testid, 'override.json');
+      if (!fs.existsSync(destPath)) {
+        if (!fs.existsSync(destPath)) {
+          fs.writeFileSync(destPath, JSON.stringify([]));
+        }
       }
     }
     const lastResults = JSON.parse(fs.readFileSync(destPath, 'utf8'));
