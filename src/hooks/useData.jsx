@@ -185,7 +185,7 @@ export function DataProvider({ children }) {
     if (window.api.toggleLid()) {
       setIsLidOpen(!isNinetySix ? true : !isLidOpen);
     } else {
-      let errorType = isNinetySix ? 'errorOpenLid' : 'errorCloseLid';
+      let errorType = !isNinetySix ? 'errorOpenLid' : isLidOpen ? 'errorCloseLid' : 'errorOpenLid';
       newErrors.push({
         type: 'lid',
         message: t(`default.errors.${errorType}`),
