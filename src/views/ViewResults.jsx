@@ -85,7 +85,7 @@ const ViewResults = () => {
           .filter((error) => error.type !== 'read')
           .concat({
             type: 'read',
-            message: t('default.errors.failedToReadTestData'),
+            message: t('errors.failedToReadTestData'),
           })
       );
       return;
@@ -123,7 +123,7 @@ const ViewResults = () => {
           .filter((error) => error.type !== 'submit')
           .concat({
             type: 'read',
-            message: t('default.errors.failedToReadResultData'),
+            message: t('errors.failedToReadResultData'),
           })
       );
       return;
@@ -168,7 +168,7 @@ const ViewResults = () => {
         <div className={`ViewResults `}>
           <div className={`ViewResultsHeader`}>
             <h3 style={{ textAlign: 'start' }}>
-              {viewResults == 'graph' ? t('default.viewResults.instructions') : t('default.viewResults.instructions2')}
+              {viewResults == 'graph' ? t('viewResults.instructions') : t('viewResults.instructions2')}
             </h3>
 
             <Block row align="center">
@@ -210,14 +210,14 @@ const ViewResults = () => {
             <Table
               th={[
                 'Position',
-                t('default.common.barcode'),
+                t('common.barcode'),
                 ...testmethod.parameters.map((parameter) => {
                   return parameter.showCT && 'CT-' + parameter.label;
                 }),
                 ...testmethod.parameters.map((parameter) => {
                   return parameter.showFL && 'FL-' + parameter.label;
                 }),
-                t('default.common.result'),
+                t('common.result'),
                 testmethod.showCurves && '',
               ]}
               tr={[
@@ -317,7 +317,7 @@ const ViewResults = () => {
           )}
 
           <ButtonArea>
-            <Button onClick={() => window.history.go(-1)}>{t('default.common.back')}</Button>
+            <Button onClick={() => window.history.go(-1)}>{t('common.back')}</Button>
             {/* {USBPresent ?  <button onClick={() => saveToUSB()}>Auf USB Speichern</button> :  <button className='disabled' onClick={() => saveToUSB()}>Auf USB Speichern</button>} */}
           </ButtonArea>
         </div>

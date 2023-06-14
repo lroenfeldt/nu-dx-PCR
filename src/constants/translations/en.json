@@ -60,7 +60,8 @@
   "authentication": {
     "title": "Authentication",
     "instructions": "Please scan the barcode on your user card or enter your UserID to authenticate yourself for the process.",
-    "invalid": "No user with this UserID is assigned to your account."
+    "invalid": "No user with this UserID is assigned to your account.",
+    "currentLot": "Current Lot"
   },
   "barcodeInput": {
     "title": "Barcode Input",

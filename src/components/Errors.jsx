@@ -57,10 +57,10 @@ const Errors = () => {
                   hideError({ index: i });
                 }}
               >
-                {t('default.common.retry')}
+                {t('common.retry')}
               </button>
 
-              <button onClick={() => reboot()}>{t('default.common.reboot')}</button>
+              <button onClick={() => reboot()}>{t('common.reboot')}</button>
             </div>
           );
         }
@@ -68,8 +68,8 @@ const Errors = () => {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
-              <button onClick={() => reboot()}>{t('default.common.reboot')}</button>
-              <button onClick={() => hideError({ index: i })}>{t('default.common.close')}</button>
+              <button onClick={() => reboot()}>{t('common.reboot')}</button>
+              <button onClick={() => hideError({ index: i })}>{t('common.close')}</button>
             </div>
           );
         }
@@ -85,10 +85,10 @@ const Errors = () => {
                     hideError({ index: i });
                   }}
                 >
-                  {t('default.common.retry')}
+                  {t('common.retry')}
                 </button>
               }
-              {<button onClick={() => launchOffline()}>{t('default.common.offlineMode')}</button>}
+              {<button onClick={() => launchOffline()}>{t('common.offlineMode')}</button>}
             </div>
           );
         }
@@ -104,16 +104,16 @@ const Errors = () => {
                   }, 3000);
                 }}
               >
-                {t('default.common.retry')}
+                {t('common.retry')}
               </button>
-              <button onClick={() => activateOffline(i)}>{t('default.common.offline')}</button>
+              <button onClick={() => activateOffline(i)}>{t('common.offline')}</button>
               <button
                 onClick={() => {
                   hideError({ index: i });
                   navigate('/selectMethod');
                 }}
               >
-                {t('default.common.close')}
+                {t('common.close')}
               </button>
             </div>
           );
@@ -122,7 +122,7 @@ const Errors = () => {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
-              <button onClick={() => hideError({ index: i })}>{t('default.common.close')}</button>
+              <button onClick={() => hideError({ index: i })}>{t('common.close')}</button>
             </div>
           );
         }
@@ -142,7 +142,7 @@ const Errors = () => {
                           .filter((err) => err.type != 'moveResults')
                           .concat({
                             type: 'moveResults',
-                            message: t('default.errors.failedToMoveResults'),
+                            message: t('errors.failedToMoveResults'),
                           })
                       );
                     } else {
@@ -155,7 +155,7 @@ const Errors = () => {
                   }, 1000);
                 }}
               >
-                {t('default.common.retry')}
+                {t('common.retry')}
               </button>
               <button
                 onClick={() => {
@@ -163,7 +163,7 @@ const Errors = () => {
                   navigate('/selectMethod');
                 }}
               >
-                {t('default.common.cancel')}
+                {t('common.cancel')}
               </button>
             </div>
           );
@@ -178,9 +178,9 @@ const Errors = () => {
                   reboot();
                 }}
               >
-                {t('default.common.testAbort') + ' & ' + t('default.common.reboot')}
+                {t('common.testAbort') + ' & ' + t('common.reboot')}
               </button>
-              <button onClick={() => hideError({ type: 'cancelTest' })}>{t('default.common.testResume')}</button>
+              <button onClick={() => hideError({ type: 'cancelTest' })}>{t('common.testResume')}</button>
             </div>
           );
         }
@@ -188,14 +188,14 @@ const Errors = () => {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
-              <button onClick={() => startTest()}>{t('default.common.retry')}</button>
+              <button onClick={() => startTest()}>{t('common.retry')}</button>
               <button
                 onClick={() => {
                   reset();
                   navigate('/selectMethod');
                 }}
               >
-                {t('default.common.cancel')}
+                {t('common.cancel')}
               </button>
             </div>
           );
@@ -204,7 +204,7 @@ const Errors = () => {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
-              <button onClick={() => handleReadError(i)}>{t('default.common.close')}</button>
+              <button onClick={() => handleReadError(i)}>{t('common.close')}</button>
             </div>
           );
         }
@@ -219,10 +219,10 @@ const Errors = () => {
                     hideError({ index: i });
                   }}
                 >
-                  {t('default.common.retry')}
+                  {t('common.retry')}
                 </button>
               }
-              <button onClick={() => hideError({ index: i, remember: true })}>{t('default.common.offlineMode')}</button>
+              <button onClick={() => hideError({ index: i, remember: true })}>{t('common.offlineMode')}</button>
             </div>
           );
         }
@@ -230,7 +230,7 @@ const Errors = () => {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
-              <button onClick={() => window.location.reload()}>{t('default.common.retry')}</button>
+              <button onClick={() => window.location.reload()}>{t('common.retry')}</button>
             </div>
           );
         }

@@ -48,24 +48,22 @@ function ViewCurves() {
       >
         <ButtonArea
           style={{
-            position: 'relative',
-            bottom: 'auto',
             left: 'auto',
             right: 'auto',
             bottom: 'auto',
-            left: 'auto',
             transform: 'none',
+            position: 'relative',
           }}
         >
-          <Button onClick={() => window.history.go(-1)}>{t('default.common.back')}</Button>
+          <Button onClick={() => window.history.go(-1)}>{t('common.back')}</Button>
         </ButtonArea>
         <ResultsFooter
-          activeBarcode={barcode}
-          testmethod={testmethod}
+          locale="en"
           settings={settings}
           barcodes={barcodes}
-          locale="en"
           navigate={navigate}
+          activeBarcode={barcode}
+          testmethod={testmethod}
         />
       </Block>
     </div>

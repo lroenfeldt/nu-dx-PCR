@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useData, useTranslation } from '../hooks';
-import { extractBarcodes, parseResultsSubmit, parseResultsDB, parseResultsExport } from '../utils/parseResults';
+import { extractBarcodes, parseResultsDB, parseResultsExport } from '../utils/parseResults';
 import axios from 'axios';
 import urls from '../config/settings';
 import { useLocation } from 'react-router-dom';
@@ -219,7 +219,7 @@ const useResults = () => {
           .filter((error) => error.type !== 'read')
           .concat({
             type: 'read',
-            message: t('default.errors.failedToReadTestData'),
+            message: t('errors.failedToReadTestData'),
           })
       );
       if (location.pathname == '/ResultList') setWriting(testid, false);
@@ -240,7 +240,7 @@ const useResults = () => {
           .filter((error) => error.type !== 'submit')
           .concat({
             type: 'submit',
-            message: t('default.errors.failedToReadResultData'),
+            message: t('errors.failedToReadResultData'),
           })
       );
       if (location.pathname == '/ResultList') setWriting(testid, false);
@@ -261,7 +261,7 @@ const useResults = () => {
           .filter((error) => error.type !== 'saveToUSB')
           .concat({
             type: 'read',
-            message: t('default.errors.failedToSaveResultData'),
+            message: t('errors.failedToSaveResultData'),
           })
       );
       if (location.pathname == '/ResultList') setWriting(testid, false);
@@ -341,7 +341,7 @@ const useResults = () => {
           .filter((error) => error.type !== 'read')
           .concat({
             type: 'read',
-            message: t('default.errors.failedToReadTestData'),
+            message: t('errors.failedToReadTestData'),
           })
       );
       setSubmitting(false);
@@ -380,7 +380,7 @@ const useResults = () => {
           .filter((error) => error.type !== 'submit')
           .concat({
             type: 'submit',
-            message: t('default.errors.failedToSaveControlSample'),
+            message: t('errors.failedToSaveControlSample'),
           })
       );
       setSubmitting(false);
@@ -411,7 +411,7 @@ const useResults = () => {
           .filter((error) => error.type !== 'submit')
           .concat({
             type: 'submit',
-            message: t('default.errors.failedToReadResultData'),
+            message: t('errors.failedToReadResultData'),
           })
       );
       setSubmitting(false);
@@ -434,7 +434,7 @@ const useResults = () => {
             .filter((error) => error.type !== 'submit')
             .concat({
               type: 'submit',
-              message: t('default.errors.failedToSendSomeResults', {
+              message: t('errors.failedToSendSomeResults', {
                 missing: msg.substr(missing),
               }),
             })
@@ -448,7 +448,7 @@ const useResults = () => {
           .filter((error) => error.type !== 'submit')
           .concat({
             type: 'submit',
-            message: t('default.errors.failedToSubmitResults'),
+            message: t('errors.failedToSubmitResults'),
           })
       );
       setSubmitting(false);
@@ -473,7 +473,7 @@ const useResults = () => {
           .filter((error) => error.type !== 'submit')
           .concat({
             type: 'submit',
-            message: t('default.errors.failedToMoveSubmittedFiles'),
+            message: t('errors.failedToMoveSubmittedFiles'),
           })
       );
       setSubmitting(false);

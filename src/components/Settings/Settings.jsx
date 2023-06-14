@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
 import { FiLogOut } from 'react-icons/fi';
-import ArrowBox from '../ArrowBox/ArrowBox';
+import ArrowBox from '../ArrowBox';
 import deFlag from '../../assets/images/flags/de.png';
 import enFlag from '../../assets/images/flags/en.png';
 import frFlag from '../../assets/images/flags/fr.png';
 import { GrEject, GrUpdate } from 'react-icons/gr';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useData, useTranslation, useWindowDimensions } from '../../hooks';
+import { useData, useTranslation } from '../../hooks';
 import Dropdown from '../Dropdown/Dropdown';
 import Switch from '../Switch/Switch';
 import defaultBarcodes from '../../utils/defaultBarcodes';
@@ -72,7 +72,7 @@ function Settings({ visible }) {
             </div>
 
             <button className="settings-item" onClick={() => resetDevice()} style={{ color: 'red' }}>
-              {t('default.common.logout')} <FiLogOut />
+              {t('common.logout')} <FiLogOut />
             </button>
             {updateAvailable && (
               <button
@@ -83,7 +83,7 @@ function Settings({ visible }) {
                 }}
                 className="settings-item"
               >
-                {t('default.common.update')} <GrUpdate />
+                {t('common.update')} <GrUpdate />
               </button>
             )}
           </div>
@@ -103,7 +103,7 @@ function Settings({ visible }) {
             }}
           >
             <span>
-              {t('default.common.hardwareId')}:{' ' + settings.device.hardwareId}
+              {t('common.hardwareId')}:{' ' + settings.device.hardwareId}
             </span>
             <span>v{settings.version}</span>
           </div>

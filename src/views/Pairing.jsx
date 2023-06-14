@@ -7,8 +7,7 @@ import { Errors } from '../components';
 export default function Pairing() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { demo, reset, errors, settings, setErrors, pairingCode, saveSettings, loadSettings } =
-    useData();
+  const { demo, reset, errors, settings, setErrors, pairingCode, saveSettings, loadSettings } = useData();
   const getPairingCodeApi = useApi(pairingCodeApi.getPairingCode);
 
   const pollPairing = useCallback(async () => {
@@ -39,7 +38,7 @@ export default function Pairing() {
             .filter((error) => error.type !== 'pairing')
             .concat({
               type: 'pairing',
-              message: t('default.errors.pairingFailed', {
+              message: t('errors.pairingFailed', {
                 message: response.originalError.message,
               }),
             })
@@ -51,23 +50,20 @@ export default function Pairing() {
             .filter((error) => error.type !== 'pairing')
             .concat({
               type: 'pairing',
-              message: t('default.errors.pairingDbError'),
+              message: t('errors.pairingDbError'),
             })
         );
       }
 
       if (response?.problem && response?.problem == 'CLIENT_ERROR') {
         console.log('Error', response.originalError.message);
-        window.api.logEvents(
-          `Error: ${JSON.stringify(response.originalError.message)}`,
-          'logErrors.txt'
-        );
+        window.api.logEvents(`Error: ${JSON.stringify(response.originalError.message)}`, 'logErrors.txt');
         setErrors((prevErrors) =>
           prevErrors
             .filter((error) => error.type !== 'pairing')
             .concat({
               type: 'pairing',
-              message: t('default.errors.pairingFailed', {
+              message: t('errors.pairingFailed', {
                 message: response.originalError.message,
               }),
             })
@@ -90,7 +86,7 @@ export default function Pairing() {
             .filter((error) => error.type !== 'pairing')
             .concat({
               type: 'pairing',
-              message: t('default.errors.pairingFailed', {
+              message: t('errors.pairingFailed', {
                 message: err.message,
               }),
             })
@@ -107,15 +103,15 @@ export default function Pairing() {
 
   return (
     <div className="Pairing">
-      <h2>{t('default.pairing.welcome')}</h2>
-      <p>{t('default.pairing.welcome')}</p>
+      <h2>{t('pairing.welcome')}</h2>
+      <p>{t('pairing.welcome')}</p>
       <div className="pairingContainer">
         <div className="qr-container">
-          <h4>{t('default.pairing.scanQrcode')}</h4>
+          <h4>{t('pairing.scanQrcode')}</h4>
           <QRCode value={'https://poc.myprocomcure.de/pairing/' + pairingCode} />
         </div>
         <div className="codeContainer">
-          <h4>{t('default.pairing.scanQrcodeInstructions')}</h4>
+          <h4>{t('pairing.scanQrcodeInstructions')}</h4>
           <span>{pairingCode}</span>
         </div>
       </div>

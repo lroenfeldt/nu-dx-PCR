@@ -65,7 +65,7 @@ const ResultList = () => {
               <Oval heigth="30" width="30" color="white" />
             </div>
           </div>
-        );
+        )
       } else if (result.submittingSuccess) {
         buttonSubmit = (
           <div className="button" onClick={() => submitResult(result.testid, result.submitted)}>
@@ -179,10 +179,10 @@ const ResultList = () => {
             <h4>{result.testid}</h4>
             <h4>{testMethodName}</h4>
             <span className="date">
-              {t('default.common.started')}: {result.testStarted.toLocaleString()}
+              {t('common.started')}: {result.testStarted.toLocaleString()}
             </span>
             <span className="date">
-              {t('default.common.ended')}: {result.testFinished.toLocaleString()}
+              {t('common.ended')}: {result.testFinished.toLocaleString()}
             </span>
           </div>
           <div className="buttons">
@@ -210,14 +210,14 @@ const ResultList = () => {
   return (
     <div className="ResultList">
       <div id="stickyHeader" className="titleArea">
-        <h2>{t('default.resultList.title')}</h2>
+        <h2>{t('resultList.title')}</h2>
         {(submitting || reading) && (
           <div className="spinnerContainer">
             <Oval heigth="50" width="50" color="var(--primary)" />
           </div>
         )}
         <label>
-          <span>{t('default.resultList.onlyPending')}</span>
+          <span>{t('resultList.onlyPending')}</span>
           <Toggle isOn={submitFilter} handleToggle={() => handleSubmitToggleChange()} />
         </label>
       </div>
@@ -228,11 +228,11 @@ const ResultList = () => {
             navigate('/selectMethod');
           }}
         >
-          {t('default.common.back')}
+          {t('common.back')}
         </button>
-        {submitFilter ? <button onClick={() => submitAll()}>{t('default.resultList.submitAll')}</button> : ''}
+        {submitFilter ? <button onClick={() => submitAll()}>{t('resultList.submitAll')}</button> : ''}
         <button className={!USBPresent ? 'disabled' : ''} onClick={() => saveAllToUSB()}>
-          {t('default.resultList.exportAll')}
+          {t('resultList.exportAll')}
         </button>
       </div>
     </div>

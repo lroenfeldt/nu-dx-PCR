@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { t } from 'i18n-js';
+
 import { useData } from '../hooks';
 import urls from '../config/settings';
 import { Oval } from 'react-loader-spinner';
 import { FaCheckCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { extractBarcodes, parseResultsDB, parseResultsExport } from '../utils/parseResults';
-import { useResults } from '../hooks';
+import { useResults, useTranslation } from '../hooks';
 
 const TestDone = () => {
   const {
@@ -35,16 +35,16 @@ const TestDone = () => {
   const userId = currentUser ? currentUser?.id : '';
   const navigate = useNavigate();
   const { checkUSB, saveToUSB, submitAll, getResults, submitResult, saveAllToUSB } = useResults();
-
+  const { t, locale } = useTranslation();
   const testmethod = settings.account.testprocedures.find((testmethod) => testmethod.id === selectedMethod);
 
   let buttonUSB;
   if (USBPresent) {
-    buttonUSB = <button onClick={() => saveToUSB(testid, testDone)}>{t('default.results.saveToUSB')}</button>;
+    buttonUSB = <button onClick={() => saveToUSB(testid, testDone)}>{t('results.saveToUSB')}</button>;
   } else {
     buttonUSB = (
       <button className="disabled" onClick={() => saveToUSB()}>
-        {t('default.results.saveToUSB')}
+        {t('results.saveToUSB')}
       </button>
     );
   }
@@ -66,8 +66,8 @@ const TestDone = () => {
             return (
               <div key={i} className="errorMessage">
                 <p>{error.message}</p>
-                <button onClick={() => submitResult(testid)}>{t('default.common.retry')}</button>
-                <button onClick={() => activateofflineMode(i)}>{t('default.common.offlineMode')}</button>
+                <button onClick={() => submitResult(testid)}>{t('common.retry')}</button>
+                <button onClick={() => activateofflineMode(i)}>{t('common.offlineMode')}</button>
               </div>
             );
           }
@@ -75,7 +75,7 @@ const TestDone = () => {
             return (
               <div key={i} className="errorMessage">
                 <p>{error.message}</p>
-                <button onClick={() => hideError(i)}>{t('default.common.close')}</button>
+                <button onClick={() => hideError(i)}>{t('common.close')}</button>
               </div>
             );
           }
@@ -110,11 +110,11 @@ const TestDone = () => {
         <div className="spinnerContainer">
           <FaCheckCircle />
         </div>
-        <h2>{t('default.results.title')}</h2>
-        <p>{t('default.results.instructions')}</p>
+        <h2>{t('results.title')}</h2>
+        <p>{t('results.instructions')}</p>
         <div className="buttonArea">
           {testmethod.showResults ? (
-            <button onClick={() => navigate('/ViewResults')}>{t('default.results.viewResults')}</button>
+            <button onClick={() => navigate('/ViewResults')}>{t('results.viewResults')}</button>
           ) : (
             ''
           )}
@@ -125,7 +125,7 @@ const TestDone = () => {
               navigate('/selectMethod');
             }}
           >
-            {t('default.results.newTest')}
+            {t('results.newTest')}
           </button>
         </div>
       </div>
@@ -136,12 +136,12 @@ const TestDone = () => {
         <div className="spinnerContainer">
           <FaCheckCircle />
         </div>
-        <h2>{!settings.account.submitResults ? t('default.results.success') : t('default.results.resultsSent')}</h2>
-        <p>{t('default.results.startNewTest')}</p>
+        <h2>{!settings.account.submitResults ? t('results.success') : t('results.resultsSent')}</h2>
+        <p>{t('results.startNewTest')}</p>
         <div className="buttonArea">
           {testmethod.showResults ? buttonUSB : ''}
           {testmethod.showResults ? (
-            <button onClick={() => navigate('/ViewResults')}>{t('default.results.viewResults')}</button>
+            <button onClick={() => navigate('/ViewResults')}>{t('results.viewResults')}</button>
           ) : (
             ''
           )}
@@ -151,7 +151,7 @@ const TestDone = () => {
               navigate('/selectMethod');
             }}
           >
-            {t('default.results.newTest')}
+            {t('results.newTest')}
           </button>
         </div>
       </div>
@@ -162,8 +162,8 @@ const TestDone = () => {
         <div className="spinnerContainer">
           <Oval heigth="100" width="100" color="var(--primary)" />
         </div>
-        <h2>{t('default.results.waitingForResults')}</h2>
-        <p>{t('default.results.wait')}</p>
+        <h2>{t('results.waitingForResults')}</h2>
+        <p>{t('results.wait')}</p>
         <div className="buttonArea discouraged">
           <button
             onClick={() => {
@@ -171,7 +171,7 @@ const TestDone = () => {
               navigate('/selectMethod');
             }}
           >
-            {t('default.common.cancel')}
+            {t('common.cancel')}
           </button>
         </div>
       </div>

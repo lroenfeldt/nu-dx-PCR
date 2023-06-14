@@ -15,7 +15,7 @@ export default function Layout({ children }) {
   return (
     <div className="App">
       {/*<Modal>
-        <h2>{t('default.common.appUpdate')}...</h2>
+        <h2>{t('common.appUpdate')}...</h2>
       </Modal>*/}
       <Header />
       <ShutdownNotification />

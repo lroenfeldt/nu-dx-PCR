@@ -36,7 +36,7 @@ const TestReady = () => {
   const setupToBackend = useCallback(() => {
     setLoading(true);
     setErrors((prevErrors) => prevErrors.filter((error) => error.type !== 'startTest'));
-    setMessage(t('default.testReady.startTest'));
+    setMessage(t('testReady.startTest'));
 
     const testmethod = settings.account.testprocedures.find((procedure) => procedure.id === selectedMethod);
 
@@ -67,7 +67,7 @@ const TestReady = () => {
       setErrors((prevErrors) =>
         prevErrors.push({
           type: 'startTest',
-          message: t('default.errors.failtedToStartTest'),
+          message: t('errors.failtedToStartTest'),
         })
       );
       setDeviceStatus('IDLE');
@@ -106,7 +106,7 @@ const TestReady = () => {
         <div className="spinnerContainer" style={{ color: 'orange' }}>
           <RiAlertFill />
         </div>
-        <h3>{isNinetySix ? t('default.testReady.ninetySixsInstructions') : t('default.testReady.instructions')}</h3>
+        <h3>{isNinetySix ? t('testReady.ninetySixsInstructions') : t('testReady.instructions')}</h3>
         <div className="buttonArea">
           <button
             onClick={() => {
@@ -115,9 +115,9 @@ const TestReady = () => {
               setDeviceStatus('IDLE');
             }}
           >
-            {t('default.testReady.noGoBack')}
+            {t('testReady.noGoBack')}
           </button>
-          <button onClick={() => startTest()}>{t('default.testReady.yesStartTest')}</button>
+          <button onClick={() => startTest()}>{t('testReady.yesStartTest')}</button>
         </div>
       </div>
     );

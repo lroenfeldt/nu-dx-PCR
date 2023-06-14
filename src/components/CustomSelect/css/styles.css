@@ -1,0 +1,29 @@
+.custom-select-container {
+  width: 200px;
+  margin: auto;
+}
+
+.custom-select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 2px solid #5a67d8;
+  font-size: 16px;
+  color: #2d3748;
+  background-color: #edf2f7;
+}
+
+.custom-select:focus {
+  border-color: #434190;
+  outline: none;
+}
+option {
+  padding: 12px 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  justify-items: center;
+  align-items: center;
+  font-size: 20px;
+  transition: 0.5s;
+}

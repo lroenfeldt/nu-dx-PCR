@@ -11,13 +11,13 @@ const BarcodeInput = () => {
     reset,
     errors,
     reboot,
-    toggleLid,
-    offlineMode,
     loading,
     barcodes,
     settings,
+    toggleLid,
     setErrors,
     setLoading,
+    offlineMode,
     setBarcodes,
     isNinetySix,
   } = useData();
@@ -191,7 +191,7 @@ const BarcodeInput = () => {
           dbError = true;
           newErrors.push({
             type: 'dbCon',
-            message: t('default.errors.checkTestSampleFail'),
+            message: t('errors.checkTestSampleFail'),
           });
         } else if (err.request) {
           // The request was made but no response was received
@@ -202,7 +202,7 @@ const BarcodeInput = () => {
           dbError = true;
           newErrors.push({
             type: 'dbCon',
-            message: t('default.errors.dbConnectionError'),
+            message: t('errors.dbConnectionError'),
           });
         } else {
           // Something happened in setting up the request that triggered an Error
@@ -212,7 +212,7 @@ const BarcodeInput = () => {
           dbError = true;
           newErrors.push({
             type: 'dbCon',
-            message: t('default.errors.dbConnectionError'),
+            message: t('errors.dbConnectionError'),
           });
         }
       }
@@ -223,7 +223,7 @@ const BarcodeInput = () => {
       value: newBarcodeValue,
       valid: true,
       checking: false,
-      error: t('default.errors.testSample'),
+      error: t('errors.testSample'),
       askRetest: false,
     };
 
@@ -259,7 +259,7 @@ const BarcodeInput = () => {
         ...newBarcode,
         checking: false,
         valid: true,
-        error: t('default.errors.controlSampleDetected'),
+        error: t('errors.controlSampleDetected'),
       };
 
       if (newBarcode.value === 'SC2NTC' || newBarcode.value === 'Placeholder_NTC' || newBarcode.value === 'NTC') {
@@ -289,20 +289,20 @@ const BarcodeInput = () => {
       for (const char of newBarcode.value) {
         if (!settings.account.allowedCharacters.includes(char)) {
           isValid = false;
-          validationErr = t('default.errors.invalidcharacters') + settings.account.allowedCharacters;
+          validationErr = t('errors.invalidcharacters') + settings.account.allowedCharacters;
         }
       }
 
       //check length
       if (!(newBarcode.value.length >= settings.account.minBarcodeLength)) {
         isValid = false;
-        validationErr = t('default.errors.minBarcodeLength', {
+        validationErr = t('errors.minBarcodeLength', {
           minLength: settings.account.minBarcodeLength,
         });
       }
       if (newBarcode.value.length > settings.account.maxBarcodeLength) {
         isValid = false;
-        validationErr = t('default.errors.maxBarcodeLength', {
+        validationErr = t('errors.maxBarcodeLength', {
           maxLength: settings.account?.maxBarcodeLength,
         });
       }
@@ -312,7 +312,7 @@ const BarcodeInput = () => {
     barcodes.forEach((barcode, index) => {
       if (barcode.value === newBarcode.value && barcode.posName !== newBarcode.posName) {
         isValid = false;
-        validationErr = t('default.errors.barcodeAlreadyUsed', {
+        validationErr = t('errors.barcodeAlreadyUsed', {
           position: barcode.posName,
         });
       }
@@ -321,7 +321,7 @@ const BarcodeInput = () => {
     //Check against db
     if (isValid && newBarcode.value.indexOf('-R') === -1 && settings.account.checkBarcodesDB) {
       if (offlineMode) {
-        validationErr = t('default.errors.offlineModeMode');
+        validationErr = t('errors.offlineModeMode');
         newBarcode = {
           ...newBarcode,
           checking: false,
@@ -348,14 +348,14 @@ const BarcodeInput = () => {
           let result = response.data;
           if (result === null) {
             isValid = false;
-            validationErr = t('default.errors.barcodeNotFound');
+            validationErr = t('errors.barcodeNotFound');
           } else if (result.status <= 3) {
             isValid = false;
             askRetest = settings.account.allowRetest;
-            validationErr = t('default.errors.barcodeAlreadyInUse');
+            validationErr = t('errors.barcodeAlreadyInUse');
           } else if (settings.account.checkOrder && result.orderKey !== settings.account.orderKey) {
             isValid = false;
-            validationErr = t('default.errors.barcodeNotInOrder');
+            validationErr = t('errors.barcodeNotInOrder');
           }
 
           setLoading(false);
@@ -369,9 +369,9 @@ const BarcodeInput = () => {
               window.api.logEvents(`request: ${JSON.stringify(err.request)}`, 'LogErrors.txt');
               newErrors.push({
                 type: 'dbCon',
-                message: t('default.errors.dbConnectionError'),
+                message: t('errors.dbConnectionError'),
               });
-              validationErr = t('default.errors.notVerifiedDbError');
+              validationErr = t('errors.notVerifiedDbError');
             }
             if (err.response) {
               // The request was made and the server responded with a status code
@@ -387,10 +387,10 @@ const BarcodeInput = () => {
                 'LogErrors.txt'
               );
               isValid = false;
-              if (err.message === t('default.errors.noSamplesImported')) {
-                validationErr = t('default.errors.useAnotherBarcode');
+              if (err.message === t('errors.noSamplesImported')) {
+                validationErr = t('errors.useAnotherBarcode');
               } else {
-                validationErr = t('default.errors.barcodeVerificationFailed', {
+                validationErr = t('errors.barcodeVerificationFailed', {
                   message: err.message,
                 });
               }
@@ -402,18 +402,18 @@ const BarcodeInput = () => {
               window.api.logEvents(`request: ${JSON.stringify(err.request)}`, 'LogErrors.txt');
               newErrors.push({
                 type: 'dbCon',
-                message: t('default.errors.dbConnectionError'),
+                message: t('errors.dbConnectionError'),
               });
-              validationErr = t('default.errors.notVerifiedDbError');
+              validationErr = t('errors.notVerifiedDbError');
             } else {
               // Something happened in setting up the request that triggered an Error
               console.log('Error', err.message);
               window.api.logEvents(`Error: ${err.message}`, 'LogErrors.txt');
               newErrors.push({
                 type: 'dbCon',
-                message: t('default.errors.dbConnectionError'),
+                message: t('errors.dbConnectionError'),
               });
-              validationErr = t('default.errors.notVerifiedDbError');
+              validationErr = t('errors.notVerifiedDbError');
             }
           }
         } finally {
@@ -534,11 +534,11 @@ const BarcodeInput = () => {
   return (
     <>
       <div className={`BarcodeInput ${isNinetySix ? ' ninetySix' : ''}`}>
-        {!isNinetySix && <h3>{t('default.barcodeInput.instructions')}</h3>}
+        {!isNinetySix && <h3>{t('barcodeInput.instructions')}</h3>}
         <RackVisualRows active={active} markActive={markActive} />
 
         <div className={`inputContainer ${isNinetySix ? ' ninetySix' : ''}`}>
-          {isNinetySix && <h3>{t('default.barcodeInput.instructions')}</h3>}
+          {isNinetySix && <h3>{t('barcodeInput.instructions')}</h3>}
           {getBarcode(active).error && !getBarcode(active).checking && getBarcode(active)?.value.length >= 1 ? (
             <div className={`barcodeValidationMsg ${isNinetySix ? ' ninetySix' : ''}`}>
               <span>{getBarcode(active).error}</span>
@@ -611,11 +611,11 @@ const BarcodeInput = () => {
               isNumeric={typeof Number(settings.account.allowedCharacters) == 'number'}
             />
             {getBarcode(active).askRetest && getBarcode(active).value != '' ? (
-              <button onClick={() => retest(getBarcode(active))}>{t('default.common.retest')}</button>
+              <button onClick={() => retest(getBarcode(active))}>{t('common.retest')}</button>
             ) : (
               ''
             )}
-            {!isNinetySix && <button type="submit">{t('default.common.continue')}</button>}
+            {!isNinetySix && <button type="submit">{t('common.continue')}</button>}
           </form>
         </div>
       </div>
@@ -627,10 +627,10 @@ const BarcodeInput = () => {
             navigate('/selectMethod');
           }}
         >
-          {t('default.common.cancel')}
+          {t('common.cancel')}
         </button>
         <button onClick={() => navigate('/testReady')} className={`${!barcodesValid ? 'disabled' : ''}`}>
-          {t('default.common.testStart')}
+          {t('common.testStart')}
         </button>
       </div>
     </>

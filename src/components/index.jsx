@@ -8,12 +8,14 @@ import Toggle from './Toggle';
 import Button from './Button';
 import Modal from './Modal/Modal';
 import Keyboard from './Keyboard';
+import ArrowBox from './ArrowBox';
 import Checkmark from './Checkmark';
 import Switch from './Switch/Switch';
 import WellVisual from './WellVisual';
 import Controller from './Controller';
 import ButtonArea from './ButtonArea';
 import ProgressBar from './ProgressBar';
+import CustomSelect from './CustomSelect';
 import Dropdown from './Dropdown/Dropdown';
 import Testselection from './Testselection';
 import Notifications from './Notifications';
@@ -38,12 +40,14 @@ export {
   Button,
   Dropdown,
   Keyboard,
+  ArrowBox,
   Checkmark,
   ButtonArea,
   WellVisual,
   TestStatus,
   Controller,
   ProgressBar,
+  CustomSelect,
   Testselection,
   Notifications,
   AlteredResult,

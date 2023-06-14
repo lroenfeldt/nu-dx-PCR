@@ -37,7 +37,7 @@ const Bootup = () => {
           .filter((error) => error.type !== 'pairing')
           .concat({
             type: 'pairing',
-            message: t('default.errors.checkInternetConnection'),
+            message: t('errors.checkInternetConnection'),
           })
       );
     } else {
@@ -67,7 +67,7 @@ const Bootup = () => {
               .filter((error) => error.type !== 'pairing')
               .concat({
                 type: 'pairing',
-                message: t('default.errors.pairingDbError'),
+                message: t('errors.pairingDbError'),
               })
           );
         }
@@ -92,7 +92,7 @@ const Bootup = () => {
               .filter((error) => error.type !== 'pairing')
               .concat({
                 type: 'pairing',
-                message: t('default.errors.deviceRegistrationFailed'),
+                message: t('errors.deviceRegistrationFailed'),
               })
           );
         } else if (err.request) {
@@ -103,7 +103,7 @@ const Bootup = () => {
               .filter((error) => error.type !== 'pairing')
               .concat({
                 type: 'pairing',
-                message: t('default.errors.pairingDbError'),
+                message: t('errors.pairingDbError'),
               })
           );
         } else {
@@ -114,7 +114,7 @@ const Bootup = () => {
               .filter((error) => error.type !== 'pairing')
               .concat({
                 type: 'pairing',
-                message: t('default.errors.pairingFailed', {
+                message: t('errors.pairingFailed', {
                   message: err.message,
                 }),
               })
@@ -189,7 +189,7 @@ const Bootup = () => {
             .filter((error) => error.type !== 'auth')
             .concat({
               type: 'auth',
-              message: t('default.errors.pairingFailed', {
+              message: t('errors.pairingFailed', {
                 message: response.originalError.message,
               }),
             })
@@ -204,7 +204,7 @@ const Bootup = () => {
                 .filter((error) => error.type !== 'offlineNotAllow')
                 .concat({
                   type: 'offlineNotAllow',
-                  message: t('default.errors.checkInternetConnection'),
+                  message: t('errors.checkInternetConnection'),
                 })
             );
           } else if (remDays > 0 && settings.account.allowDaysOffline != 0) {
@@ -214,7 +214,7 @@ const Bootup = () => {
                 .filter((error) => error.type !== 'offline')
                 .concat({
                   type: 'offline',
-                  message: t('default.errors.deviceAuthenticationFailedUseOfflineMode', {
+                  message: t('errors.deviceAuthenticationFailedUseOfflineMode', {
                     days: remDays,
                   }),
                 })
@@ -225,7 +225,7 @@ const Bootup = () => {
                 .filter((error) => error.type !== 'init')
                 .concat({
                   type: 'offline',
-                  message: t('default.errors.deviceAuthenticationFailedZeroRemDays'),
+                  message: t('errors.deviceAuthenticationFailedZeroRemDays'),
                 })
             );
           } else {
@@ -234,7 +234,7 @@ const Bootup = () => {
                 .filter((error) => error.type !== 'init')
                 .concat({
                   type: 'auth',
-                  message: t('default.errors.deviceAuthenticationFailedRetry'),
+                  message: t('errors.deviceAuthenticationFailedRetry'),
                 })
             );
           }
@@ -244,7 +244,7 @@ const Bootup = () => {
               .filter((error) => error.type !== 'offlineNotAllow')
               .concat({
                 type: 'offlineNotAllow',
-                message: t('default.errors.checkInternetConnection'),
+                message: t('errors.checkInternetConnection'),
               })
           );
         }
@@ -273,7 +273,7 @@ const Bootup = () => {
             .filter((error) => error.type !== 'auth')
             .concat({
               type: 'auth',
-              message: t('default.errors.pairingFailed', {
+              message: t('errors.pairingFailed', {
                 message: err.message,
               }),
             })
@@ -296,7 +296,7 @@ const Bootup = () => {
           .filter((error) => error.type !== 'init')
           .concat({
             type: 'init',
-            message: t('default.errors.deviceInitializationFailed'),
+            message: t('errors.deviceInitializationFailed'),
           })
       );
     }
@@ -307,7 +307,7 @@ const Bootup = () => {
       <div className="spinnerContainer">
         <Oval heigth="100" width="100" color="var(--primary)" />
       </div>
-      <h2>{t('default.bootup.deviceStart')}</h2>
+      <h2>{t('bootup.deviceStart')}</h2>
     </div>
   );
 };

@@ -10,12 +10,12 @@ const RunTest = () => {
     demo,
     testid,
     errors,
-    setErrors,
-    isNinetySix,
     settings,
+    setErrors,
+    toggleLid,
+    isNinetySix,
     selectedMethod,
     setDeviceStatus,
-    toggleLid,
     checkForTestResultFile,
     setCheckForTestResultFile,
   } = useData();
@@ -33,7 +33,7 @@ const RunTest = () => {
     let newErrors = errors.filter((error) => error.type !== 'cancelTest');
     newErrors.push({
       type: 'cancelTest',
-      message: t('default.runTest.cancelTest'),
+      message: t('runTest.cancelTest'),
     });
     setErrors(newErrors);
   };
@@ -88,7 +88,7 @@ const RunTest = () => {
                   .filter((err) => err.type != 'moveResults')
                   .concat({
                     type: 'moveResults',
-                    message: t('default.errors.failedToMoveResults'),
+                    message: t('errors.failedToMoveResults'),
                   })
               );
             } else {
@@ -109,7 +109,7 @@ const RunTest = () => {
               .filter((err) => err.type != 'testFailed')
               .concat({
                 type: 'testFailed',
-                message: t('default.errors.testFailed'),
+                message: t('errors.testFailed'),
               })
           );
           clearInterval(checkFile);
@@ -125,25 +125,21 @@ const RunTest = () => {
     <div className="RunTest">
       {!waitingForResults ? (
         <>
-          <h2>{flapClosed ? t('default.runTest.testRunning') : t('default.runTest.testRunningFlapClose')}</h2>
+          <h2>{flapClosed ? t('runTest.testRunning') : t('runTest.testRunningFlapClose')}</h2>
           <div className="progressVisualization">
             <ProgressBar startTime={startTime} remTime={remTime} />
           </div>
-          <h2 className="timeLeft">
-            {remTime == 0 ? t('default.runTest.endOfTest') : t('default.common.still') + ' ' + displayTime}
-          </h2>
+          <h2 className="timeLeft">{remTime == 0 ? t('runTest.endOfTest') : t('common.still') + ' ' + displayTime}</h2>
         </>
       ) : (
         <div>
           <div className="spinnerContainer">
             <Oval heigth="100" width="100" color="var(--primary)" />
           </div>
-          <h2>{t('default.runTest.waitingForResult')}...</h2>
+          <h2>{t('runTest.waitingForResult')}...</h2>
         </div>
       )}
-      <div className="buttonArea discouraged">
-        {<button onClick={() => showCancel()}>{t('default.common.cancel')}</button>}
-      </div>
+      <div className="buttonArea discouraged">{<button onClick={() => showCancel()}>{t('common.cancel')}</button>}</div>
     </div>
   );
 };

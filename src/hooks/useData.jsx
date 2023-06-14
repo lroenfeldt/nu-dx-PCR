@@ -10,44 +10,45 @@ export const DataContext = React.createContext({});
  * @example const { data, setData } = useData();
  * */
 export function DataProvider({ children }) {
+  const { t } = useTranslation();
   const [user, setUser] = useState(null);
   const [demo, setDemo] = useState(false);
   const [errors, setErrors] = useState([]);
-  const [testid, setTestid] = useState(null);
   const [token, setToken] = useState(null);
   const [remTime, setRemTime] = useState(0);
+  const [testid, setTestid] = useState(null);
+  const [results, setResults] = useState([]);
   const [status, setStatus] = useState('IDLE');
+  const [reading, setReading] = useState(true);
   const [testrun, setTestrun] = useState(false);
+  const [isModal, setIsModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [menuOpen, setMenuOpen] = useState(null);
   const [testDone, setTestDone] = useState(null);
-  const [currentUser, setCurrentUser] = useState({});
-  const [pairingCode, setPairingCode] = useState(null);
-  const [settings, setSettings] = useState(window.api.getConfig());
-  const [submitFilter, setSubmitFilter] = useState(false);
-  const [resultsSubmitted, setSubmitted] = useState(false);
-  const [barcodes, setBarcodes] = useState(defaultBarcodes(settings));
-  const [updateAvailable, setUpdateAvailable] = useState(false);
-  const [isModal, setIsModal] = useState(false);
-  const [resultList, setResultList] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [isNinetySix, setIsNinetySix] = useState(settings?.device?.wellCount === 96);
-  const [paramTrans, setParamTrans] = useState({ CY5: 'POC_HEC', ROX: 'POC_VIRUS' });
+  const [lotNumber, setLotNumber] = useState('');
   const [isStatus, setIsStatus] = useState(false);
-  const [selectedMethod, setSelectedMethod] = useState(null);
-  const [deviceStatus, setDeviceStatus] = useState('IDLE');
+  const [resultList, setResultList] = useState([]);
+  const [isLidOpen, setIsLidOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
   const [USBPresent, setUSBPresent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [reading, setReading] = useState(true);
-  const [results, setResults] = useState([]);
-  const [viewResults, setViewResults] = useState('graph');
-  const [dbConnection, setDbConnection] = useState(true);
+  const [pairingCode, setPairingCode] = useState(null);
   const [offlineMode, setOfflineMode] = useState(false);
   const [openResults, setOpenResults] = useState(false);
-  const [selectedPosition, setSelectedPosition] = useState(null);
-  const [isLidOpen, setIsLidOpen] = useState(false);
+  const [dbConnection, setDbConnection] = useState(true);
+  const [submitFilter, setSubmitFilter] = useState(false);
+  const [viewResults, setViewResults] = useState('graph');
+  const [resultsSubmitted, setSubmitted] = useState(false);
+  const [deviceStatus, setDeviceStatus] = useState('IDLE');
   const [idleTimestamp, setIdleTimestamp] = useState(null);
+  const [selectedMethod, setSelectedMethod] = useState(null);
+  const [updateAvailable, setUpdateAvailable] = useState(false);
+  const [selectedPosition, setSelectedPosition] = useState(null);
+  const [settings, setSettings] = useState(window.api.getConfig());
+  const [barcodes, setBarcodes] = useState(defaultBarcodes(settings));
   const [checkForTestResultFile, setCheckForTestResultFile] = useState(false);
-  const { t } = useTranslation();
+  const [isNinetySix, setIsNinetySix] = useState(settings?.device?.wellCount === 96);
+  const [paramTrans, setParamTrans] = useState({ CY5: 'POC_HEC', ROX: 'POC_VIRUS' });
   /**
    * Resets values to default
    * @returns {void}
@@ -141,7 +142,7 @@ export function DataProvider({ children }) {
     if (!clear) {
       newErrors.push({
         type: 'settings',
-        message: t('default.errors.failedTosaveSettings'),
+        message: t('errors.failedTosaveSettings'),
       });
       response = false;
     } else {
@@ -169,7 +170,7 @@ export function DataProvider({ children }) {
             .filter((error) => error.type !== 'saveSettings')
             .concat({
               type: 'saveSettings',
-              message: t('default.errors.failedTosaveSettings'),
+              message: t('errors.failedTosaveSettings'),
             })
         );
         return false;
@@ -305,6 +306,8 @@ export function DataProvider({ children }) {
       setIdleTimestamp,
       checkForTestResultFile,
       setCheckForTestResultFile,
+      lotNumber,
+      setLotNumber,
     }),
     [
       openResults,
@@ -396,6 +399,8 @@ export function DataProvider({ children }) {
       setIdleTimestamp,
       checkForTestResultFile,
       setCheckForTestResultFile,
+      lotNumber,
+      setLotNumber,
     ]
   );
   return <DataContext.Provider value={contextValue}>{children}</DataContext.Provider>;

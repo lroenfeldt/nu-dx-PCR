@@ -7,7 +7,7 @@ import { useData, useTranslation, useBackgroundProcesses, useUpdate, useResults 
 import { useNavigate, useLocation } from 'react-router-dom';
 import Settings from './Settings/Settings';
 import Notifications from './Notifications';
-import ArrowBox from './ArrowBox/ArrowBox';
+import ArrowBox from './ArrowBox';
 import { Oval } from 'react-loader-spinner';
 import SelectTestResults from './SelectTestResults/SelectTestResults';
 const Header = () => {
@@ -68,8 +68,8 @@ const Header = () => {
     return (
       <ArrowBox direction={`top-power ${menuOpen ? 'active ' : ''} `}>
         <div className="power arrow">
-          {menuOpen === 1 && <button onClick={() => shutdown()}>{t('default.common.shutdown')}</button>}
-          {menuOpen === 1 && <button onClick={() => reboot()}>{t('default.common.reboot')}</button>}
+          {menuOpen === 1 && <button onClick={() => shutdown()}>{t('common.shutdown')}</button>}
+          {menuOpen === 1 && <button onClick={() => reboot()}>{t('common.reboot')}</button>}
           {/* <button onClick={() => {setMenuOpen(null)}}>Menü schließen</button> */}
         </div>
       </ArrowBox>
@@ -92,7 +92,7 @@ const Header = () => {
           .filter((error) => error.type !== 'stillOffline')
           .concat({
             type: 'stillOffline',
-            message: t('default.common.stillOffline'),
+            message: t('common.stillOffline'),
           })
       );
     } else {

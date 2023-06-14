@@ -60,11 +60,13 @@
   "authentication": {
     "title": "Authentifizierung",
     "instructions": "Bitte scannen Sie den Barcode auf Ihrer Benutzerkarte oder geben Sie Ihre UserID ein, um sich für den Vorgang zu authentifizieren.",
-    "invalid": "Ihrem Account ist kein Nutzer mit dieser UserID zugeordnet."
+    "invalid": "Ihrem Account ist kein Nutzer mit dieser UserID zugeordnet.",
+    "currentLot": "Aktuelles Lot"
   },
   "barcodeInput": {
     "title": "Barcode eingeben",
-    "instructions": "Bitte scannen Sie zu jeder Position den Barcode der Probe, die sie untersuchen möchten,  oder geben Sie die Probennummer über eine Tastatur ein."
+    "instructions": "Bitte scannen Sie zu jeder Position den Barcode der Probe, die sie untersuchen möchten,  oder geben Sie die Probennummer über eine Tastatur ein.",
+    "invalid": "Der eingegebene Barcode ist ungültig."
   },
   "bootup": {
     "deviceStart": "Das Gerät startet, bitte warten..."

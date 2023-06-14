@@ -20,19 +20,19 @@ const Debug = () => {
       </div>
       <div className="hardwareId">
         <h3>
-          {t('default.debug.hardwareId')}: {hardwareId}
+          {t('debug.hardwareId')}: {hardwareId}
         </h3>
       </div>
       <div className="hardwareId">
-        <h3>{`${t('default.debug.serialNumber')}: ${settings.device?.serialNumber}`}</h3>
+        <h3>{`${t('debug.serialNumber')}: ${settings.device?.serialNumber}`}</h3>
       </div>
       <div className="hardwareId">
         <h3>{`${'wellCount'}: ${settings.device.wellCount}`}</h3>
       </div>
       <div className="buttonArea">
-        <button onClick={() => window.history.back()}>{t('default.common.back')}</button>
-        <button onClick={() => exit()}>{t('default.common.end')}</button>
-        <button onClick={() => resetDevice()}>{t('default.common.defaultsettings')}</button>
+        <button onClick={() => window.history.back()}>{t('common.back')}</button>
+        <button onClick={() => exit()}>{t('common.end')}</button>
+        <button onClick={() => resetDevice()}>{t('common.defaultsettings')}</button>
       </div>
     </div>
   );

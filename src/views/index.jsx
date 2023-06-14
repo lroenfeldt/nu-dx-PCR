@@ -10,6 +10,7 @@ import ViewResults from './ViewResults';
 import BarcodeInput from './BarcodeInput';
 import Authentication from './Authentication';
 import ResultList from './ResultList';
+
 export {
   Home,
   Debug,
