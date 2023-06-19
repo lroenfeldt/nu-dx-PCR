@@ -1,7 +1,7 @@
 import React from 'react';
 import { FcOk, FcCancel } from 'react-icons/fc';
-import { ActivateKeyboard, ArrowBox } from '../../components/';
-
+import { IoCloseCircle } from 'react-icons/io5';
+import { ActivateKeyboard, ArrowBox, Block } from '../../components/';
 const InputContainer = ({
   t,
   signal,
@@ -9,6 +9,7 @@ const InputContainer = ({
   isValid,
   password,
   textInput,
+  setPassword,
   currentUser,
   handleChange,
   handleKeyPress,
@@ -25,6 +26,7 @@ const InputContainer = ({
             flexDirection: 'row',
             transition: 'all 0.5s ease',
             marginBottom: isValid && keyboardVisible ? -337 : keyboardVisible ? -200 : 0,
+            position: 'relative',
           }}
         >
           <ActivateKeyboard
@@ -46,41 +48,47 @@ const InputContainer = ({
               borderBottomLeftRadius: 0,
             }}
           />
-          {signal && (
+          <IoCloseCircle
+            onClick={() => setPassword('')}
+            style={{
+              top: 5,
+              zIndex: 100,
+              fontSize: 30,
+              cursor: 'pointer',
+              position: 'absolute',
+              transition: 'all 0.3s ease',
+              right: password.length > 0 ? 4 : 0,
+              visibility: password.length > 0 ? 'visible' : 'hidden',
+            }}
+          />
+        </div>
+        {signal && password.length > 0 && (
+          <Block
+            style={{
+              position: 'absolute',
+              top: keyboardVisible ? '66%' : isValid ? '28%' : '42%',
+              right: 100,
+              width: 300,
+              height: 200,
+              zIndex: 100,
+              transition: 'all 0.3s ease',
+            }}
+          >
             <ArrowBox
               direction={`right ${signal ? 'active' : ''}`}
               style={{
-                right: keyboardVisible ? 40 : 20,
-                width: 400,
-                zIndex: 100,
-                minWidth: 400,
-                position: 'absolute',
-                transition: 'all 0.5s ease 0s',
-                top: isValid && keyboardVisible ? '68%' : keyboardVisible ? '69%' : isValid ? '28%' : '44%',
+                minWidth: 370,
+                width: '100%',
               }}
             >
               {isUser ? (
-                <div
-                  style={{
-                    maxWidth: 500,
-                    minHeight: 100,
-                    textAlign: 'justify',
-                  }}
-                >
-                  <div>
+                <Block flex={0}>
+                  <Block flex={0}>
                     <strong>{currentUser?.name}</strong>
                     <br />
                     <span style={{ fontSize: 16 }}>{currentUser?.email}</span>
-                  </div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'start',
-                      alignItems: 'center',
-                      alignContent: 'center',
-                    }}
-                  >
+                  </Block>
+                  <Block justify="start" align="center">
                     {isValid ? (
                       <>
                         <FcOk size={40} />
@@ -92,16 +100,16 @@ const InputContainer = ({
                         <h5>{t('common.notCertified')}</h5>
                       </>
                     )}
-                  </div>
-                </div>
+                  </Block>
+                </Block>
               ) : (
-                <div style={{ textAlign: 'center', maxWidth: 500, minHeight: 100 }}>
+                <Block>
                   <p style={{ color: '#D44444' }}>{t('authentication.invalid')}</p>
-                </div>
+                </Block>
               )}
             </ArrowBox>
-          )}
-        </div>
+          </Block>
+        )}
       </form>
     </div>
   );

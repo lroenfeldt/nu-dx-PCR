@@ -181,7 +181,13 @@ export function DataProvider({ children }) {
 
   const toggleLid = useCallback(() => {
     let newErrors = errors.filter((error) => error.type !== 'lid');
-    if (status == 'RUNNING') return;
+    if (status == 'RUNNING') {
+      newErrors.push({
+        type: 'default',
+        message: t('default.errors.errorOpenLidWhileRunning'),
+      });
+      return;
+    }
     if (window.api.toggleLid()) {
       setIsLidOpen(!isNinetySix ? true : !isLidOpen);
     } else {

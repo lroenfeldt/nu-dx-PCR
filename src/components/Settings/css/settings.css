@@ -9,6 +9,10 @@
 
 .top.active {
   display: block;
+  height: auto;
+  width: auto;
+  margin-top: 10px;
+  margin-right: 42px;
 }
 
 .settingsContent {

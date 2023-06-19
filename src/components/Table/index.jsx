@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useData, useSticky } from '../../hooks';
 import './css/table.css';
 
@@ -10,25 +10,46 @@ function Table({ th, tr }) {
   if (!testMethod.showCurves) th.pop();
 
   // Initialize the sticky header
-  useSticky({ top: 70, id: 'stickyHeader', stickyClass: 'table' });
+  useSticky({ top: 5, id: 'stickyHeader', stickyClass: 'table' });
   const handleSelected = (e) => {
     const selected = document.querySelector('.selected');
     if (selected) selected.classList.remove('selected');
+
     e.target.classList.add('selected');
   };
+  const containerRef = useRef();
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
+
+      if (scrollLeft + clientWidth >= scrollWidth) {
+        containerRef.current.classList.add('end-reached');
+      } else {
+        containerRef.current.classList.remove('end-reached');
+      }
+    };
+
+    containerRef.current.addEventListener('scroll', handleScroll);
+
+    return () => {
+      if (containerRef.current) containerRef.current.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
   return (
-    <div style={{ overflow: 'auto', position: 'relative' }} className="table">
+    <div className="table" ref={containerRef}>
       <table>
         <thead id="stickyHeader" className="header">
-          {th
-            .filter((item) => item !== false)
-            .filter((item) => typeof item !== undefined)
-            .map((item, i) => (
-              <th key={`th-${i}`} className="th">
-                {item}
-              </th>
-            ))}
+          <tr>
+            {th
+              .filter((item) => item !== false)
+              .filter((item) => typeof item !== undefined)
+              .map((item, i) => (
+                <th key={`th-${i}`} className="th">
+                  {item}
+                </th>
+              ))}
+          </tr>
         </thead>
         <tbody>
           {tr
@@ -39,7 +60,7 @@ function Table({ th, tr }) {
               if (!testMethod.showCurves) element.pop();
 
               return (
-                <tr className={`tr ${index % 2 === 0 ? 'even' : 'odd'}`} key={`tr-${index}`} onClick={handleSelected}>
+                <tr key={`tr-${index}`} onClick={handleSelected}>
                   {element
                     .filter((item) => item !== false)
                     .filter((item) => typeof item !== undefined)
@@ -53,6 +74,7 @@ function Table({ th, tr }) {
             })}
         </tbody>
       </table>
+      <div className="fade-out"></div>
     </div>
   );
 }

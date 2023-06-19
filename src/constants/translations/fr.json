@@ -126,6 +126,7 @@
     "viewCurves": "Voir les courbes"
   },
   "errors": {
+    "errorOpenLidWhileRunning": "Vous ne pouvez pas ouvrir le volet pendant le test.",
     "testFailed": "Test échoué",
     "error": "Erreur",
     "barcodeAlreadyInUse": "Un échantillon a déjà été utilisé avec ce code-barres.",

@@ -44,7 +44,6 @@ export const extractBarcodes = (resultFile) => {
  * @example {barcodes: [{value: "123456789", position: "A1", ...}]
  * */
 export const parseResults = (resultFile, testid, testConfig, testmethod, override = false) => {
-  console.log('parsing results');
   window.api.logEvents('parsing results', 'logInfos.txt');
 
   //Check provided Input
@@ -169,20 +168,7 @@ export const parseResults = (resultFile, testid, testConfig, testmethod, overrid
         .map((s) => '(' + s.trim() + ')')
         .join(' && ');
       const passed = eval(conditions);
-      console.log(
-        'position->' +
-          parsedResultsData[position].label +
-          '->evaluating: ' +
-          conditions +
-          ' = ' +
-          passed +
-          ' -> ' +
-          resultType.name +
-          "CT('VIC') -> " +
-          CT('VIC'),
-        "CT('FAM') -> " + CT('FAM'),
-        "CT('ROX) ->" + CT('ROX')
-      );
+
       if (passed) {
         parsedResultsData[position].result = resultType.name;
         parsedResultsData[position].oldResult = resultType.name;
@@ -193,7 +179,7 @@ export const parseResults = (resultFile, testid, testConfig, testmethod, overrid
       parsedResultsData[position].alteredResult = true;
     }
   });
-  console.log(parsedResultsData);
+
   window.api.logEvents('parsedResultsData: ' + parsedResultsData, 'logInfos.txt');
   //return
 
@@ -219,7 +205,7 @@ export const parseResultsDisplay = (resultFile, testid, testConfig, testmethod, 
  * @param {string} testmethod - testmethod id of the selected testmethod
  * @returns {object} - The parsed results
  */
-export const parseResultsExport = (resultFile, testid, testConfig, testmethod) => {
+export const parseResultsExport = (resultFile, testid, testConfig, testmethod, lotNumber = '') => {
   window.api.logEvents(`parseResultsExport settings: ${testConfig}`, 'logInfos.txt');
 
   const parsedData = parseResults(resultFile, testid, testConfig, testmethod);
@@ -228,7 +214,7 @@ export const parseResultsExport = (resultFile, testid, testConfig, testmethod) =
   let exportFile = '';
 
   if (testmethod.type === 'Absolute') {
-    exportFile += 'Position;Barcode;CT;Result\n';
+    exportFile += 'Position;Barcode;CT;Result;lotNumber\n';
 
     //Read Data
     for (let position in parsedData) {
@@ -238,7 +224,7 @@ export const parseResultsExport = (resultFile, testid, testConfig, testmethod) =
         let paramData = data.parameters[paramName];
 
         //Add result entry for each parameter
-        exportFile += `${position};${data.barcode};${paramData.ct};${data.result}\n`;
+        exportFile += `${position};${data.barcode};${paramData.ct};${data.result};${lotNumber}\n`;
         break;
       }
     }
@@ -276,7 +262,8 @@ export const parseResultsDB = (
   autoControls = [],
   testStarted,
   userId = '',
-  override
+  override,
+  lotNumber = ''
 ) => {
   const parsedData = parseResults(resultFile, testid, testConfig, testmethod, override);
 
@@ -289,9 +276,6 @@ export const parseResultsDB = (
     //replace autoControl if present
     autoControls.forEach((autoControl) => {
       if (autoControl.position === position) {
-        console.log(
-          `replacing placeholder barcode"${data.barcode}" with "${autoControl.barcode}" on position "${position}"`
-        );
         window.api.logEvents(
           `replacing placeholder barcode"${data.barcode}" with "${autoControl.barcode}" on position "${position}"`,
           'logInfos.txt'
@@ -302,7 +286,7 @@ export const parseResultsDB = (
 
     for (let paramName in data.parameters) {
       let paramData = data.parameters[paramName];
-      console.log('paramData', paramData);
+
       //Add result entry for each parameter
       results.push({
         barcode: data.barcode,
@@ -355,6 +339,7 @@ export const parseResultsDB = (
       wellCount: testConfig.device.wellCount,
       specificationId: testmethod.specificationId,
       isControl: data.isControl,
+      lotNumber,
     });
   }
 

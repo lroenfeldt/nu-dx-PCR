@@ -31,6 +31,7 @@ const useResults = () => {
     setSubmitting,
     resultsSubmitted,
     setSubmitted,
+    lotNumber,
   } = useData();
 
   const location = useLocation();
@@ -231,7 +232,7 @@ const useResults = () => {
     window.api.logEvents(`parse results`, 'logInfos.txt');
     let parsedResults;
     try {
-      parsedResults = parseResultsExport(resultFile, testid, testConfig, testmethod);
+      parsedResults = parseResultsExport(resultFile, testid, testConfig, testmethod, lotNumber);
     } catch (err) {
       console.log(err);
       window.api.logEvents(`saveToUSB: ${JSON.stringify(err)}`, 'logErrors.txt');
@@ -401,7 +402,8 @@ const useResults = () => {
         autoControls,
         testStarted,
         userId,
-        override
+        override,
+        lotNumber
       );
     } catch (err) {
       console.log(`parseResultsDB failed: ${err}`);

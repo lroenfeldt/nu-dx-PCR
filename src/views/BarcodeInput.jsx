@@ -34,7 +34,7 @@ const BarcodeInput = () => {
     : urls.checkBarcodeUrl;
   const [keyboardActive, setKeyboardActive] = useState(false);
   const [barcodeCheckTimeout, setBarcodeCheckTimeout] = useState(null);
-
+  const [clear, setClear] = useState(false);
   const markActive = (id) => {
     setActive(id);
     textInput.current.focus();
@@ -511,6 +511,7 @@ const BarcodeInput = () => {
     }
   }, [offlineMode]);
   const handleReset = useCallback(() => {
+    setClear(true);
     setBarcodes(
       barcodes.map((barcode) => {
         if (barcode?.id === active) {
@@ -604,6 +605,8 @@ const BarcodeInput = () => {
               </div>
             )}
             <Keyboard
+              clear={clear}
+              setClear={setClear}
               onChange={(e) => onKeyPress(e)}
               visible={keyboardActive}
               setVisible={setKeyboardActive}

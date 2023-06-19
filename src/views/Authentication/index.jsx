@@ -61,7 +61,6 @@ function Authentication() {
     console.log(value);
     const user = settings.account.users.find((user) => user.id == value);
     const isCertified = user?.certifiedTestprocedureIds?.includes(selectedMethod);
-    console.log(user, isCertified, selectedMethod);
     setCurrentUser(user);
     if (user) {
       setKeyboardVisible(false);
@@ -87,7 +86,7 @@ function Authentication() {
   return (
     <Block height={400} column center padding={10} gap={20}>
       <h3 style={{ textAlign: 'center' }}>{t('authentication.instructions')}</h3>
-      <Block column center shadow padding={20} radius={8} width={400} margin="0 auto">
+      <Block flex={0} column center padding={20} radius={8} width={400} margin="0 auto">
         <InputContainer
           t={t}
           signal={signal}
@@ -95,6 +94,7 @@ function Authentication() {
           isValid={isValid}
           password={password}
           textInput={textInput}
+          setPassword={setPassword}
           currentUser={currentUser}
           handleChange={handleChange}
           handleKeyPress={handleKeyPress}
@@ -109,7 +109,9 @@ function Authentication() {
             height: '83%',
           }}
         />
-        {settings.account.askForLot && isValid && <LotDoku />}
+        {settings.account.askForLot && isValid && (
+          <LotDoku keyboardVisible={keyboardVisible} setKeyboardVisible={setKeyboardVisible} />
+        )}
       </Block>
       <div className="buttonArea">
         <button onClick={() => navigate('/selectMethod')}>{t('common.cancel')}</button>

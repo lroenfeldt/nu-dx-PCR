@@ -50,7 +50,7 @@
     "react-icons": "^4.9.0",
     "react-loader-spinner": "^5.3.4",
     "react-router-dom": "^6.12.1",
-    "react-simple-keyboard": "^3.6.13",
+    "react-simple-keyboard": "^3.5.43",
     "react-toggle": "^4.1.3",
     "serial-number": "^1.3.0",
     "serialport": "^11.0.0",

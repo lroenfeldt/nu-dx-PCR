@@ -1,3 +1,9 @@
+.table {
+  position: relative;
+  overflow: auto;
+  width: 100%;
+  white-space: nowrap;
+}
 .header {
   display: flex;
   flex-direction: row;
@@ -9,7 +15,7 @@
   border-radius: 10px;
   margin-bottom: 10px;
   transition: all 0.5s ease 0s;
-  top: 100px;
+  top: -100px;
 }
 .header.sticky {
   position: sticky;
@@ -20,74 +26,75 @@
   transition: all 0.5s ease 0s;
 }
 .th {
-  width: 200px;
+  width: 100%;
   display: flex;
-  min-width: 115px;
+  margin: 0 10px;
+  min-width: 149px;
   text-align: center;
-  margin-right: 11px;
-  font-size: initial;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   transition: all 0.5s ease 0s;
 }
 
-.tr {
+tr {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   border-radius: 10px;
+  text-align: center;
+}
+tbody tr {
   margin-bottom: 5px;
   height: 40px;
-  text-align: center;
-  border: 1px solid #f1f1f1;
-  background-color: #fff;
+  transition: all 0.5s ease 0s;
 }
-
-.tr .old {
+tbody tr:nth-child(even) {
   background-color: #f1f1f1;
 }
-.row {
-  width: 200px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  font-size: 16px;
+tbody tr:nth-child(odd) {
+  border: 1px solid #f1f1f1;
 }
-.tr:hover {
+.row {
+  width: 100%;
+  display: flex;
+  margin: 0 10px;
+  font-size: 16px;
+  min-width: 149px;
+  text-align: center;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+tbody tr:hover {
   background-color: #ddd;
+}
+tbody tr:nth-child(even).selected {
+  background-color: #021e58;
 }
 .selected {
   background-color: #021e58;
   color: #fff;
 }
 
-.tr:nth-child(even) {
-  background-color: #f1f1f1;
-}
-/*
-.row:nth-child(odd) {
-  background-color: #fff;
-}
-
-
-
-.row.selected {
+.selected:hover {
   background-color: #021e58;
   color: #fff;
 }
 
-.row.selected:hover {
-  background-color: #021e58;
-  color: #fff;
-}
+.fade-out {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50px;
+  height: 100%;
+  background: linear-gradient(to left, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
 
-
-.row.selected .row:hover {
-  background-color: #021e58;
-  color: #fff;
+  pointer-events: none;
+  transition: all 0.5s ease 0s;
+  z-index: 2;
 }
-*/
+.end-reached .fade-out {
+  display: none;
+}

@@ -16,7 +16,20 @@
 .simple-keyboard {
   max-width: 850px;
 }
-
+.close-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+  cursor: pointer;
+  z-index: 1;
+  font-size: 50px;
+  color: var(--primary);
+  transition: all 0.5s ease 0s;
+}
+.close-icon:hover {
+  opacity: 0.8;
+}
 .simple-keyboard.dark {
   background-color: rgba(0, 0, 0, 0.8);
   border-radius: 0;

@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react';
+import './style.css';
+import { useData } from '../../hooks';
+import { RiCloseLine } from 'react-icons/ri';
+import { IoCloseCircle } from 'react-icons/io5';
+import { useLocation } from 'react-router-dom';
 import SimpleKeyboard from 'react-simple-keyboard';
 import 'react-simple-keyboard/build/css/index.css';
-import { useData } from '../../hooks';
-import './style.css';
-import { useLocation } from 'react-router-dom';
-import { RiCloseLine } from 'react-icons/ri';
+import React, { useEffect, useState, useRef } from 'react';
 function Keyboard(props) {
   const [layoutName, setLayoutName] = useState('default');
-  const { onChange, dark, visible, setVisible, inputValue, style, isNumeric } = props;
+  const { onChange, dark, visible, setVisible, inputValue, style, isNumeric, clear, setClear } = props;
   const { isNinetySix } = useData();
   const keyboard = useRef();
   const location = useLocation();
@@ -43,7 +44,12 @@ function Keyboard(props) {
     ],
     numeric: ['1 2 3 4 5 6 7 8 9', '{bksp} 0 {enter}'],
   };
-
+  useEffect(() => {
+    if (clear) {
+      onClear();
+      setClear(false);
+    }
+  }, [clear]);
   useEffect(() => {
     const keyboard = document.getElementById('keyboard');
 
@@ -71,10 +77,7 @@ function Keyboard(props) {
         ...style,
       }}
     >
-      <button className="close-button" onClick={() => setVisible(false)}>
-        <RiCloseLine />
-      </button>
-
+      <IoCloseCircle onClick={() => setVisible(false)} className="close-icon" />
       <SimpleKeyboard
         keyboardRef={(r) => (keyboard.current = r)}
         inputValue={inputValue}

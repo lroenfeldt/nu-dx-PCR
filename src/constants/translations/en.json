@@ -126,6 +126,7 @@
     "viewCurves": "view curves"
   },
   "errors": {
+    "errorOpenLidWhileRunning": "You cannot open the lid while the test is running.",
     "testFailed": "Test failed",
     "error": "Error",
     "barcodeAlreadyInUse": "A sample for this barcode has already been evaluated.",
