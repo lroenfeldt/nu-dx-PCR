@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 /**
  * Extract Barcodes from given result file
  * @param {*} resultFile

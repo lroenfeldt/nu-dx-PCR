@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useData } from './useData';
 /**
  * Checks if the device is connected to the internet

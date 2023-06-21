@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 import { useData } from '../hooks';
 import urls from '../config/settings';

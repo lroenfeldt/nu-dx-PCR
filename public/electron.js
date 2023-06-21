@@ -173,12 +173,11 @@ function createWindow() {
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
 
   // Open the DevTools.
-  if (isDev || forceConsole) {
-    devtools = new BrowserWindow();
-    //mainWindow.webContents.openDevTools({ mode: "detach" });
-    mainWindow.webContents.setDevToolsWebContents(devtools.webContents);
-    mainWindow.webContents.openDevTools({ mode: 'detach' });
-  }
+
+  devtools = new BrowserWindow();
+  //mainWindow.webContents.openDevTools({ mode: "detach" });
+  mainWindow.webContents.setDevToolsWebContents(devtools.webContents);
+  mainWindow.webContents.openDevTools({ mode: 'detach' });
 }
 
 /**
