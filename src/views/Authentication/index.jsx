@@ -86,7 +86,7 @@ function Authentication() {
   return (
     <Block height={400} column center padding={10} gap={20}>
       <h3 style={{ textAlign: 'center' }}>{t('authentication.instructions')}</h3>
-      <Block flex={0} column center padding={20} radius={8} width={400} margin="0 auto">
+      <Block column margin="0 325px" align="center" gap={30}>
         <InputContainer
           t={t}
           signal={signal}
@@ -106,7 +106,7 @@ function Authentication() {
           visible={keyboardVisible}
           setVisible={setKeyboardVisible}
           style={{
-            height: '83%',
+            height: keyboardVisible && isValid ? '70%' : '83%',
           }}
         />
         {settings.account.askForLot && isValid && (

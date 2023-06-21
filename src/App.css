@@ -1259,8 +1259,14 @@ form {
   align-items: center;
   background: var(--primary);
   color: white;
-  padding: 0 5px;
+  padding: 7px 8px;
   border-bottom-left-radius: 5px;
   border-top-left-radius: 5px;
   cursor: pointer;
+}
+label {
+  font-size: 14px;
+  font-weight: 500;
+  display: block;
+  margin-right: 10px;
 }

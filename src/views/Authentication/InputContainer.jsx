@@ -19,16 +19,15 @@ const InputContainer = ({
   return (
     <div className="inputContainer" style={{ marginBottom: 0 }}>
       <form action="" onSubmit={(e) => console.log(e)}>
-        <div
-          style={{
-            maxHeight: 40,
-            display: 'flex',
-            flexDirection: 'row',
-            transition: 'all 0.5s ease',
-            marginBottom: isValid && keyboardVisible ? -337 : keyboardVisible ? -200 : 0,
-            position: 'relative',
-          }}
+        <Block
+          maxHeight={40}
+          align="center"
+          position="relative"
+          transition="all 0.5s ease"
+          marginBottom={isValid && keyboardVisible ? 0 : keyboardVisible ? -200 : 0}
+          marginTop={isValid && keyboardVisible ? 34 : 0}
         >
+          <label htmlFor="UserID">UserID</label>
           <ActivateKeyboard
             onClick={() => {
               setKeyboardVisible(!keyboardVisible);
@@ -36,12 +35,14 @@ const InputContainer = ({
             }}
           />
           <input
-            ref={textInput}
             autoFocus
+            id="UserID"
             type="text"
+            name="UserID"
+            ref={textInput}
             value={password}
-            placeholder={'237c97x2'}
             onChange={handleChange}
+            placeholder={'237c97x2'}
             onKeyDown={handleKeyPress}
             style={{
               borderTopLeftRadius: 0,
@@ -49,7 +50,10 @@ const InputContainer = ({
             }}
           />
           <IoCloseCircle
-            onClick={() => setPassword('')}
+            onClick={() => {
+              setPassword('');
+              textInput.current.focus();
+            }}
             style={{
               top: 5,
               zIndex: 100,
@@ -61,26 +65,29 @@ const InputContainer = ({
               visibility: password.length > 0 ? 'visible' : 'hidden',
             }}
           />
-        </div>
+        </Block>
         {signal && password.length > 0 && (
           <Block
             style={{
               position: 'absolute',
-              top: keyboardVisible ? '66%' : isValid ? '28%' : '42%',
-              right: 100,
+              top:
+                keyboardVisible && isValid
+                  ? '53%'
+                  : keyboardVisible && !isValid
+                  ? '66%'
+                  : isValid && !keyboardVisible
+                  ? '34%'
+                  : isValid && keyboardVisible
+                  ? '28%'
+                  : '42%',
+              right: 65,
               width: 300,
               height: 200,
               zIndex: 100,
               transition: 'all 0.3s ease',
             }}
           >
-            <ArrowBox
-              direction={`right ${signal ? 'active' : ''}`}
-              style={{
-                minWidth: 370,
-                width: '100%',
-              }}
-            >
+            <ArrowBox direction={`right ${signal ? 'active' : ''}`}>
               {isUser ? (
                 <Block flex={0}>
                   <Block flex={0}>

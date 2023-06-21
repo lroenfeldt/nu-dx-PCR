@@ -1,25 +1,31 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ActivateKeyboard, Block, CustomSelect } from '../../components';
 import { useData, useTranslation } from '../../hooks';
 import { IoCloseCircle } from 'react-icons/io5';
 const LotDoku = ({ setKeyboardVisible, keyboardVisible }) => {
   const { t } = useTranslation();
+  const textInput = useRef(null);
   const { settings, selectedMethod, lotNumber, setLotNumber } = useData();
   return (
     <>
-      <h4>{t('authentication.currentLot')}</h4>
       {/*<CustomSelect options={['Lot', 'Doku']} defaultValue="" onChange={(value) => console.log(value)} />*/}
-      <Block position="relative">
+      <Block position="relative" align="center" marginRight={28} marginBottom={keyboardVisible ? -128 : 0}>
+        <label>Chargennr </label>
         <ActivateKeyboard
           onClick={() => {
             setKeyboardVisible(!keyboardVisible);
           }}
         />
+
         <input
+          autoFocus
+          ref={textInput}
           type="text"
           placeholder={t('authentication.currentLot')}
           value={lotNumber}
-          onChange={(e) => setLotNumber(e.target.value)}
+          onChange={(e) => {
+            setLotNumber(e.target.value);
+          }}
           style={{
             borderTopLeftRadius: 0,
             borderBottomLeftRadius: 0,
@@ -27,7 +33,10 @@ const LotDoku = ({ setKeyboardVisible, keyboardVisible }) => {
         />
 
         <IoCloseCircle
-          onClick={() => setLotNumber('')}
+          onClick={() => {
+            setLotNumber('');
+            textInput.current.focus();
+          }}
           style={{
             top: 5,
             zIndex: 100,

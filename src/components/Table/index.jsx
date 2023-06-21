@@ -23,13 +23,20 @@ function Table({ th, tr }) {
     const handleScroll = () => {
       const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
 
+      const fadeOut = document.querySelector('.fade-out');
+      // fadeOut.style.right = `${-((scrollLeft / clientWidth) * 100)}%`;
       if (scrollLeft + clientWidth >= scrollWidth) {
         containerRef.current.classList.add('end-reached');
       } else {
         containerRef.current.classList.remove('end-reached');
       }
+      if (scrollLeft === 0) {
+        containerRef.current.classList.add('start-reached');
+      } else {
+        containerRef.current.classList.remove('start-reached');
+      }
     };
-
+    handleScroll();
     containerRef.current.addEventListener('scroll', handleScroll);
 
     return () => {
@@ -75,6 +82,7 @@ function Table({ th, tr }) {
         </tbody>
       </table>
       <div className="fade-out"></div>
+      <div className="fade-out-left"></div>
     </div>
   );
 }

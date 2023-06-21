@@ -55,6 +55,7 @@ function Block(props) {
     marginHorizontal,
     paddingHorizontal,
     column,
+    transition,
     gap,
     ...rest
   } = props;
@@ -127,6 +128,11 @@ function Block(props) {
     ...(center && { justifyContent: 'center' }),
     ...(justify && { justifyContent: justify }),
     ...(wrap && { flexWrap: wrap }),
+    ...(scroll && { overflowY: 'scroll' }),
+    ...(blur && { backdropFilter: `blur(${blur}px)` }),
+    ...(tint && { WebkitBackdropFilter: `blur(${blur}px)`, backdropFilter: `blur(${blur}px)` }),
+    ...(intensity && { WebkitBackdropFilter: `brightness(${intensity}%)` }),
+    ...(transition && { transition: transition }),
     ...(outlined && {
       borderWidth: 1,
       backgroundColor: 'transparent',
