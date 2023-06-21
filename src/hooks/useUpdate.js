@@ -9,7 +9,7 @@ const useUpdate = () => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${process.env.REACT_APP_GH_TOKEN}`,
+          Authorization: `Bearer ${import.meta.env.VITE_APP_GH_TOKEN}`,
         },
       };
       const response = await axios.get('https://api.github.com/repos/lroenfeldt/phoenixdx-poc/releases', config);

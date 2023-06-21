@@ -62,7 +62,6 @@ function Keyboard(props) {
     }
 
     setLayoutName(isNumeric ? 'numeric' : 'default');
-    console.log(layoutName);
   }, [visible, isNumeric]);
 
   if (!visible) return null;

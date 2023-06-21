@@ -20,7 +20,6 @@ const InputContainer = ({
     <div className="inputContainer" style={{ marginBottom: 0 }}>
       <form action="" onSubmit={(e) => console.log(e)}>
         <Block
-          maxHeight={40}
           align="center"
           position="relative"
           transition="all 0.5s ease"
