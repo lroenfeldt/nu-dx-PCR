@@ -173,11 +173,12 @@ function createWindow() {
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
 
   // Open the DevTools.
-
-  devtools = new BrowserWindow();
-  //mainWindow.webContents.openDevTools({ mode: "detach" });
-  mainWindow.webContents.setDevToolsWebContents(devtools.webContents);
-  mainWindow.webContents.openDevTools({ mode: 'detach' });
+  if (isDev || forceConsole) {
+    devtools = new BrowserWindow();
+    //mainWindow.webContents.openDevTools({ mode: "detach" });
+    mainWindow.webContents.setDevToolsWebContents(devtools.webContents);
+    mainWindow.webContents.openDevTools({ mode: 'detach' });
+  }
 }
 
 /**
@@ -875,7 +876,9 @@ ipcMain.handle('launch-updates', (event) => updater());
  * Check for updates and run the update
  * @returns {void}
  */
+
 function updater() {
+  autoUpdater.allowPrerelease = store.get('settings').user.updateType === 'beta';
   autoUpdater.checkForUpdates();
   autoUpdater.on('checking-for-update', () => {
     splash.webContents.send('updateStatus', 'searching for update...');

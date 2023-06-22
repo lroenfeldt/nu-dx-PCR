@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { ActivateKeyboard, Block, CustomSelect } from '../../components';
 import { useData, useTranslation } from '../../hooks';
 import { IoCloseCircle } from 'react-icons/io5';
-const LotDoku = ({ setKeyboardVisible, keyboardVisible }) => {
+const LotDoku = ({ setKeyboardVisible, keyboardVisible, setClear }) => {
   const { t } = useTranslation();
   const textInput = useRef(null);
   const { settings, selectedMethod, lotNumber, setLotNumber } = useData();
@@ -36,6 +36,7 @@ const LotDoku = ({ setKeyboardVisible, keyboardVisible }) => {
           onClick={() => {
             setLotNumber('');
             textInput.current.focus();
+            setClear(true);
           }}
           style={{
             top: 5,
@@ -43,7 +44,7 @@ const LotDoku = ({ setKeyboardVisible, keyboardVisible }) => {
             fontSize: 30,
             cursor: 'pointer',
             position: 'absolute',
-            transition: 'all 0.3s ease',
+            transition: 'var(--transition)',
             right: lotNumber.length > 0 ? 4 : 0,
             visibility: lotNumber.length > 0 ? 'visible' : 'hidden',
           }}

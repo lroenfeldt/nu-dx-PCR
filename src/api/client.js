@@ -4,7 +4,7 @@ import settings from '../config/settings';
 const apiClient = create({
   baseURL: settings.api,
 });
-
+console.log('apiClient', settings.api);
 const { get } = apiClient;
 apiClient.get = async (url, params, axiosConfig) => {
   const response = await get(url, params, axiosConfig);

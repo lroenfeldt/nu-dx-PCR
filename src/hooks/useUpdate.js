@@ -14,9 +14,19 @@ const useUpdate = () => {
       };
       const response = await axios.get('https://api.github.com/repos/lroenfeldt/phoenixdx-poc/releases', config);
 
-      if (settings.version) {
+      let latestVersion;
+
+      if (settings.user.updateType === 'beta') {
+        // Filter prereleases and pick the first one as the latest beta version
+        latestVersion = response.data.filter((release) => release.prerelease)[0];
+      } else {
+        // Otherwise pick the first release as the latest stable version
+        latestVersion = response.data[0];
+      }
+
+      if (settings.version && latestVersion) {
         const currentVersion = settings.version.split('.');
-        const newVersion = response.data[0].tag_name.replace('v', '').split('.');
+        const newVersion = latestVersion.tag_name.replace('v', '').split('.');
         for (let i = 0; i < currentVersion.length; i++) {
           if (
             parseInt(currentVersion[i]) != parseInt(newVersion[i]) &&
@@ -31,15 +41,12 @@ const useUpdate = () => {
         }
       }
 
-      window.api.logEvents(
-        `currentVersion: ${settings.version}, newVersion:${response.data[0].tag_name}`,
-        'logInfos.txt'
-      );
+      window.api.logEvents(`currentVersion: ${settings.version}, newVersion:${latestVersion.tag_name}`, 'logInfos.txt');
     } catch (err) {
       window.api.logEvents('getLastVersion error' + JSON.stringify(err), 'logErrors.txt');
       console.log(err);
     }
-  }, [settings.version, setUpdateAvailable]);
+  }, [settings.version, setUpdateAvailable, settings.user.updateType]);
 
   return { getLastVersion };
 };

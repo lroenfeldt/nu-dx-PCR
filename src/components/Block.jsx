@@ -57,6 +57,7 @@ function Block(props) {
     column,
     transition,
     gap,
+    zIndex,
     ...rest
   } = props;
   const colors = {
@@ -142,6 +143,7 @@ function Block(props) {
       boxShadow: 'rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px',
     }),
     ...(position && { position }),
+    ...(zIndex && { zIndex }),
     ...(right !== undefined && { right }),
     ...(left !== undefined && { left }),
     ...(top !== undefined && { top }),

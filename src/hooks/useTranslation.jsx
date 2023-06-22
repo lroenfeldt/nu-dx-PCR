@@ -1,7 +1,7 @@
 import i18n from 'i18n-js';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import translations from '../constants/translations';
-import { useData } from '../hooks';
+import { useData } from '.';
 
 export const TranslationContext = React.createContext({});
 

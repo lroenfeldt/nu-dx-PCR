@@ -38,7 +38,7 @@ export const useStatus = () => {
       console.log(err);
       window.api.logEvents('ping status error:' + JSON.stringify(err), 'logErrors.txt');
     }
-  }, [deviceStatus, settings, setDbConnection, saveSettings, setErrors, onlineStatusApi]);
+  }, [deviceStatus, settings, onlineStatusApi]);
 
   return { ping };
 };

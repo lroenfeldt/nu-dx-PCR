@@ -15,7 +15,7 @@ function Authentication() {
   const [signal, setSignal] = useState(false);
   const { settings, currentUser, setCurrentUser, selectedMethod } = useData();
   const [keyboardVisible, setKeyboardVisible] = useState(false);
-
+  const [clear, setClear] = useState(false);
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && isValid) {
       navigate('/enterBarcodes');
@@ -28,10 +28,10 @@ function Authentication() {
 
       setPassword(value);
       setSignal(value.length > 0);
-      console.log(value);
+
       const user = settings.account.users.find((user) => user.id == value);
       const isCertified = user?.certifiedTestprocedureIds?.includes(selectedMethod);
-      console.log(user, isCertified, selectedMethod);
+
       setCurrentUser(user);
       if (user) {
         setKeyboardVisible(false);
@@ -45,7 +45,6 @@ function Authentication() {
         setKeyboardVisible(false);
       } else {
         setIsUser(false);
-        setKeyboardVisible(true);
       }
       if (user && !isCertified) {
         setIsUser(true);
@@ -58,7 +57,7 @@ function Authentication() {
   const onKeyPress = (value) => {
     setPassword(value);
     setSignal(value.length > 0);
-    console.log(value);
+
     const user = settings.account.users.find((user) => user.id == value);
     const isCertified = user?.certifiedTestprocedureIds?.includes(selectedMethod);
     setCurrentUser(user);
@@ -93,6 +92,7 @@ function Authentication() {
           isUser={isUser}
           isValid={isValid}
           password={password}
+          setClear={setClear}
           textInput={textInput}
           setPassword={setPassword}
           currentUser={currentUser}
@@ -108,9 +108,12 @@ function Authentication() {
           style={{
             height: keyboardVisible && isValid ? '70%' : '83%',
           }}
+          clear={clear}
+          setClear={setClear}
+          inputValue={'password'}
         />
         {settings.account.askForLot && isValid && (
-          <LotDoku keyboardVisible={keyboardVisible} setKeyboardVisible={setKeyboardVisible} />
+          <LotDoku keyboardVisible={keyboardVisible} setKeyboardVisible={setKeyboardVisible} setClear={setClear} />
         )}
       </Block>
       <div className="buttonArea">

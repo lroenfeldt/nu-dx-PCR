@@ -12,6 +12,7 @@
   --orange: orange;
   --transparent: rgba(0, 0, 0, 0.1);
   --darktransparent: rgba(0, 0, 0, 0);
+  --transition: all 0.3s ease;
 }
 
 * {
@@ -726,7 +727,7 @@ input {
 }
 .ViewResults {
   width: 90vw;
-  margin: 50px auto;
+  margin: 0 auto;
   padding-bottom: 60px;
   height: calc(100vh - 100px);
   display: flex;
@@ -792,7 +793,7 @@ input {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 12px;
+
   border: 2px solid var(--primary);
   border-radius: 10px;
 }

@@ -79,7 +79,7 @@ const ViewResults = () => {
       setSelectedMethod(testmethod.id);
     } catch (err) {
       console.log(err);
-      window.api.logEvents(`fetchResult: ${JSON.stringify(err)}`, 'logErrors.txt');
+      window.api.logEvents(`fetchResult: ${err}`, 'logErrors.txt');
       setErrors((prevErrors) =>
         prevErrors
           .filter((error) => error.type !== 'read')
@@ -117,7 +117,7 @@ const ViewResults = () => {
       setActive((prevActive) => (prevActive == 0 ? 1 : prevActive));
     } catch (err) {
       console.log(err);
-      window.api.logEvents(`parseResults: ${JSON.stringify(err)}`, 'logErrors.txt');
+      window.api.logEvents(`parseResults: ${err}`, 'logErrors.txt');
       setErrors((prevErrors) =>
         prevErrors
           .filter((error) => error.type !== 'submit')

@@ -9,6 +9,7 @@ const InputContainer = ({
   isValid,
   password,
   textInput,
+  setClear,
   setPassword,
   currentUser,
   handleChange,
@@ -23,6 +24,7 @@ const InputContainer = ({
           align="center"
           position="relative"
           transition="all 0.5s ease"
+          zIndex={1}
           marginBottom={isValid && keyboardVisible ? 0 : keyboardVisible ? -200 : 0}
           marginTop={isValid && keyboardVisible ? 34 : 0}
         >
@@ -52,6 +54,7 @@ const InputContainer = ({
             onClick={() => {
               setPassword('');
               textInput.current.focus();
+              setClear(true);
             }}
             style={{
               top: 5,
@@ -59,7 +62,7 @@ const InputContainer = ({
               fontSize: 30,
               cursor: 'pointer',
               position: 'absolute',
-              transition: 'all 0.3s ease',
+              transition: 'var(--transition)',
               right: password.length > 0 ? 4 : 0,
               visibility: password.length > 0 ? 'visible' : 'hidden',
             }}
@@ -83,7 +86,7 @@ const InputContainer = ({
               width: 300,
               height: 200,
               zIndex: 100,
-              transition: 'all 0.3s ease',
+              transition: 'var(--transition)',
             }}
           >
             <ArrowBox direction={`right ${signal ? 'active' : ''}`}>

@@ -86,24 +86,24 @@ tbody tr:nth-child(even).selected {
 .fade-out {
   position: fixed;
   right: 84px;
-  top: 20%;
+  top: 19%;
   width: 50px;
-  height: 62%;
+  height: 70%;
   background: linear-gradient(to left, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
   pointer-events: none;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   z-index: 2;
   opacity: 1;
 }
 .fade-out-left {
   position: fixed;
   left: 59px;
-  top: 20%;
+  top: 19%;
   width: 50px;
-  height: 62%;
+  height: 70%;
   background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
   pointer-events: none;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   z-index: 2;
   opacity: 1;
 }

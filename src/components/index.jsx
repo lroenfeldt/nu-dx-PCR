@@ -15,6 +15,7 @@ import WellVisual from './WellVisual';
 import Controller from './Controller';
 import ButtonArea from './ButtonArea';
 import ProgressBar from './ProgressBar';
+import RadioButton from './RadioButton';
 import CustomSelect from './CustomSelect';
 import Dropdown from './Dropdown/Dropdown';
 import Testselection from './Testselection';
@@ -47,6 +48,7 @@ export {
   TestStatus,
   Controller,
   ProgressBar,
+  RadioButton,
   CustomSelect,
   Testselection,
   Notifications,

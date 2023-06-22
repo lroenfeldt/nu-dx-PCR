@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 /**
  * Extract Barcodes from given result file
  * @param {*} resultFile
@@ -138,20 +140,20 @@ export const parseResults = (resultFile, testid, testConfig, testmethod, overrid
     parsedResultsData[position].result = 'invalid';
 
     //Define functions to call upon evaluation
-    const CT = (param) => {
+    function CT(param) {
       const ctValue = parsedResultsData[position].parameters[param]?.ct;
       return Number(ctValue);
-    };
+    }
 
-    const FL = (param) => {
+    function FL(param) {
       const flValue = parsedResultsData[position].parameters[param]?.finalCycle;
       return Number(flValue);
-    };
+    }
 
-    const Thresh = (param) => {
+    function Thresh(param) {
       const threshValue = parsedResultsData[position].parameters[param]?.threshhold;
       return Number(threshValue);
-    };
+    }
 
     //parse result conditions
     testmethod.results.forEach((resultType) => {
@@ -165,6 +167,10 @@ export const parseResults = (resultFile, testid, testConfig, testmethod, overrid
         .split(',')
         .map((s) => '(' + s.trim() + ')')
         .join(' && ');
+
+      //Vite does not consider declared and unused functions during compilation, hence the need to write this line to prevent the functions from being ignored.
+      CT('ROX') > 0 && CT('ROX') < 40 && (CT('FAM') == 0 || FL('FAM') > 40) && (Thresh('VIC') == 0 || CT('VIC') > 40);
+
       const passed = eval(conditions);
 
       if (passed) {

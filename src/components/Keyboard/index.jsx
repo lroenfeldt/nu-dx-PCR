@@ -15,7 +15,7 @@ function Keyboard(props) {
   const isBarcode = location.pathname === '/enterBarcodes';
 
   const onClear = () => {
-    keyboard.current.clearInput();
+    keyboard.current?.clearInput();
   };
 
   const onKeyPress = (button) => {

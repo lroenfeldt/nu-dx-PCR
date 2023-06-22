@@ -35,6 +35,7 @@ export function DataProvider({ children }) {
   const [pairingCode, setPairingCode] = useState(null);
   const [offlineMode, setOfflineMode] = useState(false);
   const [openResults, setOpenResults] = useState(false);
+  const [updateType, setUpdateType] = useState('stable');
   const [dbConnection, setDbConnection] = useState(true);
   const [submitFilter, setSubmitFilter] = useState(false);
   const [viewResults, setViewResults] = useState('graph');
@@ -176,7 +177,7 @@ export function DataProvider({ children }) {
         return false;
       }
     },
-    [settings?.device?.wellCount, errors, isNinetySix, barcodes]
+    [settings, errors, isNinetySix, barcodes]
   );
 
   const toggleLid = useCallback(() => {
@@ -314,6 +315,8 @@ export function DataProvider({ children }) {
       setCheckForTestResultFile,
       lotNumber,
       setLotNumber,
+      updateType,
+      setUpdateType,
     }),
     [
       openResults,
@@ -407,6 +410,8 @@ export function DataProvider({ children }) {
       setCheckForTestResultFile,
       lotNumber,
       setLotNumber,
+      updateType,
+      setUpdateType,
     ]
   );
   return <DataContext.Provider value={contextValue}>{children}</DataContext.Provider>;
