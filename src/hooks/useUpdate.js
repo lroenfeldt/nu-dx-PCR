@@ -41,12 +41,20 @@ const useUpdate = () => {
         }
       }
 
-      window.api.logEvents(`currentVersion: ${settings.version}, newVersion:${latestVersion.tag_name}`, 'logInfos.txt');
+      if (latestVersion) {
+        window.api.logEvents(
+          `currentVersion: ${settings.version}, newVersion:${latestVersion.tag_name}`,
+          'logInfos.txt'
+        );
+      } else {
+        console.log('No new version found');
+        window.api.logEvents(`No new version found`, 'logInfos.txt');
+      }
     } catch (err) {
       window.api.logEvents('getLastVersion error' + JSON.stringify(err), 'logErrors.txt');
       console.log(err);
     }
-  }, [settings.version, setUpdateAvailable, settings.user.updateType]);
+  }, [settings, setUpdateAvailable]);
 
   return { getLastVersion };
 };

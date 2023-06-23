@@ -35,7 +35,6 @@ export function DataProvider({ children }) {
   const [pairingCode, setPairingCode] = useState(null);
   const [offlineMode, setOfflineMode] = useState(false);
   const [openResults, setOpenResults] = useState(false);
-  const [updateType, setUpdateType] = useState('stable');
   const [dbConnection, setDbConnection] = useState(true);
   const [submitFilter, setSubmitFilter] = useState(false);
   const [viewResults, setViewResults] = useState('graph');
@@ -49,6 +48,7 @@ export function DataProvider({ children }) {
   const [barcodes, setBarcodes] = useState(defaultBarcodes(settings));
   const [checkForTestResultFile, setCheckForTestResultFile] = useState(false);
   const [isNinetySix, setIsNinetySix] = useState(settings?.device?.wellCount === 96);
+  const [updateType, setUpdateType] = useState(settings.user.updateType || 'stable');
   const [paramTrans, setParamTrans] = useState({ CY5: 'POC_HEC', ROX: 'POC_VIRUS' });
   /**
    * Resets values to default

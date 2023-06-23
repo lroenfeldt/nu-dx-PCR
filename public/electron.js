@@ -878,6 +878,7 @@ ipcMain.handle('launch-updates', (event) => updater());
  */
 
 function updater() {
+  console.log(store.get('settings').user.updateType === 'beta');
   autoUpdater.allowPrerelease = store.get('settings').user.updateType === 'beta';
   autoUpdater.checkForUpdates();
   autoUpdater.on('checking-for-update', () => {

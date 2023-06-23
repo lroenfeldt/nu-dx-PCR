@@ -19,10 +19,11 @@ const Debug = () => {
       const newSettings = settings;
       newSettings.user.updateType = event.target.value;
       await saveSettings(newSettings);
+      setSettings(newSettings);
     },
     [settings, updateType]
   );
-  console.log(settings.user.updateType, updateType);
+
   return (
     <div>
       <div className="version">

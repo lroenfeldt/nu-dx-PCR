@@ -1,0 +1,22 @@
+{
+  "name": "phoenixdx-poc",
+  "short_name": "phoenixdx-poc",
+  "description": "Frontend app to operate POC PCR-Cycler",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./icons.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./icons.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

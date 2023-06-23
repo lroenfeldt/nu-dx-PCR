@@ -19,6 +19,7 @@ function useBackgroundProcesses() {
     setUSBPresent,
     idleTimestamp,
     setIdleTimestamp,
+    results,
   } = useData();
   const { submitAll } = useResults();
   const location = useLocation();
@@ -40,14 +41,6 @@ function useBackgroundProcesses() {
     let resultPresent = await window.api.checkResultFile(testid);
     setIsResultFilePresent(resultPresent);
   }, [testid, deviceStatus, setIsResultFilePresent]);
-
-  const checkForUpdateAvailable = useCallback(() => {
-    // Implement your logic to check for available updates
-  }, []);
-
-  const checkConnectionStatus = useCallback(() => {
-    // Implement your logic to check for connection status
-  }, []);
 
   const checkForUSB = useCallback(async () => {
     try {
@@ -102,7 +95,7 @@ function useBackgroundProcesses() {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [results]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -112,7 +105,7 @@ function useBackgroundProcesses() {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [settings]);
 
   useEffect(() => {
     const pingInterval = setInterval(() => {
@@ -120,7 +113,7 @@ function useBackgroundProcesses() {
     }, 5000);
 
     return () => clearInterval(pingInterval);
-  }, [deviceStatus]);
+  }, [deviceStatus, settings]);
 
   useEffect(() => {
     if (deviceStatus === 'IDLE' && !idleTimestamp) {
