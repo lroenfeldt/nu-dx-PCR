@@ -77,8 +77,8 @@ const SelectTestResults = ({ onSelect, onClose, isVisible }) => {
 
   return (
     <>
-      <div id="modal" className={'overlay'} onClick={onClose}></div>
-      <div className={`overlay-body " ${isVisible ? 'visible' : ''}`}>
+      <div id="modal" className={'overlay '} onClick={onClose}></div>
+      <div className={`animate overlay-body  `}>
         <div className="overlay-header">
           <h2>{t('common.selectResult')}</h2>
 

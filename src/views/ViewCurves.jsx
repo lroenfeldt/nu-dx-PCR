@@ -2,16 +2,7 @@ import React, { useState } from 'react';
 import Line from '../components/Charts/Line';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation, useData } from '../hooks';
-import {
-  TestStatus,
-  Block,
-  Button,
-  ButtonArea,
-  ChangeResults,
-  AlteredResult,
-  Checkmark,
-  ResultsFooter,
-} from '../components';
+import { Block, Button, ButtonArea, ResultsFooter } from '../components';
 import { TbEdit, TbGripHorizontal } from 'react-icons/tb';
 import { hexToRGB } from '../utils/helper';
 function ViewCurves() {

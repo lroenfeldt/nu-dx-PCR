@@ -11,7 +11,7 @@ const AlteredResult = ({ activeBarcode, testmethod, style }) => {
       <div
         className="alteredResult"
         style={{
-          top: settings.account.ChangeResults ? 0 : 9,
+          top: settings.account.ChangeResults ? 0 : 15,
           backgroundColor:
             activeBarcode?.result == 'invalid'
               ? 'orange'

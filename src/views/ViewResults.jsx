@@ -277,11 +277,12 @@ const ViewResults = () => {
                             testmethod={testmethod}
                             style={{
                               right: -1,
-                              top: -1,
+                              top: 0,
                               bottom: -1,
                               borderRadius: 4,
                               borderTopLeftRadius: 0,
                               borderBottomLeftRadius: 0,
+                              height: '100%',
                             }}
                           />
                           <Checkmark

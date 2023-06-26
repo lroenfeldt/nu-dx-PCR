@@ -69,7 +69,7 @@ function Keyboard(props) {
   return (
     <div
       id="keyboard"
-      className={` ${visible ? 'slideIn' : ''}`}
+      className={`animate `}
       style={{
         top: 0,
         left: 0,

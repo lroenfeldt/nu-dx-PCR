@@ -20,8 +20,8 @@ const ChangeResults = ({ activeBarcode, testmethod, isTable = false }) => {
                   result.name.includes(barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]?.result)
                 )?.color,
           color: '#fff',
-          justifyContent: 'center',
-          alignItems: 'center',
+          display: 'grid',
+          maxWidth: 75,
         }}
       >
         <TbEdit size={20} />

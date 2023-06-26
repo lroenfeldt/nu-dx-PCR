@@ -319,7 +319,12 @@ const BarcodeInput = () => {
     });
 
     //Check against db
-    if (isValid && newBarcode.value.indexOf('-R') === -1 && settings.account.checkBarcodesDB) {
+    if (
+      isValid &&
+      newBarcode.value.indexOf('-R') === -1 &&
+      settings.account.checkBarcodesDB &&
+      settings.account.verifyBarcodes
+    ) {
       if (offlineMode) {
         validationErr = t('errors.offlineModeMode');
         newBarcode = {
@@ -351,7 +356,7 @@ const BarcodeInput = () => {
             validationErr = t('errors.barcodeNotFound');
           } else if (result.status <= 3) {
             isValid = false;
-            askRetest = settings.account.allowRetest;
+            askRetest = settings.account.allowRetest && settings.account.verifyBarcodes;
             validationErr = t('errors.barcodeAlreadyInUse');
           } else if (settings.account.checkOrder && result.orderKey !== settings.account.orderKey) {
             isValid = false;
@@ -497,8 +502,8 @@ const BarcodeInput = () => {
   }, []);
 
   useEffect(() => {
-    getBarcode(active).askRetest = settings.account.allowRetest;
-  }, [settings.account.allowRetest]);
+    getBarcode(active).askRetest = settings.account.allowRetest && settings.account.verifyBarcodes;
+  }, [settings.account.allowRetest, settings.account.verifyBarcodes]);
   //check valid attribure of all barcodes to toggle button for next step
   useEffect(() => {
     checkAllValid();
@@ -611,7 +616,9 @@ const BarcodeInput = () => {
               visible={keyboardActive}
               setVisible={setKeyboardActive}
               inputValue={getBarcode(active).value}
-              isNumeric={typeof Number(settings.account.allowedCharacters) == 'number'}
+              isNumeric={
+                typeof Number(settings.account.allowedCharacters) == 'number' && settings.account.verifyBarcodes
+              }
             />
             {getBarcode(active).askRetest && getBarcode(active).value != '' ? (
               <button onClick={() => retest(getBarcode(active))}>{t('common.retest')}</button>

@@ -1,10 +1,10 @@
 import React from 'react';
-import Button from '../Button';
 import Block from '../Block';
-import { VscGraphLine } from 'react-icons/vsc';
-import AlteredResult from '../AlteredResult';
+import Button from '../Button';
 import Checkmark from '../Checkmark';
+import AlteredResult from '../AlteredResult';
 import ChangeResults from '../ChangeResults';
+import { VscGraphLine } from 'react-icons/vsc';
 import { useLocation } from 'react-router-dom';
 
 const ResultsFooter = ({ activeBarcode, testmethod, settings, barcodes, locale = 'en', navigate }) => {
@@ -45,9 +45,8 @@ const ResultsFooter = ({ activeBarcode, testmethod, settings, barcodes, locale =
                     )?.color,
               color: '#fff',
               borderWidth: 0,
-              justifyContent: 'center',
-              alignItems: 'center',
               cursor: !settings.account.changeResults ? 'auto' : 'pointer',
+              justifyContent: 'center',
             }}
           >
             {barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]?.result == 'invalid'
