@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import pcc_logo from '../img/pcc_logo.png';
+import nu_dx_logo from '../img/nu-dx PCR Logo white.png';
 import { useData } from '../hooks';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaServer, FaCircle } from 'react-icons/fa';
@@ -13,7 +14,7 @@ const Footer = () => {
   const logo =
     location.pathname === '/selectMethod' ? (
       <div onDoubleClick={() => navigate('/debug')}>
-        <img src={pcc_logo} alt="" />
+        <img src={nu_dx_logo} alt="" />
       </div>
     ) : (
       <span>{settings.account.data.name || 'Procomcure Biotech'}</span>

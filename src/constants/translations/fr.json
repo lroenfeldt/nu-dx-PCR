@@ -88,7 +88,7 @@
     "resultsSent": "Les résultats ont été envoyés avec succès !"
   },
   "pairing": {
-    "welcome": "Bienvenue sur PhoenixDx® POC",
+    "welcome": "Bienvenue sur nu:dx PCR",
     "instructions": "Avant que l'appareil puisse être utilisé, il doit être associé à votre compte.",
     "scanQrcode": "Scannez le code QR affiché",
     "scanQrcodeInstructions": "Ou rendez-vous sur https://poc.myproccomcure.de/pairing et saisissez le code suivant :"

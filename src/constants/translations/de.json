@@ -78,7 +78,7 @@
   },
 
   "pairing": {
-    "welcome": "Herzlich willkomen bei PhoenixDx® POC",
+    "welcome": "Herzlich willkomen bei nu:dx PCR",
     "instructions": "Bevor das Gerät verwendet werden kann, muss es Ihrem Account zugeordnet werden.",
     "scanQrcode": "Scannen Sie den abgebildeten QR-Code",
     "scanQrcodeInstructions": "Oder gehen Sie auf https://poc.myprocomcure.de/pairing und geben Sie den folgenden Code ein:"

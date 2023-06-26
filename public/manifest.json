@@ -1,6 +1,6 @@
 {
-  "name": "phoenixdx-poc",
-  "short_name": "phoenixdx-poc",
+  "name": "nu:dx PCR",
+  "short_name": "nu:dx PCR",
   "description": "Frontend app to operate POC PCR-Cycler",
   "start_url": "/",
   "display": "standalone",

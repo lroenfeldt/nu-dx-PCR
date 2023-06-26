@@ -76,7 +76,7 @@
     "version": "Version"
   },
   "pairing": {
-    "welcome": "Welcome to PhoenixDx® POC",
+    "welcome": "Welcome to nu:dx PCR",
     "instructions": "Before the device can be used, it must be associated with your account.",
     "scanQrcode": "Scan the QR code shown",
     "scanQrcodeInstructions": "Or go to https://poc.myprocomcure.de/pairing and enter the following code:"

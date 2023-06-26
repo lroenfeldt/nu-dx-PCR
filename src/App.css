@@ -266,6 +266,7 @@ button {
   max-height: 100%;
   position: absolute;
   bottom: 15px;
+  width: 150px;
 }
 
 .menu-left {
@@ -883,7 +884,10 @@ input {
 
 .intro img {
   max-height: 100%;
-  margin-right: 0.5em;
+  /*margin-right: 0.5em;*/
+  margin-top: 0.5em;
+  width: 500px;
+  transition: all 0.5s ease-in-out;
 }
 
 .intro .appTitle {

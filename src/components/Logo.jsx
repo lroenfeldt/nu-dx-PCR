@@ -7,7 +7,7 @@ export default Logo = () => {
     location.pathname !== '/selectMethod' && (
       <div className="logoWrapper" onDoubleClick={() => navigate('/debug')}>
         <img src={logo_small} alt="" />
-        <span>PhoenixDx POC</span>
+        <span>nu:dx PCR</span>
       </div>
     )
   );

@@ -218,7 +218,7 @@ app.whenReady().then(() => {
 
   //Launch app on startup
   let autoLaunch = new AutoLaunch({
-    name: 'PhoenixDx POC',
+    name: 'nu:dx PCR',
     path: app.getPath('exe'),
   });
   autoLaunch.isEnabled().then((isEnabled) => {
@@ -313,7 +313,7 @@ const findAndMoveRunsDir = () => {
       if (!fs.existsSync(path.resolve(destpath, file.name))) {
         fs.renameSync(path.resolve(filepath, file.name), path.resolve(destpath, file.name));
       }
-    } else if (file.isDirectory() && file.name == 'phoenixdx-poc') {
+    } else if (file.isDirectory() && file.name == 'nu:dx PCR') {
       files = fs.readdirSync(path.resolve(filepath, file.name), {
         withFileTypes: true,
       });
@@ -321,7 +321,7 @@ const findAndMoveRunsDir = () => {
       files.forEach((file) => {
         if (file.isDirectory() && file.name == 'runs') {
           if (!fs.existsSync(path.resolve(destpath, file.name))) {
-            fs.renameSync(path.resolve(filepath, 'phoenixdx-poc', file.name), path.resolve(destpath, file.name));
+            fs.renameSync(path.resolve(filepath, 'nu:dx PCR', file.name), path.resolve(destpath, file.name));
           }
         }
       });
@@ -594,6 +594,9 @@ ipcMain.handle('toggleLid', (event) => {
 ipcMain.handle('getUnsubmitted', (event) => {
   const filePath = path.resolve(app.getPath('userData'), 'runs');
   try {
+    if (!fs.existsSync(filePath)) {
+      fs.mkdirSync(filePath);
+    }
     let getDirectories = fs
       .readdirSync(filePath, { withFileTypes: true })
       .filter((dirent) => dirent.isDirectory())
@@ -816,7 +819,7 @@ ipcMain.handle('saveToUSB', (event, testid, results) => {
   const dateTime = date + '-' + time;
 
   const filename = testid + '.csv';
-  const destPath = 'D:\\PhoenixDxPOC\\runs';
+  const destPath = 'D:\\nu-dx-pcr\\runs';
   const filepath = path.resolve(destPath, filename);
   try {
     fs.mkdirSync(path.dirname(filepath), { recursive: true });
