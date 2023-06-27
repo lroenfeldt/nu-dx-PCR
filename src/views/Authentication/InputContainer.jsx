@@ -74,22 +74,21 @@ const InputContainer = ({
               position: 'absolute',
               top:
                 keyboardVisible && isValid
-                  ? '53%'
+                  ? '60%'
                   : keyboardVisible && !isValid
-                  ? '66%'
+                  ? '73%'
                   : isValid && !keyboardVisible
-                  ? '34%'
+                  ? '40%'
                   : isValid && keyboardVisible
                   ? '28%'
-                  : '42%',
+                  : '49%',
               right: 65,
               width: 300,
-              height: 200,
               zIndex: 100,
               transition: 'var(--transition)',
             }}
           >
-            <ArrowBox direction={`right ${signal ? 'active' : ''}`}>
+            <ArrowBox direction={`left ${signal ? 'active' : ''} ${!isUser ? 'alert' : ''}`}>
               {isUser ? (
                 <Block flex={0}>
                   <Block flex={0}>

@@ -52,7 +52,7 @@ function Settings({ visible }) {
   );
   return (
     <div>
-      <ArrowBox direction={`top ${visible ? 'active' : ''}`}>
+      <ArrowBox direction={`top ${visible ? 'active' : 'disable'}`}>
         <div className="settingsContent">
           <b style={{ fontSize: 20 }}>{settings.account.data.name}</b>
           <span style={{ fontSize: 12 }}>{settings.account.initialized && settings.account.data.email}</span>

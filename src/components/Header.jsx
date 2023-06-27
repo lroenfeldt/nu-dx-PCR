@@ -67,7 +67,7 @@ const Header = () => {
 
   const showMenu = () => {
     return (
-      <ArrowBox direction={`top-power ${menuOpen ? 'active ' : ''} `}>
+      <ArrowBox direction={`top top-power ${menuOpen ? 'active ' : ''} `}>
         <div className="power arrow">
           {menuOpen === 1 && <button onClick={() => shutdown()}>{t('common.shutdown')}</button>}
           {menuOpen === 1 && <button onClick={() => reboot()}>{t('common.reboot')}</button>}
