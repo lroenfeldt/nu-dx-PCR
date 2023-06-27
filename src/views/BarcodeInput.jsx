@@ -39,7 +39,7 @@ const BarcodeInput = () => {
     setActive(id);
     textInput.current.focus();
   };
-
+  const numberRegex = /^[0-9]+$/;
   const nextWell = (next) => {
     let nextWell = active;
     const blockedBarcodes = barcodes
@@ -616,9 +616,7 @@ const BarcodeInput = () => {
               visible={keyboardActive}
               setVisible={setKeyboardActive}
               inputValue={getBarcode(active).value}
-              isNumeric={
-                typeof Number(settings.account.allowedCharacters) == 'number' && settings.account.verifyBarcodes
-              }
+              isNumeric={numberRegex.test(settings.account.allowedCharacters)}
             />
             {getBarcode(active).askRetest && getBarcode(active).value != '' ? (
               <button onClick={() => retest(getBarcode(active))}>{t('common.retest')}</button>

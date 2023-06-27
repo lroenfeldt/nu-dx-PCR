@@ -53,8 +53,12 @@ const Errors = () => {
 
               <button
                 onClick={() => {
-                  window.location.reload();
-                  hideError({ index: i });
+                  if (error.type === 'pairing') {
+                    window.location.href = '/';
+                  } else {
+                    window.location.reload();
+                    hideError({ index: i });
+                  }
                 }}
               >
                 {t('common.retry')}

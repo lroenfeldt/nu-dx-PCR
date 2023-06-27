@@ -9,7 +9,14 @@ const LotDoku = ({ setKeyboardVisible, keyboardVisible, setClear }) => {
   return (
     <>
       {/*<CustomSelect options={['Lot', 'Doku']} defaultValue="" onChange={(value) => console.log(value)} />*/}
-      <Block position="relative" align="center" marginRight={28} marginBottom={keyboardVisible ? -128 : 0}>
+      <Block
+        position="relative"
+        align="center"
+        marginRight={28}
+        marginBottom={keyboardVisible ? -128 : 0}
+        marginTop={keyboardVisible && !settings.account.hasUserAuthentification ? 90 : 0}
+        transition="all 0.3s "
+      >
         <label>Chargennr </label>
         <ActivateKeyboard
           onClick={() => {

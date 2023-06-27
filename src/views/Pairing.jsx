@@ -19,8 +19,6 @@ export default function Pairing() {
         hardwareId: settings.device.hardwareId,
         pairingCode,
       });
-      window.api.logEvents(`getPairingCodeApi: ${JSON.stringify(response)}`, 'logInfos.txt');
-      console.log(response);
 
       let token;
 
@@ -94,12 +92,21 @@ export default function Pairing() {
       }
     }
   }, [pairingCode]);
+
   useEffect(() => {
     const checkingInterval = setInterval(() => {
       pollPairing();
     }, 3000);
     return () => clearInterval(checkingInterval);
-  }, []);
+  }, [pairingCode, settings]);
+
+  // reload paring code if it is not set
+  useEffect(() => {
+    if (!pairingCode) {
+      setErrors((prevErrors) => prevErrors.filter((error) => error.type !== 'pairing'));
+      navigate('/');
+    }
+  }, [pairingCode]);
 
   return (
     <div className="Pairing">

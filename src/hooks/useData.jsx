@@ -26,7 +26,7 @@ export function DataProvider({ children }) {
   const [menuOpen, setMenuOpen] = useState(null);
   const [testDone, setTestDone] = useState(null);
   const [lotNumber, setLotNumber] = useState('');
-  const [isStatus, setIsStatus] = useState(false);
+  const [isStatus, setIsStatus] = useState(true);
   const [resultList, setResultList] = useState([]);
   const [isLidOpen, setIsLidOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
@@ -47,8 +47,8 @@ export function DataProvider({ children }) {
   const [settings, setSettings] = useState(window.api.getConfig());
   const [barcodes, setBarcodes] = useState(defaultBarcodes(settings));
   const [checkForTestResultFile, setCheckForTestResultFile] = useState(false);
-  const [isNinetySix, setIsNinetySix] = useState(settings?.device?.wellCount === 96);
   const [updateType, setUpdateType] = useState(settings.user.updateType || 'stable');
+  const [isNinetySix, setIsNinetySix] = useState(settings?.device?.wellCount === 96);
   const [paramTrans, setParamTrans] = useState({ CY5: 'POC_HEC', ROX: 'POC_VIRUS' });
   /**
    * Resets values to default
@@ -83,6 +83,7 @@ export function DataProvider({ children }) {
    * Sets the value of the data state
    **/
   const loadSettings = useCallback(async () => {
+    setIsStatus(false);
     let newSettings = await window.api.getConfig();
     setSettings(newSettings);
     console.log('settings loaded:');
@@ -148,11 +149,15 @@ export function DataProvider({ children }) {
       response = false;
     } else {
       let newSettings = await window.api.getConfig();
-      setSettings(newSettings);
+      setSettings({
+        ...newSettings,
+        user: { ...newSettings.user, ntcPos: newSettings?.device?.wellCount === '96' ? 'B01' : 'A02' },
+      });
     }
     setErrors(newErrors);
+    setIsStatus(true);
     return response;
-  }, [errors, setErrors, setSettings]);
+  }, [errors, settings, isStatus]);
 
   const saveSettings = useCallback(
     async (settings) => {

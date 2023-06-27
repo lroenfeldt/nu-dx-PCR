@@ -84,23 +84,28 @@ function Authentication() {
 
   return (
     <Block height={400} column center padding={10} gap={20}>
-      <h3 style={{ textAlign: 'center' }}>{t('authentication.instructions')}</h3>
+      <h3 style={{ textAlign: 'center' }}>
+        {settings.account.hasUserAuthentification ? t('authentication.instructions') : t('authentication.currentLot')}
+      </h3>
+
       <Block column margin="0 325px" align="center" gap={30}>
-        <InputContainer
-          t={t}
-          signal={signal}
-          isUser={isUser}
-          isValid={isValid}
-          password={password}
-          setClear={setClear}
-          textInput={textInput}
-          setPassword={setPassword}
-          currentUser={currentUser}
-          handleChange={handleChange}
-          handleKeyPress={handleKeyPress}
-          keyboardVisible={keyboardVisible}
-          setKeyboardVisible={setKeyboardVisible}
-        />
+        {settings.account.hasUserAuthentification && (
+          <InputContainer
+            t={t}
+            signal={signal}
+            isUser={isUser}
+            isValid={isValid}
+            password={password}
+            setClear={setClear}
+            textInput={textInput}
+            setPassword={setPassword}
+            currentUser={currentUser}
+            handleChange={handleChange}
+            handleKeyPress={handleKeyPress}
+            keyboardVisible={keyboardVisible}
+            setKeyboardVisible={setKeyboardVisible}
+          />
+        )}
         <Keyboard
           onChange={onKeyPress}
           visible={keyboardVisible}
@@ -112,13 +117,17 @@ function Authentication() {
           setClear={setClear}
           inputValue={'password'}
         />
-        {settings.account.askForLot && isValid && (
+        {((settings.account.askForLot && isValid) ||
+          (settings.account.askForLot && !settings.account.hasUserAuthentification)) && (
           <LotDoku keyboardVisible={keyboardVisible} setKeyboardVisible={setKeyboardVisible} setClear={setClear} />
         )}
       </Block>
       <div className="buttonArea">
         <button onClick={() => navigate('/selectMethod')}>{t('common.cancel')}</button>
-        <button className={!isValid || !isUser ? 'disabled' : ''} onClick={() => navigate('/enterBarcodes')}>
+        <button
+          className={settings.account.hasUserAuthentification && (!isValid || !isUser) ? 'disabled' : ''}
+          onClick={() => navigate('/enterBarcodes')}
+        >
           {t('common.continue')}
         </button>
       </div>

@@ -4,7 +4,7 @@ import { FiSettings, FiPower, FiList } from 'react-icons/fi';
 import { BsEject } from 'react-icons/bs';
 import { VscSync } from 'react-icons/vsc';
 import { useData, useTranslation, useBackgroundProcesses, useUpdate, useResults } from '../hooks';
-import nu_dx_logo from '../img/nu-dx PCR Logo white.png';
+import nuDiagnostics from '../assets/Logos/nu-diagnostics/nu-diagnostics white.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Settings from './Settings/Settings';
 import Notifications from './Notifications';
@@ -40,7 +40,7 @@ const Header = () => {
       location.pathname !== '/selectMethod' &&
       (!loading ? (
         <div className="logoWrapper" onDoubleClick={() => navigate('/debug')}>
-          <img src={nu_dx_logo} alt="" />
+          <img src={nuDiagnostics} alt="" width={150} />
           {/*<span>nu:dx PCR</span>*/}
         </div>
       ) : (

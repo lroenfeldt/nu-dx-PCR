@@ -13,7 +13,6 @@ function Keyboard(props) {
   const keyboard = useRef();
   const location = useLocation();
   const isBarcode = location.pathname === '/enterBarcodes';
-
   const onClear = () => {
     keyboard.current?.clearInput();
   };
@@ -51,6 +50,7 @@ function Keyboard(props) {
     }
   }, [clear]);
   useEffect(() => {
+    console.log({ onChange, dark, visible, setVisible, inputValue, style, isNumeric, clear, setClear });
     const keyboard = document.getElementById('keyboard');
 
     if (visible) {
@@ -69,7 +69,7 @@ function Keyboard(props) {
   return (
     <div
       id="keyboard"
-      className={`animate `}
+      className={`${visible ? 'visible' : ''} `}
       style={{
         top: 0,
         left: 0,
@@ -84,7 +84,7 @@ function Keyboard(props) {
         onKeyPress={onKeyPress}
         layoutName={layoutName}
         layout={layout}
-        theme={`hg-theme-default ${dark ? 'dark' : 'light'}`}
+        theme={`hg-theme-default ${dark ? 'dark' : 'light'} animate`}
         display={{
           '{bksp}': '⌫',
           '{enter}': '⏎',

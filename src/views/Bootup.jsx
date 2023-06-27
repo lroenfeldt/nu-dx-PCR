@@ -122,7 +122,7 @@ const Bootup = () => {
         }
       }
     }
-  }, [pairingCode]);
+  }, [pairingCode, settings, setErrors, setLoading, setPairingCode, navigate, t, getPairingCodeApi]);
 
   const checkTokenApi = useApi(auth.checkToken);
   /**
@@ -133,10 +133,10 @@ const Bootup = () => {
     const token = settings.account.authToken;
     const decoded = jwt_decode(token);
     let difference = decoded.exp * 1000 - Date.now();
-    const remDays = Math.floor(difference / 1000 / 60 / 60 / 24);
-    console.log('remDays', remDays);
 
-    if (remDays <= 0 && settings.account.allowDaysOffline != 0) {
+    const remDays = Math.floor(difference / 1000 / 60 / 60 / 24);
+
+    if (remDays < 0 && settings.account.allowDaysOffline != 0) {
       let newSettings = {
         ...settings,
         account: {

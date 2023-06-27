@@ -61,7 +61,7 @@
     "title": "Authentification",
     "instructions": "Veuillez scanner le code-barres sur votre carte d'utilisateur ou entrer votre ID utilisateur pour vous authentifier pour le processus.",
     "invalid": "Aucun utilisateur avec cet identifiant n'est affecté à votre compte.",
-    "currentLot": "Lot actuel"
+    "currentLot": "Veuillez entrer le numéro de lot actuel"
   },
   "barcodeInput": {
     "title": "Barcode Input",

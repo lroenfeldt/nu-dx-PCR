@@ -7,7 +7,7 @@ const Testmethod = ({ title, status, methodid }) => {
 
   const selectTest = () => {
     setSelectedMethod(methodid);
-    if (settings.account.hasUserAuthentification) {
+    if (settings.account.hasUserAuthentification || settings.account.askForLot) {
       navigate('/auth');
     } else {
       navigate('/enterBarcodes');
