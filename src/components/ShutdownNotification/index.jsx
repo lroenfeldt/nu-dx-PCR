@@ -14,13 +14,15 @@ const ShutdownNotification = () => {
   };
 
   const handleAccept = () => {
-    // Here you could add any action to be performed when the user accepts the shutdown
     setShowNotification(false);
   };
 
   useEffect(() => {
     let timeout;
-
+    console.log(
+      Date.now() - idleTimestamp >= (settings?.account?.autoShutdownMinutes - 1) * 60 * 1000 &&
+        Date.now() - idleTimestamp < settings?.account?.autoShutdownMinutes * 60 * 1000
+    );
     if (
       deviceStatus === 'IDLE' &&
       settings?.account?.autoShutdownMinutes &&
