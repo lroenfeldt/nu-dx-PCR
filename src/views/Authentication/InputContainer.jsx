@@ -26,7 +26,7 @@ const InputContainer = ({
           transition="all 0.5s ease"
           zIndex={1}
           marginBottom={isValid && keyboardVisible ? 0 : keyboardVisible ? -200 : 0}
-          marginTop={isValid && keyboardVisible ? 34 : 0}
+          marginTop={isValid && keyboardVisible ? 70 : 0}
         >
           <label htmlFor="UserID">UserID</label>
           <ActivateKeyboard
@@ -76,12 +76,12 @@ const InputContainer = ({
                 keyboardVisible && isValid
                   ? '60%'
                   : keyboardVisible && !isValid
-                  ? '73%'
+                  ? '77%'
                   : isValid && !keyboardVisible
-                  ? '40%'
+                  ? '36%'
                   : isValid && keyboardVisible
                   ? '28%'
-                  : '49%',
+                  : '54%',
               right: 65,
               width: 300,
               zIndex: 100,

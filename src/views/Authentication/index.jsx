@@ -85,7 +85,9 @@ function Authentication() {
   return (
     <Block height={400} column center padding={10} gap={20}>
       <h3 style={{ textAlign: 'center' }}>
-        {settings.account.hasUserAuthentification ? t('authentication.instructions') : t('authentication.currentLot')}
+        {settings.account.hasUserAuthentification && !isValid
+          ? t('authentication.instructions')
+          : t('authentication.currentLot')}
       </h3>
 
       <Block column margin="0 325px" align="center" gap={30}>
