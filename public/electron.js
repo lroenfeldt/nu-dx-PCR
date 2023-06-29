@@ -102,7 +102,7 @@ const store = new Store({
         data: {
           id: 'fbdaac7d-4055-4b30-9f64-d0070447eca7',
           profileId: 'cef5b173-f8dc-494e-8ce0-62938441ae01',
-          name: 'Procomcure Biotech',
+          name: 'nu:dx PCR',
           email: 'l.roenfeldt@procomcure.de',
           lastSignIn: '2022-06-03T08:52:07.302061Z',
           authenticated: true,
