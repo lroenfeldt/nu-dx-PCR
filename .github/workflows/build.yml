@@ -10,22 +10,20 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Install Wine
-        run: |
-          sudo dpkg --add-architecture i386
-          wget -nc https://dl.winehq.org/wine-builds/winehq.key
-          sudo apt-key add winehq.key
-          sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ focal main'
-          sudo apt-get update
-          sudo apt-get install --install-recommends winehq-stable
       - name: Check out code
         uses: actions/checkout@v2
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 16.17.0
+          node-version: 14
+      - name: Update package list
+        run: sudo apt-get update
+      - name: Install wine-stable
+        run: sudo apt-get install -y wine-stable
+      - name: Fix broken dependencies
+        run: sudo apt-get install -f
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Build and publish
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
