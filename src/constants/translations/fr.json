@@ -91,7 +91,7 @@
     "welcome": "Bienvenue sur nu:dx PCR",
     "instructions": "Avant que l'appareil puisse être utilisé, il doit être associé à votre compte.",
     "scanQrcode": "Scannez le code QR affiché",
-    "scanQrcodeInstructions": "Pour utiliser l'appareil, vous devez le coupler avec un compte : https://cloud.nu-dx.com/pairing"
+    "scanQrcodeInstructions": "Ou rendez-vous sur https://cloud.nu-dx.com/pairing et saisissez le code suivant :"
   },
   "runTest": {
     "endOfTest": "Test terminé",

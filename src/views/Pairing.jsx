@@ -111,7 +111,7 @@ export default function Pairing() {
   return (
     <div className="Pairing">
       <h2>{t('pairing.welcome')}</h2>
-      <p>{t('pairing.welcome')}</p>
+      <p>{t('pairing.instructions')}</p>
       <div className="pairingContainer">
         <div className="qr-container">
           <h4>{t('pairing.scanQrcode')}</h4>
