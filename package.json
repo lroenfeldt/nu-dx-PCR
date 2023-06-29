@@ -1,8 +1,8 @@
 {
   "name": "nu-dx-pcr",
   "version": "1.0.2",
-  "author": "nu:dx PCR",
-  "description": "Frontend app to operate POC PCR-Cycler",
+  "author": "nu:healthcare GmbH",
+  "description": "Frontend app to operate BIOER PCR-Cycler and connect to nu:dx cloud platform",
   "repository": {
     "type": "git",
     "url": "https://github.com/lroenfeldt/nu-dx-pcr/"
