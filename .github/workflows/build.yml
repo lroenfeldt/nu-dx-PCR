@@ -10,6 +10,14 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - name: Install Wine
+        run: |
+          sudo dpkg --add-architecture i386
+          wget -nc https://dl.winehq.org/wine-builds/winehq.key
+          sudo apt-key add winehq.key
+          sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ focal main'
+          sudo apt-get update
+          sudo apt-get install --install-recommends winehq-stable
       - name: Check out code
         uses: actions/checkout@v2
       - name: Set up Node.js
