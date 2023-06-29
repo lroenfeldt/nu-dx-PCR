@@ -61,7 +61,7 @@
     "title": "Authentifizierung",
     "instructions": "Bitte scannen Sie den Barcode auf Ihrer Benutzerkarte oder geben Sie Ihre UserID ein, um sich für den Vorgang zu authentifizieren.",
     "invalid": "Ihrem Account ist kein Nutzer mit dieser UserID zugeordnet.",
-    "currentLot": "Bitte geben Sie die aktuelle Lotnummer ein."
+    "currentLot": "Bitte geben Sie die aktuelle Chargennummer ein."
   },
   "barcodeInput": {
     "title": "Barcode eingeben",

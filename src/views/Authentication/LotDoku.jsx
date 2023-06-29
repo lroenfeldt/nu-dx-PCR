@@ -28,7 +28,6 @@ const LotDoku = ({ setKeyboardVisible, keyboardVisible, setClear }) => {
           autoFocus
           ref={textInput}
           type="text"
-          placeholder={t('authentication.currentLot')}
           value={lotNumber}
           onChange={(e) => {
             setLotNumber(e.target.value);

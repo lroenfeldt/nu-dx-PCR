@@ -5,7 +5,7 @@
   "description": "Frontend app to operate POC PCR-Cycler",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lroenfeldt/phoenixdx-poc/"
+    "url": "https://github.com/lroenfeldt/nu-dx-pcr/"
   },
   "private": true,
   "main": "public/electron.js",

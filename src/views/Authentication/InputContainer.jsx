@@ -76,35 +76,35 @@ const InputContainer = ({
                 keyboardVisible && isValid
                   ? '60%'
                   : keyboardVisible && !isValid
-                  ? '77%'
+                  ? '72%'
                   : isValid && !keyboardVisible
                   ? '36%'
                   : isValid && keyboardVisible
                   ? '28%'
-                  : '54%',
+                  : '49%',
               right: 65,
               width: 300,
-              zIndex: 100,
+              zIndex: 1,
               transition: 'var(--transition)',
             }}
           >
             <ArrowBox direction={`left ${signal ? 'active' : ''} ${!isUser ? 'alert' : ''}`}>
               {isUser ? (
                 <Block flex={0}>
-                  <Block flex={0}>
+                  <Block center column align="flex-start" marginTop={5}>
                     <strong>{currentUser?.name}</strong>
-                    <br />
+
                     <span style={{ fontSize: 16 }}>{currentUser?.email}</span>
                   </Block>
                   <Block justify="start" align="center">
                     {isValid ? (
                       <>
-                        <FcOk size={40} />
+                        <FcOk size={30} />
                         <h5>{t('common.certified')}</h5>
                       </>
                     ) : (
                       <>
-                        <FcCancel size={40} />
+                        <FcCancel size={30} />
                         <h5>{t('common.notCertified')}</h5>
                       </>
                     )}

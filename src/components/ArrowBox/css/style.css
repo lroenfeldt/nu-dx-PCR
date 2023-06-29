@@ -163,9 +163,17 @@
   background-color: rgba(255, 255, 255, 1);
   box-sizing: border-box;
   width: 100%;
-  min-width: 250px;
 }
 .arrow_box.top.top-power:after,
 .arrow_box.top.top-power:before {
   left: 87%;
+}
+
+.alert .content,
+.active .content {
+  box-sizing: border-box;
+  border-radius: 5px;
+  min-height: 144px;
+  display: flex;
+  align-items: center;
 }

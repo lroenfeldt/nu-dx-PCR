@@ -55,7 +55,6 @@ export function DataProvider({ children }) {
    * @returns {void}
    **/
   const reset = useCallback(() => {
-    setIsStatus(false);
     setBarcodes(defaultBarcodes(settings));
     setRemTime(0);
     setTestrun(false);

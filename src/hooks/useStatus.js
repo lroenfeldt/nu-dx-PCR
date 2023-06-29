@@ -7,7 +7,6 @@ export const useStatus = () => {
   const { saveSettings, settings, deviceStatus, setErrors, setDbConnection, isStatus } = useData();
 
   const ping = useCallback(async () => {
-    if (!isStatus) return;
     try {
       const response = await onlineStatusApi.request(settings.device.hardwareId, {
         status: deviceStatus,

@@ -12,7 +12,7 @@ const useUpdate = () => {
           Authorization: `Bearer ${import.meta.env.VITE_APP_GH_TOKEN}`,
         },
       };
-      const response = await axios.get('https://api.github.com/repos/lroenfeldt/phoenixdx-poc/releases', config);
+      const response = await axios.get('https://api.github.com/repos/lroenfeldt/nu-dx-pcr/releases', config);
 
       let latestVersion;
 

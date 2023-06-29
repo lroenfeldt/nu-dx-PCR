@@ -1,6 +1,6 @@
 let api;
 if (!import.meta.env.MODE || import.meta.env.MODE === 'development') {
-  api = 'https://devpoc.myprocomcure.de/api/';
+  api = 'https://poc.myprocomcure.de/api/';
 } else {
   api = 'https://poc.myprocomcure.de/api/';
 }
