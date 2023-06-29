@@ -22,7 +22,6 @@
     "deploy-beta": "npm run build && electron-builder -w -c.extraMetadata.main=build/electron.js -c.publish.provider=github -c.publish.releaseType=prerelease --publish always"
   },
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^14.4.3",
     "apisauce": "^2.1.5",
@@ -61,6 +60,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
+    "@testing-library/jest-dom": "^5.16.5",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^4.0.0",
