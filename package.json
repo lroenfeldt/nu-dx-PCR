@@ -22,7 +22,6 @@
     "deploy-beta": "npm run build && electron-builder -w -c.extraMetadata.main=build/electron.js -c.publish.provider=github -c.publish.releaseType=prerelease --publish always"
   },
   "dependencies": {
-    "@testing-library/user-event": "^14.4.3",
     "apisauce": "^2.1.5",
     "auto-launch": "^5.0.6",
     "axios": "^1.4.0",
