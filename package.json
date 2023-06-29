@@ -1,6 +1,6 @@
 {
   "name": "nu-dx-pcr",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Procomcure Biotech Germany",
   "description": "Frontend app to operate POC PCR-Cycler",
   "repository": {

@@ -8,6 +8,23 @@ const Checkmark = ({ barcode, isNinetySix = false, style }) => {
       <div
         className={`checkmark`}
         style={{
+          backgroundColor: 'var(--green)',
+          ...style,
+        }}
+      >
+        <IoCheckmarkSharp
+          style={{
+            fontSize: 'smaller',
+          }}
+        />
+      </div>
+    );
+  }
+  if (barcode?.result != 'invalid' && barcode?.label === 'NTC') {
+    return (
+      <div
+        className={`checkmark`}
+        style={{
           backgroundColor: 'var(--red)',
           ...style,
         }}
@@ -38,15 +55,11 @@ const Checkmark = ({ barcode, isNinetySix = false, style }) => {
       <div
         className={`checkmark`}
         style={{
-          backgroundColor: 'var(--green)',
+          backgroundColor: 'var(--red)',
           ...style,
         }}
       >
-        <IoCheckmarkSharp
-          style={{
-            fontSize: 'smaller',
-          }}
-        />
+        <IoClose />
       </div>
     );
   }
