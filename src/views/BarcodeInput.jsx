@@ -502,7 +502,7 @@ const BarcodeInput = () => {
   useEffect(() => {
     toggleLid();
     nextWell(true);
-  }, [isLidOpen, status, isNinetySix, isLidOpen, errors]);
+  }, []);
 
   useEffect(() => {
     getBarcode(active).askRetest = settings.account.allowRetest && settings.account.verifyBarcodes;

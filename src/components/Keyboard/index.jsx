@@ -49,11 +49,6 @@ function Keyboard(props) {
       setClear(false);
     }
   }, [clear]);
-  useEffect(() => {
-    if (inputValue && inputValue.length > 0) {
-      keyboard.current.setInput(inputValue);
-    }
-  }, [inputValue]);
 
   useEffect(() => {
     const keyboard = document.getElementById('keyboard');
