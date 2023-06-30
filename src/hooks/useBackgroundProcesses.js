@@ -101,10 +101,6 @@ function useBackgroundProcesses() {
     const interval = setInterval(() => {
       getLastVersion();
     }, 1000 * 60 * 5);
-
-    return () => {
-      clearInterval(interval);
-    };
   }, [settings]);
 
   useEffect(() => {
