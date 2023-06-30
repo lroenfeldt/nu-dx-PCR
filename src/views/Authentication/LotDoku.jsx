@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { ActivateKeyboard, Block, CustomSelect } from '../../components';
 import { useData, useTranslation } from '../../hooks';
 import { IoCloseCircle } from 'react-icons/io5';
-const LotDoku = ({ setKeyboardVisible, keyboardVisible, setClear }) => {
+const LotDoku = ({ setKeyboardVisible, keyboardVisible, setClear, setIsChargenNrFocused, isChargenNrFocused }) => {
   const { t } = useTranslation();
   const textInput = useRef(null);
   const { settings, selectedMethod, lotNumber, setLotNumber } = useData();
@@ -21,6 +21,7 @@ const LotDoku = ({ setKeyboardVisible, keyboardVisible, setClear }) => {
         <ActivateKeyboard
           onClick={() => {
             setKeyboardVisible(!keyboardVisible);
+            setIsChargenNrFocused(true);
           }}
         />
 
@@ -36,6 +37,7 @@ const LotDoku = ({ setKeyboardVisible, keyboardVisible, setClear }) => {
             borderTopLeftRadius: 0,
             borderBottomLeftRadius: 0,
           }}
+          onFocus={() => setIsChargenNrFocused(true)}
         />
 
         <IoCloseCircle

@@ -13,8 +13,9 @@ function Authentication() {
   const [isValid, setIsValid] = useState(false);
   const [isUser, setIsUser] = useState(false);
   const [signal, setSignal] = useState(false);
-  const { settings, currentUser, setCurrentUser, selectedMethod } = useData();
+  const { settings, currentUser, setCurrentUser, selectedMethod, setLotNumber, lotNumber } = useData();
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [isChargenNrFocused, setIsChargenNrFocused] = useState(false);
   const [clear, setClear] = useState(false);
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && isValid) {
@@ -43,8 +44,10 @@ function Authentication() {
       if (user && isCertified) {
         setIsUser(true);
         setKeyboardVisible(false);
+        setIsChargenNrFocused(true);
       } else {
         setIsUser(false);
+        setIsChargenNrFocused(false);
       }
       if (user && !isCertified) {
         setIsUser(true);
@@ -106,10 +109,12 @@ function Authentication() {
             handleKeyPress={handleKeyPress}
             keyboardVisible={keyboardVisible}
             setKeyboardVisible={setKeyboardVisible}
+            isChargenNrFocused={isChargenNrFocused}
+            setIsChargenNrFocused={setIsChargenNrFocused}
           />
         )}
         <Keyboard
-          onChange={onKeyPress}
+          onChange={isChargenNrFocused ? setLotNumber : onKeyPress}
           visible={keyboardVisible}
           setVisible={setKeyboardVisible}
           style={{
@@ -117,11 +122,17 @@ function Authentication() {
           }}
           clear={clear}
           setClear={setClear}
-          inputValue={'password'}
+          inputValue={isChargenNrFocused ? lotNumber : password}
         />
         {((settings.account.askForLot && isValid) ||
           (settings.account.askForLot && !settings.account.hasUserAuthentification)) && (
-          <LotDoku keyboardVisible={keyboardVisible} setKeyboardVisible={setKeyboardVisible} setClear={setClear} />
+          <LotDoku
+            keyboardVisible={keyboardVisible}
+            setKeyboardVisible={setKeyboardVisible}
+            setClear={setClear}
+            isChargenNrFocused={isChargenNrFocused}
+            setIsChargenNrFocused={setIsChargenNrFocused}
+          />
         )}
       </Block>
       <div className="buttonArea">

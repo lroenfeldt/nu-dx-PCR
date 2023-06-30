@@ -16,6 +16,8 @@ const InputContainer = ({
   handleKeyPress,
   keyboardVisible,
   setKeyboardVisible,
+  setIsChargenNrFocused,
+  isChargenNrFocused,
 }) => {
   return (
     <div className="inputContainer" style={{ marginBottom: 0 }}>
@@ -49,12 +51,14 @@ const InputContainer = ({
               borderTopLeftRadius: 0,
               borderBottomLeftRadius: 0,
             }}
+            onFocus={() => setIsChargenNrFocused(false)}
           />
           <IoCloseCircle
             onClick={() => {
               setPassword('');
               textInput.current.focus();
               setClear(true);
+              setIsChargenNrFocused(false);
             }}
             style={{
               top: 5,
@@ -82,7 +86,7 @@ const InputContainer = ({
                   : isValid && keyboardVisible
                   ? '28%'
                   : '49%',
-              right: 65,
+              right: '5.5%',
               width: 300,
               zIndex: 1,
               transition: 'var(--transition)',
