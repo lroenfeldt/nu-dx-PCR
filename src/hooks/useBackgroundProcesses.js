@@ -136,7 +136,13 @@ function useBackgroundProcesses() {
       clearInterval(lidAutoCloseInterval);
       clearInterval(autoShutdownInterval);
     };
-  }, [settings?.account?.autoShutdownMinutes, settings?.account?.autoCloseLidMinutes, deviceStatus, idleTimestamp]);
+  }, [
+    settings?.account?.autoShutdownMinutes,
+    settings?.account?.autoCloseLidMinutes,
+    deviceStatus,
+    idleTimestamp,
+    isLidOpen,
+  ]);
 
   useEffect(() => {
     let interval;

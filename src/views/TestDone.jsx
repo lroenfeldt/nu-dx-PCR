@@ -25,7 +25,6 @@ const TestDone = () => {
     resultsSubmitted,
     setSubmitted,
     currentUser,
-    toggleLid,
     test,
     setDeviceStatus,
     selectedMethod,
