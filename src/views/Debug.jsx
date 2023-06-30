@@ -35,7 +35,7 @@ const Debug = () => {
         </h3>
       </div>
       <div className="hardwareId">
-        <h3>{`${t('debug.serialNumber')}: ${settings.device?.serialNumber}`}</h3>
+        <h3>{`${t('debug.serialNumber')}: ${settings.account?.serialNumber}`}</h3>
       </div>
       <div className="hardwareId">
         <h3>{`${'wellCount'}: ${settings.device.wellCount}`}</h3>
