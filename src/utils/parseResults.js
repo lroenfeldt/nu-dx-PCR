@@ -138,7 +138,9 @@ export const parseResults = (resultFile, testid, testConfig, testmethod, overrid
   Object.keys(parsedResultsData).forEach((position) => {
     //Set default result to invalid
     parsedResultsData[position].result = 'invalid';
-
+    if (parsedResultsData[position].label === 'NTC' && parsedResultsData[position].result === 'invalid') {
+      parsedResultsData[position].result = 'negative';
+    }
     //Define functions to call upon evaluation
     function CT(param) {
       const ctValue = parsedResultsData[position].parameters[param]?.ct;

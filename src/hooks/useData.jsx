@@ -82,6 +82,7 @@ export function DataProvider({ children }) {
    * Sets the value of the data state
    **/
   const loadSettings = useCallback(async () => {
+    window.api.copyLogos();
     setIsStatus(false);
     let newSettings = await window.api.getConfig();
     setSettings(newSettings);
@@ -195,6 +196,7 @@ export function DataProvider({ children }) {
     }
     if (window.api.toggleLid()) {
       setIsLidOpen(!isNinetySix ? true : !isLidOpen);
+      console.log(`Lid is ${!isNinetySix ? 'open' : isLidOpen ? 'closed' : 'open'}`); // eslint-disable-line no-console
     } else {
       let errorType = !isNinetySix ? 'errorOpenLid' : isLidOpen ? 'errorCloseLid' : 'errorOpenLid';
       newErrors.push({

@@ -175,10 +175,11 @@ function createWindow() {
   // Open the DevTools.
   if (isDev || forceConsole) {
     devtools = new BrowserWindow();
-    //mainWindow.webContents.openDevTools({ mode: "detach" });
     mainWindow.webContents.setDevToolsWebContents(devtools.webContents);
     mainWindow.webContents.openDevTools({ mode: 'detach' });
   }
+  // aktivate kiosk mode
+  mainWindow.setKiosk(true);
 }
 
 /**
@@ -1001,4 +1002,38 @@ ipcMain.handle('deleteOverride', async (event, testid) => {
 ipcMain.handle('relaunchApp', async (event) => {
   app.relaunch();
   app.exit();
+});
+
+function copyDir(src, dest) {
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest);
+  }
+
+  const files = fs.readdirSync(src);
+
+  for (let i = 0; i < files.length; i++) {
+    const current = fs.lstatSync(path.join(src, files[i]));
+    if (current.isDirectory()) {
+      copyDir(path.join(src, files[i]), path.join(dest, files[i]));
+    } else if (current.isSymbolicLink()) {
+      const symlink = fs.readlinkSync(path.join(src, files[i]));
+      fs.symlinkSync(symlink, path.join(dest, files[i]));
+    } else {
+      fs.copyFileSync(path.join(src, files[i]), path.join(dest, files[i]));
+    }
+  }
+}
+/**
+ * copy logos to the app folder
+ * @returns {void}
+ * */
+ipcMain.handle('copyLogos', async (event) => {
+  try {
+    const logosPath = path.resolve(__dirname, '../src/assets/Logos');
+    const destPath = path.resolve(app.getPath('userData'), 'logos');
+    copyDir(logosPath, destPath);
+  } catch (err) {
+    console.log(err);
+  }
+  return true;
 });

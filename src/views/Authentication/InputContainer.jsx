@@ -88,7 +88,7 @@ const InputContainer = ({
                   : '49%',
               right: '5.5%',
               width: 300,
-              zIndex: 1,
+              zIndex: 0,
               transition: 'var(--transition)',
             }}
           >

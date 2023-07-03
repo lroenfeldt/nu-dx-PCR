@@ -94,7 +94,7 @@ function Settings({ visible }) {
               checked={settings.device.wellCount === '96'}
             />
           )}
-          <span>S/N: {settings.device?.serialNumber}</span>
+          <span>S/N: {settings.account.serialNumber}</span>
           <div
             style={{
               marginTop: 10,
