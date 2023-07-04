@@ -187,6 +187,8 @@ export function DataProvider({ children }) {
 
   const toggleLid = useCallback(() => {
     console.log('toggle triggered');
+    console.log('estimated lid before toggle:');
+    console.log(isLidOpen);
     let newErrors = errors.filter((error) => error.type !== 'lid');
     if (status == 'RUNNING') {
       newErrors.push({
