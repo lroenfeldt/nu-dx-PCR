@@ -186,6 +186,7 @@ export function DataProvider({ children }) {
   );
 
   const toggleLid = useCallback(() => {
+    console.log('toggle triggered');
     let newErrors = errors.filter((error) => error.type !== 'lid');
     if (status == 'RUNNING') {
       newErrors.push({
@@ -195,9 +196,11 @@ export function DataProvider({ children }) {
       return;
     }
     if (window.api.toggleLid()) {
+      console.log('toggle succeeded');
       setIsLidOpen(!isNinetySix ? true : !isLidOpen);
       console.log(`Lid is ${!isNinetySix ? 'open' : isLidOpen ? 'closed' : 'open'}`); // eslint-disable-line no-console
     } else {
+      console.log('toggle failed');
       let errorType = !isNinetySix ? 'errorOpenLid' : isLidOpen ? 'errorCloseLid' : 'errorOpenLid';
       newErrors.push({
         type: 'lid',

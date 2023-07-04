@@ -543,14 +543,14 @@ ipcMain.handle('toggleLid', (event) => {
   const buffer = [0x7b, 0x7c, 0x0, 0x2, 0x4d, 0x1, 0x0, 0x4c, 0x7c, 0x7d];
 
   if (isDev) {
-    // dialog.showMessageBox({
-    //   type: 'info',
-    //   buttons: ['Got it!'],
-    //   defaultId: 0,
-    //   title: 'Lid Open',
-    //   message: 'Imagine an open lid',
-    //   detail: 'If this device had a lid, said lid would be open now. Which is great - If you wanted an open lid, that is. Otherwise something went quite obviously wrong here and you should get back to work fixing that issue!'
-    // })
+    dialog.showMessageBox({
+      type: 'info',
+      buttons: ['Got it!'],
+      defaultId: 0,
+      title: 'Lid Open',
+      message: 'Imagine an open lid',
+      detail: 'If this device had a lid, said lid would be open now. Which is great - If you wanted an open lid, that is. Otherwise something went quite obviously wrong here and you should get back to work fixing that issue!'
+    })
     return true;
   }
 
