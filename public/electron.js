@@ -540,6 +540,9 @@ ipcMain.on('endLineGene', (event) => {
  * Open Lid via Serial Port
  * */
 ipcMain.handle('toggleLid', (event) => {
+  console.log('Signal to toggle lid received.');
+  logger('Signal to toggle lid received.', 'logErrors.txt');
+  
   const buffer = [0x7b, 0x7c, 0x0, 0x2, 0x4d, 0x1, 0x0, 0x4c, 0x7c, 0x7d];
 
   if (isDev) {
