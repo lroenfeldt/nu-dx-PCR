@@ -50,7 +50,6 @@ function Keyboard(props) {
     }
   }, [clear]);
   useEffect(() => {
-    console.log({ onChange, dark, visible, setVisible, inputValue, style, isNumeric, clear, setClear });
     const keyboard = document.getElementById('keyboard');
 
     if (visible) {
