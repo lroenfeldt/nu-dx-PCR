@@ -139,11 +139,6 @@ export const parseResults = (resultFile, testid, testConfig, testmethod, overrid
     //Set default result to invalid
     parsedResultsData[position].result = 'invalid';
 
-    if (parsedResultsData[position].label === 'NTC' && parsedResultsData[position].result === 'invalid') {
-      parsedResultsData[position].result = 'negative';
-    } else if (parsedResultsData[position].label === 'NTC' && parsedResultsData[position].result === 'negative') {
-      parsedResultsData[position].result = 'invalid';
-    }
     //Define functions to call upon evaluation
     function CT(param) {
       const ctValue = parsedResultsData[position].parameters[param]?.ct;
@@ -183,6 +178,15 @@ export const parseResults = (resultFile, testid, testConfig, testmethod, overrid
         parsedResultsData[position].oldResult = resultType.name;
       }
     });
+
+    //Translate NTC Results
+    if (parsedResultsData[position].label === 'NTC' && parsedResultsData[position].result === 'invalid') {
+      parsedResultsData[position].result = 'negative';
+    } else if (parsedResultsData[position].label === 'NTC' && parsedResultsData[position].result === 'negative') {
+      parsedResultsData[position].result = 'invalid';
+    }
+    
+    //Apply Overrides
     if (override && JSON.parse(override)[position]) {
       parsedResultsData[position].result = JSON.parse(override)[position];
       parsedResultsData[position].alteredResult = true;
