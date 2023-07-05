@@ -18,6 +18,7 @@ const RunTest = () => {
     setDeviceStatus,
     checkForTestResultFile,
     setCheckForTestResultFile,
+    isLidOpen,
   } = useData();
   const testDuration =
     settings.account.testprocedures.find((procedure) => procedure.id === selectedMethod).durationMinutes * 60;

@@ -19,10 +19,6 @@ const ShutdownNotification = () => {
 
   useEffect(() => {
     let timeout;
-    console.log(
-      Date.now() - idleTimestamp >= (settings?.account?.autoShutdownMinutes - 1) * 60 * 1000 &&
-        Date.now() - idleTimestamp < settings?.account?.autoShutdownMinutes * 60 * 1000
-    );
     if (
       deviceStatus === 'IDLE' &&
       settings?.account?.autoShutdownMinutes &&

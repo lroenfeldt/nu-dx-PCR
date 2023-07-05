@@ -20,7 +20,6 @@ const TestReady = () => {
     testDone,
     setTestid,
     setErrors,
-    setStatus,
     setTestDone,
     isNinetySix,
     selectedMethod,
@@ -75,7 +74,7 @@ const TestReady = () => {
       console.log('test start successful:' + testStarted);
       window.api.logEvents(`test start successful: ${testStarted}`, 'logInfos.txt');
       navigate('/testRunning');
-      setStatus('RUNNING');
+      setDeviceStatus('RUNNING');
       setDeviceStatus('RUNNING');
     }
   }, [testid]);
@@ -111,7 +110,7 @@ const TestReady = () => {
           <button
             onClick={() => {
               navigate('/enterBarcodes');
-              setStatus('IDLE');
+              setDeviceStatus('IDLE');
               setDeviceStatus('IDLE');
             }}
           >

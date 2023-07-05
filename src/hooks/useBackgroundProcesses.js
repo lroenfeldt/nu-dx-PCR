@@ -61,13 +61,7 @@ function useBackgroundProcesses() {
     ) {
       toggleLid(); // toggleLid can both open and close the lid
     }
-  }, [
-    deviceStatus,
-    isLidOpen,
-    settings?.account?.autoCloseLidMinutes,
-    settings?.account?.autoCloseLidMinutes,
-    toggleLid,
-  ]);
+  }, [deviceStatus, isLidOpen, settings?.account?.autoCloseLidMinutes, settings?.account?.autoCloseLidMinutes]);
 
   const autoShutdown = useCallback(() => {
     if (

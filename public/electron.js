@@ -128,7 +128,7 @@ const store = new Store({
  */
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1200,
+    width: 1280,
     height: 800,
     resizable: isDev ? true : false,
     fullscreen: isDev ? false : true,
