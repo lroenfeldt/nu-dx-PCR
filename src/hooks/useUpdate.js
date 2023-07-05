@@ -13,7 +13,6 @@ const useUpdate = () => {
         },
       };
       const response = await axios.get('https://api.github.com/repos/lroenfeldt/nu-dx-pcr/releases', config);
-
       let latestVersion;
 
       if (settings.user.updateType === 'beta') {

@@ -1,8 +1,8 @@
 let api;
 if (!import.meta.env.MODE || import.meta.env.MODE === 'development') {
-  api = 'https://poc.myprocomcure.de/api/';
+  api = 'https://cloud.nu-dx.com/api/';
 } else {
-  api = 'https://poc.myprocomcure.de/api/';
+  api = 'https://cloud.nu-dx.com/api/';
 }
 
 const TESTMETHOD = 'd5b3cef9-918c-4566-bb09-fabe9b0af8d3';

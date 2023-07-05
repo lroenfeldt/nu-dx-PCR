@@ -1,8 +1,8 @@
 {
   "name": "nu-dx-pcr",
   "version": "1.0.12",
-  "author": "Procomcure Biotech Germany",
-  "description": "Frontend app to operate POC PCR-Cycler",
+  "author": "nu:healthcare GmbH",
+  "description": "Frontend app to operate BIOER PCR-Cycler and connect to nu:dx cloud platform",
   "repository": {
     "type": "git",
     "url": "https://github.com/lroenfeldt/nu-dx-pcr/"
@@ -22,9 +22,6 @@
     "deploy-beta": "npm run build && electron-builder -w -c.extraMetadata.main=build/electron.js -c.publish.provider=github -c.publish.releaseType=prerelease --publish always"
   },
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^14.4.3",
     "apisauce": "^2.1.5",
     "auto-launch": "^5.0.6",
     "axios": "^1.4.0",

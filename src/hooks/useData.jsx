@@ -81,6 +81,7 @@ export function DataProvider({ children }) {
    * Sets the value of the data state
    **/
   const loadSettings = useCallback(async () => {
+    window.api.copyLogos();
     setIsStatus(false);
     let newSettings = await window.api.getConfig();
     setSettings(newSettings);
@@ -184,6 +185,9 @@ export function DataProvider({ children }) {
   );
 
   const toggleLid = useCallback(() => {
+    console.log('toggle triggered');
+    console.log('estimated lid before toggle:');
+    console.log(isLidOpen);
     let newErrors = errors.filter((error) => error.type !== 'lid');
     if (deviceStatus == 'RUNNING') {
       newErrors.push({
@@ -193,9 +197,11 @@ export function DataProvider({ children }) {
       return;
     }
     if (window.api.toggleLid()) {
+      console.log('toggle succeeded');
       setIsLidOpen(!isNinetySix ? true : !isLidOpen);
       console.log(isLidOpen ? 'Lid is open' : 'Lid is closed');
     } else {
+      console.log('toggle failed');
       let errorType = !isNinetySix ? 'errorOpenLid' : isLidOpen ? 'errorCloseLid' : 'errorOpenLid';
       newErrors.push({
         type: 'lid',

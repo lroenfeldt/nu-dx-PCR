@@ -82,4 +82,7 @@ contextBridge.exposeInMainWorld('api', {
   relaunchApp: () => {
     return ipcRenderer.invoke('relaunchApp');
   },
+  copyLogos: () => {
+    return ipcRenderer.invoke('copyLogos');
+  },
 });

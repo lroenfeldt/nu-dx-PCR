@@ -49,6 +49,7 @@ function Keyboard(props) {
       setClear(false);
     }
   }, [clear]);
+
   useEffect(() => {
     const keyboard = document.getElementById('keyboard');
 

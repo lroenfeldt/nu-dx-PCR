@@ -5,17 +5,20 @@ import urls from '../config/settings';
 import { useNavigate } from 'react-router-dom';
 import { useData, useTranslation } from '../hooks';
 import { IoMdCloseCircle } from 'react-icons/io';
+
 const BarcodeInput = () => {
   const {
     demo,
     reset,
     errors,
+    status,
     reboot,
     loading,
     barcodes,
     settings,
     toggleLid,
     setErrors,
+    isLidOpen,
     setLoading,
     offlineMode,
     setBarcodes,

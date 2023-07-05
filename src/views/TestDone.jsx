@@ -25,7 +25,6 @@ const TestDone = () => {
     resultsSubmitted,
     setSubmitted,
     currentUser,
-    toggleLid,
     test,
     setDeviceStatus,
     selectedMethod,
@@ -87,12 +86,12 @@ const TestDone = () => {
   //End Linegene and submit if online
   useEffect(() => {
     if (!resultsSubmitted) {
-      if (!offlineMode) {
+      if (!offlineMode && settings.account.submitResults) {
         //displayResults(testid)
         submitResult(testid);
       }
     }
-  }, [offlineMode]);
+  }, [offlineMode, resultsSubmitted, settings.account.submitResults, testid]);
 
   //Check if USB is Present
   useEffect(() => {
@@ -129,7 +128,7 @@ const TestDone = () => {
         </div>
       </div>
     );
-  } else if (resultsSubmitted) {
+  } else if (resultsSubmitted || !settings.account.submitResults) {
     return (
       <div className="TestDone">
         <div className="spinnerContainer">
