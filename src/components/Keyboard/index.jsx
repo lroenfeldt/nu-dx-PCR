@@ -12,6 +12,8 @@ function Keyboard(props) {
   const { isNinetySix } = useData();
   const keyboard = useRef();
   const location = useLocation();
+  const [cursorPosition, setCursorPosition] = useState(0);
+
   const isBarcode = location.pathname === '/enterBarcodes';
   const onClear = () => {
     keyboard.current?.clearInput();
@@ -23,6 +25,9 @@ function Keyboard(props) {
     }
     if (button === '{enter}') {
       setVisible(false);
+    }
+    if (button === '{bksp}') {
+      onChange(inputValue.slice(0, -1));
     }
   };
 
@@ -44,11 +49,19 @@ function Keyboard(props) {
     numeric: ['1 2 3 4 5 6 7 8 9', '{bksp} 0 {enter}'],
   };
   useEffect(() => {
+    keyboard.current?.setInput(inputValue);
+  }, []);
+  useEffect(() => {
     if (clear) {
       onClear();
       setClear(false);
     }
   }, [clear]);
+  useEffect(() => {
+    if (visible) {
+      onClear();
+    }
+  }, [visible]);
 
   useEffect(() => {
     const keyboard = document.getElementById('keyboard');

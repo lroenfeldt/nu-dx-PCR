@@ -181,6 +181,7 @@ const Bootup = () => {
           await clearSettings();
         }
       }
+      navigate('/selectMethod');
       if (response?.problem && response?.problem == 'CLIENT_ERROR') {
         console.log('Error', response.originalError.message);
         window.api.logEvents(`Error:${JSON.stringify(response.originalError.message)}`, 'logErrors.txt');

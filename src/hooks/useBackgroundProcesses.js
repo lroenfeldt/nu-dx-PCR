@@ -33,8 +33,8 @@ function useBackgroundProcesses() {
   }, []);
 
   const autoSubmitUnsubmittedResults = useCallback(async () => {
-    if (settings?.account?.autoSubmitUnsubmitted && resultList.length > 0) submitAll();
-  }, [submitAll]);
+    if (settings?.account?.autoSubmitResults && resultList.length > 0) submitAll();
+  }, [resultList, settings?.account?.autoSubmitResults]);
 
   const checkForTestResultFile = useCallback(async () => {
     if (!testid || deviceStatus === 'IDLE') return;
@@ -82,13 +82,9 @@ function useBackgroundProcesses() {
   }, [deviceStatus, settings?.account?.autoShutdownMinutes, idleTimestamp]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    setInterval(() => {
       autoSubmitUnsubmittedResults();
     }, 1000 * 60 * 5);
-
-    return () => {
-      clearInterval(interval);
-    };
   }, [results]);
 
   useEffect(() => {
