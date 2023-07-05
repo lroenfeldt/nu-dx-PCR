@@ -71,6 +71,7 @@ const getDeviceType = () => {
   logger('No LineGene Installation found', 'logInfos.txt');
   return false;
 };
+
 /**
  * Default configuration
  *  @type {string}
@@ -128,7 +129,7 @@ const store = new Store({
  */
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1200,
+    width: 1280,
     height: 800,
     resizable: isDev ? true : false,
     fullscreen: isDev ? false : true,
@@ -179,7 +180,7 @@ function createWindow() {
     mainWindow.webContents.openDevTools({ mode: 'detach' });
   }
   // aktivate kiosk mode
-  mainWindow.setKiosk(true);
+  //mainWindow.setKiosk(true);
 }
 
 /**
@@ -542,7 +543,7 @@ ipcMain.on('endLineGene', (event) => {
 ipcMain.handle('toggleLid', (event) => {
   console.log('Signal to toggle lid received.');
   logger('Signal to toggle lid received.', 'logErrors.txt');
-  
+
   const buffer = [0x7b, 0x7c, 0x0, 0x2, 0x4d, 0x1, 0x0, 0x4c, 0x7c, 0x7d];
 
   if (isDev) {
