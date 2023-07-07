@@ -548,6 +548,10 @@ const BarcodeInput = () => {
         }
       })
     );
+    setInputs({
+      ...inputs,
+      [getBarcode(active).label]: '',
+    });
     textInput.current.focus();
   }, [barcodes, active]);
 
