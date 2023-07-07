@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useMemo, useRef, useState } from 'react';
 import { FcOk, FcCancel } from 'react-icons/fc';
 import { IoCloseCircle } from 'react-icons/io5';
 import { ActivateKeyboard, ArrowBox, Block } from '../../components/';
@@ -8,17 +8,22 @@ const InputContainer = ({
   isUser,
   isValid,
   password,
-  textInput,
   setClear,
   setPassword,
   currentUser,
-  handleChange,
+  handlePasswordChange,
   handleKeyPress,
   keyboardVisible,
   setKeyboardVisible,
   setIsChargenNrFocused,
   isChargenNrFocused,
+  inputName,
+  setInputName,
+  getInputValue,
+  setInputs,
+  inputs,
 }) => {
+  const textInput = useRef(null);
   return (
     <div className="inputContainer" style={{ marginBottom: 0 }}>
       <form action="" onSubmit={(e) => console.log(e)}>
@@ -34,31 +39,36 @@ const InputContainer = ({
           <ActivateKeyboard
             onClick={() => {
               setKeyboardVisible(!keyboardVisible);
+              textInput?.current?.setSelectionRange(textInput.current.value.length, textInput.current.value.length);
               textInput.current.focus();
             }}
           />
           <input
-            autoFocus
             id="UserID"
+            ref={textInput}
+            autoFocus
             type="text"
             name="UserID"
-            ref={textInput}
-            value={password}
-            onChange={handleChange}
+            value={getInputValue('UserID')}
+            onChange={handlePasswordChange}
             placeholder={'237c97x2'}
             onKeyDown={handleKeyPress}
             style={{
               borderTopLeftRadius: 0,
               borderBottomLeftRadius: 0,
             }}
-            onFocus={() => setIsChargenNrFocused(false)}
+            onFocus={() => {
+              setInputName('UserID');
+              setIsChargenNrFocused(false);
+            }}
           />
           <IoCloseCircle
             onClick={() => {
               setPassword('');
+              setInputs((inputs) => ({ ...inputs, UserID: '' }));
+
               textInput.current.focus();
               setClear(true);
-              setIsChargenNrFocused(false);
             }}
             style={{
               top: 5,
@@ -127,4 +137,4 @@ const InputContainer = ({
   );
 };
 
-export default InputContainer;
+export default memo(InputContainer);

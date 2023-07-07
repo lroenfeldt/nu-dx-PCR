@@ -35,6 +35,9 @@ const BarcodeInput = () => {
   const [keyboardActive, setKeyboardActive] = useState(false);
   const [barcodeCheckTimeout, setBarcodeCheckTimeout] = useState(null);
   const [clear, setClear] = useState(false);
+  const [inputs, setInputs] = useState({});
+  const [inputName, setInputName] = useState('default');
+
   const markActive = (id) => {
     setActive(id);
     textInput.current.focus();
@@ -88,7 +91,10 @@ const BarcodeInput = () => {
     (e) => {
       e.preventDefault();
       clearTimeout(barcodeCheckTimeout);
-
+      setInputs({
+        ...inputs,
+        [inputName]: e.target.value,
+      });
       setBarcodesValid(false);
       setBarcodes((prevBarcodes) => prevBarcodes.map((barcode) => ({ ...barcode, checking: false })));
       let newBarcode = getBarcode(active);
@@ -559,12 +565,17 @@ const BarcodeInput = () => {
                   <ActivateKeyboard
                     onClick={() => {
                       setKeyboardActive(!keyboardActive);
-
+                      textInput?.current?.setlectionRange(
+                        textInput.current.value.length,
+                        textInput.current.value.length
+                      );
                       textInput.current.focus();
                     }}
                   />
                   <input
+                    id={getBarcode(active).label}
                     ref={textInput}
+                    onFocus={() => setInputName(getBarcode(active).label)}
                     autoFocus
                     type="text"
                     value={getBarcode(active).value || ''}
@@ -593,7 +604,9 @@ const BarcodeInput = () => {
                 />
 
                 <input
+                  id={getBarcode(active).label}
                   ref={textInput}
+                  onFocus={() => setInputName(getBarcode(active).label)}
                   autoFocus
                   type="text"
                   value={getBarcode(active).value}
@@ -611,9 +624,12 @@ const BarcodeInput = () => {
               </div>
             )}
             <Keyboard
+              inputs={inputs}
+              inputName={inputName}
+              onChange={(e) => onKeyPress(e)}
+              setInputs={setInputs}
               clear={clear}
               setClear={setClear}
-              onChange={(e) => onKeyPress(e)}
               visible={keyboardActive}
               setVisible={setKeyboardActive}
               inputValue={getBarcode(active).value}

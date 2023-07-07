@@ -1,6 +1,6 @@
 {
   "name": "nu-dx-pcr",
-  "version": "1.0.14",
+  "version": "1.0.16",
   "author": "nu:healthcare GmbH",
   "description": "Frontend app to operate BIOER PCR-Cycler and connect to nu:dx cloud platform",
   "repository": {
@@ -48,7 +48,7 @@
     "react-icons": "^4.9.0",
     "react-loader-spinner": "^5.3.4",
     "react-router-dom": "^6.12.1",
-    "react-simple-keyboard": "^3.5.43",
+    "react-simple-keyboard": "latest",
     "react-toggle": "^4.1.3",
     "serial-number": "^1.3.0",
     "serialport": "^11.0.0",

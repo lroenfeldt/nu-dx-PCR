@@ -3,12 +3,11 @@ import InputContainer from './InputContainer';
 import { useNavigate } from 'react-router-dom';
 import { Block, Keyboard } from '../../components';
 import { useData, useTranslation } from '../../hooks';
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
 
 function Authentication() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const textInput = useRef(null);
   const [password, setPassword] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [isUser, setIsUser] = useState(false);
@@ -17,16 +16,18 @@ function Authentication() {
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [isChargenNrFocused, setIsChargenNrFocused] = useState(false);
   const [clear, setClear] = useState(false);
+  const [inputs, setInputs] = useState({});
+  const [inputName, setInputName] = useState('default');
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && isValid) {
       navigate('/enterBarcodes');
     }
   };
-
-  const handleChange = useCallback(
+  console.log(inputs);
+  const handlePasswordChange = useCallback(
     (e) => {
       const { value } = e.target;
-
+      setInputs((inputs) => ({ ...inputs, [inputName]: value }));
       setPassword(value);
       setSignal(value.length > 0);
 
@@ -57,32 +58,51 @@ function Authentication() {
     },
     [settings, selectedMethod, setCurrentUser]
   );
-  const onKeyPress = (value) => {
-    setPassword(value);
-    setSignal(value.length > 0);
 
-    const user = settings.account.users.find((user) => user.id == value);
-    const isCertified = user?.certifiedTestprocedureIds?.includes(selectedMethod);
-    setCurrentUser(user);
-    if (user) {
-      setKeyboardVisible(false);
-      setIsValid(true);
-    } else {
-      setIsValid(false);
-      setKeyboardVisible(false);
-    }
-    if (user && isCertified) {
-      setIsUser(true);
-      setKeyboardVisible(false);
-    } else {
-      setIsUser(false);
-      setKeyboardVisible(true);
-    }
-    if (user && !isCertified) {
-      setIsUser(true);
-      setIsValid(false);
-      setKeyboardVisible(false);
-    }
+  const handleLotNumberChange = useCallback(
+    (value) => {
+      setLotNumber(value);
+    },
+    [setLotNumber]
+  );
+
+  const onKeyPress = useCallback(
+    (value) => {
+      setInputs((inputs) => ({ ...inputs, [inputName]: value }));
+      if (isChargenNrFocused) {
+        setLotNumber(value);
+      } else {
+        setPassword(value);
+      }
+      setSignal(value.length > 0);
+
+      const user = settings.account.users.find((user) => user.id == value);
+      const isCertified = user?.certifiedTestprocedureIds?.includes(selectedMethod);
+      setCurrentUser(user);
+      if (user) {
+        setKeyboardVisible(false);
+        setIsValid(true);
+      } else {
+        setIsValid(false);
+        setKeyboardVisible(false);
+      }
+      if (user && isCertified) {
+        setIsUser(true);
+        setKeyboardVisible(false);
+      } else {
+        setIsUser(false);
+        setKeyboardVisible(true);
+      }
+      if (user && !isCertified) {
+        setIsUser(true);
+        setIsValid(false);
+        setKeyboardVisible(false);
+      }
+    },
+    [settings, selectedMethod, setCurrentUser, isChargenNrFocused, inputName, setLotNumber]
+  );
+  const getInputValue = (inputName) => {
+    return inputs[inputName] || '';
   };
 
   return (
@@ -102,34 +122,43 @@ function Authentication() {
             isValid={isValid}
             password={password}
             setClear={setClear}
-            textInput={textInput}
+            inputName={inputName}
             setPassword={setPassword}
             currentUser={currentUser}
-            handleChange={handleChange}
+            handlePasswordChange={handlePasswordChange}
+            setInputName={setInputName}
             handleKeyPress={handleKeyPress}
             keyboardVisible={keyboardVisible}
             setKeyboardVisible={setKeyboardVisible}
             isChargenNrFocused={isChargenNrFocused}
             setIsChargenNrFocused={setIsChargenNrFocused}
+            getInputValue={getInputValue}
+            setInputs={setInputs}
+            inputs={inputs}
           />
         )}
         <Keyboard
-          onChange={isChargenNrFocused ? setLotNumber : onKeyPress}
+          clear={clear}
+          inputs={inputs}
+          setClear={setClear}
+          inputName={inputName}
+          setInputs={setInputs}
           visible={keyboardVisible}
           setVisible={setKeyboardVisible}
+          inputValue={isChargenNrFocused ? lotNumber : password}
+          onChange={isChargenNrFocused ? setLotNumber : onKeyPress}
           style={{
             height: keyboardVisible && isValid ? '70%' : '83%',
           }}
-          clear={clear}
-          setClear={setClear}
-          inputValue={isChargenNrFocused ? lotNumber : password}
         />
         {((settings.account.askForLot && isValid) ||
           (settings.account.askForLot && !settings.account.hasUserAuthentification)) && (
           <LotDoku
+            setClear={setClear}
+            inputName={inputName}
+            setInputName={setInputName}
             keyboardVisible={keyboardVisible}
             setKeyboardVisible={setKeyboardVisible}
-            setClear={setClear}
             isChargenNrFocused={isChargenNrFocused}
             setIsChargenNrFocused={setIsChargenNrFocused}
           />
@@ -148,4 +177,4 @@ function Authentication() {
   );
 }
 
-export default Authentication;
+export default memo(Authentication);
