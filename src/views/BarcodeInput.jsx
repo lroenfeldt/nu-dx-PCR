@@ -176,6 +176,10 @@ const BarcodeInput = () => {
     while (hit === true && dbError === false) {
       retestNumber++;
       newBarcodeValue = barcode.value + '-R' + retestNumber;
+      setInputs({
+        ...inputs,
+        [inputName]: newBarcodeValue,
+      });
       try {
         let response = await axios.get(`${checkBarcodeUrl}/${newBarcodeValue}`);
         let result = response.data;
