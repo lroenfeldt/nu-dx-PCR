@@ -42,6 +42,9 @@ const BarcodeInput = () => {
     setActive(id);
     textInput.current.focus();
   };
+  useEffect(() => {
+    setInputName(getBarcode(active).label);
+  }, [active]);
   const numberRegex = /^[0-9]+$/;
   const nextWell = (next) => {
     let nextWell = active;
@@ -254,7 +257,8 @@ const BarcodeInput = () => {
     };
 
     setBarcodes((prevBarcodes) => prevBarcodes.map((barcode) => (barcode.id === newBarcode.id ? newBarcode : barcode)));
-
+    setInputs({ ...inputs, [newBarcode.label]: newBarcode.value });
+    console.log({ [newBarcode.label]: newBarcode.value });
     let isValid = true;
     let validationErr = null;
 
@@ -509,6 +513,7 @@ const BarcodeInput = () => {
 
   useEffect(() => {
     getBarcode(active).askRetest = settings.account.allowRetest && settings.account.verifyBarcodes;
+    setInputName(getBarcode(active).label);
   }, [settings.account.allowRetest, settings.account.verifyBarcodes]);
   //check valid attribure of all barcodes to toggle button for next step
   useEffect(() => {
@@ -522,7 +527,6 @@ const BarcodeInput = () => {
     }
   }, [offlineMode]);
   const handleReset = useCallback(() => {
-    setClear(true);
     setBarcodes(
       barcodes.map((barcode) => {
         if (barcode?.id === active) {
@@ -575,7 +579,10 @@ const BarcodeInput = () => {
                   <input
                     id={getBarcode(active).label}
                     ref={textInput}
-                    onFocus={() => setInputName(getBarcode(active).label)}
+                    onFocus={() => {
+                      setInputName(getBarcode(active).label);
+                      setInputs({ ...inputs, [getBarcode(active).label]: getBarcode(active).value });
+                    }}
                     autoFocus
                     type="text"
                     value={getBarcode(active).value || ''}

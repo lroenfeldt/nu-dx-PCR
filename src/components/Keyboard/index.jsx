@@ -30,6 +30,7 @@ function Keyboard(props) {
   };
   const onChangeAll = (newInput) => {
     setInputs((prevInputs) => ({ ...prevInputs, ...newInput }));
+    console.log('Inputs changed', inputs);
   };
 
   const onKeyPress = (button) => {
@@ -61,7 +62,7 @@ function Keyboard(props) {
 
   useEffect(() => {
     keyboard.current?.setInput(inputs[inputName]);
-  }, [inputs, inputName]);
+  }, [inputs, inputName, visible]);
 
   useEffect(() => {
     if (clear) {
