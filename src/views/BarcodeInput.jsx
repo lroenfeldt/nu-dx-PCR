@@ -262,10 +262,17 @@ const BarcodeInput = () => {
 
     setBarcodes((prevBarcodes) => prevBarcodes.map((barcode) => (barcode.id === newBarcode.id ? newBarcode : barcode)));
     setInputs({ ...inputs, [newBarcode.label]: newBarcode.value });
-    console.log({ [newBarcode.label]: newBarcode.value });
+
     let isValid = true;
     let validationErr = null;
-
+    if (!settings.account.verifyBarcodes) {
+      setBarcodes((prevBarcodes) =>
+        prevBarcodes.map((barcode) =>
+          barcode.id === newBarcode.id ? { ...barcode, checking: false, valid: true } : barcode
+        )
+      );
+      return;
+    }
     //Check for control placeholders
     const controlPlaceholders = ['Placeholder_NTC', 'Placeholder_TPC', 'SC2NTC', 'SC2TPC', 'TPC', 'NTC'];
     if (controlPlaceholders.includes(newBarcode.value)) {
