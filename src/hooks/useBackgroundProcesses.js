@@ -83,15 +83,17 @@ function useBackgroundProcesses() {
   }, [deviceStatus, settings?.account?.autoShutdownMinutes, idleTimestamp]);
 
   useEffect(() => {
-    setInterval(() => {
+    const interval = setInterval(() => {
       autoSubmitUnsubmittedResults();
     }, 1000 * 60 * 5); // 5 minutes
+    return () => clearInterval(interval);
   }, [results]);
 
   useEffect(() => {
-    setInterval(() => {
+    const interval = setInterval(() => {
       getLastVersion();
     }, 1000 * 60 * 5 * 12); // 1H
+    return () => clearInterval(interval);
   }, [settings]);
 
   useEffect(() => {
