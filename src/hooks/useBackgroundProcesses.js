@@ -92,9 +92,9 @@ function useBackgroundProcesses() {
   useEffect(() => {
     const interval = setInterval(() => {
       getLastVersion();
-    }, 1000 * 60 * 5 * 12); // 1H
+    }, 1000 * 60 * 60); // 1h
     return () => clearInterval(interval);
-  }, [settings]);
+  }, []);
 
   useEffect(() => {
     const pingInterval = setInterval(() => {
