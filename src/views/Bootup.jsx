@@ -135,7 +135,7 @@ const Bootup = () => {
     let difference = decoded.exp * 1000 - Date.now();
 
     const remDays = Math.floor(difference / 1000 / 60 / 60 / 24);
-
+    console.log('remDays', remDays);
     if (remDays < 0 && settings.account.allowDaysOffline != 0) {
       let newSettings = {
         ...settings,
@@ -184,7 +184,6 @@ const Bootup = () => {
 
       if (response?.problem && response?.problem == 'CLIENT_ERROR') {
         console.log('Error', response.originalError.message);
-        console.log('response', response);
         window.api.logEvents(`Error:${JSON.stringify(response.originalError.message)}`, 'logErrors.txt');
         setErrors((prevErrors) =>
           prevErrors
