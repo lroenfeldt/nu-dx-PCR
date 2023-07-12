@@ -50,8 +50,8 @@ const useUpdate = () => {
         window.api.logEvents(`No new version found`, 'logInfos.txt');
       }
     } catch (err) {
-      window.api.logEvents('getLastVersion error' + JSON.stringify(err), 'logErrors.txt');
       console.log(err);
+      window.api.logEvents('getLastVersion error' + JSON.stringify(err), 'logErrors.txt');
     }
   }, [settings, setUpdateAvailable]);
 

@@ -18,58 +18,58 @@ let mainWindow;
 let splash;
 let lineGenePath;
 
+const killProcess = (process) => {
+  spawn('taskkill', ['/f', '/im', process]);
+};
 const forceConsole = false;
 /**
  * check installed version of LineGene
  * @returns {string} the version of LineGene
  */
-const getDeviceType = () => {
-  let lineGene1644Path = 'C:\\Bioer\\LineGene1600 for research\\1644\\bin\\LineGene1600.exe';
-  let lineGene1640Path = 'C:\\BIOER\\LineGene1600 for research\\1640\\bin\\LineGene1600.exe';
-  let lineGene96Path = 'C:\\BIOER\\96\\bin\\Gene-9660.exe';
+const softwareList = [
+  {
+    path: 'C:\\Bioer\\LineGene1600 for research\\1644\\bin\\LineGene1600.exe',
+    returnType: '16',
+    name: 'LineGene1644',
+  },
+  {
+    path: 'C:\\BIOER\\LineGene1600 for research\\1640\\bin\\LineGene1600.exe',
+    returnType: '16',
+    name: 'LineGene1640',
+  },
+  {
+    path: 'C:\\BIOER\\96\\bin\\Gene-9660.exe',
+    returnType: '96',
+    name: 'LineGene9600',
+  },
+];
 
+const getDeviceType = () => {
   if (isDev) {
     return '16';
   }
 
-  try {
-    const res = fs.realpathSync(lineGene1644Path);
-    fs.accessSync(res, fs.constants.F_OK);
-    console.log('LineGene1644 found');
-    logger('LineGene1644 found', 'logInfos.txt');
-    lineGenePath = res;
-    return '16';
-  } catch (error) {
-    console.log('LineGene1644 not found');
-    logger('LineGene1644 not found', 'logInfos.txt');
+  for (let i = 0; i < softwareList.length; i++) {
+    const software = softwareList[i];
+
+    try {
+      const res = fs.realpathSync(software.path);
+      fs.accessSync(res, fs.constants.F_OK);
+      console.log(`${software.name} found`);
+      logger(`${software.name} found`, 'logInfos.txt');
+      lineGenePath = res;
+      return software.returnType;
+    } catch (error) {
+      console.log(`${software.name} not found`);
+      logger(`${software.name} not found`, 'logInfos.txt');
+    }
   }
 
-  try {
-    const res = fs.realpathSync(lineGene1640Path);
-    fs.accessSync(res, fs.constants.F_OK);
-    console.log('LineGene1640 found');
-    logger('LineGene1640 found', 'logInfos.txt');
-    lineGenePath = res;
-    return '16';
-  } catch (error) {
-    console.log(lineGene1640Path);
-    console.log('LineGene1640 not found');
-    logger('LineGene1640 not found', 'logInfos.txt');
-  }
+  const errMessage = 'No LineGene Installation found';
+  console.log(new Error(errMessage));
+  logger(errMessage, 'logInfos.txt');
 
-  try {
-    const res = fs.realpathSync(lineGene96Path);
-    fs.accessSync(res, fs.constants.F_OK);
-    console.log('LineGene9600 found');
-    lineGenePath = res;
-    return '96';
-  } catch (error) {
-    console.log('LineGene9600 not found');
-    logger('LineGene9600 not found', 'logInfos.txt');
-  }
-  console.log(new Error('No LineGene Installation found'));
-  logger('No LineGene Installation found', 'logInfos.txt');
-  return false;
+  throw new Error(errMessage);
 };
 
 /**
@@ -131,8 +131,8 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
-    resizable: isDev ? true : false,
-    fullscreen: isDev ? false : true,
+    resizable: isDev,
+    fullscreen: !isDev,
     alwaysOnTop: false, // !isDev
     backgroundColor: '#000000',
     show: false,
@@ -164,9 +164,7 @@ function createWindow() {
   });
 
   mainWindow.on('closed', () => {
-    spawn('taskkill', ['/f', '/im', 'Gene-9660.exe']);
-    spawn('taskkill', ['/f', '/im', 'LineGene1600.exe']);
-    spawn('taskkill', ['/f', '/im', 'PcrServer.exe']);
+    ['Gene-9660.exe', 'LineGene1600.exe', 'PcrServer.exe'].forEach(killProcess);
     app.quit();
   });
 
@@ -238,11 +236,8 @@ app.whenReady().then(() => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', function () {
-  spawn('taskkill', ['/f', '/im', 'LineGene1600.exe']);
-  spawn('taskkill', ['/f', '/im', 'Gene-9660.exe']);
-  spawn('taskkill', ['/f', '/im', 'PcrServer.exe']);
-
+app.on('window-all-closed', () => {
+  ['Gene-9660.exe', 'LineGene1600.exe', 'PcrServer.exe'].forEach(killProcess);
   app.quit();
 });
 
@@ -492,7 +487,7 @@ ipcMain.on('startLineGene', (event, testid, xmlContent, settings, barcodes, test
   settings.testid = testid;
   settings.testmethod = testmethod;
 
-  const pcrServerPath = 'C:\\Bioer\\PcrServer\\bin\\PcrServer.exe';
+  const pcrServerPath = 'C:\\Bioer\\LineGene\\pcrserver\\bin\\PcrServer.exe';
   const xmlPath = path.resolve(app.getPath('userData'), 'runs', testid, 'lineGeneSetup.xml');
   const outputPath = path.resolve(app.getPath('userData'), 'runs', testid, testid + '.fqd');
   const configPath = path.resolve(app.getPath('userData'), 'runs', testid, 'config.json');
@@ -530,9 +525,7 @@ ipcMain.on('startLineGene', (event, testid, xmlContent, settings, barcodes, test
  * @returns {Boolean} true if test stopped
  * */
 ipcMain.on('endLineGene', (event) => {
-  spawn('taskkill', ['/f', '/im', 'LineGene1600.exe']);
-  spawn('taskkill', ['/f', '/im', 'Gene-9660.exe']);
-  spawn('taskkill', ['/f', '/im', 'PcrServer.exe']);
+  ['Gene-9660.exe', 'LineGene1600.exe', 'PcrServer.exe'].forEach(killProcess);
   clearInterval(focusInterval);
   event.returnValue = true;
 });

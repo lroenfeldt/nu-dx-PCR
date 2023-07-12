@@ -57,7 +57,8 @@ function useBackgroundProcesses() {
       deviceStatus === 'IDLE' &&
       isLidOpen &&
       settings?.account?.autoCloseLidMinutes &&
-      settings?.account?.autoCloseLidMinutes > 0
+      settings?.account?.autoCloseLidMinutes > 0 &&
+      settings?.device.wellCount == '96'
     ) {
       toggleLid(); // toggleLid can both open and close the lid
     }
@@ -84,19 +85,19 @@ function useBackgroundProcesses() {
   useEffect(() => {
     setInterval(() => {
       autoSubmitUnsubmittedResults();
-    }, 1000 * 60 * 5);
+    }, 1000 * 60 * 5); // 5 minutes
   }, [results]);
 
   useEffect(() => {
     setInterval(() => {
       getLastVersion();
-    }, 1000 * 60 * 5);
+    }, 1000 * 60 * 5 * 12); // 1H
   }, [settings]);
 
   useEffect(() => {
     const pingInterval = setInterval(() => {
       ping();
-    }, 5000);
+    }, 5000); // 5 seconds
 
     return () => clearInterval(pingInterval);
   }, [deviceStatus, settings]);
@@ -112,11 +113,11 @@ function useBackgroundProcesses() {
   useEffect(() => {
     let lidAutoCloseInterval = setInterval(() => {
       lidAutoClose();
-    }, settings?.account?.autoCloseLidMinutes * 60 * 1000);
+    }, settings?.account?.autoCloseLidMinutes * 60 * 1000); // 5 minutes
 
     let autoShutdownInterval = setInterval(() => {
       autoShutdown();
-    }, settings?.account?.autoCloseLidMinutes * 60 * 1000);
+    }, settings?.account?.autoCloseLidMinutes * 60 * 1000); // 5 minutes
 
     return () => {
       clearInterval(lidAutoCloseInterval);
@@ -139,11 +140,11 @@ function useBackgroundProcesses() {
         //await checkForTestResultFile();
         await checkForUnsubmittedResults();
         if (interval) clearInterval(interval);
-        interval = setInterval(executeChecks, 5000);
+        interval = setInterval(executeChecks, 5000); // 5 seconds
       } catch (error) {
         console.error(error);
         if (interval) clearInterval(interval);
-        interval = setInterval(executeChecks, 10000);
+        interval = setInterval(executeChecks, 10000); // 10 seconds
       }
     };
 

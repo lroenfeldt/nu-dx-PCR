@@ -150,7 +150,6 @@ function Authentication() {
           style={{
             height: keyboardVisible && isValid ? '70%' : '83%',
           }}
-          isNumeric={isChargenNrFocused}
         />
         {((settings.account.askForLot && isValid) ||
           (settings.account.askForLot && !settings.account.hasUserAuthentification)) && (
