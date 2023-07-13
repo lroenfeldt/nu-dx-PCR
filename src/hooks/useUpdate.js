@@ -20,7 +20,7 @@ const useUpdate = () => {
         latestVersion = response.data.filter((release) => release.prerelease)[0];
       } else if (settings.user.updateType === 'stable') {
         // Otherwise pick the first release as the latest stable version
-        latestVersion = response.data[0];
+        latestVersion = response.data.filter((release) => !release.prerelease)[0];
       }
 
       if (settings.version && latestVersion) {
@@ -28,7 +28,7 @@ const useUpdate = () => {
         const newVersion = latestVersion.tag_name.replace('v', '').split('.');
         for (let i = 0; i < currentVersion.length; i++) {
           if (
-            parseInt(currentVersion[i]) != parseInt(newVersion[i]) &&
+            parseInt(currentVersion[i]) !== parseInt(newVersion[i]) &&
             parseInt(newVersion[i]) > parseInt(currentVersion[i])
           ) {
             setUpdateAvailable(true);
