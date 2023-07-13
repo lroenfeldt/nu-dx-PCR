@@ -68,7 +68,7 @@ export default function Pairing() {
         );
       }
     } catch (err) {
-      window.api.logEvents(`getPairingCodeApi err: ${JSON.stringify(err)}`, 'logErrors.txt');
+      window.api.logEvents(`getPairingCodeApi err: ${err}`, 'logErrors.txt');
       if (err?.response) {
         console.log(err.response?.data);
         console.log(err.response.status);

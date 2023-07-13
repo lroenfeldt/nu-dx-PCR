@@ -103,13 +103,13 @@ const useResults = () => {
           autoControls[i].barcode = generatedBarcode.data.sample;
         } catch (err) {
           console.log(err);
-          window.api.logEvents(`submitAutoControls error: ${JSON.stringify(err)}`, 'logErrors.txt');
+          window.api.logEvents(`submitAutoControls error: ${err}`, 'logErrors.txt');
           throw err;
         }
       }
     } catch (err) {
       console.log(err);
-      window.api.logEvents(`submitAutoControls error: ${JSON.stringify(err)}`, 'logErrors.txt');
+      window.api.logEvents(`submitAutoControls error: ${err}`, 'logErrors.txt');
       throw err;
     }
 
@@ -148,7 +148,7 @@ const useResults = () => {
     const resultList = results.filter((result) => result.submitted === false);
     let promises = [];
     resultList.forEach((result) => {
-      promises.push(submitResult(result.testid, result.submitted));
+      if (result) promises.push(submitResult(result.testid, result.submitted));
     });
     Promise.all(promises).then(() => {
       setSubmitting(false);
@@ -166,7 +166,7 @@ const useResults = () => {
       setUSBPresent(await window.api.checkUSB());
     } catch (error) {
       console.log(error);
-      window.api.logEvents(`checkUSB: ${JSON.stringify(error)}`, 'logErrors.txt');
+      window.api.logEvents(`checkUSB: ${error}`, 'logErrors.txt');
     }
   };
 
@@ -214,7 +214,7 @@ const useResults = () => {
       testmethod = settings.account.testprocedures.find((method) => method.id === testConfig.testmethod);
     } catch (err) {
       console.log(err);
-      window.api.logEvents(`saveToUSB: ${JSON.stringify(err)}`, 'logErrors.txt');
+      window.api.logEvents(`saveToUSB: ${err}`, 'logErrors.txt');
       setErrors((prevErrors) =>
         prevErrors
           .filter((error) => error.type !== 'read')
@@ -235,7 +235,7 @@ const useResults = () => {
       parsedResults = parseResultsExport(resultFile, testid, testConfig, testmethod, lotNumber);
     } catch (err) {
       console.log(err);
-      window.api.logEvents(`saveToUSB: ${JSON.stringify(err)}`, 'logErrors.txt');
+      window.api.logEvents(`saveToUSB: ${err}`, 'logErrors.txt');
       setErrors((prevErrors) =>
         prevErrors
           .filter((error) => error.type !== 'submit')
@@ -256,7 +256,7 @@ const useResults = () => {
       return true;
     } catch (error) {
       console.log(error);
-      window.api.logEvents(`saveToUSB: ${JSON.stringify(error)}`, 'logErrors.txt');
+      window.api.logEvents(`saveToUSB: ${error}`, 'logErrors.txt');
       setErrors((prevErrors) =>
         prevErrors
           .filter((error) => error.type !== 'saveToUSB')
@@ -296,10 +296,11 @@ const useResults = () => {
       setResults(newResults);
     } catch (err) {
       console.log(err);
-      window.api.logEvents(`getResults: ${JSON.stringify(err)}`, 'logErrors.txt');
+      window.api.logEvents(`getResults: ${err}`, 'logErrors.txt');
     }
     setReading(false);
   };
+
   /**
    * Submit a single result to the server
    * @param {string} testid
@@ -336,7 +337,7 @@ const useResults = () => {
       hardwareId = testConfig.device.hardwareId;
     } catch (err) {
       console.log('failedToReadTestData: ' + err);
-      window.api.logEvents(`submitResult: ${JSON.stringify(err)}`, 'logErrors.txt');
+      window.api.logEvents(`submitResult: ${err}`, 'logErrors.txt');
       setErrors((prevErrors) =>
         prevErrors
           .filter((error) => error.type !== 'read')
@@ -360,33 +361,35 @@ const useResults = () => {
     const resultUrl = testConfig.account.customSubmitResultsEndpoint
       ? testConfig.account.customSubmitResultsEndpoint
       : urls.resultUrl;
-
+    console.log(testConfig.account.customSubmitResultsEndpoint);
     //Submit ControlSamples
     console.log('check for auto controls');
     window.api.logEvents(`check for auto controls`, 'logInfos.txt');
-    try {
-      autoControls = await submitAutoControls(
-        barcodes,
-        testid,
-        orderKey,
-        hardwareId,
-        submitControlUrl,
-        fetchControlUrl
-      );
-    } catch (err) {
-      console.log(`submitAutoControls failed: ${JSON.stringify(err)}`);
-      window.api.logEvents(`submitResult: ${JSON.stringify(err)}`, 'logErrors.txt');
-      setErrors((prevErrors) =>
-        prevErrors
-          .filter((error) => error.type !== 'submit')
-          .concat({
-            type: 'submit',
-            message: t('errors.failedToSaveControlSample'),
-          })
-      );
-      setSubmitting(false);
-      setSubmittingSingle(testid, false);
-      return false;
+    if (settings.account.preregisterControlSamples) {
+      try {
+        autoControls = await submitAutoControls(
+          barcodes,
+          testid,
+          orderKey,
+          hardwareId,
+          submitControlUrl,
+          fetchControlUrl
+        );
+      } catch (err) {
+        console.log(`submitAutoControls failed: ${err}`);
+        window.api.logEvents(`submitResult: ${err}`, 'logErrors.txt');
+        setErrors((prevErrors) =>
+          prevErrors
+            .filter((error) => error.type !== 'submit')
+            .concat({
+              type: 'submit',
+              message: t('errors.failedToSaveControlSample'),
+            })
+        );
+        setSubmitting(false);
+        setSubmittingSingle(testid, false);
+        return false;
+      }
     }
 
     //Parse Results
@@ -407,7 +410,7 @@ const useResults = () => {
       );
     } catch (err) {
       console.log(`parseResultsDB failed: ${err}`);
-      window.api.logEvents(`parseResultsDB failed: ${JSON.stringify(err)}`, 'logErrors.txt');
+      window.api.logEvents(`parseResultsDB failed: ${err}`, 'logErrors.txt');
       setErrors((prevErrors) =>
         prevErrors
           .filter((error) => error.type !== 'submit')
@@ -426,7 +429,7 @@ const useResults = () => {
     window.api.logEvents(`submit to db`, 'logInfos.txt');
     try {
       let submitResponse = await axios.post(resultUrl, parsedResults);
-      console.log(submitResponse);
+      console.log(resultUrl);
       window.api.logEvents(`submit to db: ${JSON.stringify(submitResponse)}`, 'logInfos.txt');
       const msg = submitResponse.data.msg;
       const missing = msg.search('Fehlende Proben');
@@ -443,8 +446,8 @@ const useResults = () => {
         );
       }
     } catch (err) {
-      console.log(`submitResponse: ${JSON.stringify(err)}`);
-      window.api.logEvents(`submitResponse: ${JSON.stringify(err)}`, 'logErrors.txt');
+      console.log(`submitResponse: ${err}`);
+      window.api.logEvents(`submitResponse: ${err}`, 'logErrors.txt');
       setErrors((prevErrors) =>
         prevErrors
           .filter((error) => error.type !== 'submit')
@@ -468,8 +471,8 @@ const useResults = () => {
       setSubmitted(true);
       setTestDone(true);
     } catch (err) {
-      console.log(`move result file to done directory: ${JSON.stringify(err)}`);
-      window.api.logEvents(`move result file to done directory: ${JSON.stringify(err)}`, 'logErrors.txt');
+      console.log(`move result file to done directory: ${err}`);
+      window.api.logEvents(`move result file to done directory: ${err}`, 'logErrors.txt');
       setErrors((prevErrors) =>
         prevErrors
           .filter((error) => error.type !== 'submit')

@@ -80,7 +80,7 @@ export const getPairingCode = () => {
           );
         } else if (err.request) {
           console.log(err.request);
-          window.api.logEvents(`request:${JSON.stringify(err)}`, 'logErrors.txt');
+          window.api.logEvents(`request:${err}`, 'logErrors.txt');
           setErrors((prevErrors) =>
             prevErrors
               .filter((error) => error.type !== 'pairing')

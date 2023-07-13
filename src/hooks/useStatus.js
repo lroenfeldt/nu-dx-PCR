@@ -7,7 +7,6 @@ export const useStatus = () => {
   const { saveSettings, settings, deviceStatus, setErrors, setDbConnection, isStatus } = useData();
 
   const ping = useCallback(async () => {
-    console.log(settings.user)
     try {
       const response = await onlineStatusApi.request(settings.device.hardwareId, {
         status: deviceStatus,
@@ -37,7 +36,7 @@ export const useStatus = () => {
       window.api.logEvents(`ping status response: ${JSON.stringify(response)}`, 'logInfos.txt');
     } catch (err) {
       console.log(err);
-      window.api.logEvents('ping status error:' + JSON.stringify(err), 'logErrors.txt');
+      window.api.logEvents('ping status error:' + err, 'logErrors.txt');
     }
   }, [deviceStatus, settings, onlineStatusApi, isStatus]);
 

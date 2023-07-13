@@ -97,7 +97,7 @@ const Bootup = () => {
           );
         } else if (err.request) {
           console.log(err.request);
-          window.api.logEvents(`request:${JSON.stringify(err)}`, 'logErrors.txt');
+          window.api.logEvents(`request:${err}`, 'logErrors.txt');
           setErrors((prevErrors) =>
             prevErrors
               .filter((error) => error.type !== 'pairing')
@@ -135,8 +135,8 @@ const Bootup = () => {
     let difference = decoded.exp * 1000 - Date.now();
 
     const remDays = Math.floor(difference / 1000 / 60 / 60 / 24);
-    console.log('remDays', remDays);
     if (remDays < 0 && settings.account.allowDaysOffline != 0) {
+      console.log('Token expired');
       let newSettings = {
         ...settings,
         account: {
@@ -181,7 +181,27 @@ const Bootup = () => {
           await clearSettings();
         }
       }
-
+      if (response?.data?.error == 'Invalid Token' && response?.data?.valid == false) {
+        let newSettings = {
+          ...settings,
+          account: {
+            ...settings.account,
+            authToken: '',
+            initialized: false,
+          },
+        };
+        setLoading(true);
+        setSettings(newSettings);
+        saveSettings(newSettings);
+        if (settings.isDev) {
+          setTimeout(() => {
+            navigate('/pairing');
+          }, 3000);
+        } else {
+          navigate('/pairing');
+        }
+        setLoading(false);
+      }
       if (response?.problem && response?.problem == 'CLIENT_ERROR') {
         console.log('Error', response.originalError.message);
         window.api.logEvents(`Error:${JSON.stringify(response.originalError.message)}`, 'logErrors.txt');
@@ -223,7 +243,7 @@ const Bootup = () => {
           } else if (remDays === 0 && settings.account.allowDaysOffline != 0) {
             setErrors((prevErrors) =>
               prevErrors
-                .filter((error) => error.type !== 'init')
+                .filter((error) => error.type !== 'offline')
                 .concat({
                   type: 'offline',
                   message: t('errors.deviceAuthenticationFailedZeroRemDays'),
@@ -232,7 +252,7 @@ const Bootup = () => {
           } else {
             setErrors((prevErrors) =>
               prevErrors
-                .filter((error) => error.type !== 'init')
+                .filter((error) => error.type !== 'auth')
                 .concat({
                   type: 'auth',
                   message: t('errors.deviceAuthenticationFailedRetry'),

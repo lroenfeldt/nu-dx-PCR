@@ -48,7 +48,7 @@ function useBackgroundProcesses() {
       setUSBPresent(usbPresent);
     } catch (error) {
       console.log(error);
-      window.api.logEvents(`checkUSB: ${JSON.stringify(error)}`, 'logErrors.txt');
+      window.api.logEvents(`checkUSB: ${error}`, 'logErrors.txt');
     }
   }, [setUSBPresent]);
 
@@ -92,7 +92,7 @@ function useBackgroundProcesses() {
   useEffect(() => {
     const interval = setInterval(() => {
       getLastVersion();
-    }, 1000 * 60 * 60); // 1h
+    }, 1000 * 60); // 1h
     return () => clearInterval(interval);
   }, []);
 

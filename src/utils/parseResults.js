@@ -185,7 +185,7 @@ export const parseResults = (resultFile, testid, testConfig, testmethod, overrid
     } else if (parsedResultsData[position].label === 'NTC' && parsedResultsData[position].result === 'negative') {
       parsedResultsData[position].result = 'invalid';
     }
-    
+
     //Apply Overrides
     if (override && JSON.parse(override)[position]) {
       parsedResultsData[position].result = JSON.parse(override)[position];
@@ -311,7 +311,7 @@ export const parseResultsDB = (
         testStarted,
         orderKey: testConfig.account.orderKey,
         threshhold: testmethod.parameters.find((param) => param.target === paramName)?.threshhold || '',
-        hecThreshFl: testConfig.account.hecThreshFl,
+        hecThreshFl: testConfig.account?.hecThreshFl,
         virusThreshFl: testConfig.account.virusThreshFl,
         userId,
         testmethod: testmethod.id,
@@ -343,7 +343,7 @@ export const parseResultsDB = (
       testStarted,
       orderKey: testConfig.account.orderKey,
       threshhold: '',
-      hecThreshFl: testConfig.account.hecThreshFl,
+      hecThreshFl: testConfig.account?.hecThreshFl,
       virusThreshFl: testConfig.account.virusThreshFl,
       userId,
       testmethod: testmethod.id,

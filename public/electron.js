@@ -28,6 +28,11 @@ const forceConsole = false;
  */
 const softwareList = [
   {
+    path: 'C:\\Bioer\\LineGene\\1600\\bin\\LineGene1600.exe',
+    returnType: '16',
+    name: 'LineGene1600',
+  },
+  {
     path: 'C:\\Bioer\\LineGene1600 for research\\1644\\bin\\LineGene1600.exe',
     returnType: '16',
     name: 'LineGene1644',
@@ -43,20 +48,18 @@ const softwareList = [
     name: 'LineGene9600',
   },
 ];
-
+/**
+ *
+ * @returns boolean
+ */
 const getDeviceType = () => {
-  if (isDev) {
-    return '16';
-  }
-
   for (let i = 0; i < softwareList.length; i++) {
     const software = softwareList[i];
 
     try {
       const res = fs.realpathSync(software.path);
       fs.accessSync(res, fs.constants.F_OK);
-      console.log(`${software.name} found`);
-      logger(`${software.name} found`, 'logInfos.txt');
+
       lineGenePath = res;
       return software.returnType;
     } catch (error) {
@@ -66,10 +69,10 @@ const getDeviceType = () => {
   }
 
   const errMessage = 'No LineGene Installation found';
-  console.log(new Error(errMessage));
+  console.log(errMessage);
   logger(errMessage, 'logInfos.txt');
 
-  throw new Error(errMessage);
+  return false;
 };
 
 /**
@@ -119,6 +122,8 @@ const store = new Store({
       user: {
         tpcPos: 'A01',
         ntcPos: 'A02',
+        locale: 'en',
+        updateType: 'stable',
       },
     },
   },
@@ -172,11 +177,11 @@ function createWindow() {
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
 
   // Open the DevTools.
-
-  devtools = new BrowserWindow();
-  mainWindow.webContents.setDevToolsWebContents(devtools.webContents);
-  mainWindow.webContents.openDevTools({ mode: 'detach' });
-
+  if (isDev || forceConsole) {
+    devtools = new BrowserWindow();
+    mainWindow.webContents.setDevToolsWebContents(devtools.webContents);
+    mainWindow.webContents.openDevTools({ mode: 'detach' });
+  }
   // aktivate kiosk mode
   //mainWindow.setKiosk(true);
 }
@@ -381,7 +386,7 @@ ipcMain.handle('saveConfig', async (event, config) => {
     return true;
   } catch (err) {
     console.log(err);
-    logger(`saveConfig ${JSON.stringify(err)}`, 'logErrors.txt');
+    logger(`saveConfig ${err}`, 'logErrors.txt');
     throw Error('Settings could not be saved');
   }
 });
@@ -393,7 +398,7 @@ ipcMain.handle('clearConfig', async (event) => {
     return true;
   } catch (err) {
     console.log(err);
-    logger(`clearConfig ${JSON.stringify(err)}`, 'logErrors.txt');
+    logger(`clearConfig ${err}`, 'logErrors.txt');
     throw Error('Settings could not be saved');
   }
 });
@@ -443,7 +448,7 @@ ipcMain.handle('getResult', async (event, testid, done) => {
     console.log('error accessing result file for test' + testid);
     console.log(error);
     logger(`error accessing result file for test ${testid}`, 'logErrors.txt');
-    logger(JSON.stringify(error), 'logErrors.txt');
+    logger(error, 'logErrors.txt');
     throw error;
   }
   try {
@@ -451,7 +456,7 @@ ipcMain.handle('getResult', async (event, testid, done) => {
   } catch (error) {
     console.log('error accessing config file for test' + testid);
     console.log(error);
-    logger(JSON.stringify(error), 'logErrors.txt');
+    logger(error, 'logErrors.txt');
   }
   return { resultFile, configFile, testStarted, override };
 });
@@ -487,22 +492,22 @@ ipcMain.on('startLineGene', (event, testid, xmlContent, settings, barcodes, test
   settings.testid = testid;
   settings.testmethod = testmethod;
 
-  const pcrServerPath = 'C:\\Bioer\\LineGene\\pcrserver\\bin\\PcrServer.exe';
+  const pcrServerPath = 'C:\\Bioer\\PcrServer\\bin\\PcrServer.exe';
   const xmlPath = path.resolve(app.getPath('userData'), 'runs', testid, 'lineGeneSetup.xml');
   const outputPath = path.resolve(app.getPath('userData'), 'runs', testid, testid + '.fqd');
   const configPath = path.resolve(app.getPath('userData'), 'runs', testid, 'config.json');
 
   fs.mkdirSync(path.dirname(xmlPath), { recursive: true }, (err) => {
     console.log(err);
-    logger(`startLineGene error: ${JSON.stringify(err)}`, 'logErrors.txt');
+    logger(`startLineGene error: ${err}`, 'logErrors.txt');
   });
   fs.writeFileSync(xmlPath, xmlContent, (err) => {
     console.log(err);
-    logger(`startLineGene error: ${JSON.stringify(err)}`, 'logErrors.txt');
+    logger(`startLineGene error: ${err}`, 'logErrors.txt');
   });
   fs.writeFileSync(configPath, JSON.stringify(settings), (err) => {
     console.log(err);
-    logger(`startLineGene error: ${JSON.stringify(err)}`, 'logErrors.txt');
+    logger(`startLineGene error: ${err}`, 'logErrors.txt');
   });
   const launchParam = `${xmlPath} ${outputPath}`;
 
@@ -561,13 +566,13 @@ ipcMain.handle('toggleLid', (event) => {
   serialport.open((err) => {
     if (err) {
       console.log('Error establishing serialport connection : ' + err);
-      logger(`Error establishing serialport connection : ${JSON.stringify(err)}`, 'logErrors.txt');
+      logger(`Error establishing serialport connection : ${err}`, 'logErrors.txt');
       return false;
     }
     serialport.write(buffer, (err, result) => {
       if (err) {
         console.log('Error while opening lid : ' + err);
-        logger(`Error while opening lid : ${JSON.stringify(err)}`, 'logErrors.txt');
+        logger(`Error while opening lid : ${err}`, 'logErrors.txt');
         return false;
       }
       if (result) {
@@ -576,7 +581,7 @@ ipcMain.handle('toggleLid', (event) => {
       serialport.close((err) => {
         if (err) {
           console.log('Error while closing serialport connection : ' + err);
-          logger(`Error while closing serialport connection : ${JSON.stringify(err)}`, 'logErrors.txt');
+          logger(`Error while closing serialport connection : ${err}`, 'logErrors.txt');
           return false;
         }
       });
@@ -760,7 +765,7 @@ ipcMain.handle('getTests', (event) => {
     return unsubmittedTests.concat(submittedTests).sort((a, b) => b.testStartedMS - a.testStartedMS);
   } catch (err) {
     console.log(err);
-    logger(JSON.stringify(err), 'logErrors.txt');
+    logger(err, 'logErrors.txt');
     return false;
   }
 });
@@ -824,8 +829,8 @@ ipcMain.handle('saveToUSB', (event, testid, results) => {
     fs.writeFileSync(filepath, results);
   } catch (err) {
     console.log(err);
-    logger(JSON.stringify(err), 'logErrors.txt');
-    logger(`saveToUSB: ${JSON.stringify(err)}`, 'logErrors.txt');
+    logger(err, 'logErrors.txt');
+    logger(`saveToUSB: ${err}`, 'logErrors.txt');
     throw err;
   }
   return true;
@@ -843,8 +848,8 @@ ipcMain.handle('getDeviceInfo', async (event) => {
     return { hardwareId, deviceType, serialNumber };
   } catch (err) {
     console.log(err);
-    logger(JSON.stringify(err), 'logErrors.txt');
-    logger(`getDeviceInfo: ${JSON.stringify(err)}`, 'logErrors.txt');
+    logger(err, 'logErrors.txt');
+    logger(`getDeviceInfo: ${err}`, 'logErrors.txt');
     throw err;
   }
 });
@@ -888,7 +893,7 @@ function updater() {
   autoUpdater.on('error', (err) => {
     console.log(err);
     splash.webContents.send('updateStatus', 'update failed, launching current version');
-    logger(`update failed: ${JSON.stringify(err)}`, 'logErrors.txt');
+    logger(`update failed: ${err}`, 'logErrors.txt');
     setTimeout(() => {
       splash.hide();
       mainWindow.show();

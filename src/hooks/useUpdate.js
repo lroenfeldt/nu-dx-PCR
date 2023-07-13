@@ -18,7 +18,7 @@ const useUpdate = () => {
       if (settings.user.updateType === 'beta') {
         // Filter prereleases and pick the first one as the latest beta version
         latestVersion = response.data.filter((release) => release.prerelease)[0];
-      } else {
+      } else if (settings.user.updateType === 'stable') {
         // Otherwise pick the first release as the latest stable version
         latestVersion = response.data[0];
       }
@@ -51,7 +51,7 @@ const useUpdate = () => {
       }
     } catch (err) {
       console.log(err);
-      window.api.logEvents('getLastVersion error' + JSON.stringify(err), 'logErrors.txt');
+      window.api.logEvents('getLastVersion error' + err, 'logErrors.txt');
     }
   }, [settings, setUpdateAvailable]);
 

@@ -35,12 +35,12 @@ export function TranslationProvider({ children }) {
   );
 
   useEffect(() => {
-    if (settings.user.locale && settings.user.locale !== '') {
+    if (settings.user && settings.user.locale && settings.user.locale !== '') {
       setLocale(settings.user.locale);
     } else {
       setLocale(window.navigator.language.split('-')[0]);
     }
-  }, [settings.user.locale]);
+  }, [settings]);
 
   const contextValue = {
     t,

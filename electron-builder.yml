@@ -1,0 +1,15 @@
+appId: com.electron.nu-dx-pcr
+productName: nu:dx PCR
+files:
+  - build/**/*
+  - node_modules/**/*
+directories: 
+  buildResources: public
+win:
+  target: nsis
+  icon: "icon.png"
+publish: 
+  provider: github
+  releaseType: release
+  private: true
+  token: ${env.VITE_APP_GH_TOKEN}

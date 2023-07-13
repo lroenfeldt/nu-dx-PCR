@@ -13,7 +13,7 @@
 /bin
 /release-builds
 /dist
-electron-builder.yml
+
 
 # misc
 .env
