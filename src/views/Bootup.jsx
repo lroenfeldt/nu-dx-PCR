@@ -181,7 +181,11 @@ const Bootup = () => {
           await clearSettings();
         }
       }
-      if (response?.data?.error == 'Invalid Token' && response?.data?.valid == false) {
+      if (
+        (response?.data?.error == 'Invalid Token' && response?.data?.valid == false) ||
+        response?.data?.error == 'Could not find device'
+      ) {
+        setErrors((prevErrors) => prevErrors.filter((error) => error.type !== 'auth'));
         let newSettings = {
           ...settings,
           account: {
