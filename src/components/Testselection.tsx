@@ -1,0 +1,52 @@
+import { useData, useTranslation } from '../hooks';
+import Testsmethod from './Testmethod';
+import { Pagination } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+
+interface Settings {
+  id: number;
+  [key: string]: any;
+  durationMinutes: number;
+}
+
+const Testselection = () => {
+  const { setRemTime, testrun, setErrors, demo, settings }: any = useData();
+  const { locale }: any = useTranslation();
+
+  return (
+    <div className="Testselection">
+      <Swiper
+        width={settings.account.testprocedures.length > 2 ? 1038 : 700}
+        modules={[Pagination]}
+        spaceBetween={30}
+        centeredSlides={false}
+        slidesPerView={settings.account.testprocedures.length > 2 ? 3 : 2}
+        pagination={{ clickable: true }}
+      >
+        {settings.account.testprocedures.map((test: Settings, i: number) => {
+          return (
+            <SwiperSlide key={i}>
+              <Testsmethod
+                key={i}
+                title={test['label' + locale?.toUpperCase()]}
+                methodid={test.id}
+                testrun={testrun}
+                testDuration={test.durationMinutes}
+                setRemTime={setRemTime}
+                setErrors={setErrors}
+                demo={demo}
+              />
+            </SwiperSlide>
+          );
+        })}
+      </Swiper>
+    </div>
+  );
+};
+
+export default Testselection;
