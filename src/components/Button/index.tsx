@@ -6,7 +6,7 @@ const Button = (props: {
   onClick: React.MouseEventHandler<HTMLButtonElement> | undefined;
   children: JSX.Element | undefined;
   navigation: string | undefined;
-  style: {} | undefined;
+  style: React.CSSProperties | undefined;
   shadow?: boolean | undefined;
   card: string | undefined;
   center: string | undefined;
@@ -28,8 +28,8 @@ const Button = (props: {
   warning: string | undefined;
   success: string | undefined;
   info: string | undefined;
-  radius: string | undefined;
-  height: number | undefined;
+  radius: string | number | undefined;
+  height: number | string | undefined;
   width: number | undefined;
   margin: number | undefined;
   marginBottom: number | undefined;

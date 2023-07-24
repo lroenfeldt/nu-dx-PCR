@@ -6,31 +6,31 @@ contextBridge.exposeInMainWorld('api', {
   getConfig: () => {
     return ipcRenderer.sendSync('getConfig');
   },
-  saveConfig: (config) => {
+  saveConfig: (config: {}) => {
     return ipcRenderer.invoke('saveConfig', config);
   },
   clearConfig: () => {
     return ipcRenderer.invoke('clearConfig');
   },
-  checkResultFile: (testid) => {
+  checkResultFile: (testid: string) => {
     return ipcRenderer.sendSync('checkResultFile', testid);
   },
-  moveResultFile: (testid) => {
+  moveResultFile: (testid: string) => {
     return ipcRenderer.sendSync('moveResultFile', testid);
   },
-  getResult: (testid, testDone) => {
+  getResult: (testid: string, testDone: boolean) => {
     return ipcRenderer.invoke('getResult', testid, testDone);
   },
   checkUSB: () => {
     return ipcRenderer.invoke('checkUSB');
   },
-  saveToUSB: (testid, results) => {
+  saveToUSB: (testid: string, results: []) => {
     return ipcRenderer.invoke('saveToUSB', testid, results);
   },
-  power: (reboot) => {
+  power: (reboot: () => void) => {
     return ipcRenderer.sendSync('power', reboot);
   },
-  startLineGene: (testid, xmlContent, settings, barcodes, testmethod) => {
+  startLineGene: (testid: string, xmlContent: string, settings: {}, barcodes: {}, testmethod: {}) => {
     return ipcRenderer.sendSync('startLineGene', testid, xmlContent, settings, barcodes, testmethod);
   },
   endLineGene: () => {
@@ -39,13 +39,13 @@ contextBridge.exposeInMainWorld('api', {
   toggleLid: () => {
     return ipcRenderer.invoke('toggleLid');
   },
-  moveFiles: (testid) => {
+  moveFiles: (testid: string) => {
     return ipcRenderer.invoke('moveFiles', testid);
   },
   getVersion: () => {
     return ipcRenderer.invoke('getVersion');
   },
-  updateStatus: (callback) => {
+  updateStatus: (callback: () => void) => {
     return ipcRenderer.on('updateStatus', callback);
   },
   getUnsubmitted: () => {
@@ -57,7 +57,7 @@ contextBridge.exposeInMainWorld('api', {
   exit: () => {
     return ipcRenderer.invoke('exit');
   },
-  logEvents: (message, logName) => {
+  logEvents: (message: string, logName: string) => {
     return ipcRenderer.invoke('log-Events', message, logName);
   },
   launchUpdates: () => {
@@ -70,13 +70,13 @@ contextBridge.exposeInMainWorld('api', {
   downloadApp: () => {
     return ipcRenderer.invoke('downloadApp');
   },
-  editResults: (testid, results) => {
+  editResults: (testid: string, results: {}) => {
     return ipcRenderer.invoke('editResults', testid, results);
   },
   deleteAllOverrides: () => {
     return ipcRenderer.invoke('deleteAllOverrides');
   },
-  deleteOverride: (testid) => {
+  deleteOverride: (testid: string) => {
     return ipcRenderer.invoke('deleteOverride', testid);
   },
   relaunchApp: () => {

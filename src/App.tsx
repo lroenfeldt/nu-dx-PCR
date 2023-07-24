@@ -20,7 +20,7 @@ import { DataProvider, TranslationProvider } from './hooks';
 
 declare global {
   interface Window {
-    api?: any;
+    api?: any; // method or function
   }
 }
 

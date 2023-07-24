@@ -15,27 +15,26 @@ interface DataProviderProps {
 
 export function DataProvider({ children }: DataProviderProps) {
   const { t }: any = useTranslation();
-  const [user, setUser] = useState(null);
+
   const [demo, setDemo] = useState(false);
   const [errors, setErrors] = useState<{ type: string; message: string }[]>([]);
-  const [token, setToken] = useState(null);
   const [remTime, setRemTime] = useState(0);
-  const [testid, setTestid] = useState('');
+  const [testid, setTestid] = useState(null); // string
   const [results, setResults] = useState([]);
   const [reading, setReading] = useState(true);
   const [testrun, setTestrun] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(null);
-  const [testDone, setTestDone] = useState(null);
-  const [lotNumber, setLotNumber] = useState('');
+  const [menuOpen, setMenuOpen] = useState(null); // number
+  const [testDone, setTestDone] = useState(false); // boolean
+  const [lotNumber, setLotNumber] = useState(null); // string
   const [isStatus, setIsStatus] = useState(true);
   const [resultList, setResultList] = useState([]);
   const [isLidOpen, setIsLidOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [USBPresent, setUSBPresent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [pairingCode, setPairingCode] = useState(null);
+  const [pairingCode, setPairingCode] = useState(null); // string
   const [offlineMode, setOfflineMode] = useState(false);
   const [openResults, setOpenResults] = useState(false);
   const [dbConnection, setDbConnection] = useState(true);
@@ -43,10 +42,10 @@ export function DataProvider({ children }: DataProviderProps) {
   const [viewResults, setViewResults] = useState('graph');
   const [resultsSubmitted, setSubmitted] = useState(false);
   const [deviceStatus, setDeviceStatus] = useState('IDLE');
-  const [idleTimestamp, setIdleTimestamp] = useState(null);
-  const [selectedMethod, setSelectedMethod] = useState(null);
+  const [idleTimestamp, setIdleTimestamp] = useState(null); // string
+  const [selectedMethod, setSelectedMethod] = useState({});
   const [updateAvailable, setUpdateAvailable] = useState(false);
-  const [selectedPosition, setSelectedPosition] = useState(null);
+  const [selectedPosition, setSelectedPosition] = useState(null); // string
   const [settings, setSettings] = useState(window.api.getConfig());
   const [barcodes, setBarcodes] = useState(defaultBarcodes(settings));
   const [checkForTestResultFile, setCheckForTestResultFile] = useState(false);
@@ -60,12 +59,11 @@ export function DataProvider({ children }: DataProviderProps) {
   const reset = useCallback(() => {
     setRemTime(0);
     setErrors([]);
-    setTestid('');
+    setTestid(null);
     setTestrun(false);
-    setTestDone(null);
-    setTestDone(null);
+    setTestDone(false);
     setSubmitted(false);
-    setSelectedMethod(null);
+    setSelectedMethod({});
     setDeviceStatus('IDLE');
     setBarcodes(defaultBarcodes(settings));
   }, [settings]);
@@ -219,19 +217,14 @@ export function DataProvider({ children }: DataProviderProps) {
 
   const handleOpenEdit = useCallback(
     (barcode: { posName: React.SetStateAction<null> }) => {
+      // The `React.SetStateAction` type is a generic type that is provided by the React library.
+      // It represents a function that can be used to update the state of a React component.
+      // In this case, it is being used to update the value of `barcode.posName`.
       setOpenResults(true);
       setSelectedPosition(barcode.posName);
     },
     [openResults, selectedPosition]
   );
-
-  const deleteAllOverrides = useCallback(async () => {
-    await window.api.deleteAllOverrides();
-  }, []);
-
-  const deleteOverride = useCallback(async (testid: string) => {
-    await window.api.deleteOverride(testid);
-  }, []);
 
   useEffect(() => {
     loadSettings();
@@ -241,7 +234,7 @@ export function DataProvider({ children }: DataProviderProps) {
     () => ({
       openResults,
       setOpenResults,
-      user,
+
       errors,
       handleErrors,
       demo,
@@ -258,7 +251,7 @@ export function DataProvider({ children }: DataProviderProps) {
       setDemo,
       setSettings,
       setResultList,
-      setUser,
+
       barcodes,
       setBarcodes,
       remTime,
@@ -271,8 +264,7 @@ export function DataProvider({ children }: DataProviderProps) {
       setTestDone,
       pairingCode,
       setPairingCode,
-      token,
-      setToken,
+
       resultsSubmitted,
       setSubmitted,
       reset,
@@ -334,7 +326,6 @@ export function DataProvider({ children }: DataProviderProps) {
     [
       openResults,
       setOpenResults,
-      user,
       errors,
       handleErrors,
       demo,
@@ -351,7 +342,6 @@ export function DataProvider({ children }: DataProviderProps) {
       setDemo,
       setSettings,
       setResultList,
-      setUser,
       barcodes,
       setBarcodes,
       remTime,
@@ -364,8 +354,6 @@ export function DataProvider({ children }: DataProviderProps) {
       setTestDone,
       pairingCode,
       setPairingCode,
-      token,
-      setToken,
       resultsSubmitted,
       setSubmitted,
       reset,

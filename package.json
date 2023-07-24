@@ -23,6 +23,7 @@
     "deploy-beta": "npm run build && electron-builder -w -c.extraMetadata.main=build/electron.js -c.publish.provider=github -c.publish.releaseType=prerelease --publish always"
   },
   "dependencies": {
+    "@types/electron": "^1.6.10",
     "@types/jest": "^29.5.3",
     "@types/node": "^20.4.2",
     "apisauce": "^2.1.5",
@@ -68,7 +69,7 @@
     "concurrently": "^8.2.0",
     "cross-env": "^7.0.3",
     "dotenv": "^16.3.1",
-    "electron": "^25.1.0",
+    "electron": "^25.3.1",
     "electron-builder": "^23.6.0",
     "electron-packager": "^17.1.1",
     "electronmon": "^2.0.2",

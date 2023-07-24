@@ -8,26 +8,26 @@ module.exports = {
    * @param {object} options
    * @returns
    */
-  spawn: async (cmd, args, options) => {
+  spawn: async (cmd: string, args: [], options: {}): Promise<void> => {
     if (isDev) {
       return;
     }
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       const child = require('child_process').spawn(cmd, args, options);
       let errorData = '';
 
-      child.stdout.on('data', (data) => {
+      child.stdout.on('data', (data: string) => {
         console.log(data.toString());
         logger('success ' + cmd + ' ' + args.join(' ') + ': ' + data, 'spawn.txt');
       });
 
-      child.stderr.on('data', (data) => {
+      child.stderr.on('data', (data: string) => {
         errorData += data;
         console.log('Error spawning ' + cmd + ' ' + args.join(' ') + ': ' + data);
         logger('Error spawning ' + cmd + ' ' + args.join(' ') + ': ' + data, 'spawn.txt');
       });
 
-      child.on('close', (code) => {
+      child.on('close', (code: number) => {
         if (code === 0) {
           resolve();
         } else {

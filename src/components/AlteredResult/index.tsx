@@ -15,7 +15,11 @@ interface TestMethod {
 interface AlteredResultProps {
   activeBarcode: ActiveBarcode | null;
   testmethod: TestMethod;
-  style: any;
+  style: any; // CSS.Properties
+}
+
+interface SettingsProps {
+  account: { ChangeResults?: boolean };
 }
 
 const AlteredResult = ({ activeBarcode, testmethod, style }: AlteredResultProps) => {

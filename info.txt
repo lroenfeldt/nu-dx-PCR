@@ -22,3 +22,15 @@ components have type any
 -Testselection
 -Text
 -WellVisual
+
+App api any
+
+split interfaces into a specific folder
+ 
+split electornjs 
+
+line 835 delete?
+event.returnValue delete?
+381 config is Object?
+serialNumber.ts changed var to let
+check line 79
