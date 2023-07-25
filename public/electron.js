@@ -71,6 +71,7 @@ const getDeviceType = () => {
   logger('No LineGene Installation found', 'logInfos.txt');
   return false;
 };
+
 /**
  * Default configuration
  *  @type {string}
@@ -102,7 +103,7 @@ const store = new Store({
         data: {
           id: 'fbdaac7d-4055-4b30-9f64-d0070447eca7',
           profileId: 'cef5b173-f8dc-494e-8ce0-62938441ae01',
-          name: 'Procomcure Biotech',
+          name: 'nu:dx PCR',
           email: 'l.roenfeldt@procomcure.de',
           lastSignIn: '2022-06-03T08:52:07.302061Z',
           authenticated: true,
@@ -128,7 +129,7 @@ const store = new Store({
  */
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1200,
+    width: 1280,
     height: 800,
     resizable: isDev ? true : false,
     fullscreen: isDev ? false : true,
@@ -175,10 +176,11 @@ function createWindow() {
   // Open the DevTools.
   if (isDev || forceConsole) {
     devtools = new BrowserWindow();
-    //mainWindow.webContents.openDevTools({ mode: "detach" });
     mainWindow.webContents.setDevToolsWebContents(devtools.webContents);
     mainWindow.webContents.openDevTools({ mode: 'detach' });
   }
+  // aktivate kiosk mode
+  //mainWindow.setKiosk(true);
 }
 
 /**
@@ -539,17 +541,20 @@ ipcMain.on('endLineGene', (event) => {
  * Open Lid via Serial Port
  * */
 ipcMain.handle('toggleLid', (event) => {
+  console.log('Signal to toggle lid received.');
+  logger('Signal to toggle lid received.', 'logErrors.txt');
+
   const buffer = [0x7b, 0x7c, 0x0, 0x2, 0x4d, 0x1, 0x0, 0x4c, 0x7c, 0x7d];
 
   if (isDev) {
-    // dialog.showMessageBox({
-    //   type: 'info',
-    //   buttons: ['Got it!'],
-    //   defaultId: 0,
-    //   title: 'Lid Open',
-    //   message: 'Imagine an open lid',
-    //   detail: 'If this device had a lid, said lid would be open now. Which is great - If you wanted an open lid, that is. Otherwise something went quite obviously wrong here and you should get back to work fixing that issue!'
-    // })
+    /* dialog.showMessageBox({
+      type: 'info',
+      buttons: ['Got it!'],
+      defaultId: 0,
+      title: 'Lid Open',
+      message: 'Imagine an open lid',
+      detail: 'If this device had a lid, said lid would be open now. Which is great - If you wanted an open lid, that is. Otherwise something went quite obviously wrong here and you should get back to work fixing that issue!'
+    }) */
     return true;
   }
 
@@ -1001,4 +1006,38 @@ ipcMain.handle('deleteOverride', async (event, testid) => {
 ipcMain.handle('relaunchApp', async (event) => {
   app.relaunch();
   app.exit();
+});
+
+function copyDir(src, dest) {
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest);
+  }
+
+  const files = fs.readdirSync(src);
+
+  for (let i = 0; i < files.length; i++) {
+    const current = fs.lstatSync(path.join(src, files[i]));
+    if (current.isDirectory()) {
+      copyDir(path.join(src, files[i]), path.join(dest, files[i]));
+    } else if (current.isSymbolicLink()) {
+      const symlink = fs.readlinkSync(path.join(src, files[i]));
+      fs.symlinkSync(symlink, path.join(dest, files[i]));
+    } else {
+      fs.copyFileSync(path.join(src, files[i]), path.join(dest, files[i]));
+    }
+  }
+}
+/**
+ * copy logos to the app folder
+ * @returns {void}
+ * */
+ipcMain.handle('copyLogos', async (event) => {
+  try {
+    const logosPath = path.resolve(__dirname, '../src/assets/Logos');
+    const destPath = path.resolve(app.getPath('userData'), 'logos');
+    copyDir(logosPath, destPath);
+  } catch (err) {
+    console.log(err);
+  }
+  return true;
 });

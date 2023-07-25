@@ -15,20 +15,20 @@ const Header = () => {
   const {
     demo,
     reboot,
-    toggleLid,
-    offlineMode,
     loading,
     shutdown,
     menuOpen,
+    toggleLid,
     setErrors,
     toggleDemo,
-    setOfflineMode,
-    setMenuOpen,
-    updateAvailable,
-    dbConnection,
     resultList,
+    offlineMode,
+    setMenuOpen,
     openResults,
+    dbConnection,
+    setOfflineMode,
     setOpenResults,
+    updateAvailable,
   } = useData();
   const { t, locale } = useTranslation();
   const { submitAll } = useResults();

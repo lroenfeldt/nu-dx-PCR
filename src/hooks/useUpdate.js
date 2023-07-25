@@ -13,7 +13,6 @@ const useUpdate = () => {
         },
       };
       const response = await axios.get('https://api.github.com/repos/lroenfeldt/nu-dx-pcr/releases', config);
-
       let latestVersion;
 
       if (settings.user.updateType === 'beta') {
@@ -51,8 +50,8 @@ const useUpdate = () => {
         window.api.logEvents(`No new version found`, 'logInfos.txt');
       }
     } catch (err) {
-      window.api.logEvents('getLastVersion error' + JSON.stringify(err), 'logErrors.txt');
       console.log(err);
+      window.api.logEvents('getLastVersion error' + JSON.stringify(err), 'logErrors.txt');
     }
   }, [settings, setUpdateAvailable]);
 

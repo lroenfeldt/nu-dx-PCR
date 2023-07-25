@@ -52,7 +52,7 @@ const ResultList = () => {
   let tableRows = [];
   results
     .sort((a, b) => new Date(b.testStarted).getTime() - new Date(a.testStarted).getTime())
-    .forEach((result) => {
+    .forEach((result, index) => {
       let buttonUSB;
       let buttonSubmit;
       let buttonView;
@@ -65,7 +65,7 @@ const ResultList = () => {
               <Oval heigth="30" width="30" color="white" />
             </div>
           </div>
-        )
+        );
       } else if (result.submittingSuccess) {
         buttonSubmit = (
           <div className="button" onClick={() => submitResult(result.testid, result.submitted)}>
@@ -174,7 +174,7 @@ const ResultList = () => {
       }
 
       tableRows.push(
-        <div className="result" key={result.testid}>
+        <div className="result" key={`${result.testid}-${index}`}>
           <div className="testinfo">
             <h4>{result.testid}</h4>
             <h4>{testMethodName}</h4>

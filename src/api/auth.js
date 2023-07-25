@@ -1,5 +1,6 @@
-import client from "./client";
-const endpoint = "/devices/pairing/";
+import client from './client';
+const endpoint = '/devices/pairing/';
+
 /**
  *  check if the device is already paired
  * @param {string} hardwareId - the hardware id of the device
@@ -9,5 +10,5 @@ const endpoint = "/devices/pairing/";
 const checkToken = (hardwareId, token) => client.post(`${endpoint}${hardwareId}/check`, token);
 
 export default {
-	checkToken,
+  checkToken,
 };

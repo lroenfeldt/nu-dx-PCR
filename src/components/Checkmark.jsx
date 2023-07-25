@@ -3,7 +3,26 @@ import { IoClose, IoCheckmarkSharp } from 'react-icons/io5';
 
 import { useData } from '../hooks';
 const Checkmark = ({ barcode, isNinetySix = false, style }) => {
-  if (barcode?.result == 'invalid' && barcode?.label === 'NTC') {
+
+  if (barcode?.label === 'NTC' && barcode?.result == 'negative') {
+    return (
+      <div
+        className={`checkmark`}
+        style={{
+          backgroundColor: 'var(--green)',
+          ...style,
+        }}
+      >
+        <IoCheckmarkSharp
+          style={{
+            fontSize: 'smaller',
+          }}
+        />
+      </div>
+    );
+  }
+
+  if (barcode?.label === 'NTC' && barcode?.result != 'negative') {
     return (
       <div
         className={`checkmark`}
@@ -16,7 +35,8 @@ const Checkmark = ({ barcode, isNinetySix = false, style }) => {
       </div>
     );
   }
-  if (barcode?.result === 'positive' && barcode?.label === 'TPC') {
+
+  if (barcode?.label === 'TPC' && barcode?.result === 'positive') {
     return (
       <div
         className={`checkmark`}
@@ -33,20 +53,17 @@ const Checkmark = ({ barcode, isNinetySix = false, style }) => {
       </div>
     );
   }
-  if (barcode?.result != 'positive' && barcode?.label === 'TPC') {
+  
+  if (barcode?.label === 'TPC' && barcode?.result != 'positive') {
     return (
       <div
         className={`checkmark`}
         style={{
-          backgroundColor: 'var(--green)',
+          backgroundColor: 'var(--red)',
           ...style,
         }}
       >
-        <IoCheckmarkSharp
-          style={{
-            fontSize: 'smaller',
-          }}
-        />
+        <IoClose />
       </div>
     );
   }

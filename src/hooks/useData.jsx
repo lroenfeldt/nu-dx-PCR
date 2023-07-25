@@ -18,7 +18,6 @@ export function DataProvider({ children }) {
   const [remTime, setRemTime] = useState(0);
   const [testid, setTestid] = useState(null);
   const [results, setResults] = useState([]);
-  const [status, setStatus] = useState('IDLE');
   const [reading, setReading] = useState(true);
   const [testrun, setTestrun] = useState(false);
   const [isModal, setIsModal] = useState(false);
@@ -55,16 +54,16 @@ export function DataProvider({ children }) {
    * @returns {void}
    **/
   const reset = useCallback(() => {
-    setBarcodes(defaultBarcodes(settings));
     setRemTime(0);
-    setTestrun(false);
     setErrors([]);
+    setTestid('');
+    setTestrun(false);
+    setTestDone(null);
     setTestDone(null);
     setSubmitted(false);
-    setTestid('');
-    setTestDone(null);
     setSelectedMethod(null);
     setDeviceStatus('IDLE');
+    setBarcodes(defaultBarcodes(settings));
   }, [settings]);
 
   const resetBarcodes = useCallback(() => {
@@ -82,6 +81,7 @@ export function DataProvider({ children }) {
    * Sets the value of the data state
    **/
   const loadSettings = useCallback(async () => {
+    window.api.copyLogos();
     setIsStatus(false);
     let newSettings = await window.api.getConfig();
     setSettings(newSettings);
@@ -185,8 +185,11 @@ export function DataProvider({ children }) {
   );
 
   const toggleLid = useCallback(() => {
+    console.log('toggle triggered');
+    console.log('estimated lid before toggle:');
+    console.log(isLidOpen);
     let newErrors = errors.filter((error) => error.type !== 'lid');
-    if (status == 'RUNNING') {
+    if (deviceStatus == 'RUNNING') {
       newErrors.push({
         type: 'default',
         message: t('default.errors.errorOpenLidWhileRunning'),
@@ -194,17 +197,21 @@ export function DataProvider({ children }) {
       return;
     }
     if (window.api.toggleLid()) {
+      console.log('toggle succeeded');
       setIsLidOpen(!isNinetySix ? true : !isLidOpen);
+      console.log(isLidOpen ? 'Lid is open' : 'Lid is closed');
     } else {
+      console.log('toggle failed');
       let errorType = !isNinetySix ? 'errorOpenLid' : isLidOpen ? 'errorCloseLid' : 'errorOpenLid';
       newErrors.push({
         type: 'lid',
         message: t(`default.errors.${errorType}`),
       });
+      console.log(t(`default.errors.${errorType}`));
     }
 
     setErrors(newErrors);
-  }, [status, isNinetySix, isLidOpen, errors]);
+  }, [deviceStatus, isNinetySix, isLidOpen, errors]);
 
   const handleOpenEdit = useCallback(
     (barcode) => {
@@ -273,8 +280,6 @@ export function DataProvider({ children }) {
       setUpdateAvailable,
       currentUser,
       setCurrentUser,
-      status,
-      setStatus,
       menuOpen,
       setMenuOpen,
       loading,
@@ -368,8 +373,6 @@ export function DataProvider({ children }) {
       setUpdateAvailable,
       currentUser,
       setCurrentUser,
-      status,
-      setStatus,
       menuOpen,
       setMenuOpen,
       loading,

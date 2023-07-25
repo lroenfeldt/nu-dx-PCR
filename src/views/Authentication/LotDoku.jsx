@@ -1,8 +1,17 @@
-import React, { useRef } from 'react';
+import React, { memo, useMemo, useRef } from 'react';
 import { ActivateKeyboard, Block, CustomSelect } from '../../components';
 import { useData, useTranslation } from '../../hooks';
 import { IoCloseCircle } from 'react-icons/io5';
-const LotDoku = ({ setKeyboardVisible, keyboardVisible, setClear }) => {
+const LotDoku = ({
+  inputs,
+  setClear,
+  inputName,
+  setInputName,
+  keyboardVisible,
+  setKeyboardVisible,
+  isChargenNrFocused,
+  setIsChargenNrFocused,
+}) => {
   const { t } = useTranslation();
   const textInput = useRef(null);
   const { settings, selectedMethod, lotNumber, setLotNumber } = useData();
@@ -21,6 +30,8 @@ const LotDoku = ({ setKeyboardVisible, keyboardVisible, setClear }) => {
         <ActivateKeyboard
           onClick={() => {
             setKeyboardVisible(!keyboardVisible);
+            setIsChargenNrFocused(true);
+            setTimeout(() => textInput.current.focus(), 0);
           }}
         />
 
@@ -36,12 +47,16 @@ const LotDoku = ({ setKeyboardVisible, keyboardVisible, setClear }) => {
             borderTopLeftRadius: 0,
             borderBottomLeftRadius: 0,
           }}
+          onFocus={() => {
+            setInputName('lotNumber');
+            setIsChargenNrFocused(true);
+          }}
         />
 
         <IoCloseCircle
           onClick={() => {
             setLotNumber('');
-            textInput.current.focus();
+            setTimeout(() => textInput.current.focus(), 0);
             setClear(true);
           }}
           style={{
@@ -60,4 +75,4 @@ const LotDoku = ({ setKeyboardVisible, keyboardVisible, setClear }) => {
   );
 };
 
-export default LotDoku;
+export default memo(LotDoku);

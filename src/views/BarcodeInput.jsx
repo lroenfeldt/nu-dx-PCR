@@ -35,10 +35,16 @@ const BarcodeInput = () => {
   const [keyboardActive, setKeyboardActive] = useState(false);
   const [barcodeCheckTimeout, setBarcodeCheckTimeout] = useState(null);
   const [clear, setClear] = useState(false);
+  const [inputs, setInputs] = useState({});
+  const [inputName, setInputName] = useState('default');
+
   const markActive = (id) => {
     setActive(id);
     textInput.current.focus();
   };
+  useEffect(() => {
+    setInputName(getBarcode(active).label);
+  }, [active]);
   const numberRegex = /^[0-9]+$/;
   const nextWell = (next) => {
     let nextWell = active;
@@ -88,7 +94,10 @@ const BarcodeInput = () => {
     (e) => {
       e.preventDefault();
       clearTimeout(barcodeCheckTimeout);
-
+      setInputs({
+        ...inputs,
+        [inputName]: e.target.value,
+      });
       setBarcodesValid(false);
       setBarcodes((prevBarcodes) => prevBarcodes.map((barcode) => ({ ...barcode, checking: false })));
       let newBarcode = getBarcode(active);
@@ -167,6 +176,10 @@ const BarcodeInput = () => {
     while (hit === true && dbError === false) {
       retestNumber++;
       newBarcodeValue = barcode.value + '-R' + retestNumber;
+      setInputs({
+        ...inputs,
+        [inputName]: newBarcodeValue,
+      });
       try {
         let response = await axios.get(`${checkBarcodeUrl}/${newBarcodeValue}`);
         let result = response.data;
@@ -248,10 +261,18 @@ const BarcodeInput = () => {
     };
 
     setBarcodes((prevBarcodes) => prevBarcodes.map((barcode) => (barcode.id === newBarcode.id ? newBarcode : barcode)));
+    setInputs({ ...inputs, [newBarcode.label]: newBarcode.value });
 
     let isValid = true;
     let validationErr = null;
-
+    if (!settings.account.verifyBarcodes) {
+      setBarcodes((prevBarcodes) =>
+        prevBarcodes.map((barcode) =>
+          barcode.id === newBarcode.id ? { ...barcode, checking: false, valid: true } : barcode
+        )
+      );
+      return;
+    }
     //Check for control placeholders
     const controlPlaceholders = ['Placeholder_NTC', 'Placeholder_TPC', 'SC2NTC', 'SC2TPC', 'TPC', 'NTC'];
     if (controlPlaceholders.includes(newBarcode.value)) {
@@ -503,6 +524,7 @@ const BarcodeInput = () => {
 
   useEffect(() => {
     getBarcode(active).askRetest = settings.account.allowRetest && settings.account.verifyBarcodes;
+    setInputName(getBarcode(active).label);
   }, [settings.account.allowRetest, settings.account.verifyBarcodes]);
   //check valid attribure of all barcodes to toggle button for next step
   useEffect(() => {
@@ -516,7 +538,6 @@ const BarcodeInput = () => {
     }
   }, [offlineMode]);
   const handleReset = useCallback(() => {
-    setClear(true);
     setBarcodes(
       barcodes.map((barcode) => {
         if (barcode?.id === active) {
@@ -534,6 +555,10 @@ const BarcodeInput = () => {
         }
       })
     );
+    setInputs({
+      ...inputs,
+      [getBarcode(active).label]: '',
+    });
     textInput.current.focus();
   }, [barcodes, active]);
 
@@ -559,11 +584,20 @@ const BarcodeInput = () => {
                   <ActivateKeyboard
                     onClick={() => {
                       setKeyboardActive(!keyboardActive);
+                      textInput?.current?.setlectionRange(
+                        textInput.current.value.length,
+                        textInput.current.value.length
+                      );
                       textInput.current.focus();
                     }}
                   />
                   <input
+                    id={getBarcode(active).label}
                     ref={textInput}
+                    onFocus={() => {
+                      setInputName(getBarcode(active).label);
+                      setInputs({ ...inputs, [getBarcode(active).label]: getBarcode(active).value });
+                    }}
                     autoFocus
                     type="text"
                     value={getBarcode(active).value || ''}
@@ -592,7 +626,9 @@ const BarcodeInput = () => {
                 />
 
                 <input
+                  id={getBarcode(active).label}
                   ref={textInput}
+                  onFocus={() => setInputName(getBarcode(active).label)}
                   autoFocus
                   type="text"
                   value={getBarcode(active).value}
@@ -610,9 +646,12 @@ const BarcodeInput = () => {
               </div>
             )}
             <Keyboard
+              inputs={inputs}
+              inputName={inputName}
+              onChange={(e) => onKeyPress(e)}
+              setInputs={setInputs}
               clear={clear}
               setClear={setClear}
-              onChange={(e) => onKeyPress(e)}
               visible={keyboardActive}
               setVisible={setKeyboardActive}
               inputValue={getBarcode(active).value}

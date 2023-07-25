@@ -33,8 +33,8 @@ function useBackgroundProcesses() {
   }, []);
 
   const autoSubmitUnsubmittedResults = useCallback(async () => {
-    if (settings?.account?.autoSubmitUnsubmitted && resultList.length > 0) submitAll();
-  }, [submitAll]);
+    if (settings?.account?.autoSubmitResults && resultList.length > 0) submitAll();
+  }, [resultList, settings?.account?.autoSubmitResults]);
 
   const checkForTestResultFile = useCallback(async () => {
     if (!testid || deviceStatus === 'IDLE') return;
@@ -57,17 +57,12 @@ function useBackgroundProcesses() {
       deviceStatus === 'IDLE' &&
       isLidOpen &&
       settings?.account?.autoCloseLidMinutes &&
-      settings?.account?.autoCloseLidMinutes > 0
+      settings?.account?.autoCloseLidMinutes > 0 &&
+      settings?.device.wellCount == '96'
     ) {
       toggleLid(); // toggleLid can both open and close the lid
     }
-  }, [
-    deviceStatus,
-    isLidOpen,
-    settings?.account?.autoCloseLidMinutes,
-    settings?.account?.autoCloseLidMinutes,
-    toggleLid,
-  ]);
+  }, [deviceStatus, isLidOpen, settings?.account?.autoCloseLidMinutes, settings?.account?.autoCloseLidMinutes]);
 
   const autoShutdown = useCallback(() => {
     if (
@@ -90,27 +85,21 @@ function useBackgroundProcesses() {
   useEffect(() => {
     const interval = setInterval(() => {
       autoSubmitUnsubmittedResults();
-    }, 1000 * 60 * 5);
-
-    return () => {
-      clearInterval(interval);
-    };
+    }, 1000 * 60 * 5); // 5 minutes
+    return () => clearInterval(interval);
   }, [results]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       getLastVersion();
-    }, 1000 * 60 * 5);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [settings]);
+    }, 1000 * 60 * 60); // 1h
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const pingInterval = setInterval(() => {
       ping();
-    }, 5000);
+    }, 5000); // 5 seconds
 
     return () => clearInterval(pingInterval);
   }, [deviceStatus, settings]);
@@ -126,17 +115,23 @@ function useBackgroundProcesses() {
   useEffect(() => {
     let lidAutoCloseInterval = setInterval(() => {
       lidAutoClose();
-    }, settings?.account?.autoCloseLidMinutes * 60 * 1000);
+    }, settings?.account?.autoCloseLidMinutes * 60 * 1000); // 5 minutes
 
     let autoShutdownInterval = setInterval(() => {
       autoShutdown();
-    }, settings?.account?.autoCloseLidMinutes * 60 * 1000);
+    }, settings?.account?.autoCloseLidMinutes * 60 * 1000); // 5 minutes
 
     return () => {
       clearInterval(lidAutoCloseInterval);
       clearInterval(autoShutdownInterval);
     };
-  }, [settings?.account?.autoShutdownMinutes, settings?.account?.autoCloseLidMinutes, deviceStatus, idleTimestamp]);
+  }, [
+    settings?.account?.autoShutdownMinutes,
+    settings?.account?.autoCloseLidMinutes,
+    deviceStatus,
+    idleTimestamp,
+    isLidOpen,
+  ]);
 
   useEffect(() => {
     let interval;
@@ -147,11 +142,11 @@ function useBackgroundProcesses() {
         //await checkForTestResultFile();
         await checkForUnsubmittedResults();
         if (interval) clearInterval(interval);
-        interval = setInterval(executeChecks, 5000);
+        interval = setInterval(executeChecks, 5000); // 5 seconds
       } catch (error) {
         console.error(error);
         if (interval) clearInterval(interval);
-        interval = setInterval(executeChecks, 10000);
+        interval = setInterval(executeChecks, 10000); // 10 seconds
       }
     };
 

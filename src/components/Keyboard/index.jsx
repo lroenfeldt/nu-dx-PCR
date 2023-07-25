@@ -5,16 +5,32 @@ import { IoCloseCircle } from 'react-icons/io5';
 import { useLocation } from 'react-router-dom';
 import SimpleKeyboard from 'react-simple-keyboard';
 import 'react-simple-keyboard/build/css/index.css';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo, memo } from 'react';
 function Keyboard(props) {
   const [layoutName, setLayoutName] = useState('default');
-  const { onChange, dark, visible, setVisible, inputValue, style, isNumeric, clear, setClear } = props;
-  const { isNinetySix } = useData();
+  const {
+    dark,
+    style,
+    clear,
+    inputs,
+    visible,
+    onChange,
+    setClear,
+    setInputs,
+    inputName,
+    setVisible,
+    inputValue,
+    isNumeric = false,
+  } = props;
+
   const keyboard = useRef();
-  const location = useLocation();
-  const isBarcode = location.pathname === '/enterBarcodes';
+
   const onClear = () => {
     keyboard.current?.clearInput();
+  };
+  const onChangeAll = (newInput) => {
+    setInputs((prevInputs) => ({ ...prevInputs, ...newInput }));
+    console.log('Inputs changed', inputs);
   };
 
   const onKeyPress = (button) => {
@@ -43,14 +59,19 @@ function Keyboard(props) {
     ],
     numeric: ['1 2 3 4 5 6 7 8 9', '{bksp} 0 {enter}'],
   };
+
+  useEffect(() => {
+    keyboard.current?.setInput(inputs[inputName]);
+  }, [inputs, inputName, visible]);
+
   useEffect(() => {
     if (clear) {
       onClear();
       setClear(false);
     }
   }, [clear]);
+
   useEffect(() => {
-    console.log({ onChange, dark, visible, setVisible, inputValue, style, isNumeric, clear, setClear });
     const keyboard = document.getElementById('keyboard');
 
     if (visible) {
@@ -79,7 +100,8 @@ function Keyboard(props) {
       <IoCloseCircle onClick={() => setVisible(false)} className="close-icon" />
       <SimpleKeyboard
         keyboardRef={(r) => (keyboard.current = r)}
-        inputValue={inputValue}
+        inputName={inputName}
+        onChangeAll={onChangeAll}
         onChange={onChange}
         onKeyPress={onKeyPress}
         layoutName={layoutName}
@@ -99,4 +121,4 @@ function Keyboard(props) {
   );
 }
 
-export default Keyboard;
+export default memo(Keyboard);

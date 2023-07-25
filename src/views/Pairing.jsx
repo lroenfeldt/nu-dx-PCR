@@ -111,11 +111,11 @@ export default function Pairing() {
   return (
     <div className="Pairing">
       <h2>{t('pairing.welcome')}</h2>
-      <p>{t('pairing.welcome')}</p>
+      <p>{t('pairing.instructions')}</p>
       <div className="pairingContainer">
         <div className="qr-container">
           <h4>{t('pairing.scanQrcode')}</h4>
-          <QRCode value={'https://poc.myprocomcure.de/pairing/' + pairingCode} />
+          <QRCode value={'https://cloud.nu-dx.com/pairing/' + pairingCode} />
         </div>
         <div className="codeContainer">
           <h4>{t('pairing.scanQrcodeInstructions')}</h4>
