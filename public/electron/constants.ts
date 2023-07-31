@@ -1,15 +1,10 @@
 import { ISoftwareList, IStore } from '../interfaces/interfaces';
-const fs = require('fs');
-const { app, BrowserWindow } = require('electron');
-const path = require('path');
-const isDev = require('electron-is-dev');
 const Store = require('electron-store');
 
 /**
  * Default configuration
  *  @type {string}
  */
-
 export const store: IStore = new Store({
   defaults: {
     settings: {
@@ -82,7 +77,12 @@ export let lineGenePath: string = '';
 export const killProcess = (process: string | Object) => {
   spawn('taskkill', ['/f', '/im', process]);
 };
+export function spawn(arg0: string, arg1: (string | Object)[]) {
+  throw new Error('Function not implemented.');
+}
+
 export const forceConsole: boolean = false;
+
 /**
  * check installed version of LineGene
  * @returns {string} the version of LineGene
@@ -109,111 +109,3 @@ export const softwareList: ISoftwareList[] = [
     name: 'LineGene9600',
   },
 ];
-
-export function spawn(arg0: string, arg1: (string | Object)[]) {
-  throw new Error('Function not implemented.');
-}
-
-// Function getDeviceType
-export const getDeviceType = () => {
-  for (let i = 0; i < softwareList.length; i++) {
-    const software = softwareList[i];
-    try {
-      const res = fs.realpathSync(software.path);
-      fs.accessSync(res, fs.constants.F_OK);
-      lineGenePath = res;
-
-      return software.returnType;
-    } catch (error) {
-      console.log(`${software.name} not found`);
-      logger(`${software.name} not found`, 'logInfos.txt');
-    }
-  }
-  const errMessage = 'No LineGene Installation found';
-  console.log(errMessage);
-  logger(errMessage, 'logInfos.txt');
-  return false;
-};
-
-function logger(arg0: string, arg1: string) {
-  throw new Error('Function not implemented.');
-}
-
-// Function createWindow
-export function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 800,
-    resizable: isDev,
-    fullscreen: !isDev,
-    alwaysOnTop: false, // !isDev
-    backgroundColor: '#000000',
-    show: false,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: false,
-      webSecurity: false,
-      contextIsolation: true,
-    },
-  });
-
-  mainWindow.on('show', () => {
-    setTimeout(() => {
-      mainWindow.focus();
-    }, 200);
-  });
-
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.setMenuBarVisibility(isDev);
-
-    if (isDev) {
-      splash.webContents.send('updateStatus', 'launching in development mode...');
-      setTimeout(function () {
-        splash.hide();
-        mainWindow.show();
-      }, 5000);
-    }
-  });
-
-  mainWindow.on('closed', () => {
-    ['Gene-9660.exe', 'LineGene1600.exe', 'PcrServer.exe'].forEach(killProcess);
-    app.quit();
-  });
-
-  // and load the index.html of the app.
-  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
-
-  // Open the DevTools.
-  if (isDev || forceConsole) {
-    const devtools = new BrowserWindow();
-    mainWindow.webContents.setDevToolsWebContents(devtools.webContents);
-    mainWindow.webContents.openDevTools({ mode: 'detach' });
-  }
-  // aktivate kiosk mode
-  //mainWindow.setKiosk(true);
-}
-
-// Function createSplash()
-export function createSplash() {
-  // Create splash Screen
-  splash = new BrowserWindow({
-    width: 500,
-    height: 300,
-    transparent: true,
-    frame: false,
-    alwaysOnTop: false,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: false,
-      webSecurity: false,
-      contextIsolation: true,
-    },
-  });
-  splash.loadFile(path.join(__dirname, 'splash.html'));
-  splash.center();
-
-  // Open the DevTools.
-  if (isDev || forceConsole) {
-    splash.webContents.openDevTools({ mode: 'detach' });
-  }
-}

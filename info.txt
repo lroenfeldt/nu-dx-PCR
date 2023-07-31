@@ -25,12 +25,17 @@ components have type any
 
 App api any
 
-split interfaces into a specific folder
- 
-split electornjs 
 
-line 835 delete?
-event.returnValue delete?
-381 config is Object?
-serialNumber.ts changed var to let
-check line 79
+ 
+
+serialNumber.ts delete it
+    // Explanation event parameter type
+    // The type of the event parameter in an Electron function depends on which function referred to.
+    // in general,`Electron.Event` type.
+    // use the `Electron.IpcMainEvent` a subclass of `Electron.Event`
+    // used for communication between the main process and renderer processes
+    // `ipcMain` module to listen for the `my-event` event being emitted from the renderer process.
+    // When the event is received, the function is called with the `event` parameter of type `IpcMainEvent`.
+    // can replace `IpcMainEvent` with `Event` if using the `BrowserWindow` or `WebContents` APIs to listen to events.
+    // In TypeScript, when using a type annotation for an event parameter, use `typeof IpcMainEvent`
+    // helps to reference the type of `IpcMainEvent` correctly.

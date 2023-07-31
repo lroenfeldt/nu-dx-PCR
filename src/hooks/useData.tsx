@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState, useMemo } from 'react';
 import defaultBarcodes from '../utils/defaultBarcodes';
 import { useTranslation } from './useTranslation';
+import { ISettings } from '../types/interfaces/interfaces';
 export const DataContext = React.createContext({});
 /**
  * Provides a stateful value for data and a function to update it.
@@ -46,7 +47,9 @@ export function DataProvider({ children }: DataProviderProps) {
   const [selectedMethod, setSelectedMethod] = useState({});
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState(null); // string
+
   const [settings, setSettings] = useState(window.api.getConfig());
+
   const [barcodes, setBarcodes] = useState(defaultBarcodes(settings));
   const [checkForTestResultFile, setCheckForTestResultFile] = useState(false);
   const [updateType, setUpdateType] = useState(settings.user.updateType || 'stable');
@@ -105,7 +108,7 @@ export function DataProvider({ children }: DataProviderProps) {
     [settings, setSettings]
   );
   const handleSettings = useCallback(
-    (newSettings: string) => {
+    (newSettings: any) => {
       setSettings(newSettings);
     },
     [settings, setSettings]

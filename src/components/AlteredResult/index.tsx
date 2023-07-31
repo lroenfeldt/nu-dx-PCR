@@ -1,28 +1,9 @@
 import { useData } from '../../hooks';
+import { IAlteredResultProps } from '../../types/interfaces/interfaces';
 import { hexToRGB } from '../../utils/helper';
 import { SlPencil } from 'react-icons/sl';
 
-interface ActiveBarcode {
-  alteredResult: boolean;
-  result: string; // or a specific union type if it can have specific values
-}
-
-interface TestMethod {
-  results: { name: string; color: string }[];
-  // Other properties and their types
-}
-
-interface AlteredResultProps {
-  activeBarcode: ActiveBarcode | null;
-  testmethod: TestMethod;
-  style: any; // CSS.Properties
-}
-
-interface SettingsProps {
-  account: { ChangeResults?: boolean };
-}
-
-const AlteredResult = ({ activeBarcode, testmethod, style }: AlteredResultProps) => {
+const AlteredResult = ({ activeBarcode, testmethod, style }: IAlteredResultProps) => {
   const { settings }: any = useData();
 
   if (activeBarcode?.alteredResult)
