@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState, useMemo } from 'react';
 import defaultBarcodes from '../utils/defaultBarcodes';
 import { useTranslation } from './useTranslation';
-import { ISettings } from '../types/interfaces/interfaces';
+import { ISettings, IUseData} from '../types/interfaces/interfaces';
 export const DataContext = React.createContext({});
 /**
  * Provides a stateful value for data and a function to update it.
@@ -422,4 +422,4 @@ export function DataProvider({ children }: DataProviderProps) {
  *  hook to access the data context
  * @returns {Object} The current context
  */
-export const useData = () => useContext(DataContext);
+export const useData = () => useContext(DataContext) as IUseData

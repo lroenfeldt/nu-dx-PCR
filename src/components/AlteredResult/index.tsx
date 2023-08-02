@@ -4,7 +4,7 @@ import { hexToRGB } from '../../utils/helper';
 import { SlPencil } from 'react-icons/sl';
 
 const AlteredResult = ({ activeBarcode, testmethod, style }: IAlteredResultProps) => {
-  const { settings }: any = useData();
+  const { settings } = useData();
 
   if (activeBarcode?.alteredResult)
     return (
