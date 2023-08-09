@@ -6,8 +6,8 @@ const ShutdownNotification = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [countdown, setCountdown] = useState(60);
 
-  const { t }: any = useTranslation();
-  const { idleTimestamp, setIdleTimestamp, settings, deviceStatus }: any = useData();
+  const { t } = useTranslation();
+  const { idleTimestamp, setIdleTimestamp, settings, deviceStatus } = useData();
 
   const handleContinue = () => {
     setShowNotification(false);
@@ -25,8 +25,9 @@ const ShutdownNotification = () => {
       settings?.account?.autoShutdownMinutes &&
       Number(settings?.account?.autoShutdownMinutes) > 0 &&
       idleTimestamp &&
-      Date.now() - idleTimestamp >= (settings?.account?.autoShutdownMinutes - 1) * 60 * 1000 &&
-      Date.now() - idleTimestamp < settings?.account?.autoShutdownMinutes * 60 * 1000
+      Date.now() - +idleTimestamp >= (settings?.account?.autoShutdownMinutes - 1) * 60 * 1000 &&
+      Date.now() - +idleTimestamp < settings?.account?.autoShutdownMinutes * 60 * 1000
+      // converted idleTimestamp (string) to number by adding + to idleTimestamp
     ) {
       setShowNotification(true);
       setCountdown(60);
@@ -48,7 +49,7 @@ const ShutdownNotification = () => {
 
   return (
     <div className="shutdown-notification">
-      <p dangerouslySetInnerHTML={{ __html: t('common.deviceTurnOffInfo', { time: countdown }) }} />
+      <p dangerouslySetInnerHTML={{ __html: t('common.deviceTurnOffInfo', countdown) }} />
       <button onClick={handleAccept}>{t('common.acceptPowerOff')}</button>
       <button onClick={handleContinue}>{t('common.continue')}</button>
     </div>

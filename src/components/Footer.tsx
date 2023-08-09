@@ -6,7 +6,7 @@ import { FaServer, FaCircle } from 'react-icons/fa';
 import { TbMinusVertical } from 'react-icons/tb';
 
 const Footer = () => {
-  const { settings, dbConnection }: any = useData();
+  const { settings, dbConnection } = useData();
   const navigate = useNavigate();
   const location = useLocation();
   const [stateTime, setStateTime] = useState(new Date().toLocaleString());

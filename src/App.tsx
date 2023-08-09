@@ -18,12 +18,6 @@ import {
 } from './views';
 import { DataProvider, TranslationProvider } from './hooks';
 
-declare global {
-  interface Window {
-    api?: any; // method or function
-  }
-}
-
 function App() {
   if (typeof window.api == 'undefined' && window.api !== undefined) {
     return (

@@ -7,8 +7,4 @@ const endpoint = '/devices/pairing/';
  * @param {string} token
  * @returns
  */
-const checkToken = (hardwareId: string, token: string) => client.post(`${endpoint}${hardwareId}/check`, token);
-
-export default {
-  checkToken,
-};
+export const checkToken = (hardwareId: string, token: string) => client.post(`${endpoint}${hardwareId}/check`, token);

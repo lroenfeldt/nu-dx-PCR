@@ -87,14 +87,14 @@ export interface ISettings {
 }
 
 export interface IBarcode {
-  id: number | string; // check later
+  id: number;
   posName: string;
   label: string;
   value: string;
   checking: false;
   valid: boolean;
   error: Error;
-  blocked: boolean; // check later
+  blocked: boolean;
 }
 
 export interface IDevice {

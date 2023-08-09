@@ -1,14 +1,10 @@
-import { useData, useTranslation } from '../../hooks';
+import { useData } from '../../hooks';
+import { IChildren } from '../../types/interfaces/interfaces';
 import './css/style.css';
 import { Oval } from 'react-loader-spinner';
 
-interface ModalProp {
-  children: JSX.Element;
-}
-
-const Modal = ({ children }: ModalProp) => {
-  const { isModal, setIsModal }: any = useData();
-  const { t }: any = useTranslation();
+const Modal = ({ children }: IChildren) => {
+  const { isModal } = useData();
   return (
     <div className="modal" style={{ display: isModal ? 'block' : 'none' }}>
       <div className="modal-header"></div>

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from 'react';
 import { Oval } from 'react-loader-spinner';

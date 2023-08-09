@@ -1,14 +1,7 @@
+import { IRadioButton } from '../../types/interfaces/interfaces';
 import './style.css';
 
-interface RadioButtonProps {
-  checked?: boolean;
-  label: string;
-  onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
-  value?: string | number | readonly string[];
-  name: string;
-}
-
-const RadioButton = ({ checked, label, onChange, value, name }: RadioButtonProps) => {
+const RadioButton = ({ checked, label, onChange, value, name }: IRadioButton) => {
   return (
     <div className="radioButton-container">
       <label>

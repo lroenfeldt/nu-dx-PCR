@@ -1,41 +1,34 @@
-components have type any
+components
+ShutdownNotification.tsx (converted idleTimestamp (string) to number by adding + to idleTimestamp)
 
--AlteredResults
--Button
--useData
--DropDown
--Keyboard
--RackVisualRows
--Modal
--ResultsFooter
--SelectTestResults
--Settings
--ShutdownNotification
--Table
--TestStatus
--Block 
--Errors
--Header
--Layout
--RackVisualization
--Testmethod
--Testselection
--Text
--WellVisual
+hooks
+modified useBackgroundProcesses with toString()
+useResults.ts converted getResults(submitFilter) to a string
 
-App api any
+utils
+modified parseResults.ts with initial states, converted position and params to number
+modified err in the authenticateToken.ts
 
+views/authenticaten 
+modfied index.tsx
+modfied LotDoku.tsx
+BarcodeInput.tsx fix issue newBarcode: any 
 
- 
+TO DO: 
 
-serialNumber.ts delete it
-    // Explanation event parameter type
-    // The type of the event parameter in an Electron function depends on which function referred to.
-    // in general,`Electron.Event` type.
-    // use the `Electron.IpcMainEvent` a subclass of `Electron.Event`
-    // used for communication between the main process and renderer processes
-    // `ipcMain` module to listen for the `my-event` event being emitted from the renderer process.
-    // When the event is received, the function is called with the `event` parameter of type `IpcMainEvent`.
-    // can replace `IpcMainEvent` with `Event` if using the `BrowserWindow` or `WebContents` APIs to listen to events.
-    // In TypeScript, when using a type annotation for an event parameter, use `typeof IpcMainEvent`
-    // helps to reference the type of `IpcMainEvent` correctly.
+ShutdownNotification.tsx t function has countdown prop (type of number) in the second argument
+but only object is allowed
+
+check RadioButton.tsx the checked prop of intpu not accepting string only boolean by default
+in Debug.tsx its returing a string wich is causing a error in the RadioButton.tsx
+even if its boolean | string in the interface 
+
+wellCount
+FileManagementUtils string
+Settings.tsx string
+useBackgroundProcesses.tsx string
+useData.tsx number and string
+defaultBarcodes.ts string but converted to a number and back to string
+BarcodeInput.tsx its number
+
+fix useResults.tsx

@@ -1,12 +1,7 @@
+import { ISwitch } from '../../types/interfaces/interfaces';
 import './Switch.css';
 
-interface SwitchProps {
-  label: string;
-  onClick: () => void;
-  checked: boolean;
-}
-
-const Switch = ({ label, onClick, checked = false }: SwitchProps) => {
+const Switch = ({ label, onClick, checked = false }: ISwitch) => {
   return (
     <label className="switch">
       <input type="checkbox" onChange={onClick} checked={checked} />

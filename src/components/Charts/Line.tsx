@@ -10,28 +10,13 @@ import {
 } from 'chart.js';
 import { Line as LineChart } from 'react-chartjs-2';
 import { useData } from '../../hooks';
+import { ILineProp } from '../../types/interfaces/interfaces';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-interface Parameter {
-  curveData: number[];
-  target: string;
-  label: string;
-}
-
-interface Barcode {
-  color: string;
-  parameters: Parameter[];
-  value: string;
-}
-
-interface LineProp {
-  barcode: Barcode;
-}
-
-function Line({ barcode }: LineProp) {
-  const { selectedMethod, settings }: any = useData();
+function Line({ barcode }: ILineProp) {
+  const { selectedMethod, settings } = useData();
   const testMethod = settings.account.testprocedures.find((method: { id: string }) => method.id === selectedMethod);
-  const { parameters } = testMethod;
+  const { parameters }: any = testMethod;
 
   const options: {} = {
     responsive: true,

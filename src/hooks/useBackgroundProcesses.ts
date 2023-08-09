@@ -1,0 +1,150 @@
+import { useEffect, useCallback } from 'react';
+import { useData, useResults } from '.';
+import { useStatus } from './useStatus';
+import useUpdate from './useUpdate';
+
+function useBackgroundProcesses() {
+  const {
+    settings,
+    deviceStatus,
+    isLidOpen,
+    toggleLid,
+    shutdown,
+    resultList,
+    setResultList,
+    setUSBPresent,
+    idleTimestamp,
+    setIdleTimestamp,
+    results,
+  } = useData();
+  const { submitAll }: any = useResults();
+
+  const { ping } = useStatus();
+  const { getLastVersion } = useUpdate();
+
+  const checkForUnsubmittedResults = useCallback(async () => {
+    const getResultList = await window.api.getUnsubmitted();
+    setResultList(getResultList);
+  }, []);
+
+  const autoSubmitUnsubmittedResults = useCallback(async () => {
+    if (settings?.account?.autoSubmitResults && resultList.length > 0) submitAll();
+  }, [resultList, settings?.account?.autoSubmitResults]);
+
+  const checkForUSB = useCallback(async () => {
+    try {
+      const usbPresent = await window.api.checkUSB();
+      setUSBPresent(usbPresent);
+    } catch (error) {
+      console.log(error);
+      window.api.logEvents(`checkUSB: ${error}`, 'logErrors.txt');
+    }
+  }, [setUSBPresent]);
+
+  const lidAutoClose = useCallback(() => {
+    if (
+      deviceStatus === 'IDLE' &&
+      isLidOpen &&
+      settings?.account?.autoCloseLidMinutes &&
+      settings?.account?.autoCloseLidMinutes > 0 &&
+      settings?.device.wellCount == '96'
+    ) {
+      toggleLid(); // toggleLid can both open and close the lid
+    }
+  }, [deviceStatus, isLidOpen, settings?.account?.autoCloseLidMinutes, settings?.account?.autoCloseLidMinutes]);
+
+  const autoShutdown = useCallback(() => {
+    if (
+      deviceStatus === 'IDLE' &&
+      settings?.account?.autoShutdownMinutes &&
+      Number(settings?.account?.autoShutdownMinutes) > 0 &&
+      idleTimestamp &&
+      Date.now() - +idleTimestamp >= settings?.account?.autoShutdownMinutes * 60 * 1000
+    ) {
+      if (!settings.isDev) {
+        shutdown();
+      } else {
+        alert('auto shutdown');
+      }
+
+      setIdleTimestamp(Date.now().toString()); // Reset idleTimestamp after shutdown
+    }
+  }, [deviceStatus, settings?.account?.autoShutdownMinutes, idleTimestamp]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      autoSubmitUnsubmittedResults();
+    }, 1000 * 60 * 5); // 5 minutes
+    return () => clearInterval(interval);
+  }, [results]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getLastVersion();
+    }, 1000 * 60); // 1h
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const pingInterval = setInterval(() => {
+      ping();
+    }, 5000); // 5 seconds
+
+    return () => clearInterval(pingInterval);
+  }, [deviceStatus, settings]);
+
+  useEffect(() => {
+    if (deviceStatus === 'IDLE' && !idleTimestamp) {
+      setIdleTimestamp(Date.now().toString());
+    } else if (deviceStatus !== 'IDLE') {
+      setIdleTimestamp(null);
+    }
+  }, [deviceStatus, idleTimestamp]);
+
+  useEffect(() => {
+    let lidAutoCloseInterval = setInterval(() => {
+      lidAutoClose();
+    }, settings?.account?.autoCloseLidMinutes * 60 * 1000); // 5 minutes
+
+    let autoShutdownInterval = setInterval(() => {
+      autoShutdown();
+    }, settings?.account?.autoCloseLidMinutes * 60 * 1000); // 5 minutes
+
+    return () => {
+      clearInterval(lidAutoCloseInterval);
+      clearInterval(autoShutdownInterval);
+    };
+  }, [
+    settings?.account?.autoShutdownMinutes,
+    settings?.account?.autoCloseLidMinutes,
+    deviceStatus,
+    idleTimestamp,
+    isLidOpen,
+  ]);
+
+  useEffect(() => {
+    // NodeJS.Timeout` type, which represents a timer created by the `setTimeout` function
+    let interval: NodeJS.Timeout;
+
+    const executeChecks = async () => {
+      try {
+        await checkForUSB();
+        await checkForUnsubmittedResults();
+        if (interval) clearInterval(interval);
+        interval = setInterval(executeChecks, 5000); // 5 seconds
+      } catch (error) {
+        console.error(error);
+        if (interval) clearInterval(interval);
+        interval = setInterval(executeChecks, 10000); // 10 seconds
+      }
+    };
+
+    executeChecks();
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, []);
+}
+
+export default useBackgroundProcesses;

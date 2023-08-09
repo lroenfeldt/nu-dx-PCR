@@ -1,10 +1,6 @@
-interface DropdownProps {
-  title: string;
-  elements: string[];
-  handleClick?: (arg: string) => void;
-}
+import { IDropdown } from '../types/interfaces/interfaces';
 
-export default function Dropdown({ title, elements, handleClick }: DropdownProps) {
+export default function Dropdown({ title, elements, handleClick }: IDropdown) {
   return (
     <div className="dropdown">
       <button className="dropbtn">{title.toUpperCase()}</button>

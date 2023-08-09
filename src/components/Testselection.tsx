@@ -2,21 +2,14 @@ import { useData, useTranslation } from '../hooks';
 import Testsmethod from './Testmethod';
 import { Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
-interface Settings {
-  id: number;
-  [key: string]: any;
-  durationMinutes: number;
-}
-
 const Testselection = () => {
-  const { setRemTime, testrun, setErrors, demo, settings }: any = useData();
-  const { locale }: any = useTranslation();
+  const { setRemTime, testrun, setErrors, demo, settings } = useData();
+  const { locale } = useTranslation();
 
   return (
     <div className="Testselection">
@@ -28,7 +21,7 @@ const Testselection = () => {
         slidesPerView={settings.account.testprocedures.length > 2 ? 3 : 2}
         pagination={{ clickable: true }}
       >
-        {settings.account.testprocedures.map((test: Settings, i: number) => {
+        {settings.account.testprocedures.map((test, i) => {
           return (
             <SwiperSlide key={i}>
               <Testsmethod

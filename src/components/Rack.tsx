@@ -1,8 +1,6 @@
-interface RackProp {
-  children: JSX.Element;
-}
+import { IChildren } from '../types/interfaces/interfaces';
 
-const Rack = ({ children }: RackProp) => {
+const Rack = ({ children }: IChildren) => {
   return <div className="rackRow">{children}</div>;
 };
 

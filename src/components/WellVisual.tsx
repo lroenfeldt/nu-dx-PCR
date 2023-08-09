@@ -2,42 +2,11 @@ import { TailSpin } from 'react-loader-spinner';
 import { useData } from '../hooks';
 import Checkmark from './Checkmark';
 import { ReactElement, JSXElementConstructor, ReactNode } from 'react';
+import { IParameter, ITestedParameter, IWellVisual } from '../types/interfaces/interfaces';
+import { Result } from '../types/interfaces/settings';
 
-interface WellVisualProps {
-  barcode: Barcode;
-  active: number;
-  markActive: (arg: number) => void;
-  showResults: boolean;
-  testmethod: any;
-}
-
-interface Barcode {
-  id: number;
-  parameters?: {
-    [key: string]: {
-      ct: string;
-    };
-  };
-  label: string;
-  checking: boolean;
-  result: any;
-  value: string;
-  valid: boolean;
-  blocked: boolean;
-}
-
-interface Parameter {
-  target: any;
-  isPrimary: boolean;
-}
-
-interface TestedParameter {
-  target: any;
-  isPrimary: boolean;
-}
-
-const WellVisual = ({ barcode, active, markActive, showResults = false, testmethod = null }: WellVisualProps) => {
-  const { settings, isNinetySix }: any = useData();
+const WellVisual = ({ barcode, active, markActive, showResults = false, testmethod = null }: IWellVisual) => {
+  const { settings, isNinetySix } = useData();
 
   let result:
     | string
@@ -48,15 +17,15 @@ const WellVisual = ({ barcode, active, markActive, showResults = false, testmeth
     | null
     | undefined;
   if (showResults) {
-    if (testmethod.type && testmethod.type === 'Absolute') {
-      testmethod.parameters.map((parameter: Parameter) => {
+    if (testmethod?.type && testmethod.type === 'Absolute') {
+      testmethod.parameters?.map((parameter: IParameter) => {
         if (parameter.isPrimary) {
-          const targetParameter = barcode.parameters?.[parameter.target];
-
+          const targetParameter = barcode.parameters?.[+parameter.target];
+          // conveting target into a number to index an array
           if (typeof targetParameter === 'object') {
             result = targetParameter.ct;
           } else if (typeof targetParameter === 'string') {
-            const lowerCaseParameter = barcode.parameters?.[parameter.target.toLowerCase()];
+            const lowerCaseParameter = barcode.parameters?.[+parameter.target.toLowerCase()];
             if (typeof lowerCaseParameter === 'object') {
               result = lowerCaseParameter.ct;
             }
@@ -78,10 +47,10 @@ const WellVisual = ({ barcode, active, markActive, showResults = false, testmeth
         style={{
           backgroundColor:
             barcode.label == 'NTC' || barcode.label == 'TPC'
-              ? null
+              ? undefined // changed from null to undefined
               : barcode.result === 'invalid'
               ? 'orange'
-              : testmethod.results.find((result: { name: string }) => result.name.includes(barcode.result))?.color,
+              : testmethod?.results?.find((result: Result) => result.name.includes(barcode.result))?.color,
         }}
         onClick={() => {
           markActive(barcode.id);
@@ -90,8 +59,8 @@ const WellVisual = ({ barcode, active, markActive, showResults = false, testmeth
         <div>
           <span>{barcode.label}</span>
           <br />
-          {testmethod.parameters.map((testparameter: TestedParameter) => {
-            if (barcode.parameters?.[testparameter.target.toUpperCase()] && testparameter.isPrimary == true) {
+          {testmethod?.parameters?.map((testparameter: ITestedParameter) => {
+            if (barcode.parameters?.[+testparameter.target.toUpperCase()] && testparameter.isPrimary == true) {
               return (
                 <span
                   key={testparameter.target.toString()}

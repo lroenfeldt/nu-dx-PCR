@@ -1,13 +1,6 @@
-interface InputProps {
-  type?: React.HTMLInputTypeAttribute | undefined;
-  value?: string | number | readonly string[] | undefined;
-  name?: string | undefined;
-  onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
-  placeholder?: string | undefined;
-  label: string;
-}
+import { IInput } from '../../types/interfaces/interfaces';
 
-const Input = ({ type, value, name, onChange, placeholder, label }: InputProps) => {
+const Input = ({ type, value, name, onChange, placeholder, label }: IInput) => {
   return (
     <div>
       {label && <label htmlFor={name}>{label}</label>}

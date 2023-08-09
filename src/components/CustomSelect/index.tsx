@@ -1,13 +1,8 @@
 import { ChangeEvent, useState } from 'react';
 import './css/styles.css';
+import { ICustomSelect } from '../../types/interfaces/interfaces';
 
-interface CustomSelectProps {
-  options: string[];
-  defaultValue?: string;
-  onChange?: (value: string) => void;
-}
-
-const CustomSelect: React.FC<CustomSelectProps> = ({ options, defaultValue, onChange }) => {
+const CustomSelect: React.FC<ICustomSelect> = ({ options, defaultValue, onChange }) => {
   const [selectedOption, setSelectedOption] = useState<string>(defaultValue || options[0]);
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {

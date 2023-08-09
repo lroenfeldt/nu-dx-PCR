@@ -1,13 +1,10 @@
 import { ChangeEvent, useEffect } from 'react';
 import './dropdown.css';
 import { useTranslation } from '../../hooks';
+import { IDropdown } from '../../types/interfaces/interfaces';
 
-interface DropdownProps {
-  children: React.ReactNode;
-}
-
-const Dropdown = ({ children }: DropdownProps) => {
-  const { locale }: any = useTranslation();
+const Dropdown = ({ children }: IDropdown) => {
+  const { locale } = useTranslation();
 
   useEffect(() => {
     let dropdown = document.querySelector('.dropdown') as HTMLDivElement;

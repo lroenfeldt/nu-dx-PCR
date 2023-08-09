@@ -1,12 +1,8 @@
 import { useState } from 'react';
 import { ImArrowRight2, ImArrowLeft2 } from 'react-icons/im';
+import { IScrollController } from '../types/interfaces/interfaces';
 
-interface ScrollControllerProps {
-  onClick: (arg: boolean) => void;
-  disabled?: boolean;
-}
-
-const ScrollController = ({ onClick, disabled }: ScrollControllerProps) => {
+const ScrollController = ({ onClick, disabled }: IScrollController) => {
   const [direction, setDirection] = useState('next');
 
   return (

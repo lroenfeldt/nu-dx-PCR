@@ -1,22 +1,13 @@
 import { useData } from '../hooks';
 import { useNavigate } from 'react-router-dom';
+import { ITestMethod } from '../types/interfaces/interfaces';
 
-interface TestmethodProps {
-  title: string;
-  status?: string;
-  methodid: any;
-  testrun: any;
-  testDuration: any;
-  setRemTime: any;
-  setErrors: any;
-  demo: any;
-}
-const Testmethod = ({ title, status, methodid }: TestmethodProps) => {
+const Testmethod = ({ title, status, methodid }: ITestMethod) => {
   const navigate = useNavigate();
-  const { settings, setSelectedMethod }: any = useData();
+  const { settings, setSelectedMethod } = useData();
 
   const selectTest = () => {
-    setSelectedMethod(methodid);
+    setSelectedMethod(methodid as string);
     if (settings.account.hasUserAuthentification || settings.account.askForLot) {
       navigate('/auth');
     } else {
@@ -26,7 +17,7 @@ const Testmethod = ({ title, status, methodid }: TestmethodProps) => {
 
   return (
     <div className={`Testmethod ${status}`} onClick={() => selectTest()}>
-      <span>{title}</span>
+      <span>{title as string}</span>
     </div>
   );
 };

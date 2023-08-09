@@ -1,23 +1,20 @@
 import { useMemo } from 'react';
 import { useData } from '../../hooks';
 import WellVisual from '../WellVisual';
-
-interface Barcode {
-  id: number;
-}
+import { IBarcode, IRackVisualRows, ITestMethod } from '../../types/interfaces/interfaces';
 
 const RackVisualRows = (props: {
-  active: boolean;
-  markActive: boolean;
+  active: number;
+  markActive: (arg: number) => void;
   showResults: boolean;
-  testmethod: null | undefined;
+  testmethod: ITestMethod | null;
 }) => {
   const { active, markActive, showResults, testmethod } = props;
-  const { isNinetySix, barcodes }: any = useData();
-  let rackVisualRows: any = [];
+  const { isNinetySix, barcodes } = useData();
+  let rackVisualRows: IRackVisualRows = [];
 
   const length = isNinetySix ? 12 : 8;
-  barcodes.forEach((barcode: Barcode) => {
+  barcodes.forEach((barcode: IBarcode) => {
     let rowName = Math.ceil(barcode?.id / length) - 1;
     if (!rackVisualRows[rowName]) {
       rackVisualRows[rowName] = [];

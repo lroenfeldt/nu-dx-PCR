@@ -1,59 +1,34 @@
 import { useCallback } from 'react';
 import { useData, useResults, useTranslation } from '../hooks';
 import { useNavigate, useLocation } from 'react-router-dom';
-
-interface HideErrorProps {
-  type?: string;
-  index: number;
-  remember?: boolean;
-}
-
-interface ErrorObject {
-  filter: any;
-  type: string;
-  index: number;
-}
-
-interface Error {
-  message: string;
-  type: string;
-}
-
-interface HideErrorProps {
-  index: number;
-}
-
-interface MoveResultProps {
-  testId: string;
-}
+import { IError, IErrorObject, IHideError } from '../types/interfaces/interfaces';
 
 const Errors = () => {
-  const { setOfflineMode, reboot, errors, reset, testid, setDeviceStatus, startTest, setErrors }: any = useData();
+  const { setOfflineMode, reboot, errors, reset, testid, setDeviceStatus, setErrors } = useData();
   const { submitResult }: any = useResults();
-  const { t }: any = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
   const hideError = useCallback(
-    ({ type, index, remember }: HideErrorProps) => {
-      if (type)
-        setErrors((prevErrors: ErrorObject[]) => prevErrors.filter((error: ErrorObject) => error.type !== type));
+    ({ type, index, remember }: IHideError) => {
+      if (type) setErrors((prevErrors: IErrorObject[]) => prevErrors.filter((error) => error.type !== type));
       if (remember) setOfflineMode(true);
       if (index || index === 0)
-        setErrors((prevErrors: ErrorObject[]) => prevErrors.filter((error) => error.index !== index));
+        setErrors((prevErrors: IErrorObject[]) => prevErrors.filter((error) => error.index !== index));
     },
     [setErrors, setOfflineMode]
   );
 
   const cancelTest = () => {
-    setErrors((prevErrors: ErrorObject[]) => prevErrors.filter((error: ErrorObject) => error.type !== 'cancelTest'));
+    setErrors((prevErrors: IErrorObject[]) => prevErrors.filter((error) => error.type !== 'cancelTest'));
     navigate('/selectMethod');
     window.api.endLineGene();
     setDeviceStatus('IDLE');
   };
 
   const launchOffline = () => {
-    setErrors(errors.filter((e: ErrorObject) => e.type !== 'offline'));
+    setErrors(errors.filter((e) => e.type !== 'offline'));
     navigate('/selectMethod');
     setOfflineMode(true);
   };
@@ -81,7 +56,7 @@ const Errors = () => {
 
   return (
     <div className="errorContainer">
-      {errors.map((error: Error, i: number) => {
+      {errors.map((error: IError, i: number) => {
         if (ErrorsType1.includes(error.type)) {
           return (
             <div key={i} className="errorMessage">
@@ -138,7 +113,7 @@ const Errors = () => {
               <p>{error.message}</p>
               <button
                 onClick={() => {
-                  hideError({ index: i } as HideErrorProps);
+                  hideError({ index: i } as IHideError);
                   setTimeout(() => {
                     submitResult(testid);
                   }, 3000);
@@ -172,14 +147,14 @@ const Errors = () => {
               <p>{error.message}</p>
               <button
                 onClick={() => {
-                  hideError({ index: i } as HideErrorProps);
+                  hideError({ index: i } as IHideError);
                   setTimeout(() => {
-                    if (!window.api.moveResultFile(testid as MoveResultProps)) {
+                    if (!window.api.moveResultFile(testid)) {
                       console.log('result for test ' + testid + ' could not be moved');
                       window.api.logEvents(`Result for test ${testid} could not be moved`, 'logInfos.txt');
-                      setErrors((prevErrors: ErrorObject) =>
+                      setErrors((prevErrors: IErrorObject) =>
                         prevErrors
-                          .filter((err: ErrorObject) => err.type !== 'moveResults')
+                          .filter((err: IErrorObject) => err.type !== 'moveResults')
                           .concat({
                             type: 'moveResults',
                             message: t('errors.failedToMoveResults'),
@@ -228,7 +203,6 @@ const Errors = () => {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
-              <button onClick={() => startTest()}>{t('common.retry')}</button>
               <button
                 onClick={() => {
                   reset();

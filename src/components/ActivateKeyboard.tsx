@@ -1,9 +1,7 @@
 import { BsKeyboard } from 'react-icons/bs';
+import { IActivateKeyboard } from '../types/interfaces/interfaces';
 
-interface ActivateKeyboardProp {
-  onClick: () => void;
-}
-const ActivateKeyboard = ({ onClick }: ActivateKeyboardProp) => {
+const ActivateKeyboard = ({ onClick }: IActivateKeyboard) => {
   return (
     <div className="activateKeyboard">
       <BsKeyboard size={30} onClick={onClick} />

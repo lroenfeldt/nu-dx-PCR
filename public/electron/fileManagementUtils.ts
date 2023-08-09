@@ -100,7 +100,7 @@ export const ipcMainGetConfig = () => {
     settings.isDev = isDev;
     settings.version = app.getVersion();
     let hardwareId = await macaddress.one().then((mac: IDevice) => mac);
-    let serialNumber = ''; // await getSerialNumber();
+    let serialNumber = '';
     settings.device = { hardwareId, wellCount, serialNumber };
     event.returnValue = settings;
   });

@@ -1,10 +1,8 @@
 import { useTranslation } from '../../hooks';
+import { ITestStatus } from '../../types/interfaces/interfaces';
 
-interface TestStatusProp {
-  status: string;
-}
-function TestStatus({ status }: TestStatusProp) {
-  const { t }: any = useTranslation();
+function TestStatus({ status }: ITestStatus) {
+  const { t } = useTranslation();
   return <div className={`status ${status}`}>{t(`default.common.${status}`)}</div>;
 }
 

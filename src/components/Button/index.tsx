@@ -1,67 +1,7 @@
+import { IButton } from '../../types/interfaces/components';
 import './Button.css';
 
-const Button = (props: {
-  id?: 'button' | undefined;
-  className: string | undefined;
-  onClick: React.MouseEventHandler<HTMLButtonElement> | undefined;
-  children: JSX.Element | undefined;
-  navigation: string | undefined;
-  style: React.CSSProperties | undefined;
-  shadow?: boolean | undefined;
-  card: string | undefined;
-  center: string | undefined;
-  outlined: string | undefined;
-  overflow: string | undefined;
-  row: string | undefined;
-  safe: string | undefined;
-  keyboard: string | undefined;
-  scroll: string | undefined;
-  color: string | undefined;
-  gradient: string | undefined;
-  primary: string | undefined;
-  secondary: string | undefined;
-  tertiary: string | undefined;
-  black: string | undefined;
-  white: string | undefined;
-  gray: string | undefined;
-  danger: string | undefined;
-  warning: string | undefined;
-  success: string | undefined;
-  info: string | undefined;
-  radius: string | number | undefined;
-  height: number | string | undefined;
-  width: number | undefined;
-  margin: number | undefined;
-  marginBottom: number | undefined;
-  marginTop: number | undefined;
-  marginHorizontal: number | undefined;
-  marginVertical: number | undefined;
-  marginRight: number | undefined;
-  marginLeft: number | undefined;
-  padding: number | undefined;
-  paddingBottom: number | undefined;
-  paddingTop: number | undefined;
-  paddingHorizontal: number | undefined;
-  paddingVertical: number | undefined;
-  paddingRight: number | undefined;
-  paddingLeft: number | undefined;
-  justify: string | undefined;
-  align: string | undefined;
-  flex?: number | undefined;
-  wrap: string | undefined;
-  blur: string | undefined;
-  intensity: string | undefined;
-  tint: string | undefined;
-  position: any;
-  disable: string | undefined;
-  right: number | undefined;
-  left: number | undefined;
-  top: number | undefined;
-  bottom: number | undefined;
-  end: number | undefined;
-  start: number | undefined;
-  neumorphism: string | undefined;
-}) => {
+const Button = (props: IButton) => {
   const {
     id = 'button',
     onClick,
@@ -163,7 +103,6 @@ const Button = (props: {
 
   const buttonStyles = {
     ...style,
-    // ...(primary && { color: colors.WHITE }),
     ...(margin !== undefined && { margin }),
     ...(marginBottom && { marginBottom }),
     ...(marginTop && { marginTop }),
@@ -191,7 +130,6 @@ const Button = (props: {
     ...(buttonColor && { backgroundColor: buttonColor }),
     ...(outlined && {
       borderWidth: 1,
-      // borderColor: buttonColor,
       backgroundColor: 'transparent',
     }),
     ...(position && { position }),

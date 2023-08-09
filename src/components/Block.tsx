@@ -1,61 +1,6 @@
-function Block(props: {
-  row: number;
-  top: number;
-  end: any;
-  gray: any;
-  info: any;
-  wrap: any;
-  blur: any;
-  tint: any;
-  left: number;
-  style: React.CSSProperties | undefined;
-  color: string;
-  black: any;
-  white: boolean;
-  width: number;
-  align: string;
-  right: any;
-  start: any;
-  shadow: any;
-  center: boolean;
-  scroll: any;
-  danger: any;
-  radius: number;
-  height: number;
-  margin: number;
-  bottom: number;
-  border: string;
-  primary: any;
-  warning: any;
-  success: any;
-  padding: number;
-  justify: string | undefined;
-  children: JSX.Element;
-  outlined: any;
-  overflow: string;
-  tertiary: any;
-  flex?: number;
-  position: string;
-  secondary: any;
-  marginTop: number;
-  intensity: any;
-  marginLeft: number;
-  paddingTop: number;
-  marginRight: number;
-  paddingLeft: number;
-  borderColor: string;
-  marginBottom: number;
-  paddingRight: number;
-  paddingBottom: number;
-  marginVertical: number;
-  paddingVertical: number;
-  marginHorizontal: number;
-  paddingHorizontal: number;
-  column: number;
-  transition: any;
-  gap: string | undefined;
-  zIndex: number;
-}) {
+import { IBlock } from '../types/interfaces/components';
+
+function Block(props: IBlock) {
   const {
     row,
     top,

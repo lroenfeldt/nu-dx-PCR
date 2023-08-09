@@ -11,16 +11,15 @@ import Dropdown from '../Dropdown/Dropdown';
 import Switch from '../Switch/Switch';
 import defaultBarcodes from '../../utils/defaultBarcodes';
 import './css/settings.css';
+import { Settings } from '../../types/interfaces/settings';
+import { ISettingsProp } from '../../types/interfaces/interfaces';
 
-interface SettingsProp {
-  visible: boolean;
-}
-
-function Settings({ visible }: SettingsProp) {
-  const { setBarcodes, saveSettings, settings, setMenuOpen, clearSettings, updateAvailable, setUpdateAvailable }: any =
+function Settings({ visible }: ISettingsProp) {
+  const { setBarcodes, saveSettings, settings, setMenuOpen, clearSettings, updateAvailable, setUpdateAvailable } =
     useData();
 
-  const { t, setLocale, locale }: any = useTranslation();
+  const { t, setLocale, locale } = useTranslation();
+
   const navigate = useNavigate();
   const resetDevice = async () => {
     setMenuOpen(null);
@@ -29,14 +28,14 @@ function Settings({ visible }: SettingsProp) {
     navigate('/');
   };
   const handleWellCount = useCallback(async () => {
-    const newSettings = settings;
+    const newSettings: Settings = settings;
     newSettings.device.wellCount = settings.device.wellCount === '96' ? '16' : '96';
     newSettings.user.ntcPos = newSettings.device.wellCount === '96' ? 'B01' : 'A02';
     setBarcodes(defaultBarcodes(newSettings));
     await saveSettings(newSettings);
   }, []);
   const handleLocale = useCallback(
-    async (locale: any) => {
+    async (locale: string) => {
       setLocale(locale);
       const newSettings = settings;
       newSettings.user.locale = locale;
@@ -54,17 +53,23 @@ function Settings({ visible }: SettingsProp) {
               <span style={{ fontSize: 12 }}>{settings.account.initialized && settings.account.data.email}</span>
               <div className="settings">
                 <div>
-                  <Dropdown>
-                    <div onClick={() => handleLocale('de')}>
-                      Deutsch <img width={20} height={10} src={deFlag} />
-                    </div>
-                    <div onClick={() => handleLocale('en')}>
-                      English <img width={20} height={10} src={enFlag} />
-                    </div>
-                    <div onClick={() => handleLocale('fr')}>
-                      Français <img width={20} height={10} src={frFlag} />
-                    </div>
-                  </Dropdown>
+                  <Dropdown
+                    children={
+                      <>
+                        <div onClick={() => handleLocale('de')}>
+                          Deutsch <img width={20} height={10} src={deFlag} />
+                        </div>
+                        <div onClick={() => handleLocale('en')}>
+                          English <img width={20} height={10} src={enFlag} />
+                        </div>
+                        <div onClick={() => handleLocale('fr')}>
+                          Français <img width={20} height={10} src={frFlag} />
+                        </div>
+                      </>
+                    }
+                    title={''}
+                    elements={[]}
+                  />
                 </div>
 
                 <button className="settings-item" onClick={() => resetDevice()} style={{ color: 'red' }}>

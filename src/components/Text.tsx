@@ -1,57 +1,6 @@
-function Text(props: {
-  [x: string]: any;
-  id?: 'Text' | undefined;
-  children: JSX.Element;
-  style?: React.CSSProperties | undefined;
-  center: any;
-  gradient: any;
-  color: string;
-  opacity: number;
-  primary: any;
-  secondary: any;
-  tertiary: any;
-  black: any;
-  white: any;
-  gray: any;
-  danger: any;
-  warning: any;
-  success: any;
-  info: any;
-  size: any;
-  bold: any;
-  semibold: any;
-  weight: any;
-  h1: any;
-  h2: any;
-  h3: any;
-  h4: any;
-  h5: any;
-  h6: any;
-  p: any;
-  font: any;
-  align: any;
-  transform: any;
-  lineHeight: any;
-  position: any;
-  right: any;
-  left: any;
-  top: any;
-  bottom: any;
-  start: any;
-  end: any;
-  marginBottom: any;
-  marginTop: any;
-  marginHorizontal: any;
-  marginVertical: any;
-  marginRight: any;
-  marginLeft: any;
-  paddingBottom: any;
-  paddingTop: any;
-  paddingHorizontal: any;
-  paddingVertical: any;
-  paddingRight: any;
-  paddingLeft: any;
-}) {
+import { IText } from '../types/interfaces/components';
+
+function Text(props: IText) {
   const {
     id = 'Text',
     children,
@@ -106,7 +55,7 @@ function Text(props: {
     paddingLeft,
     ...rest
   } = props;
-  const textStyles: any = [
+  const textStyles: Object = [
     style,
     {
       ...(marginBottom && { marginBottom }),

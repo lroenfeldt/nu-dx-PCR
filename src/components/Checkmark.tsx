@@ -1,19 +1,7 @@
 import { IoClose, IoCheckmarkSharp } from 'react-icons/io5';
+import { ICheckmark } from '../types/interfaces/interfaces';
 
-interface Barcode {
-  label: string;
-  result: string;
-  id: number;
-  filter: any;
-}
-
-interface CheckmarkProps {
-  barcode: Barcode | any;
-  style: React.CSSProperties | undefined;
-  isNinetySix: boolean;
-}
-
-const Checkmark = ({ barcode, style }: CheckmarkProps) => {
+const Checkmark = ({ barcode, style }: ICheckmark) => {
   if (barcode?.label === 'NTC' && barcode?.result == 'negative') {
     return (
       <div

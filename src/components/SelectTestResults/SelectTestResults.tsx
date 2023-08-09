@@ -2,46 +2,17 @@ import { useCallback, useEffect } from 'react';
 import { useData, useTranslation } from '../../hooks';
 import { VscChromeClose } from 'react-icons/vsc';
 import './css/SelectTestResults.css';
+import { IBarcode, ISelectTestResults } from '../../types/interfaces/interfaces';
+import { Result, Testprocedure } from '../../types/interfaces/settings';
 
-interface SelectTestResultsProps {
-  onSelect: () => void;
-  onClose: () => void;
-  isVisible: boolean;
-}
+const SelectTestResults = ({ onSelect, onClose }: ISelectTestResults) => {
+  const { testid, selectedMethod, setSelectedPosition, setBarcodes, settings, selectedPosition } = useData();
+  const { barcodes }: { barcodes: IBarcode[] } = useData();
 
-interface Testmethod {
-  procedure: string;
-  id: number;
-  result: string | number;
-  name: string;
-  color: string;
-  [key: string]: React.ReactNode;
-}
-
-interface Barcode {
-  map(
-    arg0: (barcode: Barcode) =>
-      | Barcode
-      | {
-          result: string;
-          alteredResult: boolean;
-          barcode: string | number;
-          posName: string;
-          oldResult: string;
-          setBarcodes: () => void;
-        }
-  ): unknown;
-  barcode: string | number;
-  posName: string;
-  oldResult: string;
-}
-
-const SelectTestResults = ({ onSelect, onClose }: SelectTestResultsProps) => {
-  const { testid, barcodes, settings, setBarcodes, selectedMethod, selectedPosition, setSelectedPosition }: any =
-    useData();
-
-  const { t, locale }: any = useTranslation();
-  const testmethod = settings.account.testprocedures.find((procedure: Testmethod) => procedure.id == selectedMethod);
+  const { t, locale } = useTranslation();
+  const testmethod: Testprocedure | undefined = settings.account.testprocedures.find(
+    (procedure) => procedure.id == selectedMethod
+  );
   useEffect(() => {
     var modal = document.getElementById('modal');
     window.onclick = function (event) {
@@ -51,16 +22,19 @@ const SelectTestResults = ({ onSelect, onClose }: SelectTestResultsProps) => {
     };
   }, []);
   const handleChooseResult = useCallback(
-    async (result: Testmethod) => {
+    async (result: Result) => {
       onSelect();
-      const barcode = barcodes.find((barcode: Barcode) => barcode.posName == selectedPosition);
+      const barcode: IBarcode | undefined = barcodes.find((barcode: IBarcode) => barcode.posName == selectedPosition);
+      if (!barcode) {
+        console.log('Barcode not found');
+        return;
+      }
       if (barcode.result == result.name) return;
-
       const newResult = {
-        [selectedPosition]: result.name,
+        [selectedPosition as string]: result.name,
       };
-      setBarcodes((prev: Barcode) => {
-        return prev.map((barcode: Barcode) => {
+      setBarcodes((prev: IBarcode) => {
+        return prev.map((barcode: IBarcode) => {
           if (barcode.posName == selectedPosition) {
             console.log(barcode.oldResult);
             return {
@@ -72,19 +46,18 @@ const SelectTestResults = ({ onSelect, onClose }: SelectTestResultsProps) => {
           return barcode;
         });
       });
-
       setSelectedPosition(null);
       await window.api.editResults(testid, newResult);
     },
-    [onSelect, selectedPosition, testmethod.id]
+    [onSelect, selectedPosition, testmethod!.id]
   );
   const handleResetResult = useCallback(async () => {
     onSelect();
     const newResult = {
-      [selectedPosition]: null,
+      [selectedPosition as string]: null,
     };
-    setBarcodes((prev: Barcode) => {
-      return prev.map((barcode: Barcode) => {
+    setBarcodes((prev: IBarcode) => {
+      return prev.map((barcode: IBarcode) => {
         if (barcode.posName == selectedPosition) {
           return {
             ...barcode,
@@ -97,7 +70,15 @@ const SelectTestResults = ({ onSelect, onClose }: SelectTestResultsProps) => {
     });
     setSelectedPosition(null);
     await window.api.editResults(testid, newResult);
-  }, [onSelect, selectedPosition, testmethod.id]);
+  }, [onSelect, selectedPosition, testmethod!.id]);
+  // TypeScript is warning that `testmethod` could potentially be `undefined`,
+  // and therefore doesn't have an `id` property.
+  // possible to check with if condition
+  // if (testmethod) {
+  // [onSelect, selectedPosition, testmethod.id]
+  // }
+  // or
+  // give info to TS that testmethod wont be undefined with the ! operator
 
   return (
     <>
@@ -111,7 +92,7 @@ const SelectTestResults = ({ onSelect, onClose }: SelectTestResultsProps) => {
           </div>
         </div>
         <div className="overlay-content">
-          {testmethod?.results.map((result: Testmethod, index: number) => {
+          {testmethod?.results.map((result: Result, index: number) => {
             return (
               <button
                 className={result.name}
@@ -140,6 +121,24 @@ const SelectTestResults = ({ onSelect, onClose }: SelectTestResultsProps) => {
                 id: 0,
                 result: '',
                 color: '',
+                conditions: '',
+                labelEN: null,
+                labelFR: null,
+                labelDE: null,
+                test_type_id: '',
+                tooltipDE: null,
+                tooltipEN: null,
+                tooltipFR: null,
+                countInStatistic: null,
+                isSubmitting: false,
+                writingSuccess: false,
+                submittingSuccess: false,
+                isWriting: false,
+                testid: '',
+                resultType: {
+                  conditions: '',
+                  name: '',
+                },
               })
             }
           >

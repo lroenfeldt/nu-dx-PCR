@@ -1,7 +1,10 @@
 import React, { useCallback, useContext, useEffect, useState, useMemo } from 'react';
 import defaultBarcodes from '../utils/defaultBarcodes';
 import { useTranslation } from './useTranslation';
-import { ISettings } from '../types/interfaces/interfaces';
+import { ISettings, IUseData } from '../types/interfaces/useData';
+import { IUseTranslation } from '../types/interfaces/useTranslation';
+import { IError } from '../types/interfaces/interfaces';
+
 export const DataContext = React.createContext({});
 /**
  * Provides a stateful value for data and a function to update it.
@@ -15,10 +18,9 @@ interface DataProviderProps {
 }
 
 export function DataProvider({ children }: DataProviderProps) {
-  const { t }: any = useTranslation();
-
+  const { t }: IUseTranslation = useTranslation();
   const [demo, setDemo] = useState(false);
-  const [errors, setErrors] = useState<{ type: string; message: string }[]>([]);
+  const [errors, setErrors] = useState<IError[]>([]);
   const [remTime, setRemTime] = useState(0);
   const [testid, setTestid] = useState(null); // string
   const [results, setResults] = useState([]);
@@ -27,7 +29,7 @@ export function DataProvider({ children }: DataProviderProps) {
   const [isModal, setIsModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [menuOpen, setMenuOpen] = useState(null); // number
-  const [testDone, setTestDone] = useState(false); // boolean
+  const [testDone, setTestDone] = useState(false);
   const [lotNumber, setLotNumber] = useState(null); // string
   const [isStatus, setIsStatus] = useState(true);
   const [resultList, setResultList] = useState([]);
@@ -47,9 +49,7 @@ export function DataProvider({ children }: DataProviderProps) {
   const [selectedMethod, setSelectedMethod] = useState({});
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState(null); // string
-
   const [settings, setSettings] = useState(window.api.getConfig());
-
   const [barcodes, setBarcodes] = useState(defaultBarcodes(settings));
   const [checkForTestResultFile, setCheckForTestResultFile] = useState(false);
   const [updateType, setUpdateType] = useState(settings.user.updateType || 'stable');
@@ -108,14 +108,14 @@ export function DataProvider({ children }: DataProviderProps) {
     [settings, setSettings]
   );
   const handleSettings = useCallback(
-    (newSettings: any) => {
+    (newSettings: ISettings) => {
       setSettings(newSettings);
     },
     [settings, setSettings]
   );
 
   const handleErrors = useCallback(
-    (payload: React.SetStateAction<{ type: string; message: string }[]>) => {
+    (payload: IError[]) => {
       if (JSON.stringify(payload) !== JSON.stringify(errors)) {
         setErrors(payload);
       }
@@ -128,7 +128,7 @@ export function DataProvider({ children }: DataProviderProps) {
   }, [demo]);
 
   const shutdown = useCallback(() => {
-    window.api.power();
+    window.api.power(null);
   }, []);
 
   const reboot = useCallback(() => {
@@ -164,7 +164,7 @@ export function DataProvider({ children }: DataProviderProps) {
   }, [errors, settings, isStatus]);
 
   const saveSettings = useCallback(
-    async (settings: { user: {}; device: { wellCount: string } }) => {
+    async (settings: ISettings) => {
       try {
         await window.api.saveConfig(settings);
         setSettings({
@@ -422,4 +422,4 @@ export function DataProvider({ children }: DataProviderProps) {
  *  hook to access the data context
  * @returns {Object} The current context
  */
-export const useData = () => useContext(DataContext);
+export const useData = () => useContext(DataContext) as IUseData;

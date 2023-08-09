@@ -6,8 +6,5 @@ const endpoint = '/devices';
  * @param {string} hardwareId
  * @returns
  */
-const postStatus = (hardwareId: string, data: {}) => client.post(`${endpoint}/${hardwareId}/status`, data);
 
-export default {
-  postStatus,
-};
+export const postStatus = (hardwareId: string, data: {}) => client.post(`${endpoint}/${hardwareId}/status`, data);

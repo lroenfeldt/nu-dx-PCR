@@ -1,9 +1,6 @@
-interface ToggleProps {
-  isOn: boolean;
-  handleToggle: () => void;
-}
+import { IToggle } from '../types/interfaces/interfaces';
 
-const Toggle = ({ isOn, handleToggle }: ToggleProps) => {
+const Toggle = ({ isOn, handleToggle }: IToggle) => {
   return (
     <>
       <input

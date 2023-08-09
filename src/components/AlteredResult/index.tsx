@@ -1,21 +1,24 @@
 import { useData } from '../../hooks';
-import { IAlteredResultProps } from '../../types/interfaces/interfaces';
+import { IAlteredResult } from '../../types/interfaces/interfaces';
 import { hexToRGB } from '../../utils/helper';
 import { SlPencil } from 'react-icons/sl';
 
-const AlteredResult = ({ activeBarcode, testmethod, style }: IAlteredResultProps) => {
-  const { settings }: any = useData();
+const AlteredResult = ({ activeBarcode, testmethod, style }: IAlteredResult) => {
+  const { settings } = useData();
 
   if (activeBarcode?.alteredResult)
     return (
       <div
         className="alteredResult"
         style={{
-          top: settings.account.ChangeResults ? 0 : 15,
+          top: settings.account.changeResults ? 0 : 15,
           backgroundColor:
             activeBarcode?.result == 'invalid'
               ? 'orange'
-              : hexToRGB(testmethod.results.find((result) => result.name.includes(activeBarcode?.result))?.color, 0.9),
+              : hexToRGB(
+                  testmethod.results?.find((result) => result.name.includes(activeBarcode?.result))?.color || '',
+                  ' 0.9 '
+                ),
           ...style,
         }}
       >

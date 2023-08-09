@@ -1,29 +1,13 @@
-import { JSX } from 'react/jsx-runtime';
 import { useData } from '../hooks';
 import WellVisual from './WellVisual';
-import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from 'react';
+import { IBarcode, IRackVisualRows, IWellVisual } from '../types/interfaces/interfaces';
 
-interface RackVisualizationProp {
-  markActive: boolean;
-  active: boolean;
-  testmethod: any;
-}
-
-interface Barcode {
-  id: number;
-}
-
-interface RackVisualRows {
-  map(arg0: (row: number, index: number) => JSX.Element): ReactNode;
-  [index: number]: JSX.Element[];
-}
-
-const RackVisualization = ({ markActive, active, testmethod }: RackVisualizationProp) => {
-  const { barcodes }: any = useData();
+const RackVisualization = ({ markActive, active, testmethod }: IWellVisual) => {
+  const { barcodes } = useData();
 
   //Create RackVisualization
-  let rackVisualRows: RackVisualRows = [];
-  barcodes.map((barcode: Barcode) => {
+  let rackVisualRows: IRackVisualRows = [];
+  barcodes.map((barcode: IBarcode) => {
     let rowName = Math.ceil(barcode.id / 8) - 1;
     console.log(rowName);
     if (!rackVisualRows[rowName]) {

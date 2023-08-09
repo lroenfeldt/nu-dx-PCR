@@ -1,12 +1,7 @@
 import './css/style.css';
+import { IArrowBox } from '../../types/interfaces/interfaces';
 
-interface ArrowBoxProps {
-  children: JSX.Element;
-  style: {} | undefined;
-  direction: string;
-}
-
-function ArrowBox({ children, direction, style }: ArrowBoxProps) {
+function ArrowBox({ children, direction, style }: IArrowBox) {
   return (
     <div className={`arrow_box ${direction}`}>
       <div className="content" style={{ ...style }}>

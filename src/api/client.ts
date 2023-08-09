@@ -1,4 +1,4 @@
-import { create, ApiResponse } from 'apisauce';
+import { create, ApiResponse, ApisauceInstance } from 'apisauce';
 import settings from '../config/settings';
 import { AxiosRequestConfig } from 'axios';
 
@@ -9,7 +9,7 @@ const apiClient = create({
 });
 
 console.log('apiClient', settings.api);
-const { get }: any = apiClient;
+const { get }: ApisauceInstance = apiClient;
 
 // Assign the type alias to the 'apiClient.get' function
 (apiClient.get as GetFunction) = async (
@@ -17,7 +17,7 @@ const { get }: any = apiClient;
   params?: any,
   axiosConfig?: AxiosRequestConfig
 ): Promise<ApiResponse<any>> => {
-  const response = await get(url, params, axiosConfig);
+  const response = await get(url, params, axiosConfig as {});
   return response;
 };
 

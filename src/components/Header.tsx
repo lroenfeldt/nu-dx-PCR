@@ -2,7 +2,7 @@ import { useEffect, useCallback } from 'react';
 import { FiSettings, FiPower, FiList } from 'react-icons/fi';
 import { BsEject } from 'react-icons/bs';
 import { VscSync } from 'react-icons/vsc';
-import { useData, useTranslation, useBackgroundProcesses, useResults } from '../hooks';
+import { useData, useTranslation, useBackgroundProcesses } from '../hooks';
 import nuDiagnostics from '../assets/Logos/nu-diagnostics/nu-diagnostics white.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Settings from './Settings/Settings';
@@ -10,17 +10,7 @@ import Notifications from './Notifications';
 import ArrowBox from './ArrowBox';
 import { Oval } from 'react-loader-spinner';
 import SelectTestResults from './SelectTestResults/SelectTestResults';
-
-interface ErrorObject {
-  filter: any;
-  type: string;
-  index: number;
-}
-
-interface Error {
-  message: string;
-  type: string;
-}
+import { IError, IErrorObject } from '../types/interfaces/interfaces';
 
 const Header = () => {
   const {
@@ -30,7 +20,6 @@ const Header = () => {
     shutdown,
     menuOpen,
     toggleLid,
-    setErrors,
     toggleDemo,
     resultList,
     offlineMode,
@@ -40,8 +29,10 @@ const Header = () => {
     setOfflineMode,
     setOpenResults,
     updateAvailable,
-  }: any = useData();
-  const { t }: any = useTranslation();
+  } = useData();
+  const { setErrors } = useData();
+
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -53,7 +44,6 @@ const Header = () => {
       (!loading ? (
         <div className="logoWrapper" onDoubleClick={() => navigate('/debug')}>
           <img src={nuDiagnostics} alt="" width={150} />
-          {/*<span>nu:dx PCR</span>*/}
         </div>
       ) : (
         <div className="spinnerContainer">
@@ -84,7 +74,6 @@ const Header = () => {
           <div className="power arrow">
             {menuOpen === 1 && <button onClick={() => shutdown()}>{t('common.shutdown')}</button>}
             {menuOpen === 1 && <button onClick={() => reboot()}>{t('common.reboot')}</button>}
-            {/* <button onClick={() => {setMenuOpen(null)}}>Menü schließen</button> */}
           </div>
         }
         style={undefined}
@@ -104,9 +93,9 @@ const Header = () => {
 
   const handleOffline = useCallback(async () => {
     if (!dbConnection) {
-      setErrors((prevErrors: ErrorObject) =>
+      setErrors((prevErrors: IErrorObject) =>
         prevErrors
-          .filter((error: Error) => error.type !== 'stillOffline')
+          .filter((error: IError) => error.type !== 'stillOffline')
           .concat({
             type: 'stillOffline',
             message: t('common.stillOffline'),
@@ -114,7 +103,7 @@ const Header = () => {
       );
     } else {
       setOfflineMode(false);
-      setErrors((prevErrors: ErrorObject) => prevErrors.filter((error: Error) => error.type !== 'stillOffline'));
+      setErrors((prevErrors: IErrorObject[]) => prevErrors.filter((error) => error.type !== 'stillOffline'));
     }
   }, [dbConnection]);
 

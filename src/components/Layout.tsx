@@ -4,20 +4,14 @@ import { useLocation } from 'react-router-dom';
 import Errors from './Errors';
 import { useData } from '../hooks';
 import ShutdownNotification from './ShutdownNotification';
+import { IChildren } from '../types/interfaces/interfaces';
 
-interface LayoutProp {
-  children: JSX.Element;
-}
-
-export default function Layout({ children }: LayoutProp) {
+export default function Layout({ children }: IChildren) {
   const location = useLocation();
-  const { demo }: any = useData;
+  const { demo } = useData();
 
   return (
     <div className="App">
-      {/*<Modal>
-        <h2>{t('common.appUpdate')}...</h2>
-      </Modal>*/}
       <Header />
       <ShutdownNotification />
       {!demo && <Errors />}

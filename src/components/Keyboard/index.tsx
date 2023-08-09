@@ -3,25 +3,9 @@ import { IoCloseCircle } from 'react-icons/io5';
 import SimpleKeyboard from 'react-simple-keyboard';
 import 'react-simple-keyboard/build/css/index.css';
 import { useEffect, useState, useRef, memo } from 'react';
+import { IKeyboard, IKeyboardRef } from '../../types/interfaces/interfaces';
 
-interface KeyboardRef {
-  clearInput: () => void;
-  setInput: (value: string) => void;
-}
-
-function Keyboard(props: {
-  dark: boolean;
-  style: React.CSSProperties;
-  clear: boolean;
-  inputs: string;
-  visible: boolean;
-  onChange?: ((input: string, e?: MouseEvent | undefined) => string) | undefined;
-  setClear: React.Dispatch<React.SetStateAction<boolean>>;
-  setInputs: React.Dispatch<React.SetStateAction<string>>;
-  inputName: any;
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  isNumeric?: boolean;
-}) {
+function Keyboard(props: IKeyboard) {
   const [layoutName, setLayoutName] = useState('default');
   const {
     dark,
@@ -37,7 +21,7 @@ function Keyboard(props: {
     isNumeric = false,
   } = props;
 
-  const keyboard = useRef<KeyboardRef | null>(null);
+  const keyboard = useRef<IKeyboardRef | null>(null);
 
   const onClear = () => {
     keyboard.current?.clearInput();
@@ -75,7 +59,7 @@ function Keyboard(props: {
   };
 
   useEffect(() => {
-    keyboard.current?.setInput(inputs[inputName as any]);
+    keyboard.current?.setInput(inputs[inputName]);
   }, [inputs, inputName, visible]);
 
   useEffect(() => {
