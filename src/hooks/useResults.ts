@@ -2,7 +2,7 @@ import { useData, useTranslation } from '.';
 import axios from 'axios';
 import urls from '../config/settings';
 import { useLocation } from 'react-router-dom';
-import { IAutoControl, IBarcode, IError, IResultFile, ITestConfig, ITestMethod } from '../types/interfaces/interfaces';
+import { IAutoControl, IBarcode, IError, IResultFile, ITestConfig } from '../types/interfaces/interfaces';
 import { extractBarcodes, parseResultsDB, parseResultsExport } from '../utils/parseResults';
 import { Result, Testprocedure } from '../types/interfaces/settings';
 
@@ -236,9 +236,9 @@ const useResults = (): object => {
     //Parse Results
     console.log('parse results');
     window.api.logEvents(`parse results`, 'logInfos.txt');
-    let parsedResults: any;
+    let parsedResults;
     try {
-      parsedResults = parseResultsExport(resultFile, testid, testConfig, testmethod, lotNumber);
+      parsedResults = parseResultsExport(resultFile, testid, testConfig as any, testmethod as any, lotNumber as string);
     } catch (err) {
       console.log(err);
       window.api.logEvents(`saveToUSB: ${err}`, 'logErrors.txt');
@@ -414,7 +414,7 @@ const useResults = (): object => {
       parsedResults = parseResultsDB(
         testid,
         resultFile as unknown as IResultFile,
-        testmethod as unknown as ITestMethod,
+        testmethod as Testprocedure,
         testConfig as any,
         autoControls as any,
         testStarted as any,

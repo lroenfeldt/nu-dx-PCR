@@ -6,7 +6,7 @@ const os = require('os');
 const { logger } = require('./logger');
 const macaddress = require('macaddress');
 import { IpcMainEvent } from 'electron';
-import { IDevice } from '../interfaces/interfaces';
+
 import * as DeviceUtils from './deviceUtils';
 import * as Constants from './constants';
 
@@ -83,8 +83,8 @@ export const ipcMainConfig = () => {
     let wellCount = DeviceUtils.getDeviceType();
     settings.isDev = isDev;
     settings.version = app.getVersion();
-    let hardwareId = await macaddress.one().then((mac: IDevice) => mac);
-    let serialNumber = ''; // await getSerialNumber();
+    let hardwareId = await macaddress.one().then((mac: any) => mac);
+    let serialNumber = '';
     settings.device = { hardwareId, wellCount, serialNumber };
     event.returnValue = settings;
   });
@@ -99,7 +99,7 @@ export const ipcMainGetConfig = () => {
     let wellCount = DeviceUtils.getDeviceType();
     settings.isDev = isDev;
     settings.version = app.getVersion();
-    let hardwareId = await macaddress.one().then((mac: IDevice) => mac);
+    let hardwareId = await macaddress.one().then((mac: any) => mac);
     let serialNumber = '';
     settings.device = { hardwareId, wellCount, serialNumber };
     event.returnValue = settings;

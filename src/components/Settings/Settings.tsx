@@ -29,8 +29,8 @@ function Settings({ visible }: ISettingsProp) {
   };
   const handleWellCount = useCallback(async () => {
     const newSettings: Settings = settings;
-    newSettings.device.wellCount = settings.device.wellCount === '96' ? '16' : '96';
-    newSettings.user.ntcPos = newSettings.device.wellCount === '96' ? 'B01' : 'A02';
+    newSettings.device.wellCount = settings.device.wellCount === 96 ? 16 : 96;
+    newSettings.user.ntcPos = newSettings.device.wellCount === 96 ? 'B01' : 'A02';
     setBarcodes(defaultBarcodes(newSettings));
     await saveSettings(newSettings);
   }, []);
@@ -92,7 +92,7 @@ function Settings({ visible }: ISettingsProp) {
                 <Switch
                   label={settings.device.wellCount}
                   onClick={handleWellCount}
-                  checked={settings.device.wellCount === '96'}
+                  checked={settings.device.wellCount === 96}
                 />
               )}
               <span>S/N: {settings.account.serialNumber}</span>

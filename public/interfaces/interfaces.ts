@@ -4,7 +4,7 @@ export interface ISoftwareList {
     | 'C:\\Bioer\\LineGene1600 for research\\1644\\bin\\LineGene1600.exe'
     | 'C:\\BIOER\\LineGene1600 for research\\1640\\bin\\LineGene1600.exe'
     | 'C:\\BIOER\\96\\bin\\Gene-9660.exe';
-  returnType: '16' | '96';
+  returnType: 16 | 96;
   name: 'LineGene1600' | 'LineGene1644' | 'LineGene1640' | 'LineGene9600';
 }
 
@@ -95,12 +95,6 @@ export interface IBarcode {
   valid: boolean;
   error: Error;
   blocked: boolean;
-}
-
-export interface IDevice {
-  hardwareId: string;
-  deviceType: string;
-  serialNumber: string;
 }
 
 export interface IProgressObj {

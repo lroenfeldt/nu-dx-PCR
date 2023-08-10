@@ -1,12 +1,5 @@
-import {
-  IBarcode,
-  IParameter,
-  IParsedResults,
-  IParsedResultsData,
-  IResultFile,
-  ITestMethod,
-} from '../types/interfaces/interfaces';
-import { Account, Device } from '../types/interfaces/settings';
+import { IBarcode, IParsedResults, IParsedResultsData, IResultFile } from '../types/interfaces/interfaces';
+import { Account, Device, ParameterElement, Testprocedure } from '../types/interfaces/settings';
 
 /**
  * Extract Barcodes from given result file
@@ -108,7 +101,7 @@ export const parseResults = (
   let parsedResultsData: IParsedResultsData[] = [];
 
   //Read Cycle Values
-  resultsRawData.forEach((row: Array<any>) => {
+  resultsRawData.forEach((row: any[]) => {
     const position = row[0];
     const parameter = row[4].toUpperCase();
     const curveData = row.slice(5);
@@ -122,13 +115,13 @@ export const parseResults = (
         label: '',
         alteredResult: false,
         oldResult: '',
-        isControl: null,
+        isControl: undefined,
         result: '',
       };
     }
 
     if (!parsedResultsData[position].parameters) {
-      parsedResultsData[position].parameters = [] as IParameter[];
+      parsedResultsData[position].parameters = [] as ParameterElement[];
     }
 
     if (!parsedResultsData[position].parameters?.[parameter]) {
@@ -138,29 +131,40 @@ export const parseResults = (
         label: '',
         alteredResult: false,
         oldResult: '',
-        isControl: null,
+        isControl: undefined,
         result: '',
       };
     }
-    const testmethod: ITestMethod = {
+    const testmethod: Testprocedure = {
       showCurves: false,
       parameters: [],
       results: [],
       procedure: '',
-
       result: '',
       name: '',
-
       showResults: false,
       type: '',
       resultParameter: '',
       specificationId: '',
+      id: '',
+      translate: '',
+      protocol: '',
+      durationMinutes: null,
+      additionalAttributes: [],
+      parameter: null,
+      labelEN: '',
+      labelFR: '',
+      labelDE: '',
+      organization: '',
+      status: undefined,
+      setRemTime: undefined,
+      setErrors: undefined,
     };
 
     parsedResultsData[position].parameters[parameter].curveData = curveData;
     parsedResultsData[position].parameters[parameter].finalCycle = finalCycle;
     parsedResultsData[position].parameters[parameter].threshhold =
-      testmethod.parameters?.find((param: { target: string }) => param.target === parameter)?.threshhold || '';
+      testmethod.parameters?.find((param) => param.target === parameter)?.threshhold || '';
   });
 
   //Parse Rows for Results
@@ -179,7 +183,7 @@ export const parseResults = (
   if (!resultsData) throw Error('Invalid Result File, no results found');
 
   //Read Values
-  resultsData.forEach((row: Array<any>, index: string) => {
+  resultsData.forEach((row: Array<any>) => {
     let barcode = row[1];
     const position = row[0];
     const parameter = row[4].toUpperCase();
@@ -223,7 +227,7 @@ export const parseResults = (
       return Number(threshValue);
     }
 
-    const testmethod: ITestMethod = {
+    const testmethod: Testprocedure = {
       showCurves: false,
       parameters: [],
       results: [],
@@ -234,6 +238,19 @@ export const parseResults = (
       type: '',
       resultParameter: '',
       specificationId: '',
+      id: '',
+      translate: '',
+      protocol: '',
+      durationMinutes: null,
+      additionalAttributes: [],
+      parameter: null,
+      labelEN: '',
+      labelFR: '',
+      labelDE: '',
+      organization: '',
+      status: undefined,
+      setRemTime: undefined,
+      setErrors: undefined,
     };
 
     //parse result conditions
@@ -293,7 +310,7 @@ export const parseResultsDisplay = (
   resultFile: IResultFile,
   testid: string,
   testConfig: {},
-  testmethod: ITestMethod,
+  testmethod: Testprocedure,
   override: boolean | undefined
 ): object => {
   return parseResults(resultFile, testid, testConfig, testmethod as any, override);
@@ -310,7 +327,7 @@ export const parseResultsExport = (
   resultFile: IResultFile,
   testid: string,
   testConfig: { testmethod: { type: string } },
-  testmethod: ITestMethod,
+  testmethod: Testprocedure,
   lotNumber = ''
 ) => {
   window.api.logEvents(`parseResultsExport settings: ${testConfig}`, 'logInfos.txt');
@@ -325,7 +342,7 @@ export const parseResultsExport = (
 
     //Read Data
     for (let position in parsedData) {
-      let data: IParameter = parsedData[position as keyof typeof parsedData];
+      let data: ParameterElement = parsedData[position as keyof typeof parsedData];
       // This error occurs because  a `for...in` loop is used to iterate over the properties of an object, but TypeScript
       // doesn't have enough information to determine the types of those properties. To resolve this error,
       // type annotations to specify the types of the object's properties can be added.
@@ -368,7 +385,7 @@ export const parseResultsExport = (
 export const parseResultsDB = (
   testid: string,
   resultFile: IResultFile,
-  testmethod: ITestMethod,
+  testmethod: Testprocedure,
   testConfig: { device: Device; account: Account },
   autoControls: {
     forEach(arg0: (autoControl: { position: string; barcode: string | number }) => void): unknown;

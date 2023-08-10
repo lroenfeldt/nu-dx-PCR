@@ -21,7 +21,7 @@ const Testselection = () => {
         slidesPerView={settings.account.testprocedures.length > 2 ? 3 : 2}
         pagination={{ clickable: true }}
       >
-        {settings.account.testprocedures.map((test, i) => {
+        {settings.account.testprocedures.map((test, i: number) => {
           return (
             <SwiperSlide key={i}>
               <Testsmethod
@@ -33,6 +33,25 @@ const Testselection = () => {
                 setRemTime={setRemTime}
                 setErrors={setErrors}
                 demo={demo}
+                status={undefined}
+                id={''}
+                name={''}
+                translate={''}
+                protocol={''}
+                durationMinutes={null}
+                additionalAttributes={[]}
+                type={null}
+                parameter={null}
+                parameters={null}
+                resultParameter={null}
+                labelEN={''}
+                labelFR={''}
+                labelDE={''}
+                results={[]}
+                specificationId={null}
+                organization={''}
+                showCurves={false}
+                showResults={false}
               />
             </SwiperSlide>
           );

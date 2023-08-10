@@ -1,39 +1,18 @@
-import React, { useState, useEffect } from 'react';
-
+import { useState, useEffect } from 'react';
 import { useData } from '../hooks';
-import urls from '../config/settings';
 import { Oval } from 'react-loader-spinner';
 import { FaCheckCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { extractBarcodes, parseResultsDB, parseResultsExport } from '../utils/parseResults';
 import { useResults, useTranslation } from '../hooks';
 
 const TestDone = () => {
-  const {
-    reset,
-    demo,
-    testid,
-    errors,
-    setErrors,
-    settings,
-    offlineMode,
-    setOfflineMode,
-    barcodes,
-    setBarcodes,
-    testDone,
-    setTestDone,
-    resultsSubmitted,
-    setSubmitted,
-    currentUser,
-    test,
-    setDeviceStatus,
-    selectedMethod,
-  } = useData();
+  const { reset, testid, settings, offlineMode, testDone, resultsSubmitted, setDeviceStatus, selectedMethod } =
+    useData();
+
   const [USBPresent, setUSBPresent] = useState(false);
-  const userId = currentUser ? currentUser?.id : '';
   const navigate = useNavigate();
-  const { checkUSB, saveToUSB, submitAll, getResults, submitResult, saveAllToUSB } = useResults();
-  const { t, locale } = useTranslation();
+  const { checkUSB, saveToUSB, submitResult }: any = useResults();
+  const { t } = useTranslation();
   const testmethod = settings.account.testprocedures.find((testmethod) => testmethod.id === selectedMethod);
 
   let buttonUSB;
@@ -46,42 +25,6 @@ const TestDone = () => {
       </button>
     );
   }
-
-  const hideError = (index) => {
-    setErrors((prevErrors) => prevErrors.filter((error, errIndex) => errIndex !== index));
-  };
-
-  const activateofflineMode = (errIndex) => {
-    setOfflineMode(true);
-    hideError(errIndex);
-  };
-
-  const displayErrors = () => {
-    return (
-      <div className="errorContainer">
-        {errors.map((error, i) => {
-          if (error.type === 'submit') {
-            return (
-              <div key={i} className="errorMessage">
-                <p>{error.message}</p>
-                <button onClick={() => submitResult(testid)}>{t('common.retry')}</button>
-                <button onClick={() => activateofflineMode(i)}>{t('common.offlineMode')}</button>
-              </div>
-            );
-          }
-          if (error.type === 'invalid') {
-            return (
-              <div key={i} className="errorMessage">
-                <p>{error.message}</p>
-                <button onClick={() => hideError(i)}>{t('common.close')}</button>
-              </div>
-            );
-          }
-          return '';
-        })}
-      </div>
-    );
-  };
 
   //End Linegene and submit if online
   useEffect(() => {
@@ -111,12 +54,12 @@ const TestDone = () => {
         <h2>{t('results.title')}</h2>
         <p>{t('results.instructions')}</p>
         <div className="buttonArea">
-          {testmethod.showResults ? (
+          {testmethod?.showResults ? (
             <button onClick={() => navigate('/ViewResults')}>{t('results.viewResults')}</button>
           ) : (
             ''
           )}
-          {testmethod.showResults ? buttonUSB : ''}
+          {testmethod?.showResults ? buttonUSB : ''}
           <button
             onClick={() => {
               reset();
@@ -137,8 +80,8 @@ const TestDone = () => {
         <h2>{!settings.account.submitResults ? t('results.success') : t('results.resultsSent')}</h2>
         <p>{t('results.startNewTest')}</p>
         <div className="buttonArea">
-          {testmethod.showResults ? buttonUSB : ''}
-          {testmethod.showResults ? (
+          {testmethod?.showResults ? buttonUSB : ''}
+          {testmethod?.showResults ? (
             <button onClick={() => navigate('/ViewResults')}>{t('results.viewResults')}</button>
           ) : (
             ''
@@ -158,7 +101,7 @@ const TestDone = () => {
     return (
       <div className="TestDone">
         <div className="spinnerContainer">
-          <Oval heigth="100" width="100" color="var(--primary)" />
+          <Oval height="100" width="100" color="var(--primary)" />
         </div>
         <h2>{t('results.waitingForResults')}</h2>
         <p>{t('results.wait')}</p>

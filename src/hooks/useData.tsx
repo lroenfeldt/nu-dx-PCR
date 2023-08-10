@@ -155,7 +155,7 @@ export function DataProvider({ children }: DataProviderProps) {
       let newSettings = await window.api.getConfig();
       setSettings({
         ...newSettings,
-        user: { ...newSettings.user, ntcPos: newSettings?.device?.wellCount === '96' ? 'B01' : 'A02' },
+        user: { ...newSettings.user, ntcPos: newSettings?.device?.wellCount === 96 ? 'B01' : 'A02' },
       });
     }
     setErrors(newErrors);
@@ -169,9 +169,9 @@ export function DataProvider({ children }: DataProviderProps) {
         await window.api.saveConfig(settings);
         setSettings({
           ...settings,
-          user: { ...settings.user, ntcPos: settings?.device?.wellCount === '96' ? 'B01' : 'A02' },
+          user: { ...settings.user, ntcPos: settings?.device?.wellCount === 96 ? 'B01' : 'A02' },
         });
-        setIsNinetySix(settings?.device?.wellCount === '96');
+        setIsNinetySix(settings?.device?.wellCount === 96);
         return true;
       } catch (error) {
         console.log(error);

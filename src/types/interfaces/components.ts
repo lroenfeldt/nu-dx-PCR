@@ -1,3 +1,5 @@
+import i18n from 'i18n-js';
+
 export interface IBlock {
   row?: number;
   top?: number;
@@ -116,7 +118,7 @@ export interface IButton {
   id?: 'button';
   className?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  children?: JSX.Element;
+  children?: JSX.Element | i18n.Scope;
   navigation?: string;
   style?: any;
   shadow?: boolean;
@@ -173,4 +175,10 @@ export interface IButton {
   end?: number;
   start?: number;
   neumorphism?: string;
+}
+
+export interface IButtonArea {
+  children: JSX.Element;
+  noborder: boolean;
+  style: any;
 }

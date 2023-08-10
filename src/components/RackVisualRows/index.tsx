@@ -1,13 +1,14 @@
 import { useMemo } from 'react';
 import { useData } from '../../hooks';
 import WellVisual from '../WellVisual';
-import { IBarcode, IRackVisualRows, ITestMethod } from '../../types/interfaces/interfaces';
+import { IBarcode, IRackVisualRows } from '../../types/interfaces/interfaces';
+import { Testprocedure } from '../../types/interfaces/settings';
 
 const RackVisualRows = (props: {
   active: number;
   markActive: (arg: number) => void;
   showResults: boolean;
-  testmethod: ITestMethod | null;
+  testmethod: Testprocedure | null;
 }) => {
   const { active, markActive, showResults, testmethod } = props;
   const { isNinetySix, barcodes } = useData();

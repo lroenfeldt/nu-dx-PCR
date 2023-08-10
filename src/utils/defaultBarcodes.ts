@@ -1,4 +1,4 @@
-import { IBarcode, IError, IParameter } from '../types/interfaces/interfaces';
+import { IBarcode } from '../types/interfaces/interfaces';
 import { Settings } from '../types/interfaces/settings';
 
 /**
@@ -14,18 +14,15 @@ export default function useDefaultBarcodes(settings: Settings): IBarcode[] {
   const wellCount = settings?.device?.wellCount;
   const length = wellCount == 96 ? 12 : 8;
 
-  for (let i = 1; i <= +wellCount; i++) {
+  for (let i = 1; i <= wellCount; i++) {
     let rowIndex = Math.ceil(i / length) - 1;
     let blocked = false;
-    // wellCount is working with types. usually its string.
-    // in defaultBarcodes.ts wellCount needs to be a number.
-    // converted wellCount to number by adding a + operator
 
     //Set Position Name
     let posName =
       i - rowIndex * length < 10
-        ? rowLetters[rowIndex] + '0' + (i - rowIndex * length).toString()
-        : rowLetters[rowIndex] + '' + (i - rowIndex * length).toString();
+        ? rowLetters[rowIndex] + '0' + (i - rowIndex * length)
+        : rowLetters[rowIndex] + '' + (i - rowIndex * length);
     let label = posName;
     let value = '';
     let valid = false;

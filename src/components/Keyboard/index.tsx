@@ -26,6 +26,7 @@ function Keyboard(props: IKeyboard) {
   const onClear = () => {
     keyboard.current?.clearInput();
   };
+
   const onChangeAll = (newInput: any) => {
     setInputs((prevInputs: any) => ({ ...prevInputs, ...newInput }));
     console.log('Inputs changed', inputs);

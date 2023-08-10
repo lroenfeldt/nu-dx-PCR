@@ -11,17 +11,8 @@ import { ICheck, IGetDeviceTypeApi, IPostStatus } from '../types/interfaces/api'
 const Bootup = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const {
-    settings,
-    setErrors,
-    setLoading,
-    setSettings,
-    pairingCode,
-    loadSettings,
-    saveSettings,
-    clearSettings,
-    setPairingCode,
-  } = useData();
+  const { settings, setErrors, setLoading, setSettings, pairingCode, saveSettings, clearSettings, setPairingCode } =
+    useData();
   const getPairingCodeApi: IGetDeviceTypeApi = useApi(pollPairingCode as IPostStatus) as IGetDeviceTypeApi;
   /**
    * @description Get pairing code from server

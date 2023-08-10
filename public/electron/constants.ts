@@ -90,22 +90,22 @@ export const forceConsole: boolean = false;
 export const softwareList: ISoftwareList[] = [
   {
     path: 'C:\\Bioer\\LineGene\\1600\\bin\\LineGene1600.exe',
-    returnType: '16',
+    returnType: 16,
     name: 'LineGene1600',
   },
   {
     path: 'C:\\Bioer\\LineGene1600 for research\\1644\\bin\\LineGene1600.exe',
-    returnType: '16',
+    returnType: 16,
     name: 'LineGene1644',
   },
   {
     path: 'C:\\BIOER\\LineGene1600 for research\\1640\\bin\\LineGene1600.exe',
-    returnType: '16',
+    returnType: 16,
     name: 'LineGene1640',
   },
   {
     path: 'C:\\BIOER\\96\\bin\\Gene-9660.exe',
-    returnType: '96',
+    returnType: 96,
     name: 'LineGene9600',
   },
 ];

@@ -1,4 +1,4 @@
-import { Account, Device, ParameterElement, ParameterParameter, Result, Settings, User } from './settings';
+import { Account, Device, ParameterElement, Result, Settings, Testprocedure, User } from './settings';
 import i18n from 'i18n-js';
 
 export interface IPairingCode {
@@ -6,49 +6,10 @@ export interface IPairingCode {
   pairingCode: number | string;
 }
 
-export interface IActiveBarcode {
-  alteredResult: boolean;
-  result: string;
-  parameters: IParameter;
-  value: number;
-  id: string | number;
-  name: string;
-  label: string;
-  posName: string;
-}
-
-export interface ITestMethod {
-  specificationId?: string;
-  resultParameter?: string;
-  showCurves?: boolean;
-  parameters?: IParameter[];
-  results?: Result[];
-  procedure?: string;
-  id?: number;
-  result?: string | number;
-  name?: string | number;
-  color?: string;
-  showResults?: boolean;
-  type?: string;
-  title?: string | number | boolean | ParameterParameter | ParameterElement[] | Result[] | null[] | string[] | null;
-  status?: string;
-  methodid?: string;
-  testrun?: boolean;
-  testDuration?: number | null;
-  setRemTime?: (remTime: number) => void;
-  setErrors?: (errors: { type: string; message: string }[]) => void;
-  demo?: boolean;
-}
-
-export interface IAlteredResultStyle {
-  top: number;
-  backgroundColor: any;
-}
-
 export interface IAlteredResult {
-  activeBarcode: IActiveBarcode | null;
-  testmethod: ITestMethod;
-  style?: IAlteredResultStyle;
+  activeBarcode: IBarcode | null;
+  testmethod: Testprocedure;
+  style: Object | undefined;
 }
 
 export interface IArrowBox {
@@ -58,45 +19,24 @@ export interface IArrowBox {
 }
 
 export interface IChangeResults {
-  activeBarcode: IActiveBarcode;
-  testmethod: ITestMethod;
+  activeBarcode: IBarcode | undefined;
+  testmethod: Testprocedure;
   isTable: boolean;
 }
 
-export interface IParameter {
-  curveData: string[];
-  target: string;
-  label: string;
-  isPrimary: boolean;
-  ct: string;
-  showCT: boolean;
-  [key: string]: any;
-}
-
 export interface ICheckmark {
-  barcode: IBarcode | IActiveBarcode;
+  barcode: IBarcode;
   style: React.CSSProperties | undefined;
   isNinetySix: boolean;
 }
 
 export interface IBarcode {
-  isControl?: any;
+  map: (arg0: (barcode: IBarcode) => IBarcode) => unknown;
+  isControl?: boolean | undefined;
   position?: string;
-  map(
-    arg0: (barcode: IBarcode) =>
-      | IBarcode
-      | {
-          result: string;
-          alteredResult: boolean;
-          barcode: IBarcode;
-          posName: string;
-          oldResult: string;
-          setBarcodes: () => void;
-        }
-  ): unknown;
   id: number;
   color?: string;
-  parameters: IParameter[];
+  parameters: ParameterElement[];
   value: string;
   label: string;
   checking: boolean;
@@ -120,14 +60,14 @@ export interface ILineProp {
 export interface ICustomSelect {
   options: string[];
   defaultValue?: string;
-  onChange?: (value: string) => void;
+  onChange?: (value: string) => string;
 }
 
 export interface IDropdown {
   children: React.ReactNode;
   title: string;
   elements: string[];
-  handleClick?: (arg: string) => void;
+  handleClick?: (arg: string) => string;
 }
 
 export interface IInput {
@@ -168,11 +108,11 @@ export interface IWellVisual {
   active: number;
   markActive: (arg: number) => void;
   showResults: boolean;
-  testmethod: ITestMethod | null;
+  testmethod: Testprocedure | null;
 }
 
 export interface IRadioButton {
-  checked: boolean | string;
+  checked: boolean;
   label: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
   value?: string | number | readonly string[];
@@ -180,10 +120,10 @@ export interface IRadioButton {
 }
 
 export interface IResultsFooter {
-  activeBarcode: IActiveBarcode;
-  testmethod: ITestMethod;
+  activeBarcode: IBarcode | undefined;
+  testmethod: Testprocedure | undefined;
   settings: Settings;
-  barcodes: IActiveBarcode[];
+  barcodes: IBarcode[];
   locale: string;
   navigate: (arg0: string) => void;
 }
@@ -233,14 +173,10 @@ export interface IHideError {
   remember?: boolean;
 }
 
-export interface IErrorObject {
-  filter: any;
-  concat: any;
-  type: string;
-  index: number;
-}
-
 export interface IError {
+  filter?: (err: IError) => boolean;
+  map?: (value: IError, index: number, array: IError[]) => JSX.Element | null;
+  index?: number;
   message: string;
   type: string;
 }
@@ -279,7 +215,7 @@ export interface ITestConfig {
 export interface IUseStick {
   top: number;
   id: string;
-  stickyClass: any;
+  stickyClass: string;
 }
 
 export interface ICache {
@@ -290,18 +226,20 @@ export interface ICache {
 }
 
 export interface IResultFile {
-  split: any;
+  split(arg0: RegExp): IParsedResults;
   configFile: {};
   testStarted: number;
 }
 
 export interface IParsedResults {
+  [key: string]: any;
+  slice: (resultsDataStart: string[], resultsDataEnd: string[]) => string[];
+  filter: (row: string) => string;
+  indexOf: (arg0: string) => any;
   length: number;
-  slice(resultsRawDataStart: any, resultsRawDataEnd: unknown): any;
-  indexOf(arg0: string): any;
   testid: string;
   resultFile: IResultFile;
-  testmethod: ITestMethod;
+  testmethod: Testprocedure;
   testConfig: ITestConfig;
   autoControls: Object;
   testStarted: number;
@@ -312,19 +250,19 @@ export interface IParsedResults {
 
 export interface IParsedResultsData {
   barcode: IBarcode | null;
-  parameters: IParameter[];
+  parameters: ParameterElement[];
   label: string;
   alteredResult: boolean;
   oldResult: string;
-  isControl: any;
+  isControl: boolean | undefined;
   result: string;
 }
 
 export interface IAutoControl {
   barcode: IBarcode | undefined;
-  push(arg0: { type: string; position: string; run: string; order: string; device: string }): unknown;
+  push: (arg0: { type: string; position: string; run: string; order: string; device: string }) => unknown;
   type: string;
-  position: {};
+  position: string | undefined;
   run: string;
   order: string;
   device: string;
@@ -353,7 +291,7 @@ export interface IErr {
 
 export interface IInputContainer {
   t: (scope?: i18n.Scope, options?: i18n.TranslateOptions) => string;
-  signal: any;
+  signal: boolean;
   isUser: boolean;
   isValid: boolean;
   password: string;
@@ -368,15 +306,19 @@ export interface IInputContainer {
   isChargenNrFocused: boolean;
   inputName: string;
   setInputName: (arg: string) => void;
-  getInputValue: any;
+  getInputValue: (arg0: string) => string;
   setInputs: React.Dispatch<React.SetStateAction<{}>>;
   inputs: Object;
 }
 
 export interface ITextInput {
-  textInput: React.RefObject<HTMLInputElement>;
+  // current: {
+  //   focus: () => void;
+  //   setSelectionRange: (start: number, end: number) => number;
+  //   value: string;
+  // };
   current: any;
-  setSelectionRange: (arg0: {}, arg1: {}) => void;
+  setSelectionRange: (arg0: Object, arg1: Object) => Object;
 }
 
 export interface ILotDoku {
@@ -392,5 +334,5 @@ export interface ILotDoku {
 
 export interface IDecoded {
   exp: number;
-  jwt_decode: (arg0: string) => void;
+  jwt_decode: (arg0: string) => string;
 }

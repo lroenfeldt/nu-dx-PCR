@@ -1,8 +1,8 @@
 import { useData } from '../hooks';
 import { useNavigate } from 'react-router-dom';
-import { ITestMethod } from '../types/interfaces/interfaces';
+import { Testprocedure } from '../types/interfaces/settings';
 
-const Testmethod = ({ title, status, methodid }: ITestMethod) => {
+const Testmethod = ({ title, status, methodid }: Testprocedure) => {
   const navigate = useNavigate();
   const { settings, setSelectedMethod } = useData();
 

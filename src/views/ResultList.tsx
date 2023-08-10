@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { Toggle } from '../components';
 import { Oval } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,9 @@ import { AiFillUsb } from 'react-icons/ai';
 import { FaMicroscope, FaCloudUploadAlt, FaCheck } from 'react-icons/fa';
 import { useResults, useSticky } from '../hooks';
 import urls from '../config/settings';
+import { Result } from '../types/interfaces/settings';
+import { JSX } from 'react/jsx-runtime';
+import { ISettings } from '../types/interfaces/useData';
 
 const ResultList = () => {
   const navigate = useNavigate();
@@ -40,16 +43,16 @@ const ResultList = () => {
   };
 
   //Create Table
-  let tableRows = [];
+  let tableRows: JSX.Element[] = [];
   results
     .sort(
-      (a: { testStarted: string | number | Date }, b: { testStarted: string | number | Date }) =>
+      (a: { testStarted: Date }, b: { testStarted: Date }) =>
         new Date(b.testStarted).getTime() - new Date(a.testStarted).getTime()
     )
     .forEach(() => {
-      let buttonUSB;
-      let buttonSubmit;
-      let buttonView;
+      let buttonUSB: JSX.Element;
+      let buttonSubmit: JSX.Element;
+      let buttonView: JSX.Element;
 
       //button for db submit
       if (results.isSubmitting) {
@@ -86,7 +89,7 @@ const ResultList = () => {
         );
       }
 
-      let cloudBadge;
+      let cloudBadge: JSX.Element;
       if (results.submitted) {
         cloudBadge = (
           <div className="cloudBadge">
@@ -119,7 +122,7 @@ const ResultList = () => {
           );
         } else if (
           !settings.account.testprocedures.find((testmethod) => testmethod.id === results.testmethod) ||
-          settings.account.testprocedures.find((testmethod) => testmethod.id === results.testmethod).showResults ==
+          settings.account.testprocedures.find((testmethod) => testmethod.id === results.testmethod)?.showResults ==
             false
         ) {
           buttonUSB = (
@@ -138,7 +141,7 @@ const ResultList = () => {
         //button for view
         if (
           !settings.account.testprocedures.find((testmethod) => testmethod.id === results.testmethod) ||
-          settings.account.testprocedures.find((testmethod) => testmethod.id === results.testmethod).showResults ==
+          settings.account.testprocedures.find((testmethod) => testmethod.id === results.testmethod)?.showResults ==
             false
         ) {
           buttonView = (
@@ -156,38 +159,41 @@ const ResultList = () => {
       }
 
       //Testmethod name
-      let testMethodName;
+      let testMethodName: string | any;
+      testMethodName = '';
       if (!results.testmethod) {
         results.testmethod = urls.TESTMETHOD; //Covid backwards compatability
       }
       if (settings.account.testprocedures.find((testmethod) => testmethod.id === results.testmethod)) {
         testMethodName =
-          settings.account.testprocedures.find((testmethod) => testmethod.id === results.testmethod)[
+          settings.account.testprocedures.find((testmethod) => testmethod.id === results.testmethod)?.[
             'label' + locale.toUpperCase()
-          ] || settings.account.testprocedures.find((testmethod) => testmethod.id === results.testmethod).name;
+          ] || settings.account.testprocedures.find((testmethod) => testmethod.id === results.testmethod)?.name;
       } else {
         testMethodName = 'unsupported';
       }
 
       tableRows.push(
-        <div className="result" key={`${results.testid}-${index}`}>
-          <div className="testinfo">
-            <h4>{results.testid}</h4>
-            <h4>{testMethodName}</h4>
-            <span className="date">
-              {t('common.started')}: {results.testStarted.toLocaleString()}
-            </span>
-            <span className="date">
-              {t('common.ended')}: {results.testFinished.toLocaleString()}
-            </span>
+        results.map((result: Result, index: number) => (
+          <div className="result" key={`${result.testid}-${index}`}>
+            <div className="testinfo">
+              <h4>{result.testid}</h4>
+              <h4>{testMethodName}</h4>
+              <span className="date">
+                {t('common.started')}: {result.testStarted.toLocaleString()}
+              </span>
+              <span className="date">
+                {t('common.ended')}: {result.testFinished.toLocaleString()}
+              </span>
+            </div>
+            <div className="buttons">
+              {buttonView}
+              {buttonSubmit}
+              {buttonUSB}
+              {cloudBadge}
+            </div>
           </div>
-          <div className="buttons">
-            {buttonView}
-            {buttonSubmit}
-            {buttonUSB}
-            {cloudBadge}
-          </div>
-        </div>
+        ))
       );
     });
 

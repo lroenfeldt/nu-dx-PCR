@@ -1,10 +1,6 @@
 components
 ShutdownNotification.tsx (converted idleTimestamp (string) to number by adding + to idleTimestamp)
 
-hooks
-modified useBackgroundProcesses with toString()
-useResults.ts converted getResults(submitFilter) to a string
-
 utils
 modified parseResults.ts with initial states, converted position and params to number
 modified err in the authenticateToken.ts
@@ -12,23 +8,11 @@ modified err in the authenticateToken.ts
 views/authenticaten 
 modfied index.tsx
 modfied LotDoku.tsx
-BarcodeInput.tsx fix issue newBarcode: any 
+modified ResultList.tsx 
 
 TO DO: 
 
-ShutdownNotification.tsx t function has countdown prop (type of number) in the second argument
-but only object is allowed
-
-check RadioButton.tsx the checked prop of intpu not accepting string only boolean by default
-in Debug.tsx its returing a string wich is causing a error in the RadioButton.tsx
-even if its boolean | string in the interface 
-
-wellCount
-FileManagementUtils string
-Settings.tsx string
-useBackgroundProcesses.tsx string
-useData.tsx number and string
-defaultBarcodes.ts string but converted to a number and back to string
-BarcodeInput.tsx its number
-
 fix useResults.tsx
+fix keyboard any
+fix ITextInput current any
+name conflicts in ViewResults.tsx

@@ -47,7 +47,7 @@ function useBackgroundProcesses() {
       isLidOpen &&
       settings?.account?.autoCloseLidMinutes &&
       settings?.account?.autoCloseLidMinutes > 0 &&
-      settings?.device.wellCount == '96'
+      settings?.device.wellCount == 96
     ) {
       toggleLid(); // toggleLid can both open and close the lid
     }

@@ -25,7 +25,7 @@ const BarcodeInput = () => {
 
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const textInput: ITextInput = useRef(null) as ITextInput;
+  const textInput: ITextInput = useRef(null) as unknown as ITextInput;
 
   const markActive = (id: number) => {
     setActive(id);
@@ -492,21 +492,10 @@ const BarcodeInput = () => {
         oldResult: '',
         alteredResult: false,
         name: '',
-        map: function (
-          arg0: (barcode: IBarcode) =>
-            | IBarcode
-            | {
-                result: string;
-                alteredResult: boolean;
-                barcode: IBarcode;
-                posName: string;
-                oldResult: string;
-                setBarcodes: () => void;
-              }
-        ): unknown {
+        id: 0,
+        map: function (arg0: (barcode: IBarcode) => IBarcode): unknown {
           throw new Error('Function not implemented.');
         },
-        id: 0,
       };
       if (id == null || id === '') {
         return result;
@@ -606,7 +595,7 @@ const BarcodeInput = () => {
                       <ActivateKeyboard
                         onClick={() => {
                           setKeyboardActive(!keyboardActive);
-                          textInput?.current?.setlectionRange(
+                          textInput?.current?.setSelectionRange(
                             textInput.current.value.length,
                             textInput.current.value.length
                           );

@@ -61,7 +61,7 @@ const Debug = () => {
                     value="beta"
                     name="updateType"
                     onChange={handleUpdateTypeChange}
-                    checked={updateType === 'beta' ? 'checked' : ''}
+                    checked={updateType === 'beta' ? true : false}
                   />
                 </>
               }

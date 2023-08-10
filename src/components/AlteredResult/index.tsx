@@ -15,10 +15,10 @@ const AlteredResult = ({ activeBarcode, testmethod, style }: IAlteredResult) => 
           backgroundColor:
             activeBarcode?.result == 'invalid'
               ? 'orange'
-              : hexToRGB(
+              : (hexToRGB(
                   testmethod.results?.find((result) => result.name.includes(activeBarcode?.result))?.color || '',
                   ' 0.9 '
-                ),
+                ) as string),
           ...style,
         }}
       >

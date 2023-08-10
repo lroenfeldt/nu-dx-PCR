@@ -1,35 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { Errors, ProgressBar } from '../components';
+import { useState, useEffect } from 'react';
+import { ProgressBar } from '../components';
 import { useData, useTranslation } from '../hooks';
 import { useNavigate } from 'react-router-dom';
 import functions from '../utils/functions';
 import { Oval } from 'react-loader-spinner';
+import { IError } from '../types/interfaces/interfaces';
+
 const RunTest = () => {
   const navigate = useNavigate();
-  const {
-    demo,
-    testid,
-    errors,
-    settings,
-    setErrors,
-    toggleLid,
-    isNinetySix,
-    selectedMethod,
-    setDeviceStatus,
-    checkForTestResultFile,
-    setCheckForTestResultFile,
-    isLidOpen,
-  } = useData();
-  const testDuration =
-    settings.account.testprocedures.find((procedure) => procedure.id === selectedMethod).durationMinutes * 60;
+  const { demo, testid, errors, settings, setErrors, toggleLid, isNinetySix, selectedMethod } = useData();
   const { t } = useTranslation();
+
+  const testDuration =
+    settings?.account?.testprocedures.find((procedure) => procedure.id === selectedMethod)?.durationMinutes ?? 0 * 60;
+  // providing default value of null or undefined with nullish operator
+  // operator `??` provide a fallback value of `0` if ISettings in undefined or null
+  // Also provide expression `durationMinutes * 60` will always have a defined value.
   const startTime = demo ? 360 : testDuration;
+
   const [remTime, setRemTime] = useState(startTime);
   const [startedAt, setStartedAt] = useState(Math.floor(Date.now() / 1000));
   const finishedAt = startedAt + startTime;
   const [waitingForResults, setWaitingForResults] = useState(false);
   const [resultPresent, setResultPresent] = useState(false);
   const [flapClosed, setFlapClosed] = useState(true);
+
   const showCancel = () => {
     let newErrors = errors.filter((error) => error.type !== 'cancelTest');
     newErrors.push({
@@ -84,7 +79,7 @@ const RunTest = () => {
             if (!window.api.moveResultFile(testid)) {
               console.log('result for test ' + testid + ' could not be moved');
               window.api.logEvents(`Result for test ${testid} could not be moved`, 'logInfos.txt');
-              setErrors((prevErrors) =>
+              setErrors((prevErrors: IError[]) =>
                 prevErrors
                   .filter((err) => err.type != 'moveResults')
                   .concat({
@@ -105,7 +100,7 @@ const RunTest = () => {
 
         if (finishedAt + 60 * 20 < Math.floor(Date.now() / 1000)) {
           setWaitingForResults(false);
-          setErrors((prevErrors) =>
+          setErrors((prevErrors: IError[]) =>
             prevErrors
               .filter((err) => err.type != 'testFailed')
               .concat({
@@ -135,7 +130,7 @@ const RunTest = () => {
       ) : (
         <div>
           <div className="spinnerContainer">
-            <Oval heigth="100" width="100" color="var(--primary)" />
+            <Oval height="100" width="100" color="var(--primary)" />
           </div>
           <h2>{t('runTest.waitingForResult')}...</h2>
         </div>

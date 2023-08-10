@@ -6,7 +6,7 @@ import ChangeResults from '../ChangeResults';
 import { VscGraphLine } from 'react-icons/vsc';
 import { useLocation } from 'react-router-dom';
 import { IResultsFooter } from '../../types/interfaces/interfaces';
-import { Result } from '../../types/interfaces/settings';
+import { ParameterElement, Result } from '../../types/interfaces/settings';
 
 const ResultsFooter = ({ activeBarcode, testmethod, barcodes, locale = 'en', navigate }: IResultsFooter) => {
   const location = useLocation();
@@ -27,7 +27,7 @@ const ResultsFooter = ({ activeBarcode, testmethod, barcodes, locale = 'en', nav
         bottom={0}
         border={''}
         padding={0}
-        children={<h4>{activeBarcode.value} </h4>}
+        children={<h4>{activeBarcode?.value} </h4>}
         overflow={''}
         position={''}
         marginTop={0}
@@ -46,7 +46,7 @@ const ResultsFooter = ({ activeBarcode, testmethod, barcodes, locale = 'en', nav
         column={0}
         zIndex={0}
       />
-      {testmethod.showResults && (
+      {testmethod?.showResults && (
         <div
           style={{
             display: 'flex',
@@ -62,22 +62,23 @@ const ResultsFooter = ({ activeBarcode, testmethod, barcodes, locale = 'en', nav
             align={'center'}
             children={
               <>
-                {barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]?.result == 'invalid'
+                {barcodes.filter((barcode) => barcode.id == activeBarcode?.id)[0]?.result == 'invalid'
                   ? 'invalid'
                   : testmethod.results?.find(
                       (result: Result) =>
-                        result.name.includes(barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]?.result) ||
-                        result.name == barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]?.result
+                        result.name.includes(
+                          barcodes.filter((barcode) => barcode.id == activeBarcode?.id)[0]?.result
+                        ) || result.name == barcodes.filter((barcode) => barcode.id == activeBarcode?.id)[0]?.result
                     )?.['label' + locale?.toUpperCase()] ||
-                    barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]?.result}
+                    barcodes.filter((barcode) => barcode.id == activeBarcode?.id)[0]?.result}
 
                 <AlteredResult
-                  activeBarcode={barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]}
+                  activeBarcode={barcodes.filter((barcode) => barcode.id == activeBarcode?.id)[0]}
                   testmethod={testmethod}
                   style={undefined}
                 />
                 <Checkmark
-                  barcode={barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]}
+                  barcode={barcodes.filter((barcode) => barcode.id == activeBarcode?.id)[0]}
                   style={{
                     right: 0,
                     fontSize: 20,
@@ -128,21 +129,21 @@ const ResultsFooter = ({ activeBarcode, testmethod, barcodes, locale = 'en', nav
         zIndex={0}
         children={
           <>
-            {testmethod.parameters?.map((parameter: { isPrimary: boolean; showCT: boolean; target: string }) => {
+            {testmethod?.parameters?.map((parameter: ParameterElement) => {
               if (parameter.isPrimary && parameter.showCT) {
                 return (
                   <div key={parameter.target.toString()} className="resultBadge ct">
                     CT:{' '}
-                    {activeBarcode.parameters?.[parameter.target]
-                      ? activeBarcode.parameters?.[parameter.target]?.ct
-                      : activeBarcode.parameters?.[parameter.target.toLowerCase()]?.ct}
+                    {activeBarcode?.parameters?.[+parameter.target]
+                      ? activeBarcode?.parameters?.[+parameter.target]?.ct
+                      : activeBarcode?.parameters?.[+parameter.target.toLowerCase()]?.ct}
                   </div>
                 );
               }
             })}
 
-            {testmethod.showCurves && !location.pathname.includes('viewCurves') && (
-              <Button className={'btn-viewCurve'} onClick={() => navigate(`/viewCurves/${activeBarcode.id}`)}>
+            {testmethod?.showCurves && !location.pathname.includes('viewCurves') && (
+              <Button className={'btn-viewCurve'} onClick={() => navigate(`/viewCurves/${activeBarcode?.id}`)}>
                 <VscGraphLine size={45} />
               </Button>
             )}

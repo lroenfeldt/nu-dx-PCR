@@ -1,5 +1,5 @@
 import { IpcMainInvokeEvent } from 'electron';
-import { IDevice, IFile } from '../interfaces/interfaces';
+import { IFile } from '../interfaces/interfaces';
 import * as DeviceUtils from './deviceUtils';
 // Modules to control application life and create native browser window
 const { app, ipcMain } = require('electron');
@@ -68,7 +68,7 @@ export const ipcMainSaveToUSB = () => {
 export const ipcMainGetDeviceInfo = () => {
   ipcMain.handle('getDeviceInfo', async (event: IpcMainInvokeEvent) => {
     try {
-      let hardwareId = await macaddress.one().then((mac: IDevice) => mac);
+      let hardwareId = await macaddress.one().then((mac: any) => mac);
       let serialNumber = ''; //await getSerialNumber();
       let deviceType = DeviceUtils.getDeviceType();
       return { hardwareId, deviceType, serialNumber };

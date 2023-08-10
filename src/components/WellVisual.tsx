@@ -2,8 +2,8 @@ import { TailSpin } from 'react-loader-spinner';
 import { useData } from '../hooks';
 import Checkmark from './Checkmark';
 import { ReactElement, JSXElementConstructor, ReactNode } from 'react';
-import { IParameter, ITestedParameter, IWellVisual } from '../types/interfaces/interfaces';
-import { Result } from '../types/interfaces/settings';
+import { ITestedParameter, IWellVisual } from '../types/interfaces/interfaces';
+import { ParameterElement, Result } from '../types/interfaces/settings';
 
 const WellVisual = ({ barcode, active, markActive, showResults = false, testmethod = null }: IWellVisual) => {
   const { settings, isNinetySix } = useData();
@@ -18,7 +18,7 @@ const WellVisual = ({ barcode, active, markActive, showResults = false, testmeth
     | undefined;
   if (showResults) {
     if (testmethod?.type && testmethod.type === 'Absolute') {
-      testmethod.parameters?.map((parameter: IParameter) => {
+      testmethod.parameters?.map((parameter: ParameterElement) => {
         if (parameter.isPrimary) {
           const targetParameter = barcode.parameters?.[+parameter.target];
           // conveting target into a number to index an array

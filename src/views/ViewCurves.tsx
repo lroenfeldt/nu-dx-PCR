@@ -7,9 +7,9 @@ function ViewCurves() {
   const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
-  const { barcodes, selectedMethod, settings, handleOpenEdit } = useData();
+  const { barcodes, selectedMethod, settings } = useData();
 
-  const barcode = barcodes.find((barcode) => barcode.id === parseInt(id));
+  const barcode = barcodes.find((barcode) => barcode.id === parseInt(id as string));
   const testmethod = settings.account.testprocedures.find((procedure) => procedure.id === selectedMethod);
   return (
     <div>
@@ -20,7 +20,7 @@ function ViewCurves() {
             height: '45vh',
           }}
         >
-          {barcode && <Line barcode={barcode} />}
+          {barcode && <Line barcode={barcode} result={''} />}
         </div>
       </Block>
 
@@ -34,27 +34,24 @@ function ViewCurves() {
           left: '50%',
           transform: 'translateX(-50%)',
         }}
-      >
-        <ButtonArea
-          style={{
-            left: 'auto',
-            right: 'auto',
-            bottom: 'auto',
-            transform: 'none',
-            position: 'relative',
-          }}
-        >
-          <Button onClick={() => window.history.go(-1)}>{t('common.back')}</Button>
-        </ButtonArea>
-        <ResultsFooter
-          locale="en"
-          settings={settings}
-          barcodes={barcodes}
-          navigate={navigate}
-          activeBarcode={barcode}
-          testmethod={testmethod}
-        />
-      </Block>
+        children={
+          <>
+            <ButtonArea
+              children={<Button onClick={() => window.history.go(-1)} children={t('common.back')} />}
+              noborder={false}
+              style={{ left: 'auto', right: 'auto', bottom: 'auto', transform: 'none', position: 'relative' }}
+            />
+            <ResultsFooter
+              locale="en"
+              settings={settings}
+              barcodes={barcodes}
+              navigate={navigate}
+              testmethod={testmethod}
+              activeBarcode={barcode}
+            />
+          </>
+        }
+      />
     </div>
   );
 }

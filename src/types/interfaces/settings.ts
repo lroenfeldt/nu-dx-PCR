@@ -82,16 +82,18 @@ export interface Testprocedure {
     | ParameterElement[]
     | Result[]
     | null[]
-    | string[];
+    | string[]
+    | Function
+    | undefined;
   id: string;
   name: string;
   translate: string;
   protocol: string;
   durationMinutes: number | null;
   additionalAttributes: any[];
-  type: Type;
+  type: Type | null | '';
   parameter: ParameterParameter | null | string;
-  parameters: ParameterElement[];
+  parameters: ParameterElement[] | null;
   resultParameter: null | string;
   labelEN: string;
   labelFR: string;
@@ -101,6 +103,9 @@ export interface Testprocedure {
   organization: string;
   showCurves: boolean;
   showResults: boolean;
+  status: any;
+  setRemTime: Function | undefined;
+  setErrors: Function | undefined;
 }
 
 export interface ParameterParameter {
@@ -119,10 +124,13 @@ export interface ParameterElement {
   isPrimary: boolean;
   showCT: boolean;
   showFL: boolean;
-  threshhold: number;
+  threshhold: string;
   showThreshhold: boolean | null;
   ctWarningMin: number | null;
   ctWarningMax: number | null;
+  curveData: string[];
+  ct: string;
+  [key: string]: any;
 }
 
 export enum Target {
@@ -194,7 +202,7 @@ export interface UserElement {
 
 export interface Device {
   hardwareId: string;
-  wellCount: number | string;
+  wellCount: number;
   serialNumber: string;
 }
 

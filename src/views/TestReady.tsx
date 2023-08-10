@@ -5,19 +5,20 @@ import { Oval } from 'react-loader-spinner';
 import { RiAlertFill } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { useData, useTranslation } from '../hooks';
+import { IError } from '../types/interfaces/interfaces';
+import { Testprocedure } from '../types/interfaces/settings';
+
 const TestReady = () => {
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState('');
 
   const navigate = useNavigate();
   const { t } = useTranslation();
   const {
     demo,
     testid,
-    errors,
     barcodes,
     settings,
-    testDone,
     setTestid,
     setErrors,
     setTestDone,
@@ -34,7 +35,7 @@ const TestReady = () => {
 
   const setupToBackend = useCallback(() => {
     setLoading(true);
-    setErrors((prevErrors) => prevErrors.filter((error) => error.type !== 'startTest'));
+    setErrors((prevErrors: IError[]) => prevErrors.filter((error) => error.type !== 'startTest'));
     setMessage(t('testReady.startTest'));
 
     const testmethod = settings.account.testprocedures.find((procedure) => procedure.id === selectedMethod);
@@ -43,17 +44,20 @@ const TestReady = () => {
     barcodes.forEach((barcode) => {
       if (barcode.value.length >= 1) {
         wellsSetup += `<Well Name="${barcode.posName}" SampleId="${barcode.value}"><Tasks>`;
-        for (let i = 0; i < testmethod.parameters.length; i++) {
-          wellsSetup += `<Task DetectorId="${i + 1}" Type="Unknown" />`;
+        if (testmethod && testmethod.parameters) {
+          // check if testmethod && testmethod.parameters are defined before entering the loop
+          for (let i = 0; i < testmethod.parameters.length; i++) {
+            wellsSetup += `<Task DetectorId="${i + 1}" Type="Unknown" />`;
+          }
         }
         wellsSetup += '</Tasks></Well>\n';
       }
     });
 
-    let xml_output = testmethod.protocol.replace('%%testname%%', testid).replace('%%wells%%', wellsSetup);
+    let xml_output = testmethod?.protocol.replace('%%testname%%', testid as string).replace('%%wells%%', wellsSetup);
 
     if (isNinetySix) {
-      xml_output = xml_output.replace('cy5', 'Cy5');
+      xml_output = xml_output?.replace('cy5', 'Cy5');
     }
 
     console.log('staring test');
@@ -63,7 +67,7 @@ const TestReady = () => {
     if (testStarted === false) {
       console.log('could not start test');
       window.api.logEvents('could not start test', 'logInfos.txt');
-      setErrors((prevErrors) =>
+      setErrors((prevErrors: IError[]) =>
         prevErrors.push({
           type: 'startTest',
           message: t('errors.failtedToStartTest'),
@@ -94,7 +98,7 @@ const TestReady = () => {
     return (
       <div className="TestReady">
         <div className="spinnerContainer">
-          <Oval heigth="100" width="100" color="var(--primary)" />
+          <Oval height="100" width="100" color="var(--primary)" />
         </div>
         <h3>{message}</h3>
       </div>

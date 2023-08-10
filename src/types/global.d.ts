@@ -2,7 +2,7 @@ interface Window {
   api: {
     getConfig: () => ReturnType<typeof getConfig>;
     copyLogos: () => ReturnType<typeof copyLogos>;
-    logEvents: (arg0: string, arg1: string) => ReturnType<typeof logEvents>;
+    logEvents: (arg0: string, arg1?: string) => ReturnType<typeof logEvents>;
     power: (arg0: string | null) => ReturnType<typeof power>;
     exit: () => ReturnType<typeof exit>;
     clearConfig: () => ReturnType<typeof clearConfig>;
@@ -18,6 +18,8 @@ interface Window {
     endLineGene: () => ReturnType<typeof endLineGene>;
     moveResultFile: (arg0) => ReturnType<typeof moveResultFile>;
     editResults: (arg0, arg1) => ReturnType<typeof editResults>;
+    checkResultFile: (arg0) => ReturnType<typeof checkResultFile>;
+    startLineGene: (arg0, arg1, arg2, arg3, arg4) => ReturnType<typeof startLineGene>;
     relaunchApp: () => ReturnType<typeof relaunchApp>;
   };
 }

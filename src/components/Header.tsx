@@ -10,7 +10,7 @@ import Notifications from './Notifications';
 import ArrowBox from './ArrowBox';
 import { Oval } from 'react-loader-spinner';
 import SelectTestResults from './SelectTestResults/SelectTestResults';
-import { IError, IErrorObject } from '../types/interfaces/interfaces';
+import { IError } from '../types/interfaces/interfaces';
 
 const Header = () => {
   const {
@@ -93,7 +93,7 @@ const Header = () => {
 
   const handleOffline = useCallback(async () => {
     if (!dbConnection) {
-      setErrors((prevErrors: IErrorObject) =>
+      setErrors((prevErrors: IError[]) =>
         prevErrors
           .filter((error: IError) => error.type !== 'stillOffline')
           .concat({
@@ -103,7 +103,7 @@ const Header = () => {
       );
     } else {
       setOfflineMode(false);
-      setErrors((prevErrors: IErrorObject[]) => prevErrors.filter((error) => error.type !== 'stillOffline'));
+      setErrors((prevErrors: IError[]) => prevErrors.filter((error) => error.type !== 'stillOffline'));
     }
   }, [dbConnection]);
 

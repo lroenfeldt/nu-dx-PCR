@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, MouseEvent } from 'react';
+import { useRef, useEffect, MouseEvent } from 'react';
 import { useData, useSticky } from '../../hooks';
 import './css/table.css';
 import { ITable } from '../../types/interfaces/interfaces';

@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useData, useResults, useTranslation } from '../hooks';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { IError, IErrorObject, IHideError } from '../types/interfaces/interfaces';
+import { IError, IHideError } from '../types/interfaces/interfaces';
 
 const Errors = () => {
   const { setOfflineMode, reboot, errors, reset, testid, setDeviceStatus, setErrors } = useData();
@@ -12,16 +12,16 @@ const Errors = () => {
 
   const hideError = useCallback(
     ({ type, index, remember }: IHideError) => {
-      if (type) setErrors((prevErrors: IErrorObject[]) => prevErrors.filter((error) => error.type !== type));
+      if (type) setErrors((prevErrors: IError[]) => prevErrors.filter((error) => error.type !== type));
       if (remember) setOfflineMode(true);
       if (index || index === 0)
-        setErrors((prevErrors: IErrorObject[]) => prevErrors.filter((error) => error.index !== index));
+        setErrors((prevErrors: IError[]) => prevErrors.filter((error) => error.index !== index));
     },
     [setErrors, setOfflineMode]
   );
 
   const cancelTest = () => {
-    setErrors((prevErrors: IErrorObject[]) => prevErrors.filter((error) => error.type !== 'cancelTest'));
+    setErrors((prevErrors: IError[]) => prevErrors.filter((error) => error.type !== 'cancelTest'));
     navigate('/selectMethod');
     window.api.endLineGene();
     setDeviceStatus('IDLE');
@@ -152,9 +152,9 @@ const Errors = () => {
                     if (!window.api.moveResultFile(testid)) {
                       console.log('result for test ' + testid + ' could not be moved');
                       window.api.logEvents(`Result for test ${testid} could not be moved`, 'logInfos.txt');
-                      setErrors((prevErrors: IErrorObject) =>
+                      setErrors((prevErrors: IError[]) =>
                         prevErrors
-                          .filter((err: IErrorObject) => err.type !== 'moveResults')
+                          .filter((err: IError) => err.type !== 'moveResults')
                           .concat({
                             type: 'moveResults',
                             message: t('errors.failedToMoveResults'),
