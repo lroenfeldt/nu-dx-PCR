@@ -8,7 +8,7 @@ const { logger } = require('./logger');
 /**
  * Get unsubmitted tests
  * */
-export const ipcMainGetUnsubmitted = () => {
+const ipcMainGetUnsubmitted = () => {
   ipcMain.handle('getUnsubmitted', (event: IpcMainInvokeEvent) => {
     const filePath = path.resolve(app.getPath('userData'), 'runs');
     try {
@@ -60,7 +60,7 @@ export const ipcMainGetUnsubmitted = () => {
 /**
  * Get test results
  * */
-export const ipcMainGetTest = () => {
+const ipcMainGetTest = () => {
   ipcMain.handle('getTests', (event: IpcMainInvokeEvent) => {
     const filePath = path.resolve(app.getPath('userData'), 'runs');
     try {
@@ -196,4 +196,9 @@ export const ipcMainGetTest = () => {
       return false;
     }
   });
+};
+
+module.exports = {
+  ipcMainGetUnsubmitted,
+  ipcMainGetTest,
 };

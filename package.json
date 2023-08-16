@@ -2,13 +2,14 @@
   "name": "nu-dx-pcr",
   "version": "1.0.20",
   "author": "nu:healthcare GmbH",
+  "type": "module",
   "description": "Frontend app to operate BIOER PCR-Cycler and connect to nu:dx cloud platform",
   "repository": {
     "type": "git",
     "url": "https://github.com/lroenfeldt/nu-dx-pcr/"
   },
   "private": true,
-  "main": "public/electron.js",
+  "main": "public/electron.ts",
   "scripts": {
     "version": "npm version patch",
     "start": "vite start",
@@ -44,6 +45,7 @@
     "jsonwebtoken": "^9.0.0",
     "jwt-decode": "^3.1.2",
     "macaddress": "^0.5.3",
+    "moment": "^2.29.4",
     "node-machine-id": "^1.1.12",
     "path": "^0.12.7",
     "qrcode.react": "^3.1.0",

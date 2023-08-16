@@ -1,13 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 const { app, ipcMain } = require('electron');
+const { store } = require('./constants');
 import { IpcMainInvokeEvent } from 'electron';
-import * as Constants from './constants';
 
 /**
  * archive run folder
  */
-export const ipcMainArchiveRun = () => {
+const ipcMainArchiveRun = () => {
   ipcMain.handle('archiveRun', async () => {
     const userDataPath = app.getPath('userData');
     const filepath = path.join(userDataPath, 'runs');
@@ -46,10 +46,10 @@ export const ipcMainArchiveRun = () => {
 /**
  * save config to config.json
  */
-export const ipcMainSaveConfig = () => {
+const ipcMainSaveConfig = () => {
   ipcMain.handle('saveConfig', async (event: IpcMainInvokeEvent, config: Object) => {
     try {
-      Constants.store.set('settings', config);
+      store.set('settings', config);
       return true;
     } catch (err) {
       console.log(err);
@@ -60,7 +60,7 @@ export const ipcMainSaveConfig = () => {
   //reset config.json to defaults
   ipcMain.handle('clearConfig', async (event: IpcMainInvokeEvent) => {
     try {
-      Constants.store.clear();
+      store.clear();
       return true;
     } catch (err) {
       console.log(err);
@@ -76,10 +76,10 @@ function logger(arg0: string, arg1: string) {
 /**
  * save config to config.json
  */
-export const ipcMainConfig = () => {
+const ipcMainConfigs = () => {
   ipcMain.handle('saveConfig', async (event: IpcMainInvokeEvent, config: Object) => {
     try {
-      Constants.store.set('settings', config);
+      store.set('settings', config);
       return true;
     } catch (err) {
       console.log(err);
@@ -92,10 +92,10 @@ export const ipcMainConfig = () => {
 /**
  * reset config.json to defaults
  */
-export const ipcMainClearConfig = () => {
+const ipcMainClearConfig = () => {
   ipcMain.handle('clearConfig', async (event: IpcMainInvokeEvent) => {
     try {
-      Constants.store.clear();
+      store.clear();
       return true;
     } catch (err) {
       console.log(err);
@@ -109,7 +109,7 @@ export const ipcMainClearConfig = () => {
  * Get result file from run directory
  * @returns {object} {resultFile, configFile, testStarted}
  */
-export const ipcMainGetResult = () => {
+const ipcMainGetResult = () => {
   ipcMain.handle('getResult', async (event: IpcMainInvokeEvent, testid: string, done: boolean) => {
     logger(`getResult ${testid}`, 'logInfos.txt');
     let filepath: string;
@@ -145,7 +145,7 @@ export const ipcMainGetResult = () => {
 
     try {
       resultFile = fs.readFileSync(filepath, 'utf-8');
-    } catch (error) {
+    } catch (error: any) {
       console.log('error accessing result file for test' + testid);
       console.log(error);
       logger(`error accessing result file for test ${testid}`, 'logErrors.txt');
@@ -154,11 +154,19 @@ export const ipcMainGetResult = () => {
     }
     try {
       configFile = fs.readFileSync(configPath, 'utf-8');
-    } catch (error) {
+    } catch (error: any) {
       console.log('error accessing config file for test' + testid);
       console.log(error);
       logger(error, 'logErrors.txt');
     }
     return { resultFile, configFile, testStarted, override };
   });
+};
+
+module.exports = {
+  ipcMainArchiveRun,
+  ipcMainSaveConfig,
+  ipcMainConfigs,
+  ipcMainClearConfig,
+  ipcMainGetResult,
 };

@@ -3,12 +3,12 @@ productName: nu:dx PCR
 files:
   - build/**/*
   - node_modules/**/*
-directories: 
+directories:
   buildResources: public
 win:
   target: nsis
-  icon: "icon.png"
-publish: 
+  icon: 'icon.png'
+publish:
   provider: github
   releaseType: release
   private: true

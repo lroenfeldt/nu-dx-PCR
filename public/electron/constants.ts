@@ -5,7 +5,7 @@ const Store = require('electron-store');
  * Default configuration
  *  @type {string}
  */
-export const store: IStore = new Store({
+const store: IStore = new Store({
   defaults: {
     settings: {
       account: {
@@ -55,39 +55,26 @@ export const store: IStore = new Store({
   },
 });
 
-export let mainWindow: {
-  on: (arg0: string, arg1: { (): void; (): void }) => void;
-  focus: () => void;
-  once: (arg0: string, arg1: () => void) => void;
-  setMenuBarVisibility: (arg0: string) => void;
-  show: () => void;
-  loadURL: (arg0: string) => void;
-  webContents: { setDevToolsWebContents: (arg0: string) => void; openDevTools: (arg0: { mode: string }) => void };
-};
+let mainWindow;
 
-export let splash: {
-  webContents: { send: (arg0: string, arg1: string) => void; openDevTools: (arg0: { mode: string }) => void };
-  hide: () => void;
-  loadFile: (arg0: string) => void;
-  center: () => void;
-};
+let splash;
 
-export let lineGenePath: string = '';
+let lineGenePath: string = '';
 
-export const killProcess = (process: string | Object) => {
+const killProcess = (process: string | Object) => {
   spawn('taskkill', ['/f', '/im', process]);
 };
 export function spawn(arg0: string, arg1: (string | Object)[]) {
   throw new Error('Function not implemented.');
 }
 
-export const forceConsole: boolean = false;
+const forceConsole: boolean = false;
 
 /**
  * check installed version of LineGene
  * @returns {string} the version of LineGene
  */
-export const softwareList: ISoftwareList[] = [
+const softwareList: ISoftwareList[] = [
   {
     path: 'C:\\Bioer\\LineGene\\1600\\bin\\LineGene1600.exe',
     returnType: 16,
@@ -109,3 +96,13 @@ export const softwareList: ISoftwareList[] = [
     name: 'LineGene9600',
   },
 ];
+
+module.exports = {
+  store,
+  lineGenePath,
+  killProcess,
+  forceConsole,
+  softwareList,
+  mainWindow,
+  splash,
+};

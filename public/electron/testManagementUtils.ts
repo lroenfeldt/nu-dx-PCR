@@ -1,6 +1,5 @@
 import { IpcMainInvokeEvent } from 'electron';
 import { IFile } from '../interfaces/interfaces';
-import * as DeviceUtils from './deviceUtils';
 // Modules to control application life and create native browser window
 const { app, ipcMain } = require('electron');
 const path = require('path');
@@ -9,12 +8,13 @@ const { autoUpdater } = require('electron-updater');
 const macaddress = require('macaddress');
 const { spawn } = require('./spawn');
 const { logger } = require('./logger');
+const { getDeviceType } = require('./deviceUtils');
 
 /**
  * @returns {boolean}
  * @description Moves a test from the "runs" directory to the "done" directory
  */
-export const ipcMainMoveFiles = () => {
+const ipcMainMoveFiles = () => {
   ipcMain.handle('moveFiles', (event: IpcMainInvokeEvent, testid: string) => {
     if (testid !== 'demo') {
       const sourcePath = path.resolve(app.getPath('userData'), 'runs', testid);
@@ -36,7 +36,7 @@ export const ipcMainMoveFiles = () => {
 /**
  * Save to USB
  */
-export const ipcMainSaveToUSB = () => {
+const ipcMainSaveToUSB = () => {
   ipcMain.handle('saveToUSB', (event: IpcMainInvokeEvent, testid: string, results: string[]) => {
     console.log(results);
     logger(JSON.stringify(results), 'logInfos.txt');
@@ -65,12 +65,12 @@ export const ipcMainSaveToUSB = () => {
  * Get Device Infos
  * @returns {object}  { hardwareId, deviceType, serialNumber }
  * */
-export const ipcMainGetDeviceInfo = () => {
+const ipcMainGetDeviceInfo = () => {
   ipcMain.handle('getDeviceInfo', async (event: IpcMainInvokeEvent) => {
     try {
       let hardwareId = await macaddress.one().then((mac: any) => mac);
       let serialNumber = ''; //await getSerialNumber();
-      let deviceType = DeviceUtils.getDeviceType();
+      let deviceType = getDeviceType();
       return { hardwareId, deviceType, serialNumber };
     } catch (err) {
       console.log(err);
@@ -85,7 +85,7 @@ export const ipcMainGetDeviceInfo = () => {
  * Provide App Version
  * @returns {string}  version
  * */
-export const ipcMainGetVersion = () => {
+const ipcMainGetVersion = () => {
   ipcMain.handle('getVersion', (event: IpcMainInvokeEvent) => {
     return app.getVersion();
   });
@@ -94,7 +94,7 @@ export const ipcMainGetVersion = () => {
 /**
  * Exit App
  * */
-export const ipcMainExit = () => {
+const ipcMainExit = () => {
   ipcMain.handle('exit', (event: IpcMainInvokeEvent) => {
     spawn('taskkill', ['/f', '/im', 'LineGene1600.exe']);
     spawn('taskkill', ['/f', '/im', 'Gene-9660.exe']);
@@ -106,13 +106,13 @@ export const ipcMainExit = () => {
 /**
  * Log Errors or Infos
  * */
-export const ipcMainLogEvents = () => {
+const ipcMainLogEvents = () => {
   ipcMain.handle('log-Events', (event: IpcMainInvokeEvent, message: string, logName: string) =>
     logger(message, logName)
   );
 };
 
-export const ipcMainLaunchUpdates = () => {
+const ipcMainLaunchUpdates = () => {
   ipcMain.handle('launch-updates', (event: IpcMainInvokeEvent) => updater());
 };
 function updater() {
@@ -123,7 +123,7 @@ function updater() {
  * Download the latest version of the app
  * @returns {void}
  * */
-export const ipcMainDownloadApp = () => {
+const ipcMainDownloadApp = () => {
   ipcMain.handle('downloadApp', async (event: IpcMainInvokeEvent) => {
     autoUpdater.checkForUpdates();
     autoUpdater.downloadUpdate();
@@ -133,7 +133,7 @@ export const ipcMainDownloadApp = () => {
 /**
  * Edit test results
  * */
-export const ipcMainEditResults = () => {
+const ipcMainEditResults = () => {
   ipcMain.handle('editResults', async (event: IpcMainInvokeEvent, testid: string, results: string[]) => {
     try {
       let destPath = path.resolve(app.getPath('userData'), 'runs', testid, 'override.json');
@@ -158,4 +158,16 @@ export const ipcMainEditResults = () => {
     }
     return true;
   });
+};
+
+module.exports = {
+  ipcMainMoveFiles,
+  ipcMainSaveToUSB,
+  ipcMainGetDeviceInfo,
+  ipcMainGetVersion,
+  ipcMainExit,
+  ipcMainLogEvents,
+  ipcMainLaunchUpdates,
+  ipcMainDownloadApp,
+  ipcMainEditResults,
 };

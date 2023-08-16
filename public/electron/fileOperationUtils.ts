@@ -8,7 +8,7 @@ const fs = require('fs');
  * delete all override files
  * @returns {void}
  * */
-export const ipcMainDeleteAllOverrides = (): void => {
+const ipcMainDeleteAllOverrides = (): void => {
   ipcMain.handle('deleteAllOverrides', async (event: IpcMainInvokeEvent) => {
     try {
       const destPath = path.resolve(app.getPath('userData'), 'runs');
@@ -30,7 +30,7 @@ export const ipcMainDeleteAllOverrides = (): void => {
  * delete override file
  * @returns {void}
  * */
-export const ipcMainDeleteOverride = (): void => {
+const ipcMainDeleteOverride = (): void => {
   ipcMain.handle('deleteOverride', async (event: IpcMainInvokeEvent, testid: string) => {
     try {
       const destPath = path.resolve(app.getPath('userData'), 'runs', testid, 'override.json');
@@ -52,7 +52,7 @@ export const ipcMainDeleteOverride = (): void => {
  * relaunch app
  * @returns {void}
  * */
-export const ipcMainRelaunchApp = (): void => {
+const ipcMainRelaunchApp = (): void => {
   ipcMain.handle('relaunchApp', async (event: IpcMainInvokeEvent) => {
     app.relaunch();
     app.exit();
@@ -92,4 +92,11 @@ export const ipcMainCopyLogos = () => {
     }
     return true;
   });
+};
+
+module.exports = {
+  ipcMainDeleteAllOverrides,
+  ipcMainDeleteOverride,
+  ipcMainRelaunchApp,
+  ipcMainCopyLogos,
 };

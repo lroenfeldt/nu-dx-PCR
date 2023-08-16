@@ -6,7 +6,6 @@ import { RiAlertFill } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { useData, useTranslation } from '../hooks';
 import { IError } from '../types/interfaces/interfaces';
-import { Testprocedure } from '../types/interfaces/settings';
 
 const TestReady = () => {
   const [loading, setLoading] = useState(false);

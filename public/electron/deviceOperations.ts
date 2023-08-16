@@ -8,7 +8,7 @@ const { SerialPort } = require('serialport');
 const isDev = require('electron-is-dev');
 import { IpcMainEvent, IpcMainInvokeEvent } from 'electron';
 import { IBarcode, ISettings } from '../interfaces/interfaces';
-import * as Constants from './constants';
+const { killProcess, lineGenePath, mainWindow } = require('./constants');
 
 /**
  * Start the test and run LineGene
@@ -25,7 +25,7 @@ let focusInterval: string | number | NodeJS.Timeout | undefined;
  * Reboot the device
  * @returns {Boolean} true if reboot successful
  **/
-export const ipcMainOnPower = () => {
+const ipcMainOnPower = () => {
   ipcMain.on('power', (event: IpcMainEvent, reboot: string | boolean) => {
     if (reboot === 'reboot') {
       shutdown.reboot({ force: true });
@@ -39,7 +39,7 @@ export const ipcMainOnPower = () => {
 /**
  * Define IntervalId for keeping focus
  **/
-export const ipcMainOnStartLineGene = () => {
+const ipcMainOnStartLineGene = () => {
   ipcMain.on(
     'startLineGene',
     (
@@ -78,12 +78,12 @@ export const ipcMainOnStartLineGene = () => {
       spawn('cmd.exe', [
         '/c',
         'start ' +
-          Constants.lineGenePath?.replace('LineGene1600 for research', '"LineGene1600 for research"') +
+          lineGenePath?.replace('LineGene1600 for research', '"LineGene1600 for research"') +
           ' /run ' +
           launchParam,
       ]);
       focusInterval = setInterval(() => {
-        Constants.mainWindow.focus();
+        mainWindow.focus();
       }, 1000);
       event.returnValue = true;
     }
@@ -93,7 +93,7 @@ export const ipcMainOnStartLineGene = () => {
 /**
  * Define IntervalId for keeping focus
  */
-export const ipcMainStartLineGene = () => {
+const ipcMainStartLineGene = () => {
   ipcMain.on(
     'startLineGene',
     (
@@ -132,12 +132,12 @@ export const ipcMainStartLineGene = () => {
       spawn('cmd.exe', [
         '/c',
         'start ' +
-          Constants.lineGenePath?.replace('LineGene1600 for research', '"LineGene1600 for research"') +
+          lineGenePath?.replace('LineGene1600 for research', '"LineGene1600 for research"') +
           ' /run ' +
           launchParam,
       ]);
       focusInterval = setInterval(() => {
-        Constants.mainWindow.focus();
+        mainWindow.focus();
       }, 1000);
       event.returnValue = true;
     }
@@ -147,9 +147,9 @@ export const ipcMainStartLineGene = () => {
 /**
  * Stop the test and kill LineGene
  */
-export const ipcMainEndLineGene = () => {
+const ipcMainEndLineGene = () => {
   ipcMain.on('endLineGene', (event: IpcMainEvent) => {
-    ['Gene-9660.exe', 'LineGene1600.exe', 'PcrServer.exe'].forEach(Constants.killProcess);
+    ['Gene-9660.exe', 'LineGene1600.exe', 'PcrServer.exe'].forEach(killProcess);
     clearInterval(focusInterval);
     event.returnValue = true;
   });
@@ -158,7 +158,7 @@ export const ipcMainEndLineGene = () => {
 /**
  * Open Lid via Serial Port
  * */
-export const ipcMainToggleLid = () => {
+const ipcMainToggleLid = () => {
   ipcMain.handle('toggleLid', (event: IpcMainInvokeEvent) => {
     console.log('Signal to toggle lid received.');
     logger('Signal to toggle lid received.', 'logErrors.txt');
@@ -202,4 +202,12 @@ export const ipcMainToggleLid = () => {
     });
     return true;
   });
+};
+
+module.exports = {
+  ipcMainOnPower,
+  ipcMainOnStartLineGene,
+  ipcMainStartLineGene,
+  ipcMainEndLineGene,
+  ipcMainToggleLid,
 };

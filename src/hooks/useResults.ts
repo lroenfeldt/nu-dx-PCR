@@ -244,7 +244,7 @@ const useResults = (): object => {
       window.api.logEvents(`saveToUSB: ${err}`, 'logErrors.txt');
       setErrors((prevErrors: IError[]) =>
         prevErrors
-          .filter((error: { type: string }) => error.type !== 'submit')
+          .filter((error) => error.type !== 'submit')
           .concat({
             type: 'submit',
             message: t('errors.failedToReadResultData'),
@@ -265,7 +265,7 @@ const useResults = (): object => {
       window.api.logEvents(`saveToUSB: ${error}`, 'logErrors.txt');
       setErrors((prevErrors: IError[]) =>
         prevErrors
-          .filter((error: { type: string }) => error.type !== 'saveToUSB')
+          .filter((error) => error.type !== 'saveToUSB')
           .concat({
             type: 'read',
             message: t('errors.failedToSaveResultData'),

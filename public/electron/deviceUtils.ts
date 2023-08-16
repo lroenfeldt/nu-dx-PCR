@@ -1,10 +1,10 @@
+import { spawn } from './constants';
 const fs = require('fs');
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 const AutoLaunch = require('auto-launch');
-import * as Constants from './constants';
-import { spawn } from './constants';
+const { softwareList, splash, killProcess, forceConsole } = require('./constants');
 
 let lineGenePath: string = '';
 
@@ -12,9 +12,9 @@ let lineGenePath: string = '';
  *  Function getDeviceType
 @returns boolean
  **/
-export const getDeviceType = () => {
-  for (let i = 0; i < Constants.softwareList.length; i++) {
-    const software = Constants.softwareList[i];
+const getDeviceType = () => {
+  for (let i = 0; i < softwareList.length; i++) {
+    const software = softwareList[i];
     try {
       const res = fs.realpathSync(software.path);
       fs.accessSync(res, fs.constants.F_OK);
@@ -32,15 +32,11 @@ export const getDeviceType = () => {
   return false;
 };
 
-function logger(arg0: string, arg1: string) {
-  throw new Error('Function not implemented.');
-}
-
 /**
  * Function createWindow
  * Create and configure the browser window.
  * */
-export function createWindow() {
+function createWindow() {
   let mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
@@ -67,16 +63,16 @@ export function createWindow() {
     mainWindow.setMenuBarVisibility(isDev);
 
     if (isDev) {
-      Constants.splash.webContents.send('updateStatus', 'launching in development mode...');
+      splash.webContents.send('updateStatus', 'launching in development mode...');
       setTimeout(function () {
-        Constants.splash.hide();
+        splash.hide();
         mainWindow.show();
       }, 5000);
     }
   });
 
   mainWindow.on('closed', () => {
-    ['Gene-9660.exe', 'LineGene1600.exe', 'PcrServer.exe'].forEach(Constants.killProcess);
+    ['Gene-9660.exe', 'LineGene1600.exe', 'PcrServer.exe'].forEach(killProcess);
     app.quit();
   });
 
@@ -84,7 +80,7 @@ export function createWindow() {
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
 
   // Open the DevTools.
-  if (isDev || Constants.forceConsole) {
+  if (isDev || forceConsole) {
     const devtools = new BrowserWindow();
     mainWindow.webContents.setDevToolsWebContents(devtools.webContents);
     mainWindow.webContents.openDevTools({ mode: 'detach' });
@@ -100,7 +96,7 @@ export function createWindow() {
  * initialization and is ready to create browser windows.
  * Some APIs can only be used after this event occurs.
  */
-export function createSplash() {
+function createSplash() {
   // Create splash Screen
   let splash = new BrowserWindow({
     width: 500,
@@ -119,7 +115,7 @@ export function createSplash() {
   splash.center();
 
   // Open the DevTools.
-  if (isDev || Constants.forceConsole) {
+  if (isDev || forceConsole) {
     splash.webContents.openDevTools({ mode: 'detach' });
   }
 }
@@ -129,7 +125,7 @@ export function createSplash() {
  * initialization and is ready to create browser windows.
  * Some APIs can only be used after this event occurs.
  */
-export const whenReady = () => {
+const whenReady = () => {
   app.whenReady().then(() => {
     createSplash();
     createWindow();
@@ -161,9 +157,17 @@ export const whenReady = () => {
  * for applications and their menu bar to stay active until the user quits
  * explicitly with Cmd + Q.
  */
-export const on = () => {
+const on = () => {
   app.on('window-all-closed', () => {
-    ['Gene-9660.exe', 'LineGene1600.exe', 'PcrServer.exe'].forEach(Constants.killProcess);
+    ['Gene-9660.exe', 'LineGene1600.exe', 'PcrServer.exe'].forEach(killProcess);
     app.quit();
   });
+};
+
+module.exports = {
+  getDeviceType,
+  createWindow,
+  createSplash,
+  whenReady,
+  on,
 };

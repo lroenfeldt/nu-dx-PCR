@@ -1,48 +1,80 @@
-import * as DeviceUtils from './electron/deviceUtils';
-import * as FileManagementUtils from './electron/fileManagementUtils';
-import * as ResultFileOperations from './electron/resultFileOperations';
-import * as DeviceOperations from './electron/deviceOperations';
-import * as TestResultsUtils from './electron/testResultsUtils';
-import * as TestManagementUtils from './electron/testManagementUtils';
-import * as FileOperationUtils from './electron/fileOperationUtils';
+const { getDeviceType, createWindow, createSplash, whenReady, on } = require('./electron/deviceUtils.ts');
+const {
+  ipcMainResult,
+  ipcMainOnResultfile,
+  ipcMainConfig,
+  ipcMainGetConfig,
+} = require('./electron/fileManagementUtils');
+const {
+  ipcMainArchiveRun,
+  ipcMainSaveConfig,
+  ipcMainConfigs,
+  ipcMainClearConfig,
+  ipcMainGetResult,
+} = require('./electron/resultFileOperations');
+const {
+  ipcMainOnPower,
+  ipcMainOnStartLineGene,
+  ipcMainStartLineGene,
+  ipcMainEndLineGene,
+  ipcMainToggleLid,
+} = require('./electron/deviceOperations');
+const { ipcMainGetUnsubmitted, ipcMainGetTest } = require('./electron/testResultsUtils');
+const {
+  ipcMainMoveFiles,
+  ipcMainSaveToUSB,
+  ipcMainGetDeviceInfo,
+  ipcMainGetVersion,
+  ipcMainExit,
+  ipcMainLogEvents,
+  ipcMainLaunchUpdates,
+  ipcMainDownloadApp,
+  ipcMainEditResults,
+} = require('./electron/testManagementUtils');
+const {
+  ipcMainDeleteAllOverrides,
+  ipcMainDeleteOverride,
+  ipcMainRelaunchApp,
+  ipcMainCopyLogos,
+} = require('./electron/fileOperationUtils');
 
-DeviceUtils.getDeviceType();
-DeviceUtils.createWindow();
-DeviceUtils.createSplash();
-DeviceUtils.whenReady();
-DeviceUtils.on();
+getDeviceType();
+createWindow();
+createSplash();
+whenReady();
+on();
 
-FileManagementUtils.ipcMainResult();
-FileManagementUtils.ipcMainOnResultfile();
-FileManagementUtils.ipcMainConfig();
-FileManagementUtils.ipcMainGetConfig();
+ipcMainResult();
+ipcMainOnResultfile();
+ipcMainConfig();
+ipcMainGetConfig();
 
-ResultFileOperations.ipcMainArchiveRun();
-ResultFileOperations.ipcMainSaveConfig();
-ResultFileOperations.ipcMainConfig();
-ResultFileOperations.ipcMainClearConfig();
-ResultFileOperations.ipcMainGetResult();
+ipcMainArchiveRun();
+ipcMainSaveConfig();
+ipcMainConfigs();
+ipcMainClearConfig();
+ipcMainGetResult();
 
-DeviceOperations.ipcMainOnPower();
-DeviceOperations.ipcMainOnStartLineGene();
-DeviceOperations.ipcMainStartLineGene();
-DeviceOperations.ipcMainEndLineGene();
-DeviceOperations.ipcMainToggleLid();
+ipcMainOnPower();
+ipcMainOnStartLineGene();
+ipcMainStartLineGene();
+ipcMainEndLineGene();
+ipcMainToggleLid();
 
-TestResultsUtils.ipcMainGetUnsubmitted();
-TestResultsUtils.ipcMainGetTest();
+ipcMainGetUnsubmitted();
+ipcMainGetTest();
 
-TestManagementUtils.ipcMainMoveFiles();
-TestManagementUtils.ipcMainSaveToUSB();
-TestManagementUtils.ipcMainGetDeviceInfo();
-TestManagementUtils.ipcMainGetVersion();
-TestManagementUtils.ipcMainExit();
-TestManagementUtils.ipcMainLogEvents();
-TestManagementUtils.ipcMainLaunchUpdates();
-TestManagementUtils.ipcMainDownloadApp();
-TestManagementUtils.ipcMainEditResults();
+ipcMainMoveFiles();
+ipcMainSaveToUSB();
+ipcMainGetDeviceInfo();
+ipcMainGetVersion();
+ipcMainExit();
+ipcMainLogEvents();
+ipcMainLaunchUpdates();
+ipcMainDownloadApp();
+ipcMainEditResults();
 
-FileOperationUtils.ipcMainDeleteAllOverrides();
-FileOperationUtils.ipcMainDeleteOverride();
-FileOperationUtils.ipcMainRelaunchApp();
-FileOperationUtils.ipcMainCopyLogos();
+ipcMainDeleteAllOverrides();
+ipcMainDeleteOverride();
+ipcMainRelaunchApp();
+ipcMainCopyLogos();

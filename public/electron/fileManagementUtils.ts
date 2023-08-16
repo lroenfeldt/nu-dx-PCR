@@ -1,3 +1,5 @@
+import { IpcMainEvent } from 'electron';
+
 const { app, ipcMain } = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
@@ -5,15 +7,13 @@ const fs = require('fs');
 const os = require('os');
 const { logger } = require('./logger');
 const macaddress = require('macaddress');
-import { IpcMainEvent } from 'electron';
-
-import * as DeviceUtils from './deviceUtils';
-import * as Constants from './constants';
+const { getDeviceType } = require('./deviceUtils');
+const { store } = require('./constants');
 
 /**
  * check if result file is present and move to run directory
  */
-export const ipcMainResult = () => {
+const ipcMainResult = () => {
   ipcMain.on('checkResultFile', (event: IpcMainEvent, testid: string) => {
     if (testid === 'demo') {
       event.returnValue = true;
@@ -26,7 +26,7 @@ export const ipcMainResult = () => {
 
     try {
       fs.accessSync(filepath, fs.constants.F_OK);
-    } catch (error) {
+    } catch (error: any) {
       const errorMsg = `Result file "${filepath}" is not present or not readable: ${error.message}`;
       console.error(errorMsg);
       logger(errorMsg, 'logErrors.txt');
@@ -40,7 +40,7 @@ export const ipcMainResult = () => {
       }
 
       event.returnValue = true;
-    } catch (error) {
+    } catch (error: any) {
       const errorMsg = `Result file "${filepath}" could not be moved to "${destpath}" due to error: ${error.message}`;
       console.error(errorMsg);
       logger(errorMsg, 'logErrors.txt');
@@ -52,7 +52,7 @@ export const ipcMainResult = () => {
 /**
  * move resultfile to run directory
  */
-export const ipcMainOnResultfile = () => {
+const ipcMainOnResultfile = () => {
   ipcMain.on('moveResultFile', (event: IpcMainEvent, testid: string) => {
     if (testid === 'demo') {
       event.returnValue = true;
@@ -68,7 +68,7 @@ export const ipcMainOnResultfile = () => {
       console.log(successMsg);
       logger(successMsg, 'logErrors.txt');
       event.returnValue = true;
-    } catch (error) {
+    } catch (error: any) {
       const errorMsg = `Result file "${filepath}" could not be moved to "${destpath}" due to error: ${error.message}`;
       console.error(errorMsg);
       logger(errorMsg, 'logErrors.txt');
@@ -77,10 +77,10 @@ export const ipcMainOnResultfile = () => {
   });
 };
 
-export const ipcMainConfig = () => {
+const ipcMainConfig = () => {
   ipcMain.on('getConfig', async (event: IpcMainEvent) => {
-    let settings = Constants.store.get('settings');
-    let wellCount = DeviceUtils.getDeviceType();
+    let settings = store.get('settings');
+    let wellCount = getDeviceType();
     settings.isDev = isDev;
     settings.version = app.getVersion();
     let hardwareId = await macaddress.one().then((mac: any) => mac);
@@ -93,10 +93,10 @@ export const ipcMainConfig = () => {
 /**
  * fetch config from config.json and hardware
  */
-export const ipcMainGetConfig = () => {
+const ipcMainGetConfig = () => {
   ipcMain.on('getConfig', async (event: IpcMainEvent) => {
-    let settings = Constants.store.get('settings');
-    let wellCount = DeviceUtils.getDeviceType();
+    let settings = store.get('settings');
+    let wellCount = getDeviceType();
     settings.isDev = isDev;
     settings.version = app.getVersion();
     let hardwareId = await macaddress.one().then((mac: any) => mac);
@@ -104,4 +104,11 @@ export const ipcMainGetConfig = () => {
     settings.device = { hardwareId, wellCount, serialNumber };
     event.returnValue = settings;
   });
+};
+
+module.exports = {
+  ipcMainResult,
+  ipcMainOnResultfile,
+  ipcMainConfig,
+  ipcMainGetConfig,
 };

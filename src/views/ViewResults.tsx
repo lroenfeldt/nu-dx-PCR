@@ -19,12 +19,12 @@ import {
   AlteredResult,
   ResultsFooter,
 } from '../components';
-import { IError, IParsedResults } from '../types/interfaces/interfaces';
+import { IBarcode, IError, IParsedResults } from '../types/interfaces/interfaces';
 import { Testprocedure } from '../types/interfaces/settings';
 
 const ViewResults = () => {
   const [active, setActive] = useState(0);
-  const [activeBarcode, setActiveBarcode] = useState({});
+  const [activeBarcode, setActiveBarcode] = useState<IBarcode>();
   const {
     testid,
     barcodes,
@@ -39,7 +39,7 @@ const ViewResults = () => {
 
   const [testmethod, setTestmethod] = useState(null);
   const [testLoaded, setTestLoaded] = useState(false);
-  const { checkUSB, saveToUSB }: any = useResults();
+  const { checkUSB }: any = useResults();
   const navigate = useNavigate();
 
   const { t, locale } = useTranslation();
@@ -158,15 +158,15 @@ const ViewResults = () => {
   if (testLoaded) {
     let result;
     if (testmethod.type && testmethod.type === 'SNP') {
-      result = activeBarcode.result === 'invalid' ? '-' : activeBarcode.result;
+      result = activeBarcode?.result === 'invalid' ? '-' : activeBarcode?.result;
     }
 
     if (testmethod.type && testmethod.type === 'Absolute') {
-      result = testmethod.parameters.map((parameter: { isPrimary: any; target: string }) => {
+      result = testmethod.parameters.map((parameter: { isPrimary: boolean; target: string }) => {
         if (parameter.isPrimary) {
-          return activeBarcode.parameters?.[parameter.target]
+          return activeBarcode?.parameters?.[parameter.target]
             ? activeBarcode.parameters?.[parameter.target]?.ct
-            : activeBarcode.parameters?.[parameter.target.toLowerCase()]?.ct;
+            : activeBarcode?.parameters?.[parameter.target.toLowerCase()]?.ct;
         }
       });
     }
@@ -254,72 +254,78 @@ const ViewResults = () => {
                         : false;
                     }),
                     barcode.result && testmethod.showResults ? (
-                      <Block row gap={4}>
-                        <div
-                          key={barcode.id.toString()}
-                          className="resultBadge-table"
-                          style={{
-                            ...(barcode.alteredResult && { border: '1px solid orange' }),
-                            position:
-                              barcode.alteredResult || barcode.label == 'NTC' || barcode.label == 'TPC'
-                                ? 'relative'
-                                : '',
-                            color:
-                              barcode.result == 'invalid'
-                                ? 'orange'
-                                : testmethod.results.find((result: { name: string | string[] }) =>
+                      <Block
+                        gap={4}
+                        row={0}
+                        children={
+                          <>
+                            <div
+                              key={barcode.id.toString()}
+                              className="resultBadge-table"
+                              style={{
+                                ...(barcode.alteredResult && { border: '1px solid orange' }),
+                                position:
+                                  barcode.alteredResult || barcode.label == 'NTC' || barcode.label == 'TPC'
+                                    ? 'relative'
+                                    : '',
+                                color:
+                                  barcode.result == 'invalid'
+                                    ? 'orange'
+                                    : testmethod.results.find((result: { name: string | string[] }) =>
+                                        result.name.includes(barcode.result)
+                                      )?.color,
+                                border: '1px solid orange',
+                                borderColor:
+                                  barcode.result == 'invalid'
+                                    ? 'orange'
+                                    : testmethod.results.find((result: { name: string | string[] }) =>
+                                        result.name.includes(barcode.result)
+                                      )?.color,
+                                backgroundColor: hexToRGB(
+                                  testmethod.results.find((result: { name: string | string[] }) =>
                                     result.name.includes(barcode.result)
                                   )?.color,
-                            border: '1px solid orange',
-                            borderColor:
-                              barcode.result == 'invalid'
-                                ? 'orange'
+                                  0.1
+                                ),
+                                minWidth: 114,
+                                fontSize: 'small',
+                              }}
+                            >
+                              {barcode.result == 'invalid'
+                                ? 'invalid'
                                 : testmethod.results.find((result: { name: string | string[] }) =>
                                     result.name.includes(barcode.result)
-                                  )?.color,
-                            backgroundColor: hexToRGB(
-                              testmethod.results.find((result: { name: string | string[] }) =>
-                                result.name.includes(barcode.result)
-                              )?.color,
-                              0.1
-                            ),
-                            minWidth: 114,
-                            fontSize: 'small',
-                          }}
-                        >
-                          {barcode.result == 'invalid'
-                            ? 'invalid'
-                            : testmethod.results.find((result: { name: string | string[] }) =>
-                                result.name.includes(barcode.result)
-                              )['label' + locale?.toUpperCase()] || barcode.result.toUpperCase()}
-                          <AlteredResult
-                            activeBarcode={barcode}
-                            testmethod={testmethod}
-                            style={{
-                              right: -1,
-                              top: 0,
-                              bottom: -1,
-                              borderRadius: 4,
-                              borderTopLeftRadius: 0,
-                              borderBottomLeftRadius: 0,
-                              height: '100%',
-                              backgroundColor: undefined,
-                            }}
-                          />
-                          <Checkmark
-                            barcode={barcode}
-                            style={{
-                              top: 20,
-                              right: -9,
-                              width: 20,
-                              height: 20,
-                              color: 'white',
-                            }}
-                            isNinetySix={false}
-                          />
-                        </div>
-                        <ChangeResults activeBarcode={barcode} testmethod={testmethod} isTable={true} />
-                      </Block>
+                                  )['label' + locale?.toUpperCase()] || barcode.result.toUpperCase()}
+                              <AlteredResult
+                                activeBarcode={barcode}
+                                testmethod={testmethod}
+                                style={{
+                                  right: -1,
+                                  top: 0,
+                                  bottom: -1,
+                                  borderRadius: 4,
+                                  borderTopLeftRadius: 0,
+                                  borderBottomLeftRadius: 0,
+                                  height: '100%',
+                                  backgroundColor: undefined,
+                                }}
+                              />
+                              <Checkmark
+                                barcode={barcode}
+                                style={{
+                                  top: 20,
+                                  right: -9,
+                                  width: 20,
+                                  height: 20,
+                                  color: 'white',
+                                }}
+                                isNinetySix={false}
+                              />
+                            </div>
+                            <ChangeResults activeBarcode={barcode} testmethod={testmethod} isTable={true} />
+                          </>
+                        }
+                      />
                     ) : (
                       ''
                     ),

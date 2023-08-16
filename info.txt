@@ -2,7 +2,6 @@ components
 ShutdownNotification.tsx (converted idleTimestamp (string) to number by adding + to idleTimestamp)
 
 utils
-modified parseResults.ts with initial states, converted position and params to number
 modified err in the authenticateToken.ts
 
 views/authenticaten 
@@ -16,3 +15,4 @@ fix useResults.tsx
 fix keyboard any
 fix ITextInput current any
 name conflicts in ViewResults.tsx
+check override prop

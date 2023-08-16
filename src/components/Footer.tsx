@@ -1,15 +1,22 @@
 import { useState, useEffect } from 'react';
 import nuDiagnostics from '../assets/Logos/nu-diagnostics/nu-diagnostics white.png';
-import { useData } from '../hooks';
+import { useData, useTranslation } from '../hooks';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaServer, FaCircle } from 'react-icons/fa';
 import { TbMinusVertical } from 'react-icons/tb';
+import moment from 'moment';
+import 'moment/locale/de';
+import 'moment/locale/fr';
+import { IUseTranslation } from '../types/interfaces/useTranslation';
 
 const Footer = () => {
+  const { locale }: IUseTranslation = useTranslation();
   const { settings, dbConnection } = useData();
   const navigate = useNavigate();
   const location = useLocation();
-  const [stateTime, setStateTime] = useState(new Date().toLocaleString());
+  const [stateTime, setStateTime] = useState(
+    moment().locale(locale).format('LL') + ' ' + moment().locale(locale).format('LTS')
+  );
 
   const logo =
     location.pathname === '/selectMethod' ? (
@@ -21,8 +28,14 @@ const Footer = () => {
     );
 
   useEffect(() => {
-    setInterval(() => setStateTime(new Date().toLocaleString()), 1);
-  }, []);
+    const interval = setInterval(
+      () => setStateTime(moment().locale(locale).format('LL') + ' ' + moment().locale(locale).format('LTS')),
+      1000
+    );
+    return () => {
+      clearInterval(interval);
+    };
+  }, [locale]);
 
   return (
     <div className="Footer">
