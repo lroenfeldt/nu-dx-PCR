@@ -1,0 +1,88 @@
+.overlay {
+  position: fixed;
+  display: block;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: transparent;
+  backdrop-filter: blur(5px);
+  z-index: 2;
+  cursor: pointer;
+}
+.overlay-body {
+  transition: var(--transition)-in-out;
+  display: block;
+  position: absolute;
+  padding: 10px;
+
+  font-size: 50px;
+  color: white;
+  margin: 15% 30% 15% 30%;
+  background-color: #fff;
+  border-radius: 25px;
+  width: 500px;
+  height: 400px;
+  cursor: default;
+  z-index: 30;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid #ccc;
+}
+.overlay-header {
+  display: flex;
+  color: #000;
+  justify-content: center;
+  align-items: flex-start;
+  font-size: 17px;
+}
+.overlay-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px;
+  padding: 20px;
+  height: 275px;
+  overflow-y: scroll;
+}
+.closebtn {
+  background: lightgray;
+  color: #fff;
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  cursor: pointer;
+  height: 40px;
+  width: 40px;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: var(--transition);
+}
+.closebtn:hover {
+  background: var(--secondary);
+}
+.open {
+  display: block;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.positive {
+  background-color: green;
+  color: white;
+}
+
+.negative {
+  background-color: red;
+  color: white;
+}
+
+.invalid {
+  background-color: orange;
+  color: white;
+}

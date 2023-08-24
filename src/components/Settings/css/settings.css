@@ -1,0 +1,25 @@
+.container {
+  background-color: transparent;
+  position: absolute;
+  right: 0px;
+  top: 7vh;
+  position: absolute;
+  display: none;
+}
+
+.top.active {
+  display: block;
+  height: auto;
+  width: auto;
+  margin-top: 10px;
+  margin-right: 42px;
+}
+
+.settingsContent {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  text-align: justify;
+  justify-content: center;
+  width: 100%;
+}

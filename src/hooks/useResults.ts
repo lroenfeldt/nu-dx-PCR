@@ -1,0 +1,521 @@
+import { useData, useTranslation } from '.';
+import axios from 'axios';
+import urls from '../config/settings';
+import { useLocation } from 'react-router-dom';
+import {extractBarcodes, parseResultsDB, parseResultsExport } from '../utils/parseResults';
+import { IConfigFile, ITestProcedure,   } from '../types/interfaces/settings';
+import {  TsaveToUSB,  TgetResults, TsubmitResult, TsubmitAutoControls, IUseResults } from '../types/interfaces/useResults';
+import { IAutoControl, IExtractedBarcodes } from '../types/interfaces/parseResults';
+
+/**
+ * hook to handle all the results related functions
+ * @returns {object} results
+ */
+const useResults = (): IUseResults  => {
+  const {
+    setErrors,
+    settings,
+    setTestDone,
+    submitFilter,
+    currentUser,
+    setUSBPresent,
+    results,
+    setResults,
+    setReading,
+    setSubmitting,
+    setSubmitted,
+    lotNumber,
+  } = useData();
+
+  const location = useLocation();
+  const { t } = useTranslation();
+  const userId = currentUser ? currentUser?.id : '';
+
+  /**
+ * Submit Auto Controls to db
+ * @param props - The properties for submitting auto controls
+ * @returns The parsed results
+ */
+  const submitAutoControls:TsubmitAutoControls = async (
+    barcodes,
+    testid,
+    orderKey,
+    hardwareId,
+    submitControlUrl,
+    fetchControlUrl,
+  )  => {
+   
+    window.api.logEvents(`Arguemnts: ${testid} ${orderKey} ${submitControlUrl} ${fetchControlUrl}`, 'logInfos.txt');
+    //validate input
+    if (!Array.isArray(barcodes)) {
+      throw Error('Invalid barcodes provdided: ' + barcodes);
+    }
+    if (!(testid && orderKey && submitControlUrl && fetchControlUrl)) {
+      throw Error('insufficient arguments');
+    }
+
+    //process barcodes
+    let autoControls: IAutoControl[] = [];
+    let placeholders = ['Placeholder_NTC', 'Placeholder_TPC', 'NTC', 'TPC', 'SC2NTC', 'SC2TPC'];
+    barcodes.forEach((barcode) => {
+      if (placeholders.includes(barcode.value) || barcode.value.indexOf('-R') !== -1) {
+        let dbLabel = barcode.value;
+        const ntcPlaceholders = ['Placeholder_NTC', 'NTC', 'SC2NTC'];
+        const tpcPlaceholders = ['Placeholder_TPC', 'TPC', 'SC2TPC'];
+
+        if (ntcPlaceholders.includes(barcode.value)) {
+          dbLabel = 'NTC';
+        }
+        if (tpcPlaceholders.includes(barcode.value)) {
+          dbLabel = 'TPC';
+        }
+
+        autoControls.push({
+          type: dbLabel,
+          position: barcode.position,
+          run: testid,
+          order: orderKey,
+          device: hardwareId,
+        });
+      }
+    });
+    //check if autocontrols present
+    if (autoControls.length === 0) {
+      
+      return autoControls;
+    }
+
+    //submit to db
+    try {
+      const response = await axios.post(submitControlUrl, autoControls);
+
+      window.api.logEvents(`submitAutoControls response: ${JSON.stringify(response)}`, 'logInfos.txt');
+      const createdSamples = response.data.imported_data[0].save_response;
+
+      window.api.logEvents(`submitAutoControls createdSamples: ${JSON.stringify(createdSamples)}`, 'logInfos.txt');
+      for (let i = 0; i < autoControls.length; i++) {
+        try {
+          const generatedBarcode = await axios.get(`${fetchControlUrl}${createdSamples[i].sample_id}`);
+          autoControls[i].barcode = generatedBarcode.data.sample;
+        } catch (err) {
+          console.log(err);
+          window.api.logEvents(`submitAutoControls error: ${err}`, 'logErrors.txt');
+          throw err;
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      window.api.logEvents(`submitAutoControls error: ${err}`, 'logErrors.txt');
+      throw err;
+    }
+
+    return autoControls;
+  };
+
+  const setSubmittingSingle = (testid: string, isSubmitting: boolean) => {
+    setResults((prevUnsubmittedResults) =>
+      prevUnsubmittedResults.map((result) => {
+        if (result.testid === testid) {
+          let newResult = result;
+          newResult.isSubmitting = isSubmitting;
+          return newResult;
+        } else {
+          return result;
+        }
+      })
+    );
+  };
+  const setWritingSuccess = (testid: string, isSuccess: boolean) => {
+    setResults((prevUnsubmittedResults) =>
+      prevUnsubmittedResults.map((result) => {
+        if (result.testid === testid) {
+          return {
+            ...result,
+            writingSuccess: isSuccess,
+          };
+        } else {
+          return result;
+        }
+      })
+    );
+  };
+
+  const submitAll = () => {
+    setSubmitting(true);
+    const resultList = results.filter((result) => result.submitted === false);
+    let promises: Array<Object> = [];
+    resultList.forEach((result) => {
+      if (result.testid && result.submitted === false) promises.push(submitResult(result.testid, result.submitted));
+    });
+    Promise.all(promises).then(() => {
+      setSubmitting(false);
+    });
+  };
+
+  const saveAllToUSB = () => {
+    results.forEach((result) => {
+      if (result.testid && result.submitted === false)
+      saveToUSB(result.testid, result.submitted);
+    });
+  };
+
+  const checkUSB= async () => {
+    try {
+      setUSBPresent(await window.api.checkUSB());
+    } catch (error) {
+      console.log(error);
+      window.api.logEvents(`checkUSB: ${error}`, 'logErrors.txt');
+    }
+  };
+
+  const setWriting = (testid: string, isWriting: boolean) => {
+    setResults((prevUnsubmittedResults) =>
+      prevUnsubmittedResults.map((result) => {
+        if (result.testid === testid) {
+          
+          return {
+            ...result,
+            isWriting: isWriting,
+          }
+        } else {
+          return result;
+        }
+      })
+    );
+  };
+
+  /**
+   * Save a single result to the USB
+   * @param {string} testid
+   * @param {Boolean} done
+   * @returns {Boolean} true if writing to USB was successful
+   */
+  const saveToUSB:TsaveToUSB = async (testid, done) => {
+    if (location.pathname == '/ResultList') setWriting(testid, true);
+
+    //reset errors
+    setErrors((prevErrors) => prevErrors.filter((error) => error.type !== 'read'));
+
+    //init data
+    let resultFile: string;
+    let testConfig: IConfigFile;
+    let testmethod: ITestProcedure;
+    
+
+    //read result file
+    try {
+     
+      window.api.logEvents(`fetching result files`, 'logErrors.txt');
+
+      let fetchResult = await window.api.getResult(testid, done);
+      const configFile = fetchResult.configFile;
+      resultFile = fetchResult.resultFile;
+      testConfig = JSON.parse(configFile);
+      if (!testConfig.testmethod) {
+        testConfig.testmethod = urls.TESTMETHOD;
+      }
+      testmethod = settings.account.testprocedures.find(
+        (method: { id: string }) => method.id === testConfig.testmethod
+      ) as ITestProcedure;
+    } catch (err) {
+      console.log(err);
+      window.api.logEvents(`saveToUSB: ${err}`, 'logErrors.txt');
+      setErrors((prevErrors) =>
+        prevErrors
+          .filter((error) => error.type !== 'read')
+          .concat({
+            type: 'read',
+            message: t('errors.failedToReadTestData'),
+          })
+      );
+      if (location.pathname == '/ResultList') setWriting(testid, false);
+      return false;
+    }
+
+    //Parse Results
+    console.log('parse results');
+    window.api.logEvents(`parse results`, 'logInfos.txt');
+    let parsedResults: any;
+    try {
+      parsedResults = parseResultsExport(resultFile, testid, testConfig, testmethod, lotNumber);
+    } catch (err) {
+      console.log(err);
+      window.api.logEvents(`saveToUSB: ${err}`, 'logErrors.txt');
+      setErrors((prevErrors) =>
+        prevErrors
+          .filter((error) => error.type !== 'submit')
+          .concat({
+            type: 'submit',
+            message: t('errors.failedToReadResultData'),
+          })
+      );
+      if (location.pathname == '/ResultList') setWriting(testid, false);
+      return false;
+    }
+
+    //Save To USB
+    try {
+      await window.api.saveToUSB(testid, parsedResults);
+      if (location.pathname == '/ResultList') setWriting(testid, false);
+      setWritingSuccess(testid, true);
+      return true;
+    } catch (error) {
+      console.log(error);
+      window.api.logEvents(`saveToUSB: ${error}`, 'logErrors.txt');
+      setErrors((prevErrors) =>
+        prevErrors
+          .filter((error) => error.type !== 'saveToUSB')
+          .concat({
+            type: 'read',
+            message: t('errors.failedToSaveResultData'),
+          })
+      );
+      if (location.pathname == '/ResultList') setWriting(testid, false);
+      return false;
+    }
+
+  };
+
+  const setSubmittingSuccess = (testid: string, isSuccess: boolean) => {
+    setResults((prevUnsubmittedResults) =>
+      prevUnsubmittedResults.map((result) => {
+        if (result.testid === testid) {
+          
+          return {
+            ...result,
+            submittingSuccess: isSuccess,
+          };
+        } else {
+          return result;
+        }
+      })
+    );
+  };
+
+  const getResults:TgetResults = async (filter) => {
+    setReading(true);
+    try {
+      let newResults = await window.api.getTests();
+      if (!newResults) {
+        newResults = [];
+      }
+      if (filter) {
+        newResults = newResults.filter((result: { submitted: boolean }) => !result.submitted);
+      }
+      setResults(newResults);
+    } catch (err) {
+      console.log(err);
+      window.api.logEvents(`getResults: ${err}`, 'logErrors.txt');
+    }
+    setReading(false);
+  };
+
+  /**
+   * Submit a single result to the server
+   * @param {string} testid
+   * @param {Boolean} done
+   * @returns void
+   */
+  const submitResult:TsubmitResult = async (testid, done) => {
+    
+    window.api.logEvents(`attempting submit`, 'logInfos.txt');
+    setSubmitting(true);
+    setSubmittingSingle(testid, true);
+    //reset errors
+    setErrors((prevErrors) => prevErrors.filter((error) => error.type !== 'submit'));
+    //init data & fetch file
+
+    let testConfig: IConfigFile;
+    let barcodes: IExtractedBarcodes[] = []; 
+    let resultFile: string;
+    let orderKey: string;
+    let hardwareId: string;
+    let testStarted: string|Date;
+    let testmethod: ITestProcedure;
+    let override: Record<string, string> | undefined;
+
+    let autoControls: IAutoControl[] | undefined = [];
+    try {
+      
+      window.api.logEvents(`fetching result files`, 'logInfos.txt');
+
+      let fetchResult = await window.api.getResult(testid, done);
+      const configFile = fetchResult.configFile;
+      resultFile = fetchResult.resultFile;
+      testConfig = JSON.parse(configFile);
+      testStarted = fetchResult.testStarted;
+      barcodes = extractBarcodes(resultFile.toString());
+      override = fetchResult.override;
+      if (!testConfig.testmethod) {
+        testConfig.testmethod = urls.TESTMETHOD;
+      }
+      testmethod = settings.account.testprocedures.find((method: ITestProcedure) => method.id === testConfig.testmethod) as ITestProcedure;
+      orderKey = testConfig.account.orderKey;
+      hardwareId = testConfig.device.hardwareId;
+    } catch (err) {
+      
+      window.api.logEvents(`submitResult: ${err}`, 'logErrors.txt');
+      setErrors((prevErrors) =>
+        prevErrors
+          .filter((error) => error.type !== 'read')
+          .concat({
+            type: 'read',
+            message: t('errors.failedToReadTestData'),
+          })
+      );
+      setSubmitting(false);
+      setSubmittingSingle(testid, false);
+      return false;
+    }
+
+    //define urls
+    const submitControlUrl = testConfig.account.customSubmitAutoControlEndpoint
+      ? testConfig.account.customSubmitAutoControlEndpoint
+      : urls.submitControlUrl;
+    const fetchControlUrl = testConfig.account.customFetchAutoControlEndpoint
+      ? testConfig.account.customFetchAutoControlEndpoint
+      : urls.fetchControlUrl;
+    const resultUrl = testConfig.account.customSubmitResultsEndpoint
+      ? testConfig.account.customSubmitResultsEndpoint
+      : urls.resultUrl;
+    
+    //Submit ControlSamples
+    console.log('check for auto controls');
+    window.api.logEvents(`check for auto controls`, 'logInfos.txt');
+    if (settings.account.preregisterControlSamples) {
+      try {
+        autoControls = await submitAutoControls(
+          barcodes,
+          testid,
+          orderKey,
+          hardwareId,
+          submitControlUrl,
+          fetchControlUrl,
+        );
+      } catch (err) {
+        
+        window.api.logEvents(`submitResult: ${err}`, 'logErrors.txt');
+        setErrors((prevErrors) =>
+          prevErrors
+            .filter((error) => error.type !== 'submit')
+            .concat({
+              type: 'submit',
+              message: t('errors.failedToSaveControlSample'),
+            })
+        );
+        setSubmitting(false);
+        setSubmittingSingle(testid, false);
+        return false;
+      }
+    }
+
+    //Parse Results
+    console.log('parse results');
+    window.api.logEvents(`parse results`, 'logInfos.txt');
+    let parsedResults;
+    try {
+      parsedResults = parseResultsDB(
+        testid,
+        resultFile,
+        testmethod,
+        testConfig,
+        autoControls,
+        testStarted,
+        userId,
+        override,
+        lotNumber===null?undefined:lotNumber
+      );
+    } catch (err) {
+      
+      window.api.logEvents(`parseResultsDB failed: ${err}`, 'logErrors.txt');
+      setErrors((prevErrors) =>
+        prevErrors
+          .filter((error) => error.type !== 'submit')
+          .concat({
+            type: 'submit',
+            message: t('errors.failedToReadResultData'),
+          })
+      );
+      setSubmitting(false);
+      setSubmittingSingle(testid, false);
+      return false;
+    }
+
+    //Submit Results
+    console.log('submit to db');
+    window.api.logEvents(`submit to db`, 'logInfos.txt');
+    try {
+      let submitResponse = await axios.post(resultUrl, parsedResults);
+      
+      window.api.logEvents(`submit to db: ${JSON.stringify(submitResponse)}`, 'logInfos.txt');
+      const msg = submitResponse.data.msg;
+      const missing = msg.search('Fehlende Proben');
+      if (missing !== -1) {
+        setErrors((prevErrors) =>
+          prevErrors
+            .filter((error) => error.type !== 'submit')
+            .concat({
+              type: 'submit',
+              message: t('errors.failedToSendSomeResults', {
+                missing: msg.substr(missing),
+              }),
+            })
+        );
+      }
+    } catch (err) {
+      console.log(`submitResponse: ${err}`);
+      window.api.logEvents(`submitResponse: ${err}`, 'logErrors.txt');
+      setErrors((prevErrors) =>
+        prevErrors
+          .filter((error) => error.type !== 'submit')
+          .concat({
+            type: 'submit',
+            message: t('errors.failedToSubmitResults'),
+          })
+      );
+      setSubmitting(false);
+      setSubmittingSingle(testid, false);
+      return false;
+    }
+
+    //Move Result Files if successfull
+
+    window.api.logEvents(`move result file to done directory`, 'logInfos.txt');
+    try {
+      window.api.moveFiles(testid);
+      setSubmittingSingle(testid, false);
+      setSubmittingSuccess(testid, true);
+      setSubmitted(true);
+      setTestDone(true);
+    } catch (err) {
+      console.log(`move result file to done directory: ${err}`);
+      window.api.logEvents(`move result file to done directory: ${err}`, 'logErrors.txt');
+      setErrors((prevErrors) =>
+        prevErrors
+          .filter((error) => error.type !== 'submit')
+          .concat({
+            type: 'submit',
+            message: t('errors.failedToMoveSubmittedFiles'),
+          })
+      );
+      setSubmitting(false);
+      setSubmittingSingle(testid, false);
+    }
+
+    getResults(submitFilter);
+    setSubmitting(false);
+    return true;
+  };
+
+  return {
+    checkUSB,
+    saveToUSB,
+    submitAll,
+    getResults,
+    submitResult,
+    saveAllToUSB,
+    submitAutoControls,
+  };
+};
+
+export default useResults;

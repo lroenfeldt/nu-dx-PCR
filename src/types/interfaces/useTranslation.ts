@@ -1,0 +1,7 @@
+import i18n from 'i18n-js';
+
+export interface IUseTranslation {
+  t: (scope?: i18n.Scope, options?: i18n.TranslateOptions) => string;
+  locale: string;
+  setLocale: (arg0: string) => void;
+}
