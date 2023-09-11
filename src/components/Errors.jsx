@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 const Errors = () => {
   const { setOfflineMode, reboot, errors, reset, testid, setTestid, setDeviceStatus, startTest, setErrors } = useData();
-  const { checkUSB, saveToUSB, submitAll, getResults, submitResult, saveAllToUSB } = useResults();
+  const { submitResult } = useResults();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();

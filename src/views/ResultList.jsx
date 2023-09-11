@@ -14,7 +14,6 @@ const ResultList = () => {
   const navigate = useNavigate();
   const {
     USBPresent,
-    setUSBPresent,
     settings,
     setTestid,
     resetBarcodes,
@@ -22,15 +21,9 @@ const ResultList = () => {
     setTestDone,
     submitFilter,
     setSubmitFilter,
-    currentUser,
     results,
-    setResults,
     reading,
-    setReading,
     submitting,
-    setSubmitting,
-    setErrors,
-    errors,
   } = useData();
   const { checkUSB, saveToUSB, submitAll, getResults, submitResult, saveAllToUSB } = useResults();
   const { t, locale } = useTranslation();

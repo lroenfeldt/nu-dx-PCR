@@ -1,10 +1,9 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const Store = require('electron-store');
 const shutdown = require('electron-shutdown-command');
-const childProcess = require('child_process');
 const isDev = require('electron-is-dev');
 const { SerialPort } = require('serialport');
 const { autoUpdater } = require('electron-updater');
@@ -13,7 +12,9 @@ const os = require('os');
 const macaddress = require('macaddress');
 const { spawn } = require('./spawn');
 const { logger } = require('./logger');
-const { el } = require('date-fns/locale');
+const { createFile } = require('./createFile');
+const { saveLogs } = require('./saveLogs');
+const { deleteLogs } = require('./deleteLogs');
 let mainWindow;
 let splash;
 let lineGenePath;
@@ -218,6 +219,11 @@ app.whenReady().then(() => {
   createWindow();
   spawn('taskkill', ['/f', '/im', 'PcrServer.exe']);
 
+  // improve logging
+  // createFile();
+  // saveLogs();
+  // deleteLogs();
+
   //Launch app on startup
   let autoLaunch = new AutoLaunch({
     name: 'nu:dx PCR',
@@ -246,6 +252,11 @@ app.on('window-all-closed', function () {
   app.quit();
 });
 
+// listening for any console.log from the renderer process
+ipcMain.on('log', function (_event, ...data) {
+  console.log(...data);
+});
+
 /**check if result file is present and move to run directory*/
 ipcMain.on('checkResultFile', (event, testid) => {
   if (testid === 'demo') {
@@ -256,6 +267,7 @@ ipcMain.on('checkResultFile', (event, testid) => {
   const filepath = path.resolve(os.homedir(), 'Documents', `${testid}.csv`);
   const destDir = path.resolve(app.getPath('userData'), 'runs', testid);
   const destpath = path.resolve(destDir, `${testid}.csv`);
+  console.log(destDir);
 
   try {
     fs.accessSync(filepath, fs.constants.F_OK);
@@ -305,32 +317,6 @@ ipcMain.on('moveResultFile', (event, testid) => {
   }
 });
 
-const findAndMoveRunsDir = () => {
-  let filepath = path.resolve(os.homedir(), 'Documents');
-  let destpath = path.resolve(app.getPath('userData'));
-  let files = fs.readdirSync(filepath, { withFileTypes: true });
-
-  files.forEach((file) => {
-    if (file.isDirectory() && file.name == 'runs') {
-      if (!fs.existsSync(path.resolve(destpath, file.name))) {
-        fs.renameSync(path.resolve(filepath, file.name), path.resolve(destpath, file.name));
-      }
-    } else if (file.isDirectory() && file.name == 'nu:dx PCR') {
-      files = fs.readdirSync(path.resolve(filepath, file.name), {
-        withFileTypes: true,
-      });
-
-      files.forEach((file) => {
-        if (file.isDirectory() && file.name == 'runs') {
-          if (!fs.existsSync(path.resolve(destpath, file.name))) {
-            fs.renameSync(path.resolve(filepath, 'nu:dx PCR', file.name), path.resolve(destpath, file.name));
-          }
-        }
-      });
-    }
-  });
-};
-///findAndMoveRunsDir();
 //fetch config from config.json and hardware
 ipcMain.on('getConfig', async (event) => {
   let settings = store.get('settings');

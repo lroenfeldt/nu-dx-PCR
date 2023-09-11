@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useData, useApi, useTranslation } from '../hooks';
 
 export const getPairingCode = () => {
-  const { settings, saveSettings, setErrors, setPairingCode, setLoading, pairingCode } = useData();
+  const { settings, setErrors, setPairingCode, setLoading, pairingCode } = useData();
   const getPairingCodeApi = useApi(pairingApi.pollPairingCode);
   const navigate = useNavigate();
   const { t } = useTranslation();

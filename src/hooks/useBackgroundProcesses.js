@@ -36,12 +36,6 @@ function useBackgroundProcesses() {
     if (settings?.account?.autoSubmitResults && resultList.length > 0) submitAll();
   }, [resultList, settings?.account?.autoSubmitResults]);
 
-  const checkForTestResultFile = useCallback(async () => {
-    if (!testid || deviceStatus === 'IDLE') return;
-    let resultPresent = await window.api.checkResultFile(testid);
-    setIsResultFilePresent(resultPresent);
-  }, [testid, deviceStatus, setIsResultFilePresent]);
-
   const checkForUSB = useCallback(async () => {
     try {
       const usbPresent = await window.api.checkUSB();

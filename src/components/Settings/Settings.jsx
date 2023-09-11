@@ -4,26 +4,17 @@ import ArrowBox from '../ArrowBox';
 import deFlag from '../../assets/images/flags/de.png';
 import enFlag from '../../assets/images/flags/en.png';
 import frFlag from '../../assets/images/flags/fr.png';
-import { GrEject, GrUpdate } from 'react-icons/gr';
+import { GrUpdate } from 'react-icons/gr';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useData, useTranslation } from '../../hooks';
 import Dropdown from '../Dropdown/Dropdown';
 import Switch from '../Switch/Switch';
 import defaultBarcodes from '../../utils/defaultBarcodes';
 import './css/settings.css';
+
 function Settings({ visible }) {
-  const {
-    setBarcodes,
-    saveSettings,
-    settings,
-    setIsModal,
-    setMenuOpen,
-    clearSettings,
-    updateAvailable,
-    setUpdateAvailable,
-    resetBarcodes,
-    reboot,
-  } = useData();
+  const { setBarcodes, saveSettings, settings, setMenuOpen, clearSettings, updateAvailable, setUpdateAvailable } =
+    useData();
 
   const { t, setLocale, locale } = useTranslation();
   const location = useLocation();
@@ -59,13 +50,25 @@ function Settings({ visible }) {
           <div className="settings">
             <div>
               <Dropdown>
-                <div onClick={() => handleLocale('de')}>
+                <div
+                  onClick={() => {
+                    handleLocale('de');
+                  }}
+                >
                   Deutsch <img width={20} height={10} src={deFlag} />
                 </div>
-                <div onClick={() => handleLocale('en')}>
+                <div
+                  onClick={() => {
+                    handleLocale('en');
+                  }}
+                >
                   English <img width={20} height={10} src={enFlag} />
                 </div>
-                <div onClick={() => handleLocale('fr')}>
+                <div
+                  onClick={() => {
+                    handleLocale('fr');
+                  }}
+                >
                   Français <img width={20} height={10} src={frFlag} />
                 </div>
               </Dropdown>

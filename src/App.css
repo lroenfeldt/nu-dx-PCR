@@ -1296,3 +1296,22 @@ label {
   display: block;
   margin-right: 10px;
 }
+
+.state-time-de {
+  display: grid;
+  width: 245px;
+  justify-content: start;
+}
+
+.state-time-en {
+  display: flex;
+  width: 275px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.state-time-fr {
+  display: grid;
+  width: 215px;
+  justify-content: start;
+}

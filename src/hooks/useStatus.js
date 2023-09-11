@@ -4,15 +4,16 @@ import onlineStatus from '../api/onlineStatus';
 
 export const useStatus = () => {
   const onlineStatusApi = useApi(onlineStatus.postStatus);
-  const { saveSettings, settings, deviceStatus, setErrors, setDbConnection, isStatus } = useData();
+  const { saveSettings, settings, deviceStatus, setErrors, setDbConnection, isStatus, errors } = useData();
 
   const ping = useCallback(async () => {
-    console.log(settings.user)
+    console.log(settings.user);
     try {
       const response = await onlineStatusApi.request(settings.device.hardwareId, {
         status: deviceStatus,
         timesStamp: new Date().getTime(),
         cyclerVersion: settings.version,
+        errors,
       });
 
       if (response.ok && response.data.account) {
@@ -39,7 +40,7 @@ export const useStatus = () => {
       console.log(err);
       window.api.logEvents('ping status error:' + JSON.stringify(err), 'logErrors.txt');
     }
-  }, [deviceStatus, settings, onlineStatusApi, isStatus]);
+  }, [deviceStatus, settings, onlineStatusApi, isStatus, errors]);
 
   return { ping };
 };

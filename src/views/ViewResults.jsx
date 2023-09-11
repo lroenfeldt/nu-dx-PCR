@@ -35,6 +35,7 @@ const ViewResults = () => {
     isNinetySix,
     setViewResults,
     setSelectedMethod,
+    results,
   } = useData();
   const [testmethod, setTestmethod] = useState(null);
   const [testLoaded, setTestLoaded] = useState(false);
@@ -192,6 +193,7 @@ const ViewResults = () => {
               </div>
             </Block>
           </div>
+
           {viewResults === 'graph' && (
             <>
               <RackVisualRows markActive={setActive} active={active} testmethod={testmethod} showResults={true} />
@@ -208,6 +210,7 @@ const ViewResults = () => {
           {/* TABLE VIEW */}
           {viewResults === 'table' && (
             <Table
+              // Table head
               th={[
                 'Position',
                 t('common.barcode'),
@@ -319,7 +322,6 @@ const ViewResults = () => {
 
           <ButtonArea>
             <Button onClick={() => window.history.go(-1)}>{t('common.back')}</Button>
-            {/* {USBPresent ?  <button onClick={() => saveToUSB()}>Auf USB Speichern</button> :  <button className='disabled' onClick={() => saveToUSB()}>Auf USB Speichern</button>} */}
           </ButtonArea>
         </div>
       </>

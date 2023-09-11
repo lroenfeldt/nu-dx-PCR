@@ -11,10 +11,6 @@ function Home() {
     <>
       <div className="intro">
         <img src={logo_medium} alt="logo_medium" />
-        {/*<div className="appTitle">
-          <span style={{ fontWeight: '' }}>nu:dx </span>
-          <span style={{ fontWeight: '200' }}>PCR</span>
-        </div>*/}
       </div>
       <div className="Main">
         <Testselection />

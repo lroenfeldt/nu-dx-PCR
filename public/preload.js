@@ -85,4 +85,7 @@ contextBridge.exposeInMainWorld('api', {
   copyLogos: () => {
     return ipcRenderer.invoke('copyLogos');
   },
+  log: (...data) => {
+    return ipcRenderer.send('log', ...data);
+  },
 });

@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useEffect, useState, useMemo } from 're
 import useResults from './useResults';
 import defaultBarcodes from '../utils/defaultBarcodes';
 import { useTranslation } from './useTranslation';
+import axios from 'axios';
 export const DataContext = React.createContext({});
 /**
  * Provides a stateful value for data and a function to update it.
@@ -73,7 +74,6 @@ export function DataProvider({ children }) {
   const handleError = useCallback((type, message) => {
     if (!message) {
     }
-
     setErrors((prevErrors) => prevErrors.filter((error) => error.type !== type).concat({ type, message }));
   }, []);
 

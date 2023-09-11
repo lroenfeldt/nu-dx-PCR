@@ -1,26 +1,14 @@
-import { Block, Errors, Keyboard, Controller, WellVisual, RackVisualRows, ActivateKeyboard } from '../components';
-import React, { useState, useRef, useEffect, useMemo, memo, useCallback } from 'react';
+import { Block, Keyboard, Controller, RackVisualRows, ActivateKeyboard } from '../components';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import urls from '../config/settings';
 import { useNavigate } from 'react-router-dom';
 import { useData, useTranslation } from '../hooks';
 import { IoMdCloseCircle } from 'react-icons/io';
+
 const BarcodeInput = () => {
-  const {
-    demo,
-    reset,
-    errors,
-    reboot,
-    loading,
-    barcodes,
-    settings,
-    toggleLid,
-    setErrors,
-    setLoading,
-    offlineMode,
-    setBarcodes,
-    isNinetySix,
-  } = useData();
+  const { reset, errors, barcodes, settings, toggleLid, setErrors, setLoading, offlineMode, setBarcodes, isNinetySix } =
+    useData();
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -28,7 +16,6 @@ const BarcodeInput = () => {
   const [active, setActive] = useState(isNinetySix ? -11 : 0);
   const [barcodesValid, setBarcodesValid] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
   const checkBarcodeUrl = settings.account.customCheckBarcodesEndpoint
     ? settings.account.customCheckBarcodesEndpoint
     : urls.checkBarcodeUrl;
@@ -98,6 +85,7 @@ const BarcodeInput = () => {
         ...inputs,
         [inputName]: e.target.value,
       });
+
       setBarcodesValid(false);
       setBarcodes((prevBarcodes) => prevBarcodes.map((barcode) => ({ ...barcode, checking: false })));
       let newBarcode = getBarcode(active);
@@ -114,11 +102,13 @@ const BarcodeInput = () => {
         setTimeout(() => {
           checkBarcode(newBarcode);
           setBarcodeCheckTimeout(null);
-        }, 500)
+        }, 1000)
       );
     },
+
     [active, barcodes, barcodeCheckTimeout, setBarcodes, setBarcodeCheckTimeout]
   );
+
   const onKeyPress = useCallback(
     (value) => {
       clearTimeout(barcodeCheckTimeout);
@@ -139,11 +129,12 @@ const BarcodeInput = () => {
         setTimeout(() => {
           checkBarcode(newBarcode);
           setBarcodeCheckTimeout(null);
-        }, 500)
+        }, 1000)
       );
     },
     [active, barcodes, barcodeCheckTimeout, setBarcodes, setBarcodeCheckTimeout]
   );
+
   const checkAll = useCallback(
     async (barcodes) => {
       for (let i = 0; i < barcodes.length; i++) {
@@ -254,17 +245,18 @@ const BarcodeInput = () => {
   const checkBarcode = async (newBarcode) => {
     newBarcode = {
       ...newBarcode,
-      checking: true,
+      checking: true, // trigger loading spinner
       valid: false,
       error: null,
       label: newBarcode.posName,
     };
 
     setBarcodes((prevBarcodes) => prevBarcodes.map((barcode) => (barcode.id === newBarcode.id ? newBarcode : barcode)));
-    setInputs({ ...inputs, [newBarcode.label]: newBarcode.value });
+    setInputs({ ...inputs, [newBarcode.label]: newBarcode.value }); // same value as input field
 
     let isValid = true;
     let validationErr = null;
+    // break check
     if (!settings.account.verifyBarcodes) {
       setBarcodes((prevBarcodes) =>
         prevBarcodes.map((barcode) =>
@@ -273,7 +265,9 @@ const BarcodeInput = () => {
       );
       return;
     }
+
     //Check for control placeholders
+    // feature for testing
     const controlPlaceholders = ['Placeholder_NTC', 'Placeholder_TPC', 'SC2NTC', 'SC2TPC', 'TPC', 'NTC'];
     if (controlPlaceholders.includes(newBarcode.value)) {
       newBarcode = {
@@ -330,7 +324,15 @@ const BarcodeInput = () => {
     }
 
     //Check duplicates
-    barcodes.forEach((barcode, index) => {
+    barcodes.forEach((barcode) => {
+      if (barcode.error && barcode.error.includes(newBarcode.posName)) {
+        const errBarcode = barcodes.find((barcode) => barcode.error && barcode.error.includes(newBarcode.posName));
+        setBarcodes((prevBarcodes) => {
+          return prevBarcodes.map((barcode) =>
+            barcode.id === errBarcode.id ? { ...barcode, error: null, valid: false } : barcode
+          );
+        });
+      }
       if (barcode.value === newBarcode.value && barcode.posName !== newBarcode.posName) {
         isValid = false;
         validationErr = t('errors.barcodeAlreadyUsed', {
@@ -601,7 +603,7 @@ const BarcodeInput = () => {
                     autoFocus
                     type="text"
                     value={getBarcode(active).value || ''}
-                    onChange={(e) => updateBarcode(e)}
+                    onChange={(e) => updateBarcode(e.target.value)}
                     style={{
                       borderTopLeftRadius: 0,
                       borderBottomLeftRadius: 0,
