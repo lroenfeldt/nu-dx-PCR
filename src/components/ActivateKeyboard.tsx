@@ -1,12 +1,13 @@
-import { BsKeyboard } from 'react-icons/bs';
-import { IActivateKeyboard } from '../types/interfaces/interfaces';
+import { IActivateKeyboard } from "../types/interfaces/interfaces";
+import { Button } from ".";
+import Keyboard from "./Icons/Keyboard";
 
 const ActivateKeyboard = ({ onClick }: IActivateKeyboard) => {
-  return (
-    <div className="activateKeyboard">
-      <BsKeyboard size={30} onClick={onClick} />
-    </div>
-  );
+	return (
+		<Button secondary onClick={onClick} width={174} height={64}>
+			<Keyboard />
+		</Button>
+	);
 };
 
 export default ActivateKeyboard;

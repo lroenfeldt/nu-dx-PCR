@@ -3,41 +3,29 @@ import electron from 'vite-plugin-electron'
 import renderer from 'vite-plugin-electron-renderer'
 import react from '@vitejs/plugin-react'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    // React plugin for JSX and other React features
     react(),
+
+    // Electron configurations
     electron([
-      {
-        // Main-Process entry file of the Electron App.
-        entry: 'electron/main.ts',
-        
-      },
-      {
-        // Main-Process entry file of the Electron App.
-        entry: 'electron/logger.ts',
-        
-      },
-      {
-        // Main-Process entry file of the Electron App.
-        entry: 'electron/spawn.ts',
-        
-      },
-      {
-        // Main-Process entry file of the Electron App.
-        entry: 'electron/splash.html',
-        
-      },
+      // Main process configurations
+      { entry: 'electron/main.ts' },
+      { entry: 'electron/logger.ts' },
+      { entry: 'electron/spawn.ts' },
+      
+      // Preload script configuration
       {
         entry: 'electron/preload.ts',
         onstart(options) {
-          // Notify the Renderer-Process to reload the page when the Preload-Scripts build is complete, 
-          // instead of restarting the entire Electron App.
+          // Reload page when preload script build is complete instead of restarting Electron app.
           options.reload()
-        },
-        
-      },
+        }
+      }
     ]),
-    renderer(),
+
+    // Configuration for Electron renderer process
+    renderer()
   ],
 })

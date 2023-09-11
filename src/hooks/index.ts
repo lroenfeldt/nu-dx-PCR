@@ -18,5 +18,7 @@ export {
   DataProvider,
   useCheckConnectivity,
   useBackgroundProcesses,
+ 
 };
 export { useTranslation, TranslationContext, TranslationProvider } from './useTranslation';
+export { useTheme} from '../assets/theme';

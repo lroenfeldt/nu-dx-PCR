@@ -16,7 +16,7 @@ const AlteredResult = ({ activeBarcode, testmethod, style }:IAlteredResult) => {
           backgroundColor:
             activeBarcode?.result == 'invalid'
               ? 'orange'
-              : hexToRGB(testmethod.results.find((result) => result.name.includes(activeBarcode?.result))?.color, 0.9) || 'transparent',
+              : hexToRGB(testmethod.results.find((result) => result.name.includes(activeBarcode?.result))?.color as string, 0.9) || 'transparent',
           ...style,
         }}
       >

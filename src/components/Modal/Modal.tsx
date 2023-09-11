@@ -1,22 +1,28 @@
-import { useData } from '../../hooks';
-import { IChildren } from '../../types/interfaces/interfaces';
-import './css/style.css';
-import { Oval } from 'react-loader-spinner';
+import React, { useEffect, FC } from "react";
+import useModalStyle from "./useModalStyle";
 
-const Modal = ({ children }: IChildren) => {
-  const { isModal } = useData();
-  return (
-    <div className="modal" style={{ display: isModal ? 'block' : 'none' }}>
-      <div className="modal-header"></div>
-      <div className="modal-content">
-        <div className="spinnerContainer">
-          <Oval height="100" width="100" color="var(--primary)" />
-        </div>
-        <>{children}</>
-      </div>
-      <div className="modal-footer"></div>
-    </div>
-  );
+interface ModalProps {
+	children: React.ReactNode;
+	isVisible: boolean;
+	setIsvisible: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const Modal: FC<ModalProps> = ({ children, isVisible, setIsvisible }) => {
+	const styles = useModalStyle();
+	useEffect(() => {
+		var modal = document.getElementById("modal");
+
+		window.onclick = function (event) {
+			if (modal && event.target == modal) {
+				setIsvisible(false);
+			}
+		};
+	}, [isVisible, setIsvisible]);
+
+	return (
+		<div id="modal" style={{ ...styles.modal, display: isVisible ? "flex" : "none" }}>
+			{children}
+		</div>
+	);
 };
 
 export default Modal;

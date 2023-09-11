@@ -1,10 +1,10 @@
-import  { useCallback, useEffect, FC  } from 'react';
+import  { useCallback, useEffect, FC , } from 'react';
 import QRCode from 'qrcode.react';
 import { useApi, useData, useTranslation } from '../hooks';
 import { useNavigate } from 'react-router-dom';
 import pairingCodeApi from '../api/pairingCode';
 
-const Pairing: FC = () =>  {
+const Pairing: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const {  errors, settings, setErrors, pairingCode, saveSettings } = useData();

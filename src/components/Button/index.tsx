@@ -1,159 +1,136 @@
-import React from 'react';
-import './Button.css';
-import { IButtonProps } from '../../types/components';
+import React from "react";
+import useButtonStyle from "./useButtonStyle";
+import { IButtonProps } from "../../types/components";
+import { borders, useTheme } from "../../assets/theme";
 const Button: React.FC<IButtonProps> = (props) => {
-  const {
-    id = 'button',
-    onClick,
-    children,
-    navigation,
-    style,
-    shadow = false,
-    card,
-    center,
-    outlined,
-    overflow,
-    row,
-    safe,
-    keyboard,
-    scroll,
-    color,
-    gradient,
-    primary,
-    secondary,
-    tertiary,
-    black,
-    white,
-    gray,
-    danger,
-    warning,
-    success,
-    info,
-    radius,
-    height,
-    width,
-    margin,
-    marginBottom,
-    marginTop,
-    marginHorizontal,
-    marginVertical,
-    marginRight,
-    marginLeft,
-    padding,
-    paddingBottom,
-    paddingTop,
-    paddingHorizontal,
-    paddingVertical,
-    paddingRight,
-    paddingLeft,
-    justify,
-    align,
-    flex = 1,
-    wrap,
-    blur,
-    intensity,
-    tint,
-    position,
-    disable,
-    right,
-    left,
-    top,
-    bottom,
-    end,
-    start,
-    neumorphism,
-    ...rest
-  } = props;
-  const colors = {
-    primary: 'var(--primary)',
-    secondary: '#CE0808',
-    tertiary: '#E28337',
-    black: '#000',
-    white: '#FFF',
-    gray: '#E0E0E0',
-    danger: '#CE0808',
-    warning: '#E28337',
-    success: '#80C180',
-    info: '#E28337',
-    shadow: '#000000',
-  };
-  const colorIndex = primary
-    ? 'primary'
-    : secondary
-    ? 'secondary'
-    : tertiary
-    ? 'tertiary'
-    : black
-    ? 'black'
-    : white
-    ? 'white'
-    : gray
-    ? 'gray'
-    : danger
-    ? 'danger'
-    : warning
-    ? 'warning'
-    : success
-    ? 'success'
-    : info
-    ? 'info'
-    : null;
-  const buttonColor = colorIndex&&(color || colors?.[colorIndex]);
+	const {
+		id = "button",
+		onClick,
+		children,
+		navigation,
+		style,
+		shadow = false,
+		card,
+		center,
+		outlined,
+		overflow,
+		row,
+		safe,
+		keyboard,
+		scroll,
+		color,
+		gradient,
+		primary,
+		secondary,
+		tertiary,
+		black,
+		white,
+		gray,
+		danger,
+		warning,
+		success,
+		info,
+		radius,
+		height,
+		width,
+		margin,
+		marginBottom,
+		marginTop,
+		marginHorizontal,
+		marginVertical,
+		marginRight,
+		marginLeft,
+		padding,
+		paddingBottom,
+		paddingTop,
+		paddingHorizontal,
+		paddingVertical,
+		paddingRight,
+		paddingLeft,
+		justify,
+		align,
+		flex,
+		wrap,
+		blur,
+		intensity,
+		tint,
+		position,
+		disable,
+		right,
+		left,
+		top,
+		bottom,
+		end,
+		start,
+		neumorphism,
+		disabled,
+		bgColor,
+		rounded,
+		...rest
+	} = props;
+	const { colors } = useTheme();
+	const colorIndex = primary ? "primary" : secondary ? "secondary" : info ? "info" : success ? "success" : warning ? "warning" : white ? "white" : "";
 
-  const buttonStyles = {
-    ...style,
-    // ...(primary && { color: colors.WHITE }),
-    ...(margin !== undefined && { margin }),
-    ...(marginBottom && { marginBottom }),
-    ...(marginTop && { marginTop }),
-    ...(marginHorizontal && { marginHorizontal }),
-    ...(marginVertical && { marginVertical }),
-    ...(marginRight && { marginRight }),
-    ...(marginLeft && { marginLeft }),
-    ...(padding !== undefined && { padding }),
-    ...(paddingBottom && { paddingBottom }),
-    ...(paddingTop && { paddingTop }),
-    ...(paddingHorizontal && { paddingHorizontal }),
-    ...(paddingVertical && { paddingVertical }),
-    ...(paddingRight && { paddingRight }),
-    ...(paddingLeft && { paddingLeft }),
-    ...(radius && { borderRadius: radius }),
-    ...(height && { height }),
-    ...(width && { width }),
-    ...(overflow && { overflow }),
-    ...(flex !== undefined && { display: 'flex', flex }),
-    ...(row && { flexDirection: 'row' }),
-    ...(align && { alignItems: align }),
-    ...(center && { justifyContent: 'center' }),
-    ...(justify && { justifyContent: justify }),
-    ...(wrap && { flexWrap: wrap }),
-    ...(buttonColor && { backgroundColor: buttonColor }),
-    ...(outlined && {
-      borderWidth: 1,
-      // borderColor: buttonColor,
-      backgroundColor: 'transparent',
-    }),
-    ...(position && { position }),
-    ...(right !== undefined && { right }),
-    ...(left !== undefined && { left }),
-    ...(top !== undefined && { top }),
-    ...(bottom !== undefined && { bottom }),
-  } as React.CSSProperties;
-  const buttonClasses = [
-    shadow && 'shadow',
-    card && 'card',
-    safe && 'safe',
-    neumorphism && 'neumorphism',
-    disable && 'disable',
-  ]
-    .filter((el) => typeof el != undefined && el != false)
-    .join(' ');
+	const buttonColor = colorIndex && (color || colors?.[colorIndex].main);
+	const buttonTheme = useButtonStyle();
+	const buttonStyles = {
+		...buttonTheme.button,
+		...style,
+		...(primary && { color: colors.white.main, backgroundColor: colors.primary.main }),
+		...(color && { color: color }),
+		...(!outlined && !secondary && { border: 0 }),
+		...(margin !== undefined && { margin }),
+		...(marginBottom && { marginBottom }),
+		...(marginTop && { marginTop }),
+		...(marginHorizontal && { marginHorizontal }),
+		...(marginVertical && { marginVertical }),
+		...(marginRight && { marginRight }),
+		...(marginLeft && { marginLeft }),
+		...(padding !== undefined && { padding }),
+		...(paddingBottom && { paddingBottom }),
+		...(paddingTop && { paddingTop }),
+		...(paddingHorizontal && { paddingHorizontal }),
+		...(paddingVertical && { paddingVertical }),
+		...(paddingRight && { paddingRight }),
+		...(paddingLeft && { paddingLeft }),
+		...(radius && { borderRadius: radius }),
+		...(height && { height }),
+		...(width && { width }),
+		...(overflow && { overflow }),
+		...(flex && { flex }),
+		...(row && { flexDirection: "row" }),
+		...(align && { alignItems: align }),
+		...(center && { justifyContent: "center" }),
+		...(justify && { justifyContent: justify }),
+		...(wrap && { flexWrap: wrap }),
+		...(buttonColor && { backgroundColor: buttonColor }),
+		...(secondary && { backgroundColor: colors.white.main, color: colors.secondary.main, border: `4px solid ${colors.secondary.main}` }),
+		...(bgColor && { backgroundColor: bgColor }),
+		...(outlined && {
+			border: `${borders.borderWidth.input}px solid ${colors.primary.main}`,
 
-  return (
-    <button className={buttonClasses} style={{ ...buttonStyles }} {...rest} onClick={onClick}>
-      {children}
-    </button>
-  );
+			color: secondary ? colors.secondary.main : colors.primary.main,
+			backgroundColor: "transparent",
+		}),
+		...(position && { position }),
+		...(right !== undefined && { right }),
+		...(left !== undefined && { left }),
+		...(top !== undefined && { top }),
+		...(bottom !== undefined && { bottom }),
+		...(end !== undefined && { end }),
+		...(disabled && { opacity: 0.5 }),
+		...(start !== undefined && { start }),
+		...(rounded && {
+			borderRadius: "100%",
+			padding: 16,
+		}),
+	} as React.CSSProperties;
+
+	return (
+		<button style={{ ...buttonStyles }} {...rest} onClick={onClick}>
+			{children}
+		</button>
+	);
 };
 
 export default Button;

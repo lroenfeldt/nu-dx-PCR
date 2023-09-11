@@ -66,7 +66,7 @@ export interface IBarcode {
   position?: string;
   id: number;
   color?: string;
-  parameters?: IParameter[];
+  parameters?: IParameter;
   value: string;
   label: string;
   checking: boolean;

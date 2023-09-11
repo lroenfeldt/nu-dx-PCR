@@ -6,7 +6,6 @@ import { IUseTranslation } from "../types/interfaces/useTranslation";
 import { IBarcode, IError } from "../types/interfaces/interfaces";
 import { ITestObject } from "../../electron/interfaces/interfaces";
 
-
 export const DataContext = React.createContext({});
 /**
  * Provides a stateful value for data and a function to update it.
@@ -39,7 +38,7 @@ export function DataProvider({ children }: DataProviderProps) {
 	const [currentUser, setCurrentUser] = useState({});
 	const [USBPresent, setUSBPresent] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
-	const [pairingCode, setPairingCode] = useState(null); 
+	const [pairingCode, setPairingCode] = useState(null);
 	const [offlineMode, setOfflineMode] = useState(false);
 	const [openResults, setOpenResults] = useState(false);
 	const [dbConnection, setDbConnection] = useState(true);
@@ -59,6 +58,7 @@ export function DataProvider({ children }: DataProviderProps) {
 	const [paramTrans, setParamTrans] = useState({ CY5: "POC_HEC", ROX: "POC_VIRUS" });
 	const [isResultFilePresent, setIsResultFilePresent] = useState(false);
 	const [failedSubmittingResults, setFailedSubmittingResults] = useState<string[]>([]);
+	const [viewType, setViewType] = useState("sample");
 	/**
 	 * Resets values to default
 	 * @returns {void}
@@ -194,7 +194,6 @@ export function DataProvider({ children }: DataProviderProps) {
 	);
 
 	const toggleLid = useCallback(() => {
-
 		let newErrors = errors.filter((error) => error.type !== "lid");
 		if (deviceStatus == "RUNNING") {
 			newErrors.push({
@@ -204,17 +203,13 @@ export function DataProvider({ children }: DataProviderProps) {
 			return;
 		}
 		if (window.api.toggleLid()) {
-			
 			setIsLidOpen(!isNinetySix ? true : !isLidOpen);
-			
 		} else {
-			
 			let errorType = !isNinetySix ? "errorOpenLid" : isLidOpen ? "errorCloseLid" : "errorOpenLid";
 			newErrors.push({
 				type: "lid",
 				message: t(`default.errors.${errorType}`),
 			});
-			
 		}
 
 		setErrors(newErrors);
@@ -331,6 +326,8 @@ export function DataProvider({ children }: DataProviderProps) {
 			setIsResultFilePresent,
 			failedSubmittingResults,
 			setFailedSubmittingResults,
+			viewType,
+			setViewType,
 		}),
 		[
 			openResults,
@@ -424,6 +421,8 @@ export function DataProvider({ children }: DataProviderProps) {
 			setIsResultFilePresent,
 			failedSubmittingResults,
 			setFailedSubmittingResults,
+			viewType,
+			setViewType,
 		]
 	);
 	return <DataContext.Provider value={contextValue}>{children}</DataContext.Provider>;

@@ -149,4 +149,6 @@ export interface IUseData {
   
   failedSubmittingResults: string[];
   setFailedSubmittingResults: React.Dispatch<React.SetStateAction<string[]>>;
+  viewType: string;
+  setViewType: React.Dispatch<React.SetStateAction<string>>;
 }

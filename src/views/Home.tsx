@@ -1,22 +1,15 @@
-import { useEffect } from 'react';
-import { Testselection } from '../components';
-import { useData } from '../hooks';
-import logo_medium from '../img/nu-dx PCR Logo white.png';
+import { useEffect } from "react";
+import { Block, Testselection } from "../components";
+import { useData, useTranslation } from "../hooks";
+import { Text } from "../components";
+
 function Home() {
-  const { setDeviceStatus } = useData();
-  useEffect(() => {
-    setDeviceStatus('IDLE');
-  }, []);
-  return (
-    <>
-      <div className="intro">
-        <img src={logo_medium} alt="logo_medium" />
-      </div>
-      <div className="Main">
-        <Testselection />
-      </div>
-    </>
-  );
+	const { setDeviceStatus } = useData();
+	const { t } = useTranslation();
+	useEffect(() => {
+		setDeviceStatus("IDLE");
+	}, []);
+	return <Testselection />;
 }
 
 export default Home;

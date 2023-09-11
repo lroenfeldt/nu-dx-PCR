@@ -55,7 +55,13 @@
 		"testName": "Testname",
 		"selectResult": "Wählen Sie ein Ergebnis aus",
 		"resetResult": "Ergebnis zurücksetzen",
-		"deviceTurnOffInfo": "Das Gerät wird automatisch in <strong>%{time}</strong> Sekunden ausgeschaltet"
+		"deviceTurnOffInfo": "Das Gerät wird automatisch in <strong>%{time}</strong> Sekunden ausgeschaltet",
+		"testSelection": "Testauswahl",
+		"minutes": "Minuten",
+		"toTest": "Zum Test",
+		"samples": "Proben",
+		"list": "Liste",
+		"results": "Ergebnisse"
 	},
 	"authentication": {
 		"title": "Authentifizierung",
@@ -64,9 +70,11 @@
 		"currentLot": "Bitte geben Sie die aktuelle Chargennummer ein."
 	},
 	"barcodeInput": {
-		"title": "Barcode eingeben",
-		"instructions": "Bitte scannen Sie zu jeder Position den Barcode der Probe, die sie untersuchen möchten,  oder geben Sie die Probennummer über eine Tastatur ein.",
-		"invalid": "Der eingegebene Barcode ist ungültig."
+		"title": "Proben spezifizieren:",
+		"instructions1": "Bitte scannen sie zu jeder Position den Barcode der Probe.",
+		"instructions2": "Oder klicken sie auf das Tastatur-Icon um die Probe per Tastatur einzugeben.",
+		"invalid": "Der eingegebene Barcode ist ungültig.",
+		"barcode": "Barcode"
 	},
 	"bootup": {
 		"deviceStart": "Das Gerät startet, bitte warten..."
@@ -123,7 +131,7 @@
 		"exportAll": "Alle exportieren"
 	},
 	"viewResults": {
-		"instructions": "Hier sehen Sie zu jeder Position das Ergebnis der Testung. Für genauere Informationen klicken Sie bitte auf die jeweilige Position.",
+		"instructions": "Klicken sie auf die jeweilige Position für ein detaillierteres Informationen.",
 		"instructions2": "Hier sehen Sie zu jeder Position das Ergebnis der Testung.",
 		"viewCurves": "Kurven ansehen"
 	},

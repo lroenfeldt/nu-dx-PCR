@@ -55,7 +55,13 @@
 		"testName": "Nom du test",
 		"selectResult": "Sélectionnez le résultat",
 		"resetResult": "Réinitialiser le résultat",
-		"deviceTurnOffInfo": "L'appareil va automatiquement s'éteindre dans <strong>%{time}</strong> secondes"
+		"deviceTurnOffInfo": "L'appareil va automatiquement s'éteindre dans <strong>%{time}</strong> secondes",
+		"testSelection": "Sélectionnez un test",
+		"minutes": "Minutes",
+		"toTest": "Aller au test",
+		"samples": "Échantillons",
+		"list": "Liste",
+		"results": "Résultats"
 	},
 	"authentication": {
 		"title": "Authentification",
@@ -64,8 +70,10 @@
 		"currentLot": "Veuillez entrer le numéro de lot actuel"
 	},
 	"barcodeInput": {
-		"title": "Barcode Input",
-		"instructions": "Pour chaque article, veuillez scanner le code-barres de l'échantillon que vous souhaitez examiner  ou saisir le numéro de l'échantillon à l'aide d'un clavier."
+		"title": "Spécifier les échantillons:",
+		"instructions1": "Veuillez scanner le code-barres de l'échantillon pour chaque position.",
+		"instructions2": "Ou cliquez sur l'icône du clavier pour saisir l'échantillon au clavier.",
+		"barcode": "Code barre"
 	},
 	"bootup": {
 		"deviceStart": "L'appareil démarre, veuillez patienter..."
@@ -121,7 +129,7 @@
 		"exportAll": "Tout Exporter"
 	},
 	"viewResults": {
-		"instructions": "Ici vous pouvez voir le résultat du test pour chaque position. Pour plus d'informations, veuillez cliquer sur la position respective.",
+		"instructions": "Cliquez sur la position correspondante pour obtenir des informations plus détaillées.",
 		"instructions2": "Ici vous pouvez voir le résultat du test pour chaque position.",
 		"viewCurves": "Voir les courbes"
 	},

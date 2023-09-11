@@ -1,120 +1,97 @@
-import React from 'react';
-import Block from '../Block';
-import Button from '../Button';
-import Checkmark from '../Checkmark';
-import AlteredResult from '../AlteredResult';
-import ChangeResults from '../ChangeResults';
-import { VscGraphLine } from 'react-icons/vsc';
-import { useLocation } from 'react-router-dom';
-import { ISettings, ITestProcedure } from '../../types/interfaces/settings';
-import { IBarcode } from '../../types/interfaces/interfaces';
+import React from "react";
+import Block from "../Block";
+import Button from "../Button";
+import { useLocation } from "react-router-dom";
+import { ISettings, ITestProcedure } from "../../types/interfaces/settings";
+import { IBarcode } from "../../types/interfaces/interfaces";
+import { Graph, Text } from "..";
+import { useTheme } from "../../assets/theme/ThemeContext";
 
 interface ResultsFooterProps {
-  activeBarcode: IBarcode; 
-  testmethod: ITestProcedure;   
-  settings: ISettings;      
-  barcodes: IBarcode[];    
-  locale?: string;
-  navigate: (path: string) => void;
+	activeBarcode: IBarcode;
+	testmethod: ITestProcedure;
+	settings: ISettings;
+	barcodes: IBarcode[];
+	locale?: string;
+	navigate: (path: string) => void;
 }
 
-const ResultsFooter: React.FC<ResultsFooterProps> = ({
-  activeBarcode,
-  testmethod,
-  settings,
-  barcodes,
-  locale = 'en',
-  navigate,
-}) => {
-  const location = useLocation();
-  return (
-    <div className={`resultContainer`}>
-      <Block white height={40} width={170} radius={5} center align={'center'} shadow>
-        <h4>{activeBarcode.value} </h4>
-      </Block>
-      {testmethod.showResults && (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            position: 'relative',
-            bottom: 'auto',
-            left: 'auto',
-            right: 'auto',
-            overflow: 'visible',
-          }}
-        >
-          <Button
-            style={{
-              width: 125,
-              padding: 14,
-              fontSize: 16,
-              ...(barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]?.result?.length > 9 && {
-                minWidth: 12 * barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]?.result?.length,
-              }),
-              transition: '.3s',
-              borderRadius: !settings.account.changeResults ? 30 : '30px 0px 0px 30px',
-              position: 'relative',
-              backgroundColor:
-                barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]?.result == 'invalid'
-                  ? 'orange'
-                  : testmethod.results.find((result) =>
-                      result.name.includes(barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]?.result)
-                    )?.color,
-              color: '#fff',
-              borderWidth: 0,
-              cursor: !settings.account.changeResults ? 'auto' : 'pointer',
-              justifyContent: 'center',
-            }}
-          >
-            {barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]?.result == 'invalid'
-              ? 'invalid'
-              : testmethod.results.find(
-                  (result) =>
-                    result.name.includes(barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]?.result) ||
-                    result.name == barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]?.result
-                )?.['label' + locale?.toUpperCase()] ||
-                barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]?.result}
+const ResultsFooter: React.FC<ResultsFooterProps> = ({ activeBarcode, testmethod, settings, barcodes, locale = "en", navigate }) => {
+	const location = useLocation();
+	const { colors } = useTheme();
 
-            <AlteredResult
-              activeBarcode={barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]}
-              testmethod={testmethod}
-            />
-            <Checkmark
-              barcode={barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]}
-              style={{
-                right: 0,
-                fontSize: 20,
-                maxWidth: 50,
-              }}
-            />
-          </Button>
-          <ChangeResults activeBarcode={activeBarcode} testmethod={testmethod} />
-        </div>
-      )}
-      <Block justify="space-between" gap={20}>
-        {testmethod.parameters.map((parameter) => {
-          if (parameter.isPrimary && parameter.showCT) {
-            const {target} :{target:any} = parameter;
-            return (
-              <div key={parameter.target.toString()} className="resultBadge ct">
-                CT:{' '}
-                {activeBarcode.parameters?.[target]
-                  ? activeBarcode.parameters?.[target]?.ct
-                  : activeBarcode.parameters?.[target.toLowerCase()]?.ct}
-              </div>
-            );
-          }
-        })}
+	const currentBarcode = barcodes.find((barcode) => barcode.id === activeBarcode.id);
+	const currentResult = currentBarcode?.result as string;
+	const resultColor =
+		currentResult === "invalid"
+			? "orange"
+			: testmethod.results.find((result) => result.name.includes(currentResult) || result.name === currentResult)?.color;
 
-        {testmethod.showCurves && !location.pathname.includes('viewCurves') && (
-          <Button className="btn-viewCurve" onClick={() => navigate(`/viewCurves/${activeBarcode.id}`)}>
-            <VscGraphLine size={45} />
-          </Button>
-        )}
-      </Block>
-    </div>
-  );
+	const resultPrefix = currentResult === "positive" ? "+" : currentResult === "negative" ? "-" : "";
+	const buttonText = `${resultPrefix} ${
+		currentResult === "invalid"
+			? "invalid"
+			: testmethod.results.find((result) => result.name.includes(currentResult) || result.name === currentResult)?.["label" + locale.toUpperCase()] ||
+			  currentResult
+	}`;
+
+	return (
+		<Block inlineFlex gap={44} align="flex-end">
+			<Block flex column gap={8}>
+				<Text p>Barcode</Text>
+				<Text label>{activeBarcode.value}</Text>
+			</Block>
+			<Block flex column gap={8}>
+				<Text p>CT-N-Gene</Text>
+				<Text label>
+					{testmethod.parameters.map(
+						(parameter) =>
+							parameter.isPrimary &&
+							parameter.showCT &&
+							(activeBarcode.parameters?.[parameter.target]?.ct || activeBarcode.parameters?.[parameter.target.toLowerCase()]?.ct)
+					)}
+				</Text>
+			</Block>
+			<Block flex column gap={4} align="flex-start">
+				<Text p>Ergebnis</Text>
+				{testmethod.showResults && (
+					<Block>
+						<Button
+							style={{
+								padding: "12px 16px",
+								height: "44px",
+								borderRadius: "4px",
+								minWidth: currentResult && currentResult.length > 9 ? 12 * currentResult.length : undefined,
+								transition: ".3s",
+								position: "relative",
+								backgroundColor: resultColor,
+								color: "#fff",
+								borderWidth: 0,
+								cursor: !settings.account.changeResults ? "auto" : "pointer",
+							}}>
+							{buttonText}
+						</Button>
+					</Block>
+				)}
+			</Block>
+			{testmethod.showCurves && !location.pathname.includes("viewCurves") && (
+				<Button
+					onClick={() => navigate(`/viewCurves/${activeBarcode.id}`)}
+					flex
+					row
+					height={64}
+					center
+					align="center"
+					gap={8}
+					bgColor={colors.secondary.main}>
+					<Graph />
+					<Text bold white>
+						Graph
+					</Text>
+				</Button>
+			)}
+		</Block>
+	);
 };
 
 export default ResultsFooter;

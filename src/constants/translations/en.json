@@ -55,7 +55,13 @@
 		"testName": "Test Name",
 		"selectResult": "Select Result",
 		"resetResult": "Reset Result",
-		"deviceTurnOffInfo": "The device will automatically turn off in <strong>%{time}</strong> seconds."
+		"deviceTurnOffInfo": "The device will automatically turn off in <strong>%{time}</strong> seconds.",
+		"testSelection": "Test Selection",
+		"minutes": "Minutes",
+		"toTest": "To Test",
+		"samples": "Samples",
+		"list": "List",
+		"results": "Results"
 	},
 	"authentication": {
 		"title": "Authentication",
@@ -64,8 +70,10 @@
 		"currentLot": "Please give the current lot number."
 	},
 	"barcodeInput": {
-		"title": "Barcode Input",
-		"instructions": "For each position, please scan the barcode of the sample you would like to analyse or enter the sample number using a keyboard."
+		"title": "Specify samples:",
+		"instructions1": "Please scan the barcode of the sample for each position.",
+		"instructions2": "Or click on the keyboard icon to enter the sample by keyboard.",
+		"barcode": "Barcode"
 	},
 	"bootup": {
 		"deviceStart": "The device is starting, please wait..."
@@ -121,7 +129,7 @@
 		"exportAll": "Export all"
 	},
 	"viewResults": {
-		"instructions": "Here you can see the testresult for each sample. For more detailed information, please click on the respective position.",
+		"instructions": "Click on the respective position for more detailed information.",
 		"instructions2": "Here you can see the testresult for each sample.",
 		"viewCurves": "view curves"
 	},

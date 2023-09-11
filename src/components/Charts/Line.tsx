@@ -1,4 +1,4 @@
-import  { FC } from 'react';
+import React from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,22 +8,18 @@ import {
   Title,
   Tooltip,
   Legend,
-  
 } from 'chart.js';
 import { Line as LineChart } from 'react-chartjs-2';
 import { useData } from '../../hooks';
-import { IBarcode } from '../../types/interfaces/interfaces';
-
+import {  ITestProcedure } from '../../types/interfaces/settings';
+import { ILineProps } from '../../types/components';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const Line: FC<IBarcode> = ({ barcode }) => {
+const Line: React.FC<ILineProps> = ({ barcode }) => {
   const { selectedMethod, settings } = useData();
-  const testMethod = selectedMethod 
-  ? settings.account.testprocedures.find((method) => method.id === selectedMethod) 
-  : undefined;
+  const testMethod = settings.account.testprocedures.find((method) => method.id === selectedMethod) as ITestProcedure;
+  const { parameters } = testMethod; 
 
-const parameters = testMethod?.parameters || [];
- 
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -56,16 +52,20 @@ const parameters = testMethod?.parameters || [];
     },
     scales: {
       y: {
+        type: 'linear' as 'linear',
         grid: {
           zeroLineColor: 'transparent',
-          drawBorder: false,
+          drawBorder: true,
+          drawTicks: true,
+          drawOnChartArea: true,
         },
         ticks: {
           maxTicksLimit: 7,
         },
       },
       x: {
-        display: 1,
+        type: 'linear' as 'linear',
+        display: true,
         ticks: {
           display: true,
         },
@@ -80,10 +80,11 @@ const parameters = testMethod?.parameters || [];
     27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
   ];
 
-  let datasets= [];
+  let datasets = [];
 
-  for (let param in parameters) {
-    let parameter = parameters[param];
+  for (let param in barcode.parameters) {
+    
+    let parameter = barcode.parameters[param];
     let dataset = {
       label: parameters.find((p) => p.target == param.toUpperCase())?.label,
       data: parameter.curveData,
