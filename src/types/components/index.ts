@@ -1,67 +1,86 @@
 import React, { ReactNode, CSSProperties, ButtonHTMLAttributes  } from 'react';
 import { IAccountUser } from '../interfaces/settings';
+import { IBarcode,ITestMethod } from '../interfaces/interfaces';
 
-type ColorsType = 'primary' | 'secondary' | 'tertiary' | 'black' | 'white' | 'gray' | 'danger' | 'warning' | 'success' | 'info';
 
-export type TBlockProps = {
-  row?: boolean,
-  top?: number | string,
-  end?: boolean,
-  gray?: boolean,
-  info?: boolean,
-  wrap?: boolean,
-  blur?: number | string,
-  tint?: boolean,
-  left?: number | string,
-  style?: CSSProperties,
-  color?: string,
-  black?: boolean,
-  white?: boolean,
-  width?: string | number,
-  align?: string,
-  right?: number | string,
-  start?: boolean,
-  shadow?: boolean,
-  center?: boolean,
-  scroll?: boolean,
-  danger?: boolean,
-  radius?: number | string,
-  height?: string | number,
-  margin?: number | string,
-  bottom?: number | string,
-  border?: string,
-  primary?: boolean,
-  warning?: boolean,
-  success?: boolean,
-  padding?: number | string,
-  justify?: string,
-  children?: ReactNode,
-  outlined?: boolean,
-  overflow?: 'visible' | 'hidden' | 'scroll' | 'auto',
-  tertiary?: boolean,
-  flex?: number | string,
-  position?: 'absolute' | 'relative' | 'fixed' | 'static' | 'sticky',
-  secondary?: boolean,
-  marginTop?: number | string,
-  intensity?: number | string,
-  marginLeft?: number | string,
-  paddingTop?: number | string,
-  marginRight?: number | string,
-  paddingLeft?: number | string,
-  borderColor?: string,
-  marginBottom?: number | string,
-  paddingRight?: number | string,
-  paddingBottom?: number | string,
-  marginVertical?: number | string,
-  paddingVertical?: number | string,
-  marginHorizontal?: number | string,
-  paddingHorizontal?: number | string,
-  column?: boolean,
-  transition?: string,
-  gap?: number | string,
-  zIndex?: number | string,
-  [key: string]: any
-};
+
+
+export interface TBlockProps {
+  row?: boolean;
+  top?: any;
+  end?: boolean;
+  grey?: boolean;
+  info?: boolean;
+  wrap?: boolean;
+  blur?: number;
+  tint?: boolean;
+  left?: any;
+  style?: CSSProperties;
+  color?: string;
+  black?: boolean;
+  white?: boolean;
+  width?: string | number;
+  align?: string;
+  right?: any;
+  start?: boolean;
+  shadow?: boolean;
+  card?: boolean;
+  center?: boolean;
+  scroll?: boolean;
+  error?: boolean;
+  radius?: string | number;
+  height?: string | number;
+  margin?: string | number;
+  bottom?: any;
+  border?: string;
+  primary?: boolean;
+  warning?: boolean;
+  success?: boolean;
+  padding?: string | number;
+  justify?: string;
+  children?: ReactNode;
+  outlined?: boolean;
+  overflow?: string;
+  flex?: boolean;
+  position?: string;
+  secondary?: boolean;
+  marginTop?: string | number;
+  intensity?: number;
+  marginLeft?: string | number;
+  paddingTop?: string | number;
+  marginRight?: string | number;
+  paddingLeft?: string | number;
+  borderColor?: string;
+  marginBottom?: string | number;
+  paddingRight?: string | number;
+  paddingBottom?: string | number;
+  marginVertical?: string | number;
+  paddingVertical?: string | number;
+  marginHorizontal?: string | number;
+  paddingHorizontal?: string | number;
+  borderTop?: string | number;
+  borderLeft?: string | number;
+  borderRight?: string | number;
+  borderBottom?: string | number;
+  column?: boolean;
+  transition?: string;
+  gap?: string | number;
+  zIndex?: number;
+  bgColor?: string;
+  inlineFlex?: boolean;
+  flexShrink?: number;
+  cursor?: boolean;
+  opacity?: number;
+  transform?: string;
+  scrollX?: boolean;
+  scrollY?: boolean;
+  alignSelf?: string;
+  transparency?: Boolean;
+  secGrad?: Boolean;
+  priGrad?: Boolean;
+  [key: string]: any;
+}
+
 
 export type InputsType = { [key: string]: string };
 
@@ -103,13 +122,16 @@ export interface IKeyboard {
   clear: boolean;
   visible: boolean;
   inputs: InputsType;
-  onChange?: ((input: string, e?: MouseEvent | undefined) => string) | undefined | ((value: string) => void);
+  onChange?: ((input: string) => string) | undefined | ((value: string) => void);
   setClear: React.Dispatch<React.SetStateAction<boolean>>;
   setInputs: React.Dispatch<React.SetStateAction<InputsType>>;
   inputName: string;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isNumeric?: boolean;
-  inputValue: string | boolean | null;
+  inputValue?: string | boolean | null;
+  barcode?: IBarcode;
+  onPrev?: () => void;
+  onNext?: () => void;
 }
 
 export interface IHideErrorProps {
@@ -161,7 +183,7 @@ export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   paddingLeft?: number | string;
   justify?: string;
   align?: string;
-  flex?: number;
+  flex?: boolean;
   wrap?: string;
   blur?: boolean;
   intensity?: boolean;
@@ -174,8 +196,22 @@ export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   bottom?: number;
   end?: boolean;
   start?: boolean;
+  bgColor?: string;
   neumorphism?: boolean;
   style?: CSSProperties;
   children?: ReactNode;
   [key: string]: any;
+}
+
+export interface ILineProps {
+  barcode: IBarcode;
+}
+
+export interface IWellVisualProps {
+  barcode: IBarcode;
+  style?: CSSProperties;
+  active: number;
+  markActive: (id: number) => void;
+  showResults?: boolean;
+  testmethod: ITestMethod;
 }

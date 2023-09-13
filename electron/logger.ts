@@ -13,7 +13,7 @@ import { app } from 'electron';
  **/
 export const logger = async (message: string, logName: string): Promise<void> => {
     const dateTime = `${format(new Date(), 'yyyyMMdd\tHH:mm:ss')}`;
-    const logItem = `${dateTime}\t${uuid()}\t${JSON.stringify(message)}\n`;
+    const logItem = `${dateTime}\t${dateTime}\t${JSON.stringify(message)}\n`;
     try {
       if (!fs.existsSync(path.resolve(app.getPath('userData'), 'logs'))) {
         await fs.promises.mkdir(path.resolve(app.getPath('userData'), 'logs'));

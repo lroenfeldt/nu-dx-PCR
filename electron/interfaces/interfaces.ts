@@ -128,4 +128,8 @@ export interface ITestObject {
   submitted: boolean;
   testmethod: string | null;
   isSubmitting?: boolean;
+  writingSuccess ?: boolean;
+  isWriting?: boolean;
+  submittingSuccess?: boolean;
+
 }

@@ -1,5 +1,4 @@
 import { create, ApiResponse } from 'apisauce';
-// import cache from '../utility/cache';
 import settings from '../config/settings';
 
 const apiClient = create({

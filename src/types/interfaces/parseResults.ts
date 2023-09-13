@@ -13,6 +13,7 @@ export interface IParameter {
   finalCycle: any;
   threshhold: number;
   target: string;
+  [key: string]: any;
 }
 
 export interface IParsedResult {
@@ -24,7 +25,7 @@ export interface IParsedResult {
   parameters:  Record<string, IParameter>;
   result?: string;
   position?: string|number;
-  [key: string]: any;
+  
 }
 
 export interface ITestConfigAccount {
@@ -44,11 +45,13 @@ export interface ITestMethodParameter {
   target: string;
   threshhold?: string;
   dbTransformation?: string;
+  isPrimary?: boolean;
 }
 
 export interface ITestMethodResult {
   conditions: string;
   name: string;
+  color: string;
 }
 
 export interface ITestMethod {
@@ -143,8 +146,8 @@ export type TParseResults = (
   testid: string,
   testConfig: IConfigFile,
   testmethod: ITestProcedure,
-  override?: Record<string, string>,
-) => Record<string, IParsedResult>[];
+  override?: string,
+) => Record<string, IParsedResult>;
 
 export type TParseResultsExport = (
     resultFile: string,
@@ -162,7 +165,7 @@ export type TParseResultsDB = (
     autoControls: IAutoControl[],
     testStarted: Date | string,
     userId?: string,
-    override?: Record<string, string>,
+    override?: string,
     lotNumber?: string
 ) => IResultsDB;
 

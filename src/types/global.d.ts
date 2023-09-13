@@ -9,7 +9,7 @@ declare global {
   interface Window {
     api: {
       getConfig: () => ConfigType;
-      saveConfig: (config: ConfigType) => void;
+      saveConfig: (config: ConfigType) => boolean;
       clearConfig: () => boolean;
       checkResultFile: (testid: string) => boolean;
       moveResultFile: (testid: string) => boolean;

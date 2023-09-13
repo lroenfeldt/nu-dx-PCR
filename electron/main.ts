@@ -5,7 +5,7 @@ import fs from 'fs';
 import Store from 'electron-store';
 import shutdown from 'electron-shutdown-command';
 import isDev from 'electron-is-dev';
-import { SerialPort } from 'serialport';
+import SerialPort  from 'serialport'
 import { autoUpdater } from 'electron-updater';
 import AutoLaunch from 'auto-launch';
 import os from 'os';
@@ -58,9 +58,10 @@ const softwareList = [
  * @returns number
  */
 const getDeviceType = () => {
+  if(isDev ) return 16;
   for (let i = 0; i < softwareList.length; i++) {
     const software = softwareList[i];
-
+    
     try {
       const res = fs.realpathSync(software.path);
       fs.accessSync(res, fs.constants.F_OK);
@@ -555,12 +556,6 @@ ipcMain.handle('toggleLid', (event:Electron.IpcMainInvokeEvent): boolean => {
   }
   
 
-  let serialport: SerialPort = new SerialPort({
-    path: 'COM1',
-    baudRate: 19200,
-    parity: 'none',
-    autoOpen: false,
-  });
 
   serialport.open((err?: Error | null) => {
     if (err) {

@@ -1,15 +1,5 @@
-import {
-  IRunData,
-  IAutoControl,
-  IResultsDB,
-  IExtractedBarcodes,
-  IParsedResult,
-  IParameter,
-  TParseResultsDB,
-  TParseResultsExport,
-  TParseResults,
-  TExtractBarcodes,
-} from '../types/interfaces/parseResults';
+import { IExtractedBarcodes, IParsedResult, TExtractBarcodes, TParseResults, TParseResultsDB, TParseResultsExport } from '../types/interfaces/parseResults';
+
 
 /**
  * Extract Barcodes from given result file
@@ -17,8 +7,8 @@ import {
  * @returns {Array} array of barcodes
  */
 
-export const extractBarcodes: TExtractBarcodes = (resultFile) => {
-  let extractedBarcodes: IExtractedBarcodes[] = [];
+export const extractBarcodes:TExtractBarcodes = (resultFile) => {
+  let extractedBarcodes:IExtractedBarcodes[] = [];
   let parsedResults = resultFile.split(/\r?\n/);
 
   //Parse Rows for Results
@@ -41,6 +31,7 @@ export const extractBarcodes: TExtractBarcodes = (resultFile) => {
       extractedBarcodes.push({ value, position });
     }
   });
+
   //return barcodes
   return extractedBarcodes;
 };
@@ -54,8 +45,7 @@ export const extractBarcodes: TExtractBarcodes = (resultFile) => {
  * @returns {Object} object of barcodes, parameters, labels, results and positions
  * @example {barcodes: [{value: "123456789", position: "A1", ...}]
  * */
-
-export const parseResults: TParseResults = (resultFile, testid, testConfig, testmethod, override) => {
+export const parseResults:TParseResults = (resultFile, testid, testConfig, testmethod, override) => {
   window.api.logEvents('parsing results', 'logInfos.txt');
 
   //Check provided Input
@@ -82,28 +72,49 @@ export const parseResults: TParseResults = (resultFile, testid, testConfig, test
 
   let parsedResultsData: Record<string, IParsedResult> = {};
 
- 
+
   //Read Cycle Values
   resultsRawData.forEach((row) => {
     const position = row[0];
     const parameter = row[4].toUpperCase();
     const curveData = row.slice(5);
     const finalCycle = row.slice(5)[row.slice(5).length - 1];
+    
 
     //Pass to result object
     if (!parsedResultsData[position]) {
-      parsedResultsData[position] = {};
+      parsedResultsData[position] = {
+        barcode: '',
+        parameters: {},
+        label: '',
+        alteredResult: false,
+        oldResult: '',
+        isControl: false,
+        result: '',
+
+      }
     }
     if (!parsedResultsData[position].parameters) {
-      parsedResultsData[position].parameters = [];
+      parsedResultsData[position].parameters = {};
     }
     if (!parsedResultsData[position].parameters[parameter]) {
-      parsedResultsData[position].parameters[parameter] = {};
+      parsedResultsData[position].parameters[parameter] = {
+        parameter: parameter,
+        ct: '',
+        curveData: [],
+        result: '',
+        orginalResult: '',
+        expectedResult: '',
+        finalCycle: '',
+        threshhold: 0,
+        target: '',
+
+      };
     }
     parsedResultsData[position].parameters[parameter].curveData = curveData;
     parsedResultsData[position].parameters[parameter].finalCycle = finalCycle;
     parsedResultsData[position].parameters[parameter].threshhold =
-      testmethod.parameters.find((param) => param.target === parameter)?.threshhold || '';
+      testmethod.parameters.find((param) => param.target === parameter)?.threshhold || 0;
   });
 
   //Parse Rows for Results
@@ -151,17 +162,17 @@ export const parseResults: TParseResults = (resultFile, testid, testConfig, test
     parsedResultsData[position].result = 'invalid';
 
     //Define functions to call upon evaluation
-    function CT(param: string) {
+    function CT(param:string) {
       const ctValue = parsedResultsData[position].parameters[param]?.ct;
       return Number(ctValue);
     }
 
-    function FL(param: string) {
+    function FL(param:string) {
       const flValue = parsedResultsData[position].parameters[param]?.finalCycle;
       return Number(flValue);
     }
 
-    function Thresh(param: string) {
+    function Thresh(param:string) {
       const threshValue = parsedResultsData[position].parameters[param]?.threshhold;
       return Number(threshValue);
     }
@@ -198,18 +209,19 @@ export const parseResults: TParseResults = (resultFile, testid, testConfig, test
     }
 
     //Apply Overrides
-    if (override && override[position]) {
-      parsedResultsData[position].result = override[position];
+    
+    if (override && JSON.parse(override)[position]) {
+      
+      console.log('override', JSON.parse(override)[position]);
+      parsedResultsData[position].result = JSON.parse(override)[position];
       parsedResultsData[position].alteredResult = true;
-  }
-  
+    }
   });
 
-  window.api.logEvents('parsedResultsData: ' + parsedResultsData, 'logInfos.txt');
-  //return
-
-  return [parsedResultsData];
+  return parsedResultsData;
 };
+
+
 
 /**
  * Parses the results from the result file and calculates the results
@@ -218,10 +230,10 @@ export const parseResults: TParseResults = (resultFile, testid, testConfig, test
  * @param {string} testmethod - testmethod id of the selected testmethod
  * @returns {object} - The parsed results
  */
-export const parseResultsExport: TParseResultsExport = (resultFile, testid, testConfig, testmethod, lotNumber) => {
+export const parseResultsExport:TParseResultsExport = (resultFile, testid, testConfig, testmethod, lotNumber = '') => {
   window.api.logEvents(`parseResultsExport settings: ${testConfig}`, 'logInfos.txt');
 
-  const parsedData = parseResults(resultFile, testid, testConfig, testmethod, {});
+  const parsedData = parseResults(resultFile, testid, testConfig, testmethod);
 
   //init export file
   let exportFile = '';
@@ -244,12 +256,12 @@ export const parseResultsExport: TParseResultsExport = (resultFile, testid, test
   }
 
   if (testmethod.type === 'SNP') {
-    exportFile += 'Position;Barcode;Result\n';
+    exportFile += 'Position;Barcode;Result;lotNumbe\n';
 
     //Read Data
     for (let position in parsedData) {
       let data = parsedData[position];
-      exportFile += `${position};${data.barcode};${data.result}\n`;
+      exportFile += `${position};${data.barcode};${data.result};${lotNumber}\n`;
     }
   }
 
@@ -258,23 +270,29 @@ export const parseResultsExport: TParseResultsExport = (resultFile, testid, test
 };
 
 /**
- * Parses the results from the result file and returns the results for submission to the database.
- * @param params - The parameters for the function.
+ * Parses the results from the result file and returns the results for submission to the database
+ * @param {string} testid - The testid of the test
+ * @param {string} resultFile - The result file to parse
+ * @param {string} testmethod - testmethod id of the selected testmethod
+ * @param {object} testConfig - The Config file of the test
+ * @param {Array} autoControls - Test id of the selected testmethod
+ * @param {Date} testStarted - Date when the test was started
+ * @param {string} userId - The id of the user who started the test
  **/
-export const parseResultsDB: TParseResultsDB = (
+export const parseResultsDB:TParseResultsDB = (
   testid,
   resultFile,
   testmethod,
   testConfig,
-  autoControls,
+  autoControls = [],
   testStarted,
   userId = '',
-  override={},
-  lotNumber= ''
+  override,
+  lotNumber = ''
 ) => {
-  const parsedData = parseResults(resultFile, testid, testConfig, testmethod,  override );
+  const parsedData = parseResults(resultFile, testid, testConfig, testmethod, override);
 
-  const runData: IRunData = {
+  const runData = {
     run: testid,
     testmethod: testmethod.id,
     specificationId: testmethod.specificationId,
@@ -287,30 +305,27 @@ export const parseResultsDB: TParseResultsDB = (
 
   const samples = Object.entries(parsedData).map(([position, data]) => {
     const { barcode: oldBarcode, parameters, isControl, result, oldResult } = data;
-    const barcode = autoControls.find(({ position: p }) => p === position)?.barcode || (typeof oldBarcode === "string" ? oldBarcode : "");
-
-
-    
+    const barcode = autoControls.find(({ position: p }) => p === position)?.barcode || oldBarcode;
     const sampleParameters = Object.entries(parameters).map(([paramName, { ct, curveData }]) => {
       const { dbTransformation, threshhold } = testmethod.parameters.find(({ target }) => target === paramName) || {};
 
       return {
         parameter: dbTransformation || paramName,
         ct,
-        curveData: curveData.map((value: string) => parseFloat(parseFloat(value).toFixed(3))),
+        curveData: curveData.map((value) => parseFloat(value).toFixed(3)),
         threshhold: threshhold || 0,
-        result: result.toString(),
-        orginalResult: oldResult.toString(),
-        expectedResult: '', // expected result for control samples as defined in nu:dx cloud. If no control then empty.
+        result: result || '',
+        orginalResult: oldResult || '',
+        expectedResult: '', //expected result for control samples as defined in nu:dx cloud. If no controll then empty
       };
     });
 
     return {
       position,
-      controlType: !!isControl, // TPC, NTC or whatever, fetched from account -> testmethod (dynamic controls feature)
+      controlType: isControl || false, // TPC, NTC or whatever, fetch from account-> testmethod (dynamic controls feature)
       barcode,
-      pcrLOT: lotNumber,
-      pureLOT: '', // coming soon (from auth screen as well probably)
+      pcrLOT: lotNumber || '',
+      pureLOT: '', //coming soon (from auth screen as well probably)
       parameters: sampleParameters,
     };
   });
@@ -318,6 +333,5 @@ export const parseResultsDB: TParseResultsDB = (
   return {
     runData,
     samples,
-};
-
+  };
 };

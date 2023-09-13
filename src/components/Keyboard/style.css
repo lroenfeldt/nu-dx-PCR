@@ -1,146 +1,220 @@
 #keyboard {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  height: 70%;
-  background: rgba(255, 255, 255, 0.25);
-  /*box-shadow: 0 8px 32px 0 var(--primary);*/
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  filter: blur(0px);
-  border-radius: 15px 15px 0 0;
-  position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	width: 100%;
+	height: 70%;
+	background: rgba(255, 255, 255, 0.25);
+	backdrop-filter: blur(15px);
+	-webkit-backdrop-filter: blur(15px);
+	position: absolute;
 }
-.simple-keyboard {
-  max-width: 850px;
+.simple-keyboard.hg-theme-ios.hg-theme-default {
+	width: 1157px;
+
+	flex-shrink: 0;
+	background: #d1d2d9;
+	backdrop-filter: blur(50px);
+	border-radius: 0px;
+	padding: 15px;
+
+	color: #000;
+	text-align: center;
+	/*font-family: SF Pro;*/
+	font-size: 31px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
 }
+
+.simple-keyboard.hg-theme-ios.hg-theme-default .hg-row .hg-button {
+	flex-grow: 1;
+	cursor: pointer;
+	max-width: initial;
+}
+.simple-keyboard.hg-theme-ios .hg-row {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button {
+	display: flex;
+	height: 74px;
+	width: 74px;
+	padding: 17px 0px 19px 0px;
+	justify-content: center;
+	align-items: center;
+	flex: 1 0 0;
+	border-radius: 8px;
+	background: #fff;
+	box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.35);
+}
+.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button:active,
+.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button:focus {
+	background: #e4e4e4;
+}
+.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.hg-functionBtn {
+	display: flex;
+	height: 74px;
+	width: 74px;
+	padding: 43px 76.24px 8px 10px;
+	align-items: center;
+	flex: 1 0 0;
+	border-radius: 8px;
+	background: #abb0ba;
+	box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.35);
+}
+.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.hg-button-space,
+.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.hg-button-shift,
+.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button.hg-button-shiftactivated {
+	background-color: #ffffff;
+}
+.simple-keyboard.hg-theme-ios.hg-theme-default .hg-button-space {
+	max-width: 448px;
+	min-width: 448px;
+	height: 74px;
+}
+
 .close-icon {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 10px;
-  cursor: pointer;
-  z-index: 1;
-  font-size: 50px;
-  color: var(--primary);
-  transition: all 0.5s ease 0s;
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 10px;
+	cursor: pointer;
+	z-index: 1;
+	font-size: 50px;
+	color: var(--primary);
+	transition: all 0.5s ease 0s;
 }
 .close-icon:hover {
-  opacity: 0.8;
+	opacity: 0.8;
 }
 .simple-keyboard.dark {
-  background-color: rgba(0, 0, 0, 0.8);
-  border-radius: 0;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+	background-color: rgba(0, 0, 0, 0.8);
+	border-radius: 0;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
 }
 
-.simple-keyboard.dark .hg-button {
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-}
-
-.simple-keyboard.dark .hg-button:active {
-  background: var(--primary);
-  color: white;
-}
-
-#root .simple-keyboard.dark + .simple-keyboard-preview {
-  background: var(--primary);
-}
-
-.simple-keyboard.light {
-  background-color: #f1f1f1;
-  border-radius: 0;
-  border-radius: 5px;
-}
-
-.simple-keyboard.light .hg-button {
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: white;
-  color: rgba(0, 0, 0, 0.5);
-}
-
-.simple-keyboard.light .hg-button:active {
-  background: var(--primary);
-  color: white;
-}
-.hg-theme-default {
-  background-color: #f1f1f1;
-  border-radius: 10px;
-  border: var(--primary) 2px solid;
-}
-#root .simple-keyboard.light + .simple-keyboard-preview {
-  background: var(--primary);
-}
 .slideIn {
-  -webkit-animation-name: slideIn;
-  -webkit-animation-duration: 0.4s;
-  animation-name: slideIn;
-  animation-duration: 0.4s;
+	-webkit-animation-name: slideIn;
+	-webkit-animation-duration: 0.4s;
+	animation-name: slideIn;
+	animation-duration: 0.4s;
 }
-.close-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: var(--primary);
-  border-radius: 40px;
-  color: white;
-  cursor: pointer;
-  z-index: 1;
-  margin: 10px;
-  padding: 10px;
+
+.simple-keyboard.hg-theme-ios .hg-row .hg-button:not(:last-child) {
+	display: flex;
+	height: 74px;
+	padding: 17px 0px 19px 0px;
+	justify-content: center;
+	align-items: center;
+	flex: 1 0 0;
+	border-radius: 8px;
+
+	box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.35);
 }
-.close-button:hover {
-  background: var(--secondary);
+.simple-keyboard.hg-theme-ios .hg-row .hg-button.hg-button-tab {
+	padding: 43px 60.319px 8px 10px;
+	justify-content: flex-start;
+}
+.simple-keyboard.hg-theme-ios .hg-row .hg-button.hg-button-undo {
+	padding: 43px 76.24px 8px 10px;
+	justify-content: flex-start;
+}
+.simple-keyboard.hg-theme-ios .hg-row .hg-button.hg-button-alt {
+	display: flex;
+	height: 74px;
+	padding: 43px 9.716px 8px 71px;
+	justify-content: flex-end;
+	align-items: center;
+	flex: 1 0 0;
+}
+.simple-keyboard.hg-theme-ios .hg-row .hg-button.hg-button-alt:first-of-type {
+	padding: 43px 123.876px 8px 10px;
+	justify-content: flex-start;
+}
+.simple-keyboard.hg-theme-ios .hg-row .hg-button.hg-button-default {
+	display: flex;
+	height: 74px;
+	padding: 43px 10.129px 8px 69px;
+	justify-content: flex-end;
+	align-items: center;
+	flex: 1 0 0;
+}
+.simple-keyboard.hg-theme-ios .hg-row .hg-button.hg-button-default:first-of-type {
+	padding: 43px 123.876px 8px 10px;
+	justify-content: flex-start;
+}
+.simple-keyboard.hg-theme-ios .hg-row .hg-button.hg-button-none {
+	padding: 17px 0px 19px 0px;
+	background: transparent;
+	box-shadow: none;
+	color: #d1d2d9;
+}
+.simple-keyboard.hg-theme-ios .hg-row .hg-button.hg-button-bksp {
+	display: flex;
+	height: 74px;
+	padding: 43px 10.319px 8px 33px;
+	justify-content: flex-end;
+	align-items: center;
+	flex: 1 0 0;
+}
+.simple-keyboard.hg-theme-ios .hg-row .hg-button.hg-button-space {
+	min-width: 530px;
+}
+.simple-keyboard.hg-theme-ios .hg-row .hg-button.hg-button-enter {
+	display: flex;
+	height: 74px;
+	padding: 43px 10.453px 8px 96px;
+	justify-content: flex-end;
+	align-items: center;
+	flex: 1 0 0;
+}
+.simple-keyboard.hg-theme-ios .hg-row .hg-button.hg-button-downkeyboard {
+	display: flex;
+	height: 74px;
+	padding: 43px 10.319px 8px 33px;
+	justify-content: flex-end;
+	align-items: center;
+	flex: 1 0 0;
 }
 /* Add Animation */
 @-webkit-keyframes slideIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    top: 0;
-    opacity: 1;
-  }
+	from {
+		opacity: 0;
+	}
+	to {
+		top: 0;
+		opacity: 1;
+	}
 }
 
 @keyframes slideIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    top: 0;
-    opacity: 1;
-  }
+	from {
+		opacity: 0;
+	}
+	to {
+		top: 0;
+		opacity: 1;
+	}
 }
 
 @-webkit-keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
 }
