@@ -1,8 +1,8 @@
-import { useEffect, useCallback, } from 'react';
-import { useData, useResults } from '../hooks';
+import { useEffect, useCallback } from "react";
+import { useData, useResults } from "../hooks";
 
-import { useStatus } from './useStatus';
-import useUpdate from './useUpdate';
+import { useStatus } from "./useStatus";
+import useUpdate from "./useUpdate";
 function useBackgroundProcesses() {
   const {
     results,
@@ -19,7 +19,6 @@ function useBackgroundProcesses() {
   } = useData();
   const { submitAll } = useResults();
 
-
   const { ping } = useStatus();
   const { getLastVersion } = useUpdate();
 
@@ -29,10 +28,9 @@ function useBackgroundProcesses() {
   }, []);
 
   const autoSubmitUnsubmittedResults = useCallback(async () => {
-    if (settings?.account?.autoSubmitResults && resultList.length > 0) submitAll();
+    if (settings?.account?.autoSubmitResults && resultList.length > 0)
+      submitAll();
   }, [resultList, settings?.account?.autoSubmitResults]);
-
-
 
   const checkForUSB = useCallback(async () => {
     try {
@@ -40,13 +38,13 @@ function useBackgroundProcesses() {
       setUSBPresent(usbPresent);
     } catch (error) {
       console.log(error);
-      window.api.logEvents(`checkUSB: ${error}`, 'logErrors.txt');
+      window.api.logEvents(`checkUSB: ${error}`, "logErrors");
     }
   }, [setUSBPresent]);
 
   const lidAutoClose = useCallback(() => {
     if (
-      deviceStatus === 'IDLE' &&
+      deviceStatus === "IDLE" &&
       isLidOpen &&
       settings?.account?.autoCloseLidMinutes &&
       settings?.account?.autoCloseLidMinutes > 0 &&
@@ -54,20 +52,26 @@ function useBackgroundProcesses() {
     ) {
       toggleLid(); // toggleLid can both open and close the lid
     }
-  }, [deviceStatus, isLidOpen, settings?.account?.autoCloseLidMinutes, settings?.account?.autoCloseLidMinutes]);
+  }, [
+    deviceStatus,
+    isLidOpen,
+    settings?.account?.autoCloseLidMinutes,
+    settings?.account?.autoCloseLidMinutes,
+  ]);
 
   const autoShutdown = useCallback(() => {
     if (
-      deviceStatus === 'IDLE' &&
+      deviceStatus === "IDLE" &&
       settings?.account?.autoShutdownMinutes &&
       Number(settings?.account?.autoShutdownMinutes) > 0 &&
       idleTimestamp &&
-      Date.now() - idleTimestamp >= settings?.account?.autoShutdownMinutes * 60 * 1000
+      Date.now() - idleTimestamp >=
+        settings?.account?.autoShutdownMinutes * 60 * 1000
     ) {
       if (!settings.isDev) {
         shutdown();
       } else {
-        alert('auto shutdown');
+        alert("auto shutdown");
       }
 
       setIdleTimestamp(Date.now()); // Reset idleTimestamp after shutdown
@@ -97,9 +101,9 @@ function useBackgroundProcesses() {
   }, [deviceStatus, settings]);
 
   useEffect(() => {
-    if (deviceStatus === 'IDLE' && !idleTimestamp) {
+    if (deviceStatus === "IDLE" && !idleTimestamp) {
       setIdleTimestamp(Date.now());
-    } else if (deviceStatus !== 'IDLE') {
+    } else if (deviceStatus !== "IDLE") {
       setIdleTimestamp(null);
     }
   }, [deviceStatus, idleTimestamp]);

@@ -1,7 +1,7 @@
-import { useCallback } from 'react';
-import { useApi, useData } from './'; 
-import onlineStatus from '../api/onlineStatus';
-import { ISettings } from '../types/interfaces/settings';
+import { useCallback } from "react";
+import { useApi, useData } from "./";
+import onlineStatus from "../api/onlineStatus";
+import { ISettings } from "../types/interfaces/settings";
 
 type SettingsType = {
   device: {
@@ -10,7 +10,7 @@ type SettingsType = {
   version: string;
   account: {
     authToken: string;
-    initialized: boolean;  
+    initialized: boolean;
   };
 };
 
@@ -26,15 +26,25 @@ interface IResponse {
 
 export const useStatus = (): UseStatusReturnType => {
   const onlineStatusApi = useApi(onlineStatus.postStatus);
-  const { saveSettings, settings, deviceStatus, setErrors, setDbConnection, isStatus } = useData();
+  const {
+    saveSettings,
+    settings,
+    deviceStatus,
+    setErrors,
+    setDbConnection,
+    isStatus,
+  } = useData();
 
   const ping = useCallback(async () => {
     try {
-      const response = await onlineStatusApi.request(settings.device.hardwareId, {
-        status: deviceStatus,
-        timesStamp: new Date().getTime(),
-        cyclerVersion: settings.version,
-      });
+      const response = await onlineStatusApi.request(
+        settings.device.hardwareId,
+        {
+          status: deviceStatus,
+          timesStamp: new Date().getTime(),
+          cyclerVersion: settings.version,
+        }
+      );
       const responseData = response.data as IResponse;
 
       if (responseData.ok && responseData.data.account) {
@@ -49,18 +59,26 @@ export const useStatus = (): UseStatusReturnType => {
 
         await saveSettings(newSettings);
       }
-      
-      if (response.problem === 'NETWORK_ERROR' || response.problem === 'CONNECTION_ERROR') {
+
+      if (
+        response.problem === "NETWORK_ERROR" ||
+        response.problem === "CONNECTION_ERROR"
+      ) {
         setDbConnection(false);
       } else {
         setDbConnection(true);
-        setErrors((errors: any[]) => errors.filter((error: any) => error.type !== 'stillOffline')); 
+        setErrors((errors: any[]) =>
+          errors.filter((error: any) => error.type !== "stillOffline")
+        );
       }
 
-      window.api.logEvents(`ping status response: ${JSON.stringify(response)}`, 'logInfos.txt');
-    } catch (err: any) { 
+      window.api.logEvents(
+        `ping status response: ${JSON.stringify(response)}`,
+        "logInfos"
+      );
+    } catch (err: any) {
       console.log(err);
-      window.api.logEvents('ping status error:' + err, 'logErrors.txt');
+      window.api.logEvents("ping status error:" + err, "logErrors");
     }
   }, [deviceStatus, settings, onlineStatusApi, isStatus]);
 
