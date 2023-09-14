@@ -311,7 +311,7 @@ startTest();
 endTest();
 
 // deviceInteraction
-// toggleLid();
+toggleLid();
 
 // testManagement
 getUnsubmitted();

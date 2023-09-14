@@ -7,10 +7,11 @@ import React, {
 } from "react";
 import defaultBarcodes from "../utils/defaultBarcodes";
 import { useTranslation } from "./useTranslation";
-import { ISettings, IUseData } from "../types/interfaces/useData";
+import { IUseData } from "../types/interfaces/useData";
 import { IUseTranslation } from "../types/interfaces/useTranslation";
 import { IBarcode, IError } from "../types/interfaces/interfaces";
 import { ITestObject } from "../../electron/interfaces/interfaces";
+import { ISettings } from "../types/interfaces/settings";
 
 export const DataContext = React.createContext({});
 /**

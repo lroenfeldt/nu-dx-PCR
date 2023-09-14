@@ -65,9 +65,7 @@ export const parseResults: TParseResults = (
   if (!testid) throw Error("Invalid testid: " + testid);
   if (!testConfig) throw Error("Invalid settings: " + testConfig);
   if (!testmethod) throw Error("Invalid testmethod: " + testmethod);
-  //Check Threshholds and provide fallback(don´t delete these two variables, they will be used in eval functions)
-  let hecThreshFl = testConfig.account.hecThreshFl || 0;
-  let virusThreshFl = testConfig.account.virusThreshFl || 0;
+
   //split by linebreak
   let parsedResults = resultFile.split(/\r?\n/);
 
@@ -146,7 +144,7 @@ export const parseResults: TParseResults = (
   if (!resultsData) throw Error("Invalid Result File, no results found");
 
   //Read Values
-  resultsData.forEach((row, index) => {
+  resultsData.forEach((row) => {
     let barcode = row[1];
     const position = row[0];
     const parameter = row[4].toUpperCase();

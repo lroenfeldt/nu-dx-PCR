@@ -54,7 +54,7 @@ export function moveFiles() {
    * @returns {boolean}
    * @description Moves a test from the "runs" directory to the "done" directory
    * */
-  ipcMain.handle("moveFiles", (event, testid) => {
+  ipcMain.handle("moveFiles", (_event, testid) => {
     if (testid !== "demo") {
       const sourcePath = path.resolve(app.getPath("userData"), "runs", testid);
       const destPath = path.resolve(
@@ -85,7 +85,7 @@ export function deleteAllOverrides() {
    * delete all override files
    * @returns {void}
    * */
-  ipcMain.handle("deleteAllOverrides", async (event) => {
+  ipcMain.handle("deleteAllOverrides", async (_event) => {
     try {
       const destPath = path.resolve(app.getPath("userData"), "runs");
       const files = fs.readdirSync(destPath);
@@ -107,7 +107,7 @@ export function deleteOverride() {
    * delete override file
    * @returns {void}
    * */
-  ipcMain.handle("deleteOverride", async (event, testid) => {
+  ipcMain.handle("deleteOverride", async (_event, testid) => {
     try {
       const destPath = path.resolve(
         app.getPath("userData"),

@@ -1,12 +1,12 @@
 import { ipcMain } from "electron";
 import shutdown from "electron-shutdown-command";
-import { SerialPort } from "serialport";
 import isDev from "electron-is-dev";
 import * as fs from "fs";
 import * as path from "path";
 import macaddress from "macaddress";
 import { getDeviceType } from "../main";
 import { logger } from "../logger";
+const { SerialPort } = require("serialport");
 
 export function rebootDevice(): void {
   /**
@@ -23,65 +23,64 @@ export function rebootDevice(): void {
   });
 }
 
-// export function shutdownDevice(): void {
-//   shutdown.shutdown();
-// }
-
 export function toggleLid() {
   /**
    * Open Lid via Serial Port
    * */
-  ipcMain.handle("toggleLid", (event: Electron.IpcMainInvokeEvent): boolean => {
-    console.log("Signal to toggle lid received.");
-    logger("Signal to toggle lid received.", "logErrors");
-    const buffer: number[] = [
-      0x7b, 0x7c, 0x0, 0x2, 0x4d, 0x1, 0x0, 0x4c, 0x7c, 0x7d,
-    ];
-    if (isDev) {
-      return true;
-    }
-    let serialport: SerialPort = new SerialPort({
-      path: "COM1",
-      baudRate: 19200,
-      parity: "none",
-      autoOpen: false,
-    });
-    serialport.open((err?: Error | null) => {
-      if (err) {
-        console.log(
-          "Error establishing serialport connection : " + err.message
-        );
-        logger(
-          `Error establishing serialport connection : ${err.message}`,
-          "logErrors"
-        );
-        return false;
+  ipcMain.handle(
+    "toggleLid",
+    (_event: Electron.IpcMainInvokeEvent): boolean => {
+      console.log("Signal to toggle lid received.");
+      logger("Signal to toggle lid received.", "logErrors");
+      const buffer: number[] = [
+        0x7b, 0x7c, 0x0, 0x2, 0x4d, 0x1, 0x0, 0x4c, 0x7c, 0x7d,
+      ];
+      if (isDev) {
+        return true;
       }
-      serialport.write(buffer, (err?: Error | null, result?: number) => {
+      let serialport = new SerialPort({
+        path: "COM1",
+        baudRate: 19200,
+        parity: "none",
+        autoOpen: false,
+      });
+      serialport.open((err?: Error | null) => {
         if (err) {
-          console.log("Error while opening lid : " + err.message);
-          logger(`Error while opening lid : ${err.message}`, "logErrors");
+          console.log(
+            "Error establishing serialport connection : " + err.message
+          );
+          logger(
+            `Error establishing serialport connection : ${err.message}`,
+            "logErrors"
+          );
           return false;
         }
-        if (result) {
-          console.log("Response received after opening lid : " + result);
-        }
-        serialport.close((err?: Error | null) => {
+        serialport.write(buffer, (err?: Error | null, result?: number) => {
           if (err) {
-            console.log(
-              "Error while closing serialport connection : " + err.message
-            );
-            logger(
-              `Error while closing serialport connection : ${err.message}`,
-              "logErrors"
-            );
+            console.log("Error while opening lid : " + err.message);
+            logger(`Error while opening lid : ${err.message}`, "logErrors");
             return false;
           }
+          if (result) {
+            console.log("Response received after opening lid : " + result);
+          }
+          serialport.close((err?: Error | null) => {
+            if (err) {
+              console.log(
+                "Error while closing serialport connection : " + err.message
+              );
+              logger(
+                `Error while closing serialport connection : ${err.message}`,
+                "logErrors"
+              );
+              return false;
+            }
+          });
         });
       });
-    });
-    return true;
-  });
+      return true;
+    }
+  );
 }
 
 export function checkUSB() {
@@ -106,7 +105,7 @@ export function checkUSB() {
 
 export function saveToUSB() {
   //Save to USB
-  ipcMain.handle("saveToUSB", (event, testid, results) => {
+  ipcMain.handle("saveToUSB", (_event, testid, results) => {
     console.log(results);
     logger(JSON.stringify(results), "logInfos");
     const filename = testid + ".csv";
@@ -130,7 +129,7 @@ export function getDeviceInfo() {
    * Get Device Infos
    * @returns {object}  { hardwareId, deviceType, serialNumber }
    * */
-  ipcMain.handle("getDeviceInfo", async (event) => {
+  ipcMain.handle("getDeviceInfo", async (_event) => {
     try {
       let hardwareId = await macaddress.one().then((mac) => mac);
       let serialNumber = ""; //await getSerialNumber();
@@ -144,3 +143,8 @@ export function getDeviceInfo() {
     }
   });
 }
+
+// export function shutdownDevice(): void {
+//   shutdown.shutdown();
+//   console.log("shut down device");
+// }

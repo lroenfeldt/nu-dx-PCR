@@ -1,8 +1,8 @@
-import { IText } from '../types/interfaces/components';
+import { IText } from "../types/components";
 
 function Text(props: IText) {
   const {
-    id = 'Text',
+    id = "Text",
     children,
     style,
     center,
@@ -70,7 +70,7 @@ function Text(props: IText) {
       ...(paddingVertical && { paddingVertical }),
       ...(paddingRight && { paddingRight }),
       ...(paddingLeft && { paddingLeft }),
-      ...(center && { textAlign: 'center' }),
+      ...(center && { textAlign: "center" }),
       ...(align && { textAlign: align }),
       ...(bold && { fontFamily: bold }),
       ...(semibold && { fontFamily: semibold }),

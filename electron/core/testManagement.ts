@@ -23,7 +23,7 @@ export function startTest(/* parameters */): void {
   ipcMain.handle(
     "startLineGene",
     (
-      event: Electron.IpcMainInvokeEvent,
+      _event: Electron.IpcMainInvokeEvent,
       testid: string,
       xmlContent: string,
       settings: ILineGeneSettings,
@@ -90,7 +90,7 @@ export function endTest(/* parameters */): void {
    * Stop the test and kill LineGene
    * @returns {Boolean} true if test stopped
    * */
-  ipcMain.handle("endLineGene", async (event: Electron.IpcMainInvokeEvent) => {
+  ipcMain.handle("endLineGene", async (_event: Electron.IpcMainInvokeEvent) => {
     try {
       ["Gene-9660.exe", "LineGene1600.exe", "PcrServer.exe"].forEach(
         killProcess
@@ -110,7 +110,7 @@ export function getUnsubmitted() {
    * bGet unsubmitted tests
    * @returns {Array} unsubmitted tests
    * */
-  ipcMain.handle("getUnsubmitted", (event: Electron.IpcMainInvokeEvent) => {
+  ipcMain.handle("getUnsubmitted", (_event: Electron.IpcMainInvokeEvent) => {
     const filePath = path.resolve(app.getPath("userData"), "runs");
     try {
       if (!fs.existsSync(filePath)) {
@@ -176,7 +176,7 @@ export function getTests() {
    * */
   ipcMain.handle(
     "getTests",
-    (event: Electron.IpcMainInvokeEvent): ITestObject[] | boolean => {
+    (_event: Electron.IpcMainInvokeEvent): ITestObject[] | boolean => {
       const filePath = path.resolve(app.getPath("userData"), "runs");
       try {
         //Get Unsubmitted
@@ -350,7 +350,7 @@ export function getTests() {
 
 export function editResultsHandler() {
   /** Edit test results */
-  ipcMain.handle("editResults", async (event, testid, results) => {
+  ipcMain.handle("editResults", async (_event, testid, results) => {
     try {
       let destPath = path.resolve(
         app.getPath("userData"),

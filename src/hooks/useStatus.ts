@@ -1,28 +1,11 @@
 import { useCallback } from "react";
 import { useApi, useData } from "./";
 import onlineStatus from "../api/onlineStatus";
-import { ISettings } from "../types/interfaces/settings";
-
-type SettingsType = {
-  device: {
-    hardwareId: string;
-  };
-  version: string;
-  account: {
-    authToken: string;
-    initialized: boolean;
-  };
-};
-
-interface UseStatusReturnType {
-  ping: () => Promise<void>;
-}
-
-interface IResponse {
-  ok: boolean;
-  data: ISettings;
-  problem: string;
-}
+import { IResponse } from "../types/interfaces/interfaces";
+import {
+  SettingsType,
+  UseStatusReturnType,
+} from "../types/interfaces/useStatuts";
 
 export const useStatus = (): UseStatusReturnType => {
   const onlineStatusApi = useApi(onlineStatus.postStatus);

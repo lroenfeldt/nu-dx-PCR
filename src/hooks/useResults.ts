@@ -1,5 +1,3 @@
-import { TCurveData } from "./../types/interfaces/parseResults";
-import React, { useCallback } from "react";
 import { useData, useTranslation } from "../hooks";
 import {
   extractBarcodes,

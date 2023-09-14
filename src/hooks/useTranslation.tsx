@@ -1,8 +1,8 @@
-import i18n from 'i18n-js';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import translations from '../constants/translations';
-import { IChildren } from '../types/interfaces/interfaces';
-import { IUseTranslation } from '../types/interfaces/useTranslation';
+import i18n from "i18n-js";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import translations from "../constants/translations";
+import { IChildren } from "../types/interfaces/interfaces";
+import { IUseTranslation } from "../types/interfaces/useTranslation";
 
 export const TranslationContext = React.createContext({});
 
@@ -14,10 +14,10 @@ export const TranslationContext = React.createContext({});
 export function TranslationProvider({ children }: IChildren) {
   const settings = window.api.getConfig();
 
-  const [locale, setLocale] = useState('en');
+  const [locale, setLocale] = useState("en");
 
   i18n.locale = locale;
-  i18n.defaultLocale = 'en'; // Default fallback locale
+  i18n.defaultLocale = "en"; // Default fallback locale
   i18n.translations = translations;
   i18n.fallbacks = true;
 
@@ -26,8 +26,10 @@ export function TranslationProvider({ children }: IChildren) {
       const translation = i18n.t(scope, { ...options, locale });
 
       if (translation === scope) {
-        console.error(`No translation found for key: "${scope}" in locale: "${locale}"`);
-        return 'No translation available'; // Default message when no translation is found
+        console.error(
+          `No translation found for key: "${scope}" in locale: "${locale}"`
+        );
+        return "No translation available"; // Default message when no translation is found
       }
 
       return translation;
@@ -36,10 +38,10 @@ export function TranslationProvider({ children }: IChildren) {
   );
 
   useEffect(() => {
-    if (settings.user && settings.user.locale && settings.user.locale !== '') {
+    if (settings.user && settings.user.locale && settings.user.locale !== "") {
       setLocale(settings.user.locale);
     } else {
-      setLocale(window.navigator.language.split('-')[0]);
+      setLocale(window.navigator.language.split("-")[0]);
     }
   }, [settings]);
 
@@ -50,7 +52,11 @@ export function TranslationProvider({ children }: IChildren) {
     translate: t,
   };
 
-  return <TranslationContext.Provider value={contextValue}>{children}</TranslationContext.Provider>;
+  return (
+    <TranslationContext.Provider value={contextValue}>
+      {children}
+    </TranslationContext.Provider>
+  );
 }
 
 /**
@@ -63,4 +69,5 @@ export function TranslationProvider({ children }: IChildren) {
  * If 'my.translation.key' doesn't exist in the current locale,
  * it will fallback to the default locale.
  */
-export const useTranslation = () => useContext(TranslationContext) as IUseTranslation;
+export const useTranslation = () =>
+  useContext(TranslationContext) as IUseTranslation;

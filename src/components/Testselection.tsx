@@ -1,14 +1,14 @@
-import { useData, useTranslation } from '../hooks';
-import Testsmethod from './Testmethod';
-import { Pagination } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
+import { useData, useTranslation } from "../hooks";
+import Testsmethod from "./Testmethod";
+import { Pagination } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 
 const Testselection = () => {
-  const { setRemTime, testrun, setErrors, demo, settings } = useData();
+  const { testrun, settings } = useData();
   const { locale } = useTranslation();
 
   return (
@@ -26,9 +26,9 @@ const Testselection = () => {
             <SwiperSlide key={i}>
               <Testsmethod
                 key={i}
-                title={test['label' + locale?.toUpperCase() ] }
+                title={test["label" + locale?.toUpperCase()]}
                 methodid={test.id}
-                status={testrun ? 'active' : ''}              
+                status={testrun ? "active" : ""}
               />
             </SwiperSlide>
           );

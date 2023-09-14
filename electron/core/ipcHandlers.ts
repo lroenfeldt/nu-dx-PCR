@@ -8,7 +8,7 @@ import { logger } from "../logger";
 export function checkResultFileHandler(): void {
   // logic for IPC handler "checkResultFile"
   /**check if result file is present and move to run directory*/
-  ipcMain.handle("checkResultFile", (event, testid) => {
+  ipcMain.handle("checkResultFile", (_event, testid) => {
     if (testid === "demo") {
       return true;
     }
@@ -45,7 +45,7 @@ export function checkResultFileHandler(): void {
 export function moveResultFileHandler(): void {
   // logic for IPC handler "moveResultFile"
   /**move resultfile to run directory*/
-  ipcMain.handle("moveResultFile", (event, testid) => {
+  ipcMain.handle("moveResultFile", (_event, testid) => {
     if (testid === "demo") {
       return true;
     }
@@ -77,7 +77,7 @@ export function getResultHandler(): void {
   ipcMain.handle(
     "getResult",
     async (
-      event: Electron.IpcMainInvokeEvent,
+      _event: Electron.IpcMainInvokeEvent,
       testid: string,
       done: boolean
     ): Promise<IGetResultResponse> => {
@@ -143,7 +143,7 @@ export function getVersion() {
    * Provide App Version
    * @returns {string}  version
    * */
-  ipcMain.handle("getVersion", (event) => {
+  ipcMain.handle("getVersion", (_event) => {
     return app.getVersion();
   });
 }

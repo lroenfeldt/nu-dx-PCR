@@ -4,7 +4,7 @@ import { autoUpdater } from "electron-updater";
 import { logger } from "../logger";
 
 export function launchUpdates() {
-  ipcMain.handle("launch-updates", (event) => updater());
+  ipcMain.handle("launch-updates", (_event) => updater());
 }
 
 export function updater() {
@@ -57,7 +57,7 @@ export function updater() {
       autoUpdater.quitAndInstall();
     }, 2000);
   });
-  autoUpdater.on("update-not-available", (info) => {
+  autoUpdater.on("update-not-available", (_info) => {
     splash &&
       splash.webContents.send(
         "updateStatus",
@@ -76,7 +76,7 @@ export function downloadUpdates(/* parameters */): void {
    * Download the latest version of the app
    * @returns {void}
    * */
-  ipcMain.handle("downloadApp", async (event) => {
+  ipcMain.handle("downloadApp", async (_event) => {
     autoUpdater.checkForUpdates();
     autoUpdater.downloadUpdate();
   });

@@ -70,15 +70,17 @@ const Settings: React.FC<SettingsProps> = ({ visible }) => {
           <div className="settings">
             <div>
               <Dropdown>
-                <div onClick={() => handleLocale("de")}>
-                  Deutsch <img width={20} height={10} src={deFlag} />
-                </div>
-                <div onClick={() => handleLocale("en")}>
-                  English <img width={20} height={10} src={enFlag} />
-                </div>
-                <div onClick={() => handleLocale("fr")}>
-                  Français <img width={20} height={10} src={frFlag} />
-                </div>
+                <>
+                  <div onClick={() => handleLocale("de")}>
+                    Deutsch <img width={20} height={10} src={deFlag} />
+                  </div>
+                  <div onClick={() => handleLocale("en")}>
+                    English <img width={20} height={10} src={enFlag} />
+                  </div>
+                  <div onClick={() => handleLocale("fr")}>
+                    Français <img width={20} height={10} src={frFlag} />
+                  </div>
+                </>
               </Dropdown>
             </div>
 

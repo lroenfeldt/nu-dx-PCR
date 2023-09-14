@@ -1,5 +1,4 @@
-import { IBarcode } from './interfaces';
-import { IAutoControl, IExtractedBarcodes } from './parseResults';
+import { IAutoControl, IExtractedBarcodes } from "./parseResults";
 
 export type TcheckUSB = () => Promise<void>;
 
@@ -19,7 +18,7 @@ export type TsubmitAutoControls = (
   orderKey: string,
   hardwareId: string,
   submitControlUrl: string,
-  fetchControlUrl: string,
+  fetchControlUrl: string
 ) => Promise<IAutoControl[]>;
 
 export interface IUseResults {

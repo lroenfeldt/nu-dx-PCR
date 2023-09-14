@@ -11,7 +11,7 @@ import "moment/dist/locale/fr";
 const Footer = () => {
   const { settings, dbConnection } = useData();
   const navigate = useNavigate();
-  const { locale }: any = useTranslation();
+  const { locale } = useTranslation();
   const location = useLocation();
   const [stateTime, setStateTime] = useState(
     moment().locale(locale).format("LL") +
