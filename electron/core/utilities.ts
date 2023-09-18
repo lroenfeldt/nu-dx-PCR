@@ -34,7 +34,7 @@ export function copyLogos(): void {
       const destPath = path.resolve(app.getPath("userData"), "logos");
       copyDir(logosPath, destPath);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     return true;
   });

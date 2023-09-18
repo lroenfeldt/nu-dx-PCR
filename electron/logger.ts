@@ -29,6 +29,6 @@ export const logger = async (
     }
     await fs.promises.appendFile(file, logItem);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

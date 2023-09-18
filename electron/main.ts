@@ -99,13 +99,13 @@ export const getDeviceType = () => {
       return software.returnType;
     } catch (error) {
       console.log(`${software.name} not found`);
-      logger(`${software.name} not found`, "logInfos");
+      logger(`${software.name} not found`, "logErrors");
     }
   }
 
   const errMessage = "No LineGene Installation found";
   console.log(errMessage);
-  logger(errMessage, "logInfos");
+  logger(errMessage, "logErrors");
 
   return 0;
 };
@@ -349,3 +349,6 @@ relaunchApp();
 
 // utilities
 copyLogos();
+
+// deviceInteraction
+// shutdownDevice();

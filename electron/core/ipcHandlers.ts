@@ -61,8 +61,7 @@ export function moveResultFileHandler(): void {
     try {
       fs.renameSync(filepath, destpath);
       const successMsg = `Result file successfully moved to "${destpath}"`;
-      console.log(successMsg);
-      logger(successMsg, "logErrors");
+      logger(successMsg, "logInfos");
       return true;
     } catch (error: any) {
       const errorMsg = `Result file "${filepath}" could not be moved to "${destpath}" due to error: ${error.message}`;
@@ -101,9 +100,6 @@ export function getResultHandler(): void {
       try {
         testStarted = fs.statSync(launchFilePath).mtime;
       } catch (error) {
-        console.log(
-          "test launch file not found, defaulting to current time for test start"
-        );
         logger(
           "test launch file not found, defaulting to current time for test start",
           "logInfos"
@@ -114,18 +110,17 @@ export function getResultHandler(): void {
       try {
         resultFile = fs.readFileSync(filepath, "utf-8");
       } catch (error: any) {
-        console.log(`error accessing result file for test ${testid}`);
-        console.error(error);
+        console.error(`error accessing result file for test ${testid}`);
+
         logger(`error accessing result file for test ${testid}`, "logErrors");
-        logger(error.message, "logErrors");
+
         throw error;
       }
 
       try {
         configFile = fs.readFileSync(configPath, "utf-8");
       } catch (error: any) {
-        console.log(`error accessing config file for test ${testid}`);
-        console.error(error);
+        console.error(`error accessing config file for test ${testid}`);
         logger(error.message, "logErrors");
       }
 

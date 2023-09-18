@@ -11,7 +11,6 @@ const Pairing: FC = () => {
   const getPairingCodeApi = useApi(pairingCodeApi.getPairingCode);
 
   const pollPairing = useCallback(async () => {
-    console.log("pairing with code " + pairingCode);
     window.api.logEvents("pairing with code " + pairingCode, "logInfos");
 
     try {
@@ -57,7 +56,7 @@ const Pairing: FC = () => {
       }
 
       if (response?.problem && response?.problem == "CLIENT_ERROR") {
-        console.log("Error", response.originalError.message);
+        console.error("Error", response.originalError.message);
         window.api.logEvents(
           `Error: ${JSON.stringify(response.originalError.message)}`,
           "logErrors"
@@ -76,9 +75,7 @@ const Pairing: FC = () => {
     } catch (err: any) {
       window.api.logEvents(`getPairingCodeApi err: ${err}`, "logErrors");
       if (err?.response) {
-        console.log(err.response?.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
+        console.error(err.response?.data);
         window.api.logEvents(
           `headers: ${JSON.stringify(
             err.response.headers

@@ -2,7 +2,7 @@ import { app, ipcMain } from "electron";
 import { ILineGeneSettings, ITestObject } from "../interfaces/interfaces";
 import * as fs from "fs";
 import * as path from "path";
-import { spawn } from "child_process";
+import { spawn } from "../spawn";
 import { killProcess, lineGenePath, mainWindow } from "../main";
 import { logger } from "../logger";
 
@@ -98,7 +98,7 @@ export function endTest(/* parameters */): void {
       clearInterval(focusInterval);
       return true;
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
       logger(`endLineGene error: ${error.message}`, "logErrors");
       return false;
     }
@@ -164,7 +164,7 @@ export function getUnsubmitted() {
         });
       return unsubmittedTests;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return false;
     }
   });
@@ -254,7 +254,7 @@ export function getTests() {
         try {
           fs.accessSync(path.resolve(filePath, "done"), fs.constants.F_OK);
         } catch (error) {
-          console.log('no "done" directory found');
+          console.error('no "done" directory found');
           logger(`no "done" directory found`, "logErrors");
           return unsubmittedTests as ITestObject[];
         }
@@ -340,7 +340,7 @@ export function getTests() {
           return b.testStartedMS - a.testStartedMS;
         }) as ITestObject[];
       } catch (err: any) {
-        console.log(err);
+        console.error(err);
         logger(err, "logErrors");
         return false;
       }
@@ -391,7 +391,7 @@ export function editResultsHandler() {
       const newResults = { ...lastResults, ...results };
       fs.writeFileSync(destPath, JSON.stringify(newResults));
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     return true;
   });

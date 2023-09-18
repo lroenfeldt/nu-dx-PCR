@@ -37,7 +37,7 @@ function useBackgroundProcesses() {
       const usbPresent = await window.api.checkUSB();
       setUSBPresent(usbPresent);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       window.api.logEvents(`checkUSB: ${error}`, "logErrors");
     }
   }, [setUSBPresent]);

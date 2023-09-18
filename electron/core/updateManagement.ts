@@ -23,7 +23,7 @@ export function updater() {
     }
   });
   autoUpdater.on("error", (err) => {
-    console.log(err);
+    console.error(err);
     if (splash) {
       splash.webContents.send(
         "updateStatus",

@@ -232,7 +232,6 @@ export const parseResults: TParseResults = (
     //Apply Overrides
 
     if (override && JSON.parse(override)[position]) {
-      console.log("override", JSON.parse(override)[position]);
       parsedResultsData[position].result = JSON.parse(override)[position];
       parsedResultsData[position].alteredResult = true;
     }

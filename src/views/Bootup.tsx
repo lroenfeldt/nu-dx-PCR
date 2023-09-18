@@ -30,7 +30,6 @@ const Bootup = () => {
     setErrors(errors.filter((error) => error.type !== "pairing"));
 
     if (settings.device.hardwareId === null) {
-      console.log("Couldnt read MAC Adress from Settings.");
       window.api.logEvents(
         "Couldnt read MAC Adress from Settings.",
         "logInfos"
@@ -46,7 +45,6 @@ const Bootup = () => {
       );
     } else {
       try {
-        console.log("trying to fetch pairing code");
         window.api.logEvents("trying to fetch pairing code", "logInfos");
 
         let response = await getPairingCodeApi.request(
@@ -92,12 +90,10 @@ const Bootup = () => {
           "logInfos"
         );
       } catch (err: any) {
-        console.log(err);
+        console.error(err);
         setLoading(false);
         if (err.response) {
-          console.log(err.response?.data);
-          console.log(err.response.status);
-          console.log(err.response.headers);
+          console.error(err.response?.data);
           window.api.logEvents(
             `headers:${JSON.stringify(
               err.response.headers
@@ -115,7 +111,7 @@ const Bootup = () => {
               })
           );
         } else if (err.request) {
-          console.log(err.request);
+          console.error(err.request);
           window.api.logEvents(`request:${err}`, "logErrors");
           setErrors(
             errors
@@ -127,7 +123,7 @@ const Bootup = () => {
               })
           );
         } else {
-          console.log("Error", err.message);
+          console.error("Error", err.message);
           window.api.logEvents(
             `Error:${JSON.stringify(err.message)}`,
             "logErrors"
@@ -161,7 +157,6 @@ const Bootup = () => {
 
     const remDays = Math.floor(difference / 1000 / 60 / 60 / 24);
     if (remDays < 0 && settings.account.allowDaysOffline != 0) {
-      console.log("Token expired");
       let newSettings = {
         ...settings,
         account: {
@@ -229,7 +224,7 @@ const Bootup = () => {
         setLoading(false);
       }
       if (response?.problem && response?.problem == "CLIENT_ERROR") {
-        console.log("Error", response.originalError.message);
+        console.error("Error", response.originalError.message);
         window.api.logEvents(
           `Error:${JSON.stringify(response.originalError.message)}`,
           "logErrors"
@@ -315,13 +310,10 @@ const Bootup = () => {
         }
       }
     } catch (err: any) {
-      console.log(err);
+      console.error(err);
       setLoading(false);
       if (err?.response) {
-        console.log(err.response?.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
-        console.log("token invalid");
+        console.error("token invalid");
         window.api.logEvents(
           `headers:${JSON.stringify(
             err.response.headers
@@ -333,7 +325,7 @@ const Bootup = () => {
         await clearSettings();
         await getPairingCode();
       } else {
-        console.log("Error", err.message);
+        console.error("Error", err.message);
         window.api.logEvents(
           `Error:${JSON.stringify(err.message)}`,
           "logErrors"

@@ -116,8 +116,6 @@ export function DataProvider({ children }: DataProviderProps) {
     setIsStatus(false);
     let newSettings = await window.api.getConfig();
     setSettings(newSettings);
-    console.log("settings loaded:");
-
     window.api.logEvents(
       `Settings loaded: ${JSON.stringify(newSettings)}`,
       "logInfos"
@@ -209,7 +207,7 @@ export function DataProvider({ children }: DataProviderProps) {
         setIsNinetySix(settings?.device?.wellCount === 96);
         return true;
       } catch (error) {
-        console.log(error);
+        console.error(error);
         setErrors((prevErrors) =>
           prevErrors
             .filter((error) => error.type !== "saveSettings")

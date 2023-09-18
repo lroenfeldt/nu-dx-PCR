@@ -138,13 +138,13 @@ const useResults = () => {
           );
           autoControls[i].barcode = generatedBarcode.data.sample;
         } catch (err) {
-          console.log(err);
+          console.error(err);
           window.api.logEvents(`submitAutoControls error: ${err}`, "logErrors");
           throw err;
         }
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
       window.api.logEvents(`submitAutoControls error: ${err}`, "logErrors");
       throw err;
     }
@@ -202,7 +202,7 @@ const useResults = () => {
     try {
       setUSBPresent(await window.api.checkUSB());
     } catch (error) {
-      console.log(error);
+      console.error(error);
       window.api.logEvents(`checkUSB: ${error}`, "logErrors");
     }
   };
@@ -242,7 +242,6 @@ const useResults = () => {
 
     //read result file
     try {
-      console.log("fetching result files");
       window.api.logEvents(`fetching result files`, "logErrors");
 
       let fetchResult = await window.api.getResult(testid, done);
@@ -256,7 +255,7 @@ const useResults = () => {
         (method) => method.id === testConfig.testmethod
       ) as ITestProcedure;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       window.api.logEvents(`saveToUSB: ${err}`, "logErrors");
       setErrors((prevErrors) =>
         prevErrors
@@ -271,7 +270,6 @@ const useResults = () => {
     }
 
     //Parse Results
-    console.log("parse results");
     window.api.logEvents(`parse results`, "logInfos");
     let parsedResults;
     try {
@@ -283,7 +281,7 @@ const useResults = () => {
         lotNumber
       );
     } catch (err) {
-      console.log(err);
+      console.error(err);
       window.api.logEvents(`saveToUSB: ${err}`, "logErrors");
       setErrors((prevErrors) =>
         prevErrors
@@ -303,7 +301,7 @@ const useResults = () => {
       if (location.pathname == "/ResultList") setWriting(testid, false);
       setWritingSuccess(testid, true);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       window.api.logEvents(`saveToUSB: ${error}`, "logErrors");
       setErrors((prevErrors) =>
         prevErrors
@@ -345,7 +343,7 @@ const useResults = () => {
       }
       setResults(newResults);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       window.api.logEvents(`getResults: ${err}`, "logErrors");
     }
     setReading(false);
@@ -358,7 +356,6 @@ const useResults = () => {
    * @returns void
    */
   const submitResult: TsubmitResult = async (testid, done) => {
-    console.log("attempting submit");
     window.api.logEvents(`attempting submit`, "logInfos");
     setSubmitting(true);
     setSubmittingSingle(testid, true);
@@ -379,7 +376,6 @@ const useResults = () => {
     let autoControls: IAutoControl[] | undefined = [];
 
     try {
-      console.log("fetching result files");
       window.api.logEvents(`fetching result files`, "logInfos");
 
       let fetchResult = await window.api.getResult(testid, done);
@@ -398,7 +394,7 @@ const useResults = () => {
       orderKey = testConfig.account.orderKey;
       hardwareId = testConfig.device.hardwareId;
     } catch (err) {
-      console.log("failedToReadTestData: " + JSON.stringify(err));
+      console.error("failedToReadTestData: " + JSON.stringify(err));
       window.api.logEvents(`submitResult: ${err}`, "logErrors");
       setFailedSubmittingResults((prevFailedSubmittingResults) =>
         prevFailedSubmittingResults.filter((id) => id !== testid).concat(testid)
@@ -429,9 +425,7 @@ const useResults = () => {
     const resultUrl = testConfig.account.customSubmitResultsEndpoint
       ? testConfig.account.customSubmitResultsEndpoint
       : urls.resultUrl;
-    console.log(testConfig.account.customSubmitResultsEndpoint);
     //Submit ControlSamples
-    console.log("check for auto controls");
     window.api.logEvents(`check for auto controls`, "logInfos");
     if (settings.account.preregisterControlSamples) {
       try {
@@ -444,7 +438,7 @@ const useResults = () => {
           fetchControlUrl
         );
       } catch (err) {
-        console.log(`submitAutoControls failed: ${err}`);
+        console.error(`submitAutoControls failed: ${err}`);
         window.api.logEvents(`submitResult: ${err}`, "logErrors");
 
         setErrors((prevErrors) =>
@@ -461,8 +455,7 @@ const useResults = () => {
       }
     }
 
-    //Parse Results
-    console.log("parse results");
+    //Parse Results;
     window.api.logEvents(`parse results`, "logInfos");
     let parsedResults;
     try {
@@ -478,7 +471,7 @@ const useResults = () => {
         lotNumber === null ? undefined : lotNumber
       );
     } catch (err) {
-      console.log(`parseResultsDB failed: ${err}`);
+      console.error(`parseResultsDB failed: ${err}`);
       window.api.logEvents(`parseResultsDB failed: ${err}`, "logErrors");
       setFailedSubmittingResults((prevFailedSubmittingResults) =>
         prevFailedSubmittingResults.filter((id) => id !== testid).concat(testid)
@@ -499,7 +492,6 @@ const useResults = () => {
     }
 
     //Submit Results
-    console.log("submit to db");
     window.api.logEvents(`submit to db`, "logInfos");
     try {
       let submitResponse = await axios.post(resultUrl, parsedResults);
@@ -523,7 +515,7 @@ const useResults = () => {
         );
       }
     } catch (err) {
-      console.log(`submitResponse: ${err}`);
+      console.error(`submitResponse: ${err}`);
       window.api.logEvents(`submitResponse: ${err}`, "logErrors");
       setFailedSubmittingResults((prevFailedSubmittingResults) =>
         prevFailedSubmittingResults.filter((id) => id !== testid).concat(testid)
@@ -544,7 +536,6 @@ const useResults = () => {
     }
 
     //Move Result Files if successfull
-    console.log("move result file to done directory");
     window.api.logEvents(`move result file to done directory`, "logInfos");
     try {
       window.api.moveFiles(testid);
@@ -553,7 +544,7 @@ const useResults = () => {
       setSubmitted(true);
       setTestDone(true);
     } catch (err) {
-      console.log(`move result file to done directory: ${err}`);
+      console.error(`move result file to done directory: ${err}`);
       window.api.logEvents(
         `move result file to done directory: ${err}`,
         "logErrors"

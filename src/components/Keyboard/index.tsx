@@ -29,7 +29,6 @@ function Keyboard(props: IKeyboard) {
   };
   const onChangeAll = (newInput: any) => {
     setInputs((prevInputs: any) => ({ ...prevInputs, ...newInput }));
-    console.log("Inputs changed", inputs);
   };
 
   const onKeyPress = (button: string) => {

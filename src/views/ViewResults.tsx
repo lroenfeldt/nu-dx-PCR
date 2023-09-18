@@ -91,7 +91,7 @@ const ViewResults: React.FC = () => {
 
       setSelectedMethod(testmethod.id);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       window.api.logEvents(`fetchResult: ${err}`, "logErrors");
       setErrors((prevErrors: IError[]) =>
         prevErrors
@@ -131,13 +131,11 @@ const ViewResults: React.FC = () => {
         }
       });
 
-      //console.log(newBarcodes);
-      console.log(newBarcodes);
       setBarcodes(newBarcodes as IBarcode[]);
       setTestLoaded(true);
       setActive((prevActive) => (prevActive == 0 ? 1 : prevActive));
     } catch (err) {
-      console.log(err);
+      console.error(err);
       window.api.logEvents(`parseResults: ${err}`, "logErrors");
       setErrors((prevErrors: IError[]) =>
         prevErrors

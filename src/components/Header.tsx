@@ -70,12 +70,25 @@ const Header: FC = () => {
       <ArrowBox direction={`top top-power ${menuOpen ? "active " : ""} `}>
         <div className="power arrow">
           {menuOpen === 1 && (
-            <button onClick={() => shutdown()}>{t("common.shutdown")}</button>
+            <button
+              onClick={() => {
+                setMenuOpen(null);
+                shutdown();
+              }}
+            >
+              {t("common.shutdown")}
+            </button>
           )}
           {menuOpen === 1 && (
-            <button onClick={() => reboot()}>{t("common.reboot")}</button>
+            <button
+              onClick={() => {
+                setMenuOpen(null);
+                reboot();
+              }}
+            >
+              {t("common.reboot")}
+            </button>
           )}
-          {/* <button onClick={() => {setMenuOpen(null)}}>Menü schließen</button> */}
         </div>
       </ArrowBox>
     );

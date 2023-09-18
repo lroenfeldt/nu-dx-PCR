@@ -96,7 +96,7 @@ export function deleteAllOverrides() {
         }
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     return true;
   });
@@ -118,12 +118,12 @@ export function deleteOverride() {
       if (fs.existsSync(destPath)) {
         fs.unlink(destPath, (err) => {
           if (err) {
-            console.log(err);
+            console.error(err);
           }
         });
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     return true;
   });

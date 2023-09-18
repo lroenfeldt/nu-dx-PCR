@@ -1,6 +1,10 @@
-import { useData } from '../hooks';
-import WellVisual from './WellVisual';
-import { IBarcode, IRackVisualRows, IWellVisual } from '../types/interfaces/interfaces';
+import { useData } from "../hooks";
+import WellVisual from "./WellVisual";
+import {
+  IBarcode,
+  IRackVisualRows,
+  IWellVisual,
+} from "../types/interfaces/interfaces";
 
 const RackVisualization = ({ markActive, active, testmethod }: IWellVisual) => {
   const { barcodes } = useData();
@@ -9,7 +13,6 @@ const RackVisualization = ({ markActive, active, testmethod }: IWellVisual) => {
   let rackVisualRows: IRackVisualRows = [];
   barcodes.map((barcode: IBarcode) => {
     let rowName = Math.ceil(barcode.id / 8) - 1;
-    console.log(rowName);
     if (!rackVisualRows[rowName]) {
       rackVisualRows[rowName] = [];
     }
@@ -28,7 +31,7 @@ const RackVisualization = ({ markActive, active, testmethod }: IWellVisual) => {
   return (
     <div className="rackVisualization ">
       {rackVisualRows.map((row: number, index: number) => (
-        <div key={index} className={'rackRow'}>
+        <div key={index} className={"rackRow"}>
           {row}
         </div>
       ))}

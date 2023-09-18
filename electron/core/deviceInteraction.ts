@@ -15,9 +15,22 @@ export function rebootDevice(): void {
    * */
   ipcMain.on("power", (event, reboot) => {
     if (reboot === "reboot") {
-      shutdown.reboot({ force: true });
+      shutdown.reboot({
+        force: true,
+        timerseconds: 1,
+        sudo: true,
+        debug: true,
+      });
+      // console.log("rebooting...");
     } else {
-      shutdown.shutdown({ force: true });
+      shutdown.shutdown({
+        force: true,
+        timerseconds: 1,
+        sudo: true,
+        debug: true,
+        quitapp: true,
+      });
+      // console.log("shutdown...");
     }
     event.returnValue = true;
   });
@@ -30,7 +43,7 @@ export function toggleLid() {
   ipcMain.handle(
     "toggleLid",
     (_event: Electron.IpcMainInvokeEvent): boolean => {
-      console.log("Signal to toggle lid received.");
+      ("Signal to toggle lid received.");
       logger("Signal to toggle lid received.", "logErrors");
       const buffer: number[] = [
         0x7b, 0x7c, 0x0, 0x2, 0x4d, 0x1, 0x0, 0x4c, 0x7c, 0x7d,
@@ -115,7 +128,7 @@ export function saveToUSB() {
       fs.mkdirSync(path.dirname(filepath), { recursive: true });
       fs.writeFileSync(filepath, results);
     } catch (err: any) {
-      console.log(err);
+      console.error(err);
       logger(err, "logErrors");
       logger(`saveToUSB: ${err}`, "logErrors");
       throw err;
@@ -135,16 +148,10 @@ export function getDeviceInfo() {
       let serialNumber = ""; //await getSerialNumber();
       let deviceType = getDeviceType();
       return { hardwareId, deviceType, serialNumber };
-    } catch (err: any) {
-      console.log(err);
-      logger(err, "logErrors");
+    } catch (err) {
+      console.error(err);
       logger(`getDeviceInfo: ${err}`, "logErrors");
       throw err;
     }
   });
 }
-
-// export function shutdownDevice(): void {
-//   shutdown.shutdown();
-//   console.log("shut down device");
-// }

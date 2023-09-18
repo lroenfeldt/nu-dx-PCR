@@ -60,7 +60,7 @@ export const useStatus = (): UseStatusReturnType => {
         "logInfos"
       );
     } catch (err: any) {
-      console.log(err);
+      console.error(err);
       window.api.logEvents("ping status error:" + err, "logErrors");
     }
   }, [deviceStatus, settings, onlineStatusApi, isStatus]);
