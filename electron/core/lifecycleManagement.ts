@@ -19,6 +19,7 @@ export function relaunchApp() {
    * @returns {void}
    * */
   ipcMain.handle("relaunchApp", async (event) => {
+   
     app.relaunch();
     app.exit();
   });

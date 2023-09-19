@@ -29,6 +29,7 @@ export function copyLogos(): void {
    * @returns {void}
    * */
   ipcMain.handle("copyLogos", async (event) => {
+   
     try {
       const logosPath = path.resolve(__dirname, "../src/assets/Logos");
       const destPath = path.resolve(app.getPath("userData"), "logos");
