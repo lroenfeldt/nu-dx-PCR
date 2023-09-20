@@ -9,8 +9,8 @@ import { logger } from "../logger";
 //Define IntervalId for keeping focus
 let focusInterval: NodeJS.Timeout;
 
-export function startTest(/* parameters */): void {
-	// logic for starting a test
+export function startTest(): void {
+
 	/**
 	 * Start the test and run LineGene
 	 * @param {string} testid
@@ -64,86 +64,105 @@ export function startTest(/* parameters */): void {
 	);
 }
 
-export function endTest(/* parameters */): void {
-	/**
-	 * Stop the test and kill LineGene
-	 * @returns {Boolean} true if test stopped
-	 * */
-	ipcMain.handle("endLineGene", async (event: Electron.IpcMainInvokeEvent) => {
-		try {
-			["Gene-9660.exe", "LineGene1600.exe", "PcrServer.exe"].forEach(killProcess);
-			clearInterval(focusInterval);
-			return true;
-		} catch (error: any) {
-			console.log(error);
-			logger(`endLineGene error: ${error.message}`, "logErrors");
-			return false;
-		}
-	});
+export function endTest(): void {
+  /**
+   * Stop the test and kill LineGene
+   * @returns {Boolean} true if test stopped
+   * */
+  ipcMain.handle("endLineGene", async (_event: Electron.IpcMainInvokeEvent) => {
+    try {
+      ["Gene-9660.exe", "LineGene1600.exe", "PcrServer.exe"].forEach(
+        killProcess
+      );
+      clearInterval(focusInterval);
+      return true;
+    } catch (error: any) {
+      console.error(error);
+      logger(`endLineGene error: ${error.message}`, "logErrors");
+      return false;
+    }
+  });
 }
 
 export function getUnsubmitted() {
-	/**
-	 * bGet unsubmitted tests
-	 * @returns {Array} unsubmitted tests
-	 * */
-	ipcMain.handle("getUnsubmitted", (event: Electron.IpcMainInvokeEvent) => {
-		const filePath = path.resolve(app.getPath("userData"), "runs");
-		try {
-			if (!fs.existsSync(filePath)) {
-				fs.mkdirSync(filePath);
-			}
-			let getDirectories = fs
-				.readdirSync(filePath, { withFileTypes: true })
-				.filter((dirent) => dirent.isDirectory())
-				.map((dirent) => dirent.name);
+  /**
+   * bGet unsubmitted tests
+   * @returns {Array} unsubmitted tests
+   * */
+  ipcMain.handle("getUnsubmitted", (_event: Electron.IpcMainInvokeEvent) => {
+    const filePath = path.resolve(app.getPath("userData"), "runs");
+    try {
+      if (!fs.existsSync(filePath)) {
+        fs.mkdirSync(filePath);
+      }
+      let getDirectories = fs
+        .readdirSync(filePath, { withFileTypes: true })
+        .filter((dirent) => dirent.isDirectory())
+        .map((dirent) => dirent.name);
 
-			const unsubmittedTests = getDirectories
-				.filter((testid) => {
-					if (testid === "demo") {
-						return false;
-					}
-					const resultPath = path.resolve(app.getPath("userData"), "runs", testid, testid + ".csv");
-					try {
-						fs.accessSync(resultPath, fs.constants.F_OK);
-						return true;
-					} catch (err) {
-						return false;
-					}
-				})
-				.map((testid) => {
-					const resultFilePath = path.resolve(app.getPath("userData"), "runs", testid, testid + ".csv");
-					const launchFilePath = path.resolve(app.getPath("userData"), "runs", testid, "lineGeneSetup.xml");
-					let testStarted;
-					try {
-						testStarted = fs.statSync(launchFilePath).ctime;
-					} catch (error) {
-						testStarted = "xml not found";
-					}
-					const testFinished = fs.statSync(resultFilePath).ctime;
-					const testObject = { testid, testStarted, testFinished };
-					return testObject;
-				});
-			return unsubmittedTests;
-		} catch (err) {
-			console.log(err);
-			return false;
-		}
-	});
+      const unsubmittedTests = getDirectories
+        .filter((testid) => {
+          if (testid === "demo") {
+            return false;
+          }
+          const resultPath = path.resolve(
+            app.getPath("userData"),
+            "runs",
+            testid,
+            testid + ".csv"
+          );
+          try {
+            fs.accessSync(resultPath, fs.constants.F_OK);
+            return true;
+          } catch (err) {
+            return false;
+          }
+        })
+        .map((testid) => {
+          const resultFilePath = path.resolve(
+            app.getPath("userData"),
+            "runs",
+            testid,
+            testid + ".csv"
+          );
+          const launchFilePath = path.resolve(
+            app.getPath("userData"),
+            "runs",
+            testid,
+            "lineGeneSetup.xml"
+          );
+          let testStarted;
+          try {
+            testStarted = fs.statSync(launchFilePath).ctime;
+          } catch (error) {
+            testStarted = "xml not found";
+          }
+          const testFinished = fs.statSync(resultFilePath).ctime;
+          const testObject = { testid, testStarted, testFinished };
+          return testObject;
+        });
+      return unsubmittedTests;
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
+  });
 }
 
 export function getTests() {
-	/**
-	 * Get test results
-	 * */
-	ipcMain.handle("getTests", (event: Electron.IpcMainInvokeEvent): ITestObject[] | boolean => {
-		const filePath = path.resolve(app.getPath("userData"), "runs");
-		try {
-			//Get Unsubmitted
-			let getDirectories = fs
-				.readdirSync(filePath, { withFileTypes: true })
-				.filter((dirent) => dirent.isDirectory())
-				.map((dirent) => dirent.name);
+  /**
+   * Get test results
+   * */
+  ipcMain.handle(
+    "getTests",
+    (_event: Electron.IpcMainInvokeEvent): ITestObject[] | boolean => {
+      const filePath = path.resolve(app.getPath("userData"), "runs");
+      try {
+        //Get Unsubmitted
+        let getDirectories = fs
+          .readdirSync(filePath, { withFileTypes: true })
+          .filter((dirent) => dirent.isDirectory())
+          .map((dirent) => dirent.name);
 
 			const unsubmittedTests = getDirectories
 				.filter((testid) => {
@@ -193,14 +212,14 @@ export function getTests() {
 					return testObject;
 				});
 
-			//Check if "done" directory exists
-			try {
-				fs.accessSync(path.resolve(filePath, "done"), fs.constants.F_OK);
-			} catch (error) {
-				console.log('no "done" directory found');
-				logger(`no "done" directory found`, "logErrors");
-				return unsubmittedTests as ITestObject[];
-			}
+        //Check if "done" directory exists
+        try {
+          fs.accessSync(path.resolve(filePath, "done"), fs.constants.F_OK);
+        } catch (error) {
+          console.error('no "done" directory found');
+          logger(`no "done" directory found`, "logErrors");
+          return unsubmittedTests as ITestObject[];
+        }
 
 			//Get Submitted
 			getDirectories = fs
@@ -257,44 +276,66 @@ export function getTests() {
 					return testObject;
 				});
 
-			return unsubmittedTests.concat(submittedTests).sort((a, b) => {
-				if (a.testStartedMS === undefined || b.testStartedMS === undefined) {
-					return 0;
-				}
-				return b.testStartedMS - a.testStartedMS;
-			}) as ITestObject[];
-		} catch (err: any) {
-			console.log(err);
-			logger(err, "logErrors");
-			return false;
-		}
-	});
+        return unsubmittedTests.concat(submittedTests).sort((a, b) => {
+          if (a.testStartedMS === undefined || b.testStartedMS === undefined) {
+            return 0;
+          }
+          return b.testStartedMS - a.testStartedMS;
+        }) as ITestObject[];
+      } catch (err: any) {
+        console.error(err);
+        logger(err, "logErrors");
+        return false;
+      }
+    }
+  );
 }
 
 export function editResultsHandler() {
-	/** Edit test results */
-	ipcMain.handle("editResults", async (event, testid, results) => {
-		try {
-			let destPath = path.resolve(app.getPath("userData"), "runs", testid, "override.json");
-			if (!fs.existsSync(destPath) && !fs.existsSync(path.resolve(app.getPath("userData"), "runs", testid))) {
-				destPath = path.resolve(app.getPath("userData"), "runs", "done", testid, "override.json");
-				if (!fs.existsSync(destPath)) {
-					fs.writeFileSync(destPath, JSON.stringify([]));
-				}
-			} else if (fs.existsSync(path.resolve(app.getPath("userData"), "runs", testid))) {
-				destPath = path.resolve(app.getPath("userData"), "runs", testid, "override.json");
-				if (!fs.existsSync(destPath)) {
-					if (!fs.existsSync(destPath)) {
-						fs.writeFileSync(destPath, JSON.stringify([]));
-					}
-				}
-			}
-			const lastResults = JSON.parse(fs.readFileSync(destPath, "utf8"));
-			const newResults = { ...lastResults, ...results };
-			fs.writeFileSync(destPath, JSON.stringify(newResults));
-		} catch (err) {
-			console.log(err);
-		}
-		return true;
-	});
+  /** Edit test results */
+  ipcMain.handle("editResults", async (_event, testid, results) => {
+    try {
+      let destPath = path.resolve(
+        app.getPath("userData"),
+        "runs",
+        testid,
+        "override.json"
+      );
+      if (
+        !fs.existsSync(destPath) &&
+        !fs.existsSync(path.resolve(app.getPath("userData"), "runs", testid))
+      ) {
+        destPath = path.resolve(
+          app.getPath("userData"),
+          "runs",
+          "done",
+          testid,
+          "override.json"
+        );
+        if (!fs.existsSync(destPath)) {
+          fs.writeFileSync(destPath, JSON.stringify([]));
+        }
+      } else if (
+        fs.existsSync(path.resolve(app.getPath("userData"), "runs", testid))
+      ) {
+        destPath = path.resolve(
+          app.getPath("userData"),
+          "runs",
+          testid,
+          "override.json"
+        );
+        if (!fs.existsSync(destPath)) {
+          if (!fs.existsSync(destPath)) {
+            fs.writeFileSync(destPath, JSON.stringify([]));
+          }
+        }
+      }
+      const lastResults = JSON.parse(fs.readFileSync(destPath, "utf8"));
+      const newResults = { ...lastResults, ...results };
+      fs.writeFileSync(destPath, JSON.stringify(newResults));
+    } catch (err) {
+      console.error(err);
+    }
+    return true;
+  });
 }

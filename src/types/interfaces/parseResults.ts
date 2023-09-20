@@ -1,7 +1,4 @@
-import { AxiosResponse } from 'axios';
-import { IConfigFile, ITestProcedure } from './settings';
-
-
+import { IConfigFile, ITestProcedure } from "./settings";
 
 export interface IParameter {
   parameter: string;
@@ -22,10 +19,9 @@ export interface IParsedResult {
   alteredResult?: boolean;
   oldResult?: string;
   isControl?: boolean;
-  parameters:  Record<string, IParameter>;
+  parameters: Record<string, IParameter>;
   result?: string;
-  position?: string|number;
-  
+  position?: string | number;
 }
 
 export interface ITestConfigAccount {
@@ -65,14 +61,14 @@ export interface ITestMethod {
 
 export interface IAutoControl {
   type: string;
-  run: string; 
-  order:  string; 
+  run: string;
+  order: string;
   barcode?: string;
-  device:   string;
+  device: string;
   position?: string;
 }
 
-export interface IRunData  {
+export interface IRunData {
   run: string;
   testmethod: string;
   specificationId: string;
@@ -80,8 +76,8 @@ export interface IRunData  {
   wellCount: number;
   orderKey: string;
   userId: string;
-  testStarted: Date |string;
-} 
+  testStarted: Date | string;
+}
 
 export interface ISampleParameter {
   parameter: string;
@@ -112,61 +108,36 @@ export interface IExtractedBarcodes {
   position: string;
 }
 
-export interface IWellResult {
-  position: string;
-  value: string;
-  result: string;
-}
-
-export interface IParsedSampleData {
-  barcode: string;
-  parameters: {
-    [key: string]: {
-      ct: string;
-      curveData: TCurveData;
-    };
-  };
-  isControl: boolean;
-  result: string;
-  oldResult: string;
-} 
-
-
 /******************************** TYPES ************************************/
 
 // Type definitions
 export type TExtractBarcodes = (resultFile: string) => IExtractedBarcodes[];
 export type TCurveData = Array<string>;
-export type IParsedData = {
-  [position: string]: IParsedSampleData;
-};
 
 export type TParseResults = (
   resultFile: string,
   testid: string,
   testConfig: IConfigFile,
   testmethod: ITestProcedure,
-  override?: string,
+  override?: string
 ) => Record<string, IParsedResult>;
 
 export type TParseResultsExport = (
-    resultFile: string,
-    testid: string,
-    testConfig: IConfigFile,
-    testmethod: ITestProcedure,
-    lotNumber: string | null
+  resultFile: string,
+  testid: string,
+  testConfig: IConfigFile,
+  testmethod: ITestProcedure,
+  lotNumber: string | null
 ) => string;
 
 export type TParseResultsDB = (
-    testid: string,
-    resultFile: string,
-    testmethod: ITestProcedure,
-    testConfig: IConfigFile,
-    autoControls: IAutoControl[],
-    testStarted: Date | string,
-    userId?: string,
-    override?: string,
-    lotNumber?: string
+  testid: string,
+  resultFile: string,
+  testmethod: ITestProcedure,
+  testConfig: IConfigFile,
+  autoControls: IAutoControl[],
+  testStarted: Date | string,
+  userId?: string,
+  override?: string,
+  lotNumber?: string
 ) => IResultsDB;
-
-

@@ -1,12 +1,5 @@
-export interface ISoftwareList {
-  path: string;
-  returnType: '16' | '96';
-  name: 'LineGene1600' | 'LineGene1644' | 'LineGene1640' | 'LineGene9600';
-}
-
 export interface IStore {
   settings: Settings;
- 
 }
 export interface Role {
   name: string;
@@ -62,24 +55,6 @@ export interface UserSettings {
   updateType: string;
 }
 
-export interface IFile {
-  isDirectory: () => boolean;
-  // In ElectronJS and Node.js, the `isDirectory()` method is typically defined as a function
-  // that returns a boolean value indicating whether the file represented by the `File` object is a directory
-  // With this type definition, TypeScript can now infer that the `isDirectory` method returns a boolean value,
-  // which can be used for type checking and to provide IntelliSense suggestions when working with `File` objects.
-  name: string;
-}
-
-export interface ISettings {
-  account: {
-    authToken?: string;
-  };
-  barcodes: IBarcode[];
-  testid: string;
-  testmethod: Object;
-}
-
 export interface IBarcode {
   id: number;
   posName: string;
@@ -96,10 +71,6 @@ export interface IDevice {
   deviceType?: string;
   serialNumber: string;
   wellCount: number;
-}
-
-export interface IProgressObj {
-  percent: number;
 }
 
 export interface IGetResultResponse {
@@ -128,8 +99,7 @@ export interface ITestObject {
   submitted: boolean;
   testmethod: string | null;
   isSubmitting?: boolean;
-  writingSuccess ?: boolean;
+  writingSuccess?: boolean;
   isWriting?: boolean;
   submittingSuccess?: boolean;
-
 }

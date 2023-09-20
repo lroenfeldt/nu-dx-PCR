@@ -2,11 +2,14 @@ import { IBarcode } from "./interfaces";
 import { TCurveData } from "./parseResults";
 
 export interface ISettings {
+  id: number;
+  durationMinutes: number;
   account: IAccount;
   user: IUserSettings;
   isDev: boolean;
   version: string;
   device: IDevice;
+  [key: string]: any;
 }
 
 export interface IConfigFile {
@@ -136,8 +139,8 @@ export interface ITestResult {
   test_type_id: string;
   countInStatistic: boolean;
   submitted?: boolean;
-  testid?: string|undefined;
-  [key: string]: any; 
+  testid?: string | undefined;
+  [key: string]: any;
 }
 
 export interface IAdditionalAttribute {
@@ -158,4 +161,3 @@ export interface IUserSettings {
   locale: string;
   updateType: string;
 }
-

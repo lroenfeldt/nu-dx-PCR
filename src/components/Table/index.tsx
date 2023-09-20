@@ -1,23 +1,25 @@
-import React, { useRef, useEffect } from 'react';
-import { useData, useSticky } from '../../hooks';
-import './css/table.css';
-import { ITableProps } from '../../types/interfaces/interfaces';
+import React, { useRef, useEffect } from "react";
+import { useData, useSticky } from "../../hooks";
+import "./css/table.css";
+import { ITableProps } from "../../types/interfaces/interfaces";
 
 const Table: React.FC<ITableProps> = ({ th, tr }) => {
   const { settings, selectedMethod } = useData();
-  const testMethod = settings.account.testprocedures.find((procedure) => procedure.id === selectedMethod);
+  const testMethod = settings.account.testprocedures.find(
+    (procedure) => procedure.id === selectedMethod
+  );
 
   // Remove the last header if showCurves is false
   if (testMethod && !testMethod.showCurves) th.pop();
 
   // Initialize the sticky header
-  useSticky({ top: 5, id: 'stickyHeader', stickyClass: 'table' });
+  useSticky({ top: 5, id: "stickyHeader", stickyClass: "table" });
   const handleSelected = (e: React.MouseEvent) => {
-    const selected = document.querySelector('.selected');
-    if (selected) selected.classList.remove('selected');
-    const target= e.target as Element
-    const row = target.closest('tr') ;
-    if (row) row.classList.add('selected');
+    const selected = document.querySelector(".selected");
+    if (selected) selected.classList.remove("selected");
+    const target = e.target as Element;
+    const row = target.closest("tr");
+    if (row) row.classList.add("selected");
   };
 
   const containerRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -26,26 +28,27 @@ const Table: React.FC<ITableProps> = ({ th, tr }) => {
     const handleScroll = () => {
       if (containerRef.current) {
         const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
-    
-        const fadeOut = document.querySelector('.fade-out');
+
         if (scrollLeft + clientWidth >= scrollWidth) {
-          containerRef.current.classList.add('end-reached');
+          containerRef.current.classList.add("end-reached");
         } else {
-          containerRef.current.classList.remove('end-reached');
+          containerRef.current.classList.remove("end-reached");
         }
         if (scrollLeft === 0) {
-          containerRef.current.classList.add('start-reached');
+          containerRef.current.classList.add("start-reached");
         } else {
-          containerRef.current.classList.remove('start-reached');
+          containerRef.current.classList.remove("start-reached");
         }
       }
     };
-    
+
     handleScroll();
-    if (containerRef.current) containerRef.current.addEventListener('scroll', handleScroll);
+    if (containerRef.current)
+      containerRef.current.addEventListener("scroll", handleScroll);
 
     return () => {
-      if (containerRef.current) containerRef.current.removeEventListener('scroll', handleScroll);
+      if (containerRef.current)
+        containerRef.current.removeEventListener("scroll", handleScroll);
     };
   }, []);
   return (
@@ -65,7 +68,7 @@ const Table: React.FC<ITableProps> = ({ th, tr }) => {
         </thead>
         <tbody>
           {tr
-            
+
             .filter((item) => typeof item !== undefined)
             .map((element, index) => {
               // Remove the last element in the row if showCurves is false
@@ -78,7 +81,7 @@ const Table: React.FC<ITableProps> = ({ th, tr }) => {
                     .filter((item) => typeof item !== undefined)
                     .map((item, i) => (
                       <td key={`row-${index}-${i}`} className="row">
-                        {item ? item : '-'}
+                        {item ? item : "-"}
                       </td>
                     ))}
                 </tr>
@@ -90,6 +93,6 @@ const Table: React.FC<ITableProps> = ({ th, tr }) => {
       <div className="fade-out-left"></div>
     </div>
   );
-}
+};
 
 export default Table;

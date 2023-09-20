@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { useData, useTranslation } from '../../hooks';
-import './style.css';
+import { useState, useEffect } from "react";
+import { useData, useTranslation } from "../../hooks";
+import "./style.css";
 
 const ShutdownNotification = () => {
   const [showNotification, setShowNotification] = useState(false);
@@ -21,12 +21,14 @@ const ShutdownNotification = () => {
   useEffect(() => {
     let timeout: string | number | NodeJS.Timer | undefined;
     if (
-      deviceStatus === 'IDLE' &&
+      deviceStatus === "IDLE" &&
       settings?.account?.autoShutdownMinutes &&
       Number(settings?.account?.autoShutdownMinutes) > 0 &&
       idleTimestamp &&
-      Date.now() - +idleTimestamp >= (settings?.account?.autoShutdownMinutes - 1) * 60 * 1000 &&
-      Date.now() - +idleTimestamp < settings?.account?.autoShutdownMinutes * 60 * 1000
+      Date.now() - +idleTimestamp >=
+        (settings?.account?.autoShutdownMinutes - 1) * 60 * 1000 &&
+      Date.now() - +idleTimestamp <
+        settings?.account?.autoShutdownMinutes * 60 * 1000
       // converted idleTimestamp (string) to number by adding + to idleTimestamp
     ) {
       setShowNotification(true);
@@ -49,9 +51,13 @@ const ShutdownNotification = () => {
 
   return (
     <div className="shutdown-notification">
-      <p dangerouslySetInnerHTML={{ __html: t('common.deviceTurnOffInfo', countdown) }} />
-      <button onClick={handleAccept}>{t('common.acceptPowerOff')}</button>
-      <button onClick={handleContinue}>{t('common.continue')}</button>
+      <p
+        dangerouslySetInnerHTML={{
+          __html: t("common.deviceTurnOffInfo", countdown),
+        }}
+      />
+      <button onClick={handleAccept}>{t("common.acceptPowerOff")}</button>
+      <button onClick={handleContinue}>{t("common.continue")}</button>
     </div>
   );
 };

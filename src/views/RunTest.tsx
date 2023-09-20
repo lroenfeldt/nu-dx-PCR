@@ -68,23 +68,16 @@ const RunTest = () => {
       if (resultPresent) {
         clearInterval(checkFile);
         setWaitingForResults(true);
-        console.log(
-          "result for test " +
-            testid +
-            " found, waiting for writing process to finish..."
-        );
         window.api.logEvents(
           `Result for test ${testid} found, waiting for writing process to finish...`,
           "logInfos"
         );
         setTimeout(async () => {
-          console.log("ending linegene...");
           window.api.endLineGene();
 
           setTimeout(() => {
             toggleLid();
             if (!window.api.moveResultFile(testid)) {
-              console.log("result for test " + testid + " could not be moved");
               window.api.logEvents(
                 `Result for test ${testid} could not be moved`,
                 "logInfos"
@@ -105,7 +98,6 @@ const RunTest = () => {
           }, 3000);
         }, 3000);
       } else {
-        console.log("result for test " + testid + " not present (yet)");
         window.api.logEvents(
           `Result for test ${testid} not present (yet)`,
           "logInfos"

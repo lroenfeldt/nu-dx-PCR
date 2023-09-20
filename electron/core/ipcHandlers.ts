@@ -8,7 +8,7 @@ import { logger } from "../logger";
 export function checkResultFileHandler(): void {
   // logic for IPC handler "checkResultFile"
   /**check if result file is present and move to run directory*/
-  ipcMain.handle("checkResultFile", (event, testid) => {
+  ipcMain.handle("checkResultFile", (_event, testid) => {
     if (testid === "demo") {
       return true;
     }
@@ -45,7 +45,7 @@ export function checkResultFileHandler(): void {
 export function moveResultFileHandler(): void {
   // logic for IPC handler "moveResultFile"
   /**move resultfile to run directory*/
-  ipcMain.handle("moveResultFile", (event, testid) => {
+  ipcMain.handle("moveResultFile", (_event, testid) => {
     if (testid === "demo") {
       return true;
     }
@@ -61,8 +61,7 @@ export function moveResultFileHandler(): void {
     try {
       fs.renameSync(filepath, destpath);
       const successMsg = `Result file successfully moved to "${destpath}"`;
-      console.log(successMsg);
-      logger(successMsg, "logErrors");
+      logger(successMsg, "logInfos");
       return true;
     } catch (error: any) {
       const errorMsg = `Result file "${filepath}" could not be moved to "${destpath}" due to error: ${error.message}`;
@@ -77,7 +76,7 @@ export function getResultHandler(): void {
   ipcMain.handle(
     "getResult",
     async (
-      event: Electron.IpcMainInvokeEvent,
+      _event: Electron.IpcMainInvokeEvent,
       testid: string,
       done: boolean
     ): Promise<IGetResultResponse> => {
@@ -101,9 +100,6 @@ export function getResultHandler(): void {
       try {
         testStarted = fs.statSync(launchFilePath).mtime;
       } catch (error) {
-        console.log(
-          "test launch file not found, defaulting to current time for test start"
-        );
         logger(
           "test launch file not found, defaulting to current time for test start",
           "logInfos"
@@ -114,18 +110,17 @@ export function getResultHandler(): void {
       try {
         resultFile = fs.readFileSync(filepath, "utf-8");
       } catch (error: any) {
-        console.log(`error accessing result file for test ${testid}`);
-        console.error(error);
+        console.error(`error accessing result file for test ${testid}`);
+
         logger(`error accessing result file for test ${testid}`, "logErrors");
-        logger(error.message, "logErrors");
+
         throw error;
       }
 
       try {
         configFile = fs.readFileSync(configPath, "utf-8");
       } catch (error: any) {
-        console.log(`error accessing config file for test ${testid}`);
-        console.error(error);
+        console.error(`error accessing config file for test ${testid}`);
         logger(error.message, "logErrors");
       }
 
@@ -143,7 +138,7 @@ export function getVersion() {
    * Provide App Version
    * @returns {string}  version
    * */
-  ipcMain.handle("getVersion", (event) => {
+  ipcMain.handle("getVersion", (_event) => {
     return app.getVersion();
   });
 }

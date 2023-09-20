@@ -1,4 +1,4 @@
-import { IText } from "../types/interfaces/components";
+import { IText } from "../types/components";
 
 function Text(props: IText) {
 	const {

@@ -1,9 +1,6 @@
-import React, { ReactNode, CSSProperties, ButtonHTMLAttributes  } from 'react';
-import { IAccountUser } from '../interfaces/settings';
-import { IBarcode,ITestMethod } from '../interfaces/interfaces';
-
-
-
+import { ReactNode, CSSProperties, ButtonHTMLAttributes } from "react";
+import { IAccountUser } from "../interfaces/settings";
+import { IBarcode, ITestMethod } from "../interfaces/interfaces";
 
 export interface TBlockProps {
   row?: boolean;
@@ -81,7 +78,6 @@ export interface TBlockProps {
   [key: string]: any;
 }
 
-
 export type InputsType = { [key: string]: string };
 
 export interface ILotDokuProps {
@@ -122,7 +118,10 @@ export interface IKeyboard {
   clear: boolean;
   visible: boolean;
   inputs: InputsType;
-  onChange?: ((input: string) => string) | undefined | ((value: string) => void);
+  onChange?:
+    | ((input: string) => string)
+    | undefined
+    | ((value: string) => void);
   setClear: React.Dispatch<React.SetStateAction<boolean>>;
   setInputs: React.Dispatch<React.SetStateAction<InputsType>>;
   inputName: string;
@@ -214,4 +213,59 @@ export interface IWellVisualProps {
   markActive: (id: number) => void;
   showResults?: boolean;
   testmethod: ITestMethod;
+}
+
+export interface IText {
+  [x: string]: any;
+  id?: "Text";
+  children?: JSX.Element;
+  style?: React.CSSProperties;
+  center?: boolean;
+  gradient?: string;
+  color?: string;
+  opacity?: number;
+  primary?: string;
+  secondary?: string;
+  tertiary?: string;
+  black?: string;
+  white?: boolean;
+  gray?: string;
+  danger?: string;
+  warning?: string;
+  success?: string;
+  info?: string;
+  size?: string;
+  bold?: string;
+  semibold?: string;
+  weight?: string;
+  h1?: string;
+  h2?: string;
+  h3?: string;
+  h4?: string;
+  h5?: string;
+  h6?: string;
+  p?: string;
+  font?: string;
+  align?: string;
+  transform?: string;
+  lineHeight?: string;
+  position?: string;
+  right?: number;
+  left?: number;
+  top?: number;
+  bottom?: number;
+  start?: number;
+  end?: number;
+  marginBottom?: number;
+  marginTop?: number;
+  marginHorizontal?: number;
+  marginVertical?: number;
+  marginRight?: number;
+  marginLeft?: number;
+  paddingBottom?: number;
+  paddingTop?: number;
+  paddingHorizontal?: number;
+  paddingVertical?: number;
+  paddingRight?: number;
+  paddingLeft?: number;
 }

@@ -7,20 +7,7 @@ import { useData, useTranslation } from "../hooks";
 import { IoMdCloseCircle } from "react-icons/io";
 import { IBarcode, ITestMethod } from "../types/interfaces/interfaces";
 const BarcodeInput = () => {
-	const {
-		reset,
-		errors,
-
-		barcodes,
-		settings,
-		toggleLid,
-		setErrors,
-		setLoading,
-		offlineMode,
-		setBarcodes,
-		isNinetySix,
-		selectedMethod,
-	} = useData();
+	const { reset, errors, barcodes, settings, toggleLid, setErrors, setLoading, offlineMode, setBarcodes, isNinetySix, selectedMethod } = useData();
 
 	const { t } = useTranslation();
 	const navigate = useNavigate();

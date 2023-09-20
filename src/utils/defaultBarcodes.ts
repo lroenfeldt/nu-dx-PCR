@@ -1,5 +1,5 @@
-import { IBarcode, IError,  } from '../types/interfaces/interfaces';
-import { ISettings } from '../types/interfaces/settings';
+import { IBarcode } from "../types/interfaces/interfaces";
+import { ISettings } from "../types/interfaces/settings";
 
 /**
  * Generate default barcodes depending on the device type
@@ -9,7 +9,20 @@ import { ISettings } from '../types/interfaces/settings';
 export default function useDefaultBarcodes(settings: ISettings): IBarcode[] {
   //Plate Setup
   let defaultBarcodes = [];
-  const rowLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
+  const rowLetters = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+  ];
   let demoSet = false;
   const wellCount = settings?.device?.wellCount;
   const length = wellCount == 96 ? 12 : 8;
@@ -24,22 +37,22 @@ export default function useDefaultBarcodes(settings: ISettings): IBarcode[] {
     //Set Position Name
     let posName =
       i - rowIndex * length < 10
-        ? rowLetters[rowIndex] + '0' + (i - rowIndex * length).toString()
-        : rowLetters[rowIndex] + '' + (i - rowIndex * length).toString();
+        ? rowLetters[rowIndex] + "0" + (i - rowIndex * length).toString()
+        : rowLetters[rowIndex] + "" + (i - rowIndex * length).toString();
     let label = posName;
-    let value = '';
+    let value = "";
     let valid = false;
     //Set Controls
     if (posName === settings.user.tpcPos && settings.account.autoControl) {
       blocked = settings.account.autoControl;
-      label = 'TPC';
-      value = 'TPC';
+      label = "TPC";
+      value = "TPC";
       valid = true;
     }
     if (posName === settings.user.ntcPos && settings.account.autoControl) {
       blocked = settings.account.autoControl;
-      label = 'NTC';
-      value = 'NTC';
+      label = "NTC";
+      value = "NTC";
       valid = true;
     }
     //Set Demo Code for Development
@@ -50,7 +63,7 @@ export default function useDefaultBarcodes(settings: ISettings): IBarcode[] {
       posName !== settings.user.tpcPos &&
       !demoSet
     ) {
-      value = '3575910784';
+      value = "3575910784";
       valid = true;
       demoSet = true;
     }
@@ -64,10 +77,10 @@ export default function useDefaultBarcodes(settings: ISettings): IBarcode[] {
       valid,
       error: "",
       blocked,
-      result: "", 
+      result: "",
       barcode: "",
       name: "",
-      askRetest : null,
+      askRetest: null,
     });
   }
 

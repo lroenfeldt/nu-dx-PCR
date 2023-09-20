@@ -68,17 +68,17 @@ export const getDeviceType = () => {
 			const res = fs.realpathSync(software.path);
 			fs.accessSync(res, fs.constants.F_OK);
 
-			lineGenePath = res;
-			return software.returnType;
-		} catch (error) {
-			console.log(`${software.name} not found`);
-			logger(`${software.name} not found`, "logInfos");
-		}
-	}
+      lineGenePath = res;
+      return software.returnType;
+    } catch (error) {
+      console.log(`${software.name} not found`);
+      logger(`${software.name} not found`, "logErrors");
+    }
+  }
 
-	const errMessage = "No LineGene Installation found";
-	console.log(errMessage);
-	logger(errMessage, "logInfos");
+  const errMessage = "No LineGene Installation found";
+  console.log(errMessage);
+  logger(errMessage, "logErrors");
 
 	return 0;
 };
@@ -268,6 +268,7 @@ rebootDevice();
 startTest();
 endTest();
 
+// deviceInteraction
 toggleLid();
 
 getUnsubmitted();
@@ -292,3 +293,6 @@ deleteOverride();
 
 relaunchApp();
 copyLogos();
+
+// deviceInteraction
+// shutdownDevice();
