@@ -3,7 +3,7 @@ import Menu from "./Menu";
 import Block from "./Block";
 import Close from "./Close";
 import Table from "./Table";
-import Toggle from "./Text";
+import Toggle from "./Toggel";
 import Input from "./Input";
 import Layout from "./Layout";
 import Header from "./Header";

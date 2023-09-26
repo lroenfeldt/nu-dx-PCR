@@ -91,6 +91,7 @@ function useBackgroundProcesses() {
   useEffect(() => {
     const pingInterval = setInterval(() => {
       ping();
+      
     }, 5000); // 5 seconds
 
     return () => clearInterval(pingInterval);

@@ -35,6 +35,12 @@ function Keyboard(props: IKeyboard) {
 		if (button === "{enter}") {
 			setVisible(false);
 		}
+		if (button === "{downkeyboard}") {
+			setVisible(false);
+		}
+		if (button === "{default}") {
+			setLayoutName("default");
+		}
 	};
 
 	const layout = {

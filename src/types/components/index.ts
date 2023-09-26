@@ -78,6 +78,9 @@ export interface TBlockProps {
   transparency?: Boolean;
   secGrad?: Boolean;
   priGrad?: Boolean;
+  dropShadowLarge?: boolean;
+  dropShadowSmall?: boolean;
+  innerShadow?: boolean;
   [key: string]: any;
 }
 

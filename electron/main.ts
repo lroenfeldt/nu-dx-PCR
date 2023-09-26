@@ -58,9 +58,10 @@ const softwareList = [
  * @returns number
  */
 const getDeviceType = () => {
+  if(isDev ) return 16;
   for (let i = 0; i < softwareList.length; i++) {
     const software = softwareList[i];
-
+    
     try {
       const res = fs.realpathSync(software.path);
       fs.accessSync(res, fs.constants.F_OK);

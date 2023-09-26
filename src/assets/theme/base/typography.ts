@@ -1,101 +1,103 @@
+
 import colors from "./colors";
-
-
 import pxToRem from "../functions/pxToRem";
 
-const { secondary } = colors;
+const { text } = colors;
 
 const baseProperties = {
-	fontFamily: 'inter',
-	fontWeightLight: 300,
-	fontWeightRegular: 400,
-	fontWeightMedium: 500,
-	fontWeightSemiBold: 600,
-	fontWeightBold: 700,
-	fontSizeXXS: pxToRem(10.4),
-	fontSizeXS: pxToRem(12),
-	fontSizeSM: "20px",
-	fontSizeMD: pxToRem(16),
-	fontSizeLG: "24px",
-	fontSizeXL: "28px",
+    fontFamily: 'inter', 
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+    fontWeightSemiBold: 600,
+    fontWeightBold: 700,
+    fontSizeXXS: pxToRem(10.4),
+    fontSizeXS: pxToRem(12),
+    fontSizeSM: "20px",
+    fontSizeMD: pxToRem(24), 
+    fontSizeLG: "24px", 
+    fontSizeXL: "28px",
 };
 
 const baseHeadingProperties = {
-	fontFamily: baseProperties.fontFamily,
-	color: secondary.main,
-	fontWeight: baseProperties.fontWeightBold,
-	fontStyle: "normal",
+    fontFamily: baseProperties.fontFamily,
+    color: text.main, 
+    fontWeight: baseProperties.fontWeightBold,
+    fontStyle: "normal",
 };
 
 const baseDisplayProperties = {
-	fontFamily: baseProperties.fontFamily,
-	color: secondary.main,
-	fontWeight: baseProperties.fontWeightLight,
-	lineHeight: 1.2,
+    fontFamily: baseProperties.fontFamily,
+    color: text.main, 
+    fontWeight: baseProperties.fontWeightLight,
+    lineHeight: 1.2,
 };
 
 const typography = {
-	fontFamily: baseProperties.fontFamily,
-	fontWeightLight: baseProperties.fontWeightLight,
-	fontWeightRegular: baseProperties.fontWeightRegular,
-	fontWeightMedium: baseProperties.fontWeightMedium,
-	fontWeightBold: baseProperties.fontWeightBold,
+    fontFamily: baseProperties.fontFamily,
+    fontWeightLight: baseProperties.fontWeightLight,
+    fontWeightRegular: baseProperties.fontWeightRegular,
+    fontWeightMedium: baseProperties.fontWeightMedium,
+    fontWeightBold: baseProperties.fontWeightBold,
 
-	h1: {
-		...baseHeadingProperties,
-		fontSize: "44px",
-		lineHeight: "64px",
-	},
+    h1: {
+        ...baseHeadingProperties,
+        fontSize: "44px",
+        lineHeight: "56px",
+    },
 
-	h2: {
-		fontSize: pxToRem(36),
-		lineHeight: 1.3,
-		...baseHeadingProperties,
-	},
+    h2: {
+        fontSize: "36px",
+        lineHeight: "48px",
+        ...baseHeadingProperties,
+    },
 
-	h3: {
-		...baseHeadingProperties,
-		fontSize: 32,
-		lineHeight: "44px",
-		fontWeight: baseProperties.fontWeightBold,
-	},
+    h3: {
+        ...baseHeadingProperties,
+        fontSize: "32px",
+        lineHeight: "44px",
+        fontWeight: baseProperties.fontWeightBold,
+    },
 
-	h4: {
-		fontSize: 24,
-		lineHeight: "32px",
-		...baseHeadingProperties,
-	},
+    h4: {
+        fontSize: "24px",
+        lineHeight: "32px",
+        ...baseHeadingProperties,
+    },
 
-	h5: {
-		fontSize: 20,
-		lineHeight: "28px",
-		...baseHeadingProperties,
-	},
+    h5: {
+        fontSize: "20px",
+        lineHeight: "28px",
+        ...baseHeadingProperties,
+    },
 
-	h6: {
-		fontSize: pxToRem(16),
-		lineHeight: 1.625,
-		...baseHeadingProperties,
-	},
-	p: {
-		...baseHeadingProperties,
-		fontFamily: baseProperties.fontFamily,
-		fontSize: baseProperties.fontSizeLG,
-		fontWeight: baseProperties.fontWeightMedium,
-		lineHeight: "32px",
-	},
-	small: {
-		fontFamily: baseProperties.fontFamily,
-		fontSize: baseProperties.fontSizeSM,
-		fontWeight: baseProperties.fontWeightRegular,
-		lineHeight: "28px",
-	},
-	label : {
-		fontFamily: baseProperties.fontFamily,
-		fontSize: baseProperties.fontSizeXL,
-		fontWeight: baseProperties.fontWeightSemiBold,
-		lineHeight: "36px",
-	},
+    h6: {
+        fontSize: pxToRem(16),
+        lineHeight: 1.625,
+        ...baseHeadingProperties,
+    },
+    p: {
+        ...baseHeadingProperties,
+        fontFamily: baseProperties.fontFamily,
+        fontSize: baseProperties.fontSizeMD,
+        fontWeight: baseProperties.fontWeightMedium,
+        lineHeight: "32px",
+        color: text.default, 
+    },
+    small: {
+        fontFamily: baseProperties.fontFamily,
+        fontSize: baseProperties.fontSizeSM,
+        fontWeight: baseProperties.fontWeightRegular,
+        lineHeight: "28px",
+        color: '--content-cnt-text-body', 
+    },
+    label : {
+        fontFamily: baseProperties.fontFamily,
+        fontSize: baseProperties.fontSizeXL,
+        fontWeight: baseProperties.fontWeightSemiBold,
+        lineHeight: "32px",
+        color: text.main, 
+    },
 	subtitle1: {
 		fontFamily: baseProperties.fontFamily,
 		fontSize: baseProperties.fontSizeXL,
@@ -182,11 +184,12 @@ const typography = {
 		xl: baseProperties.fontSizeXL,
 	},
 
-	lineHeight: {
-		sm: 1.25,
-		md: 1.5,
-		lg: 2,
-	},
+lineHeight: {
+    sm: 28, 
+    md: 32, 
+    lg: 44, 
+},
+
 };
 
 export default typography;

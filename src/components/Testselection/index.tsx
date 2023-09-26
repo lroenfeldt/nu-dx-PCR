@@ -11,6 +11,7 @@ import useTestSelectionStyle from "./useTestSelectionStyle";
 import { Block, Text } from "..";
 import { Modal } from "..";
 import TestInfos from "./TestInfos";
+import PaginationBullets from "./PaginationBullets";
 
 const Testselection = () => {
 	const testSelectionRef = useRef<HTMLDivElement>(null);
@@ -24,7 +25,7 @@ const Testselection = () => {
 	const el = testSelectionRef.current;
 	const totalContentWidth = el?.scrollWidth;
 	const pageWidth = el?.offsetWidth;
-
+	const testsCount = settings.account.testprocedures.length;
 	const numberOfPages = totalContentWidth && pageWidth && Math.ceil(totalContentWidth / pageWidth);
 	const navigate = useNavigate();
 	const scroll = (direction: "left" | "right") => {
@@ -91,9 +92,7 @@ const Testselection = () => {
 				</Modal>
 
 				<Block padding={"0px 22px"} marginBottom={20}>
-					<Text h1 secondary>
-						{t("common.testSelection")}
-					</Text>
+					<Text h1>{t("common.testSelection")}</Text>
 				</Block>
 				<Block
 					position="relative"
@@ -101,23 +100,26 @@ const Testselection = () => {
 					height="auto"
 					width="100%"
 					gap={54}
+					paddingBottom={40}
 					ref={testSelectionRef}
 					padding={"0px 22px"}
 					align="flex-start"
 					scrollX>
-					<Block
-						position="fixed"
-						top="50%"
-						right={0}
-						transform="translateY(-50%)"
-						transition="all 0.3s ease-in-out"
-						border="0px solid transparent"
-						cursor
-						onMouseDown={() => setScrolling("right")}
-						onClick={() => scroll("right")}
-						onMouseUp={() => setScrolling(null)}>
-						<Next />
-					</Block>
+					{testsCount > 3 && (
+						<Block
+							position="fixed"
+							top="50%"
+							right={0}
+							transform="translateY(-50%)"
+							transition="all 0.3s ease-in-out"
+							border="0px solid transparent"
+							cursor
+							onMouseDown={() => setScrolling("right")}
+							onClick={() => scroll("right")}
+							onMouseUp={() => setScrolling(null)}>
+							<Next />
+						</Block>
+					)}
 
 					{settings.account.testprocedures.map((test, i) => (
 						<Testsmethod
@@ -129,41 +131,22 @@ const Testselection = () => {
 							openInfos={() => setIsvisible(true)}
 						/>
 					))}
-					<Block
-						position="fixed"
-						top="50%"
-						left={0}
-						transform="translateY(-50%)"
-						transition="all 0.3s ease-in-out"
-						border="0px solid transparent"
-						cursor
-						onMouseDown={() => setScrolling("left")}
-						onClick={() => scroll("left")}
-						onMouseUp={() => setScrolling(null)}>
-						<Prev />
-					</Block>
-					<Block
-						flex
-						position="fixed"
-						bottom="8%"
-						left={"50%"}
-						transform="translateX(-50%)"
-						transition="all 0.3s ease-in-out"
-						border="0px solid transparent"
-						cursor>
-						{Array.from({ length: numberOfPages || 0 }, (_, i) => (
-							<Block
-								key={i}
-								width={20}
-								height={20}
-								radius={10}
-								marginRight={10}
-								secondary={i === currentPage}
-								primary
-								onClick={() => goToPage(i)}
-							/>
-						))}
-					</Block>
+					{testsCount > 3 && (
+						<Block
+							position="fixed"
+							top="50%"
+							left={0}
+							transform="translateY(-50%)"
+							transition="all 0.3s ease-in-out"
+							border="0px solid transparent"
+							cursor
+							onMouseDown={() => setScrolling("left")}
+							onClick={() => scroll("left")}
+							onMouseUp={() => setScrolling(null)}>
+							<Prev />
+						</Block>
+					)}
+					{testsCount > 3 && <PaginationBullets numberOfPages={numberOfPages || 0} currentPage={currentPage} goToPage={goToPage} />}
 				</Block>
 			</Block>
 		</Block>

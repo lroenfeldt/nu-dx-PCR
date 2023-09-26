@@ -3,7 +3,7 @@ import Power from "../Icons/Power";
 import Settings from "../Icons/Settings";
 import Open from "../Icons/Open";
 import Back from "../Icons/Back";
-import { useTranslation, useData } from "../../hooks";
+import { useTranslation, useData, useBackgroundProcesses } from "../../hooks";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Block, List, Menu, Modal, Proben, Text } from "..";
 import { useTheme } from "../../assets/theme";
@@ -16,6 +16,7 @@ const Header = () => {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const { colors } = useTheme();
 	const { t } = useTranslation();
+	useBackgroundProcesses();
 	return (
 		<Block flex row padding="0 24px" justify="space-between" align="center" secGrad height="64px">
 			<Block flex align="center" gap={11} padding="8px 26px" center cursor onClick={() => window.history.back()}>

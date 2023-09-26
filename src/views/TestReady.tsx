@@ -81,7 +81,7 @@ const TestReady: React.FC = () => {
 		return (
 			<Block flex center height={"100%"} width="100%">
 				<Block flex column center gap={50}>
-					<Block flex justify="space-around" gap={10}>
+					<Block flex justify="space-around" gap={10} align="center">
 						<Alert />
 						<Text h3>{isNinetySix ? t("testReady.ninetySixsInstructions") : t("testReady.instructions")}</Text>
 					</Block>

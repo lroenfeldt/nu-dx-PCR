@@ -1,6 +1,7 @@
 import React, { FC, forwardRef, memo, Ref } from "react";
 import { TBlockProps } from "../types/components";
 import { useTheme } from "../assets/theme";
+
 const Block: FC<TBlockProps> = forwardRef<HTMLDivElement, TBlockProps>((props: TBlockProps, ref: Ref<HTMLDivElement>) => {
 	const {
 		row,
@@ -76,6 +77,9 @@ const Block: FC<TBlockProps> = forwardRef<HTMLDivElement, TBlockProps>((props: T
 		transparency,
 		secGrad,
 		priGrad,
+		dropShadowLarge,
+		dropShadowSmall,
+		innerShadow,
 		...rest
 	} = props;
 	const { colors, boxShadows, borders } = useTheme();
@@ -158,6 +162,9 @@ const Block: FC<TBlockProps> = forwardRef<HTMLDivElement, TBlockProps>((props: T
 		...(transparency && { backgroundColor: colors.white.transparency }),
 		...(secGrad && { background: colors.gradients.secondary.main }),
 		...(priGrad && { background: colors.gradients.primary.main }),
+		...(dropShadowLarge && { boxShadow: boxShadows.dropShadowLarge.main }),
+		...(dropShadowSmall && { boxShadow: boxShadows.dropShadowSmall.main }),
+		...(innerShadow && { boxShadow: boxShadows.innerShadow.main }),
 	} as React.CSSProperties;
 	return (
 		<div ref={ref} style={{ ...blockStyles }} {...rest}>

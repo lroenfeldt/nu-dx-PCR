@@ -5,6 +5,8 @@ const useBarcodeProperties = () => {
 	const { t } = useTranslation();
 	const { barcodes } = useData();
 	const checkBarcodeValidity = (barcode: IBarcode, settings: any) => {
+		barcode= barcodes.find((currentBarcode) => currentBarcode.posName === barcode.posName) || barcode;
+		console.log("barcode", barcode.value);
 		let isValid = true;
 		let validationErr = null;
             //check empty

@@ -24,4 +24,12 @@ export interface IBoxShadows {
   dropShadowLarge: {
     main: string;
   };
+  dropShadowSmall: {
+    main: string;
+  };
+  innerShadow: {
+    main: string;
+  };
+  
+
 }

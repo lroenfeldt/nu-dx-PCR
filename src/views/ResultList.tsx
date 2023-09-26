@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 //import { FiUpload, FiRefreshCw, FiUploadCloud, FiSave, FiExternalLink } from "react-icons/fi"
 
-import { Block, Button, Text, Toggle } from "../components";
+import { Toggle } from "../components";
 import { Oval } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import { BsCloudCheckFill } from "react-icons/bs";
@@ -11,22 +11,29 @@ import { AiFillUsb } from "react-icons/ai";
 import { FaMicroscope, FaCloudUploadAlt, FaCheck } from "react-icons/fa";
 import { useResults, useSticky } from "../hooks";
 import urls from "../config/settings";
-
-const ResultList: React.FC = () => {
+const ResultList = () => {
 	const navigate = useNavigate();
 	const {
-		results,
-		reading,
+		USBPresent,
+		setUSBPresent,
 		settings,
 		setTestid,
-		USBPresent,
-		submitting,
+		resetBarcodes,
 		offlineMode,
 		setTestDone,
 		submitFilter,
-		resetBarcodes,
 		setSubmitFilter,
+		currentUser,
+		results,
+		setResults,
+		reading,
+		setReading,
+		submitting,
+		setSubmitting,
+		setErrors,
+		errors,
 		failedSubmittingResults,
+		setFailedSubmittingResults,
 	} = useData();
 	const { checkUSB, saveToUSB, submitAll, getResults, submitResult, saveAllToUSB } = useResults();
 	const { t, locale } = useTranslation();
@@ -36,7 +43,7 @@ const ResultList: React.FC = () => {
 		setSubmitFilter(!submitFilter);
 	};
 
-	const viewResult = (testid: string, done: boolean) => {
+	const viewResult = (testid, done) => {
 		resetBarcodes();
 		setTestid(testid);
 		setTestDone(done);
@@ -45,8 +52,7 @@ const ResultList: React.FC = () => {
 
 	//Create Table
 
-	let tableRows: JSX.Element[] = [];
-
+	let tableRows = [];
 	results
 		.sort((a, b) => new Date(b.testStarted).getTime() - new Date(a.testStarted).getTime())
 		.forEach((result, index) => {
@@ -65,9 +71,9 @@ const ResultList: React.FC = () => {
 				);
 			} else if (!result.isSubmitting) {
 				buttonSubmit = (
-					<Button rounded className="button" onClick={() => submitResult(result.testid, result.submitted)}>
+					<div className="button" onClick={() => submitResult(result.testid, result.submitted)}>
 						<FaCheck />
-					</Button>
+					</div>
 				);
 			} else if (offlineMode) {
 				buttonSubmit = (
@@ -77,9 +83,9 @@ const ResultList: React.FC = () => {
 				);
 			} else if (!settings.account.testprocedures.find((testmethod) => testmethod.id === result.testmethod)) {
 				buttonSubmit = (
-					<Button rounded className="button disabled">
+					<div className="button disabled">
 						<FaCloudUploadAlt />
-					</Button>
+					</div>
 				);
 			} else {
 				buttonSubmit = (
@@ -110,99 +116,100 @@ const ResultList: React.FC = () => {
 				if (result.isWriting) {
 					buttonUSB = (
 						<div className="button" onClick={() => saveToUSB(result.testid, result.submitted)}>
-							<Button className="spinnerContainer">
+							<div className="spinnerContainer">
 								<Oval height="30" width="30" color="white" />
-							</Button>
+							</div>
 						</div>
 					);
 				} else if (result.writingSuccess) {
 					buttonUSB = (
-						<Button className="button" onClick={() => saveToUSB(result.testid, result.submitted)}>
+						<div className="button" onClick={() => saveToUSB(result.testid, result.submitted)}>
 							<FaCheck />
-						</Button>
+						</div>
 					);
 				} else if (!USBPresent) {
 					buttonUSB = (
-						<Button className="button disabled">
+						<div className="button disabled">
 							<AiFillUsb />
-						</Button>
+						</div>
 					);
 				} else if (
 					!settings.account.testprocedures.find((testmethod) => testmethod.id === result.testmethod) ||
-					settings.account.testprocedures.find((testmethod) => testmethod.id === result.testmethod)?.showResults == false
+					settings.account.testprocedures.find((testmethod) => testmethod.id === result.testmethod).showResults == false
 				) {
 					buttonUSB = (
-						<Button rounded className="button disabled">
+						<div className="button disabled">
 							<AiFillUsb />
-						</Button>
+						</div>
 					);
 				} else {
 					buttonUSB = (
-						<Button rounded className="button" onClick={() => saveToUSB(result.testid, result.submitted)}>
+						<div className="button" onClick={() => saveToUSB(result.testid, result.submitted)}>
 							<AiFillUsb />
-						</Button>
+						</div>
 					);
 				}
 
 				//button for view
 				if (
 					!settings.account.testprocedures.find((testmethod) => testmethod.id === result.testmethod) ||
-					settings.account.testprocedures.find((testmethod) => testmethod.id === result.testmethod)?.showResults == false
+					settings.account.testprocedures.find((testmethod) => testmethod.id === result.testmethod).showResults == false
 				) {
 					buttonView = (
-						<Button rounded>
+						<div className="button disabled">
 							<FaMicroscope />
-						</Button>
+						</div>
 					);
 				} else {
 					buttonView = (
-						<Button rounded className="button" onClick={() => viewResult(result.testid, result.submitted)}>
+						<div className="button" onClick={() => viewResult(result.testid, result.submitted)}>
 							<FaMicroscope />
-						</Button>
+						</div>
 					);
 				}
 			}
 			let submittingFailed;
 			if (failedSubmittingResults.includes(result.testid)) {
 				submittingFailed = (
-					<Button rounded className="button error">
+					<div className="button error">
 						<PiWarningCircleFill size={30} />
-					</Button>
+					</div>
 				);
 			}
 
 			//Testmethod name
-			let testMethodName: string = "unsupported";
+			let testMethodName;
 			if (!result.testmethod) {
 				result.testmethod = urls.TESTMETHOD; //Covid backwards compatability
 			}
 			if (settings.account.testprocedures.find((testmethod) => testmethod.id === result.testmethod)) {
-				const foundTestMethod = settings.account.testprocedures.find((testmethod) => testmethod.id === result.testmethod);
-				const localLabel = "label" + locale?.toUpperCase();
 				testMethodName =
-					foundTestMethod && localLabel in foundTestMethod ? (foundTestMethod as any)[localLabel] ?? foundTestMethod.name : "unsupported";
+					settings.account.testprocedures.find((testmethod) => testmethod.id === result.testmethod)["label" + locale.toUpperCase()] ||
+					settings.account.testprocedures.find((testmethod) => testmethod.id === result.testmethod).name;
+			} else {
+				testMethodName = "unsupported";
 			}
 
 			tableRows.push(
-				<Block key={`${result.testid}-${index}`} flex card padding={20} marginBottom={10}>
-					<Block className="testinfo">
-						<Text h4>{result.testid}</Text>
-						<Text>{testMethodName}</Text>
-						<Text small>
+				<div className="result" key={`${result.testid}-${index}`}>
+					<div className="testinfo">
+						<h4>{result.testid}</h4>
+						<h4>{testMethodName}</h4>
+						<span className="date">
 							{t("common.started")}: {result.testStarted.toLocaleString()}
-						</Text>
-						<Text small>
+						</span>
+						<span className="date">
 							{t("common.ended")}: {result.testFinished.toLocaleString()}
-						</Text>
-					</Block>
-					<Block flex gap={16} align="center" justify="flex-end">
+						</span>
+					</div>
+					<div className="buttons">
 						{submittingFailed}
 						{buttonView}
 						{buttonSubmit}
 						{buttonUSB}
 						{cloudBadge}
-					</Block>
-				</Block>
+					</div>
+				</div>
 			);
 		});
 
@@ -219,9 +226,9 @@ const ResultList: React.FC = () => {
 	}, []);
 	useSticky({ top: 70, id: "stickyHeader", stickyClass: "ResultList" });
 	return (
-		<Block className="ResultList">
-			<Block id="stickyHeader" className="titleArea">
-				<Text>{t("resultList.title")}</Text>
+		<div className="ResultList">
+			<div id="stickyHeader" className="titleArea">
+				<h2>{t("resultList.title")}</h2>
 				{(submitting || reading) && (
 					<div className="spinnerContainer">
 						<Oval height="50" width="50" color="var(--primary)" />
@@ -231,21 +238,21 @@ const ResultList: React.FC = () => {
 					<span>{t("resultList.onlyPending")}</span>
 					<Toggle isOn={submitFilter} handleToggle={() => handleSubmitToggleChange()} />
 				</label>
-			</Block>
+			</div>
 			{tableRows}
-			<Block flex>
-				<Button
+			<div className="buttonArea">
+				<button
 					onClick={() => {
 						navigate("/selectMethod");
 					}}>
 					{t("common.back")}
-				</Button>
+				</button>
 				{submitFilter ? <button onClick={() => submitAll()}>{t("resultList.submitAll")}</button> : ""}
-				<Button className={!USBPresent ? "disabled" : ""} onClick={() => saveAllToUSB()}>
+				<button className={!USBPresent ? "disabled" : ""} onClick={() => saveAllToUSB()}>
 					{t("resultList.exportAll")}
-				</Button>
-			</Block>
-		</Block>
+				</button>
+			</div>
+		</div>
 	);
 };
 

@@ -4,9 +4,10 @@ const colors = {
 	},
 
 	text: {
-		main: "#062B56",
+		main: "#17191C",
+		default: "#212733",
 		focus: "#67748e",
-		disabled: "#646D89",
+		disabled: "#5E6673",
 	},
 
 	transparent: {

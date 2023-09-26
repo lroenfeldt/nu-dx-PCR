@@ -96,19 +96,19 @@ const Text: React.FC<ITextProps> = (props) => {
 	} = props;
 
 	let TagName = as as keyof JSX.IntrinsicElements | React.ComponentType<any>;
+	if (p) TagName = "p";
 	if (h1) TagName = "h1";
 	if (h2) TagName = "h2";
 	if (h3) TagName = "h3";
 	if (h4) TagName = "h4";
 	if (h5) TagName = "h5";
 	if (h6) TagName = "h6";
-	if (p) TagName = "p";
-
+	if (cardTitle) TagName = "h2";
 	const textTheme = useTextTheme();
 	const { colors } = useTheme();
 	const baseStyle: React.CSSProperties = {
 		...(as && textTheme[TagName as keyof typeof textTheme]),
-		...(cardTitle && textTheme.cardTitle),
+		...(cardTitle && { ...textTheme.cardTitle, ...textTheme.h2 }),
 		...(fontSize && { fontSize }),
 		...(fontWeight && { fontWeight }),
 		...(textAlign && { textAlign }),
@@ -127,6 +127,8 @@ const Text: React.FC<ITextProps> = (props) => {
 		...(textOverflow && { textOverflow }),
 		...(verticalAlign && { verticalAlign }),
 		...(direction && { direction }),
+		...(label && textTheme["label" as keyof typeof textTheme]),
+		...(small && textTheme["small" as keyof typeof textTheme]),
 		...(white && { color: colors.white.main }),
 		...(black && { color: colors.black.main }),
 		...(primary && { color: colors.primary.main }),
@@ -137,8 +139,6 @@ const Text: React.FC<ITextProps> = (props) => {
 		...(color && { color }),
 		...(grey && { color: colors.grey[100] }),
 		...(bold && { fontWeight: 600 }),
-		...(label && textTheme["label" as keyof typeof textTheme]),
-		...(small && textTheme["small" as keyof typeof textTheme]),
 	} as React.CSSProperties;
 
 	const animationStyle: React.CSSProperties = animated ? { animation: `${animationType} 1s ease-in-out` } : {};

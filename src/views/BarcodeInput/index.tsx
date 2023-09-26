@@ -61,7 +61,7 @@ const BarcodeInput = () => {
 			}
 
 			const { isValid, validationErr } = checkBarcodeValidity(newBarcode, settings);
-			console.log("isValid", isValid);
+
 			if (isValid && newBarcode.value.indexOf("-R") === -1 && settings.account.checkBarcodesDB) {
 				const cancelTokenHook = useCancelToken();
 				const token = cancelTokenHook.create();

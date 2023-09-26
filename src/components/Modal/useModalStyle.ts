@@ -6,7 +6,7 @@ const useModalStyle = () => {
     position: 'fixed',
     zIndex: 2,
     left: 0,
-    top: 0,
+    top: 62,
     width: '100%',
     height: '100%',
     overflow: 'auto',
