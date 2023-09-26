@@ -4,8 +4,9 @@
 	"version": "1.0.0",
 	"scripts": {
 		"dev": "vite",
-		"build": "tsc && vite build && electron-builder",
+		"build": "vite build",
 		"lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+		"package": "npm run build &&  electron-builder -w -c.extraMetadata.main=build/electron.js --publish never",
 		"preview": "vite preview"
 	},
 	"dependencies": {

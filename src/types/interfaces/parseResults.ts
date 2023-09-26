@@ -55,7 +55,7 @@ export interface ITestMethod {
   specificationId: string;
   type: string;
   results: ITestMethodResult[];
-  parameters: ITestMethodParameter[];
+  parameters?: ITestMethodParameter[];
   protocol?: string;
 }
 

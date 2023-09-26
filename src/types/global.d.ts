@@ -5,7 +5,7 @@ import {
 } from "../../electron/interfaces/interfaces";
 import { IBarcode } from "./interfaces/interfaces";
 import { ITestConfig, ITestMethod } from "./interfaces/parseResults";
-import { ITestResult } from "./interfaces/settings";
+import { IConfigFile, ISettings, ITestResult } from "./interfaces/settings";
 
 declare global {
   interface Window {
@@ -47,5 +47,5 @@ declare global {
   }
 }
 
-type ConfigType = any;
+type ConfigType = ISettings;
 type CallbackType = (event: IpcRendererEvent, ...args: any[]) => void;

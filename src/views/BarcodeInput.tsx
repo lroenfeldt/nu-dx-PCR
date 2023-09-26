@@ -5,7 +5,9 @@ import urls from "../config/settings";
 import { useNavigate } from "react-router-dom";
 import { useData, useTranslation } from "../hooks";
 import { IoMdCloseCircle } from "react-icons/io";
-import { IBarcode, ITestMethod } from "../types/interfaces/interfaces";
+import { IBarcode,  } from "../types/interfaces/interfaces";
+import { ITestMethod } from "../types/interfaces/parseResults";
+import { ITestProcedure } from "../types/interfaces/settings";
 const BarcodeInput = () => {
 	const { reset, errors, barcodes, settings, toggleLid, setErrors, setLoading, offlineMode, setBarcodes, isNinetySix, selectedMethod } = useData();
 
@@ -21,7 +23,7 @@ const BarcodeInput = () => {
 	const [clear, setClear] = useState(false);
 	const [inputs, setInputs] = useState({});
 	const [inputName, setInputName] = useState("default");
-	const testmethod = settings.account.testprocedures.find((procedure) => procedure.id == selectedMethod) as ITestMethod;
+	const testmethod = settings.account.testprocedures.find((procedure) => procedure.id == selectedMethod) as ITestProcedure;
 	const markActive = (id: number) => {
 		setActive(id);
 		if (textInput.current) textInput.current.focus();

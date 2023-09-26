@@ -10,7 +10,7 @@ const Bootup = () => {
 	const navigate = useNavigate();
 	const { t } = useTranslation();
 	const { settings, setErrors, errors, setLoading, setSettings, pairingCode, saveSettings, clearSettings, setPairingCode } = useData();
-	const getPairingCodeApi = useApi<[]>(pairingApi.pollPairingCode);
+	const getPairingCodeApi = useApi<any>(pairingApi.pollPairingCode);
 
 	/**
 	 * @description Get pairing code from server
@@ -148,7 +148,7 @@ const Bootup = () => {
 			setLoading(false);
 		}
 		try {
-			let response = await checkTokenApi.request(settings.device.hardwareId, {
+			let response: any = await checkTokenApi.request(settings.device.hardwareId, {
 				token,
 			});
 

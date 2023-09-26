@@ -1,6 +1,7 @@
 import { ReactNode, CSSProperties, ButtonHTMLAttributes } from "react";
-import { IAccountUser } from "../interfaces/settings";
-import { IBarcode, ITestMethod } from "../interfaces/interfaces";
+import { IAccountUser, ITestProcedure } from "../interfaces/settings";
+import { IBarcode,  } from "../interfaces/interfaces";
+import { ITestMethod } from "../interfaces/parseResults";
 
 export interface TBlockProps {
   row?: boolean;
@@ -212,7 +213,7 @@ export interface IWellVisualProps {
   active: number;
   markActive: (id: number) => void;
   showResults?: boolean;
-  testmethod: ITestMethod;
+  testmethod: ITestProcedure;
 }
 
 export interface IText {

@@ -14,7 +14,7 @@ const Pairing: FC = () => {
 		window.api.logEvents("pairing with code " + pairingCode, "logInfos");
 
 		try {
-			let response = await getPairingCodeApi.request({
+			let response: any = await getPairingCodeApi.request({
 				hardwareId: settings.device.hardwareId,
 				pairingCode,
 			});

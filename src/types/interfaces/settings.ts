@@ -21,6 +21,7 @@ export interface IConfigFile {
   barcodes: IBarcode[];
   testid: string;
   testmethod?: string;
+  [key: string]: any;
 }
 export interface IAccount {
   data: IAccountData;

@@ -3,8 +3,9 @@ import { ImArrowRight2, ImArrowLeft2 } from 'react-icons/im';
 import { IScrollController } from '../types/interfaces/interfaces';
 
 const ScrollController = ({ onClick, disabled }: IScrollController) => {
+  
   const [direction, setDirection] = useState('next');
-
+  
   return (
     <div className="controller">
       <div

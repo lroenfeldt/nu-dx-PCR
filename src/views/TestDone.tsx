@@ -7,6 +7,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { extractBarcodes, parseResultsDB, parseResultsExport } from "../utils/parseResults";
 import { useResults, useTranslation } from "../hooks";
+import { ITestProcedure } from "../types/interfaces/settings";
 
 const TestDone = () => {
 	const {
@@ -25,7 +26,6 @@ const TestDone = () => {
 		resultsSubmitted,
 		setSubmitted,
 		currentUser,
-		test,
 		setDeviceStatus,
 		selectedMethod,
 	} = useData();
@@ -34,24 +34,24 @@ const TestDone = () => {
 	const navigate = useNavigate();
 	const { checkUSB, saveToUSB, submitAll, getResults, submitResult, saveAllToUSB } = useResults();
 	const { t, locale } = useTranslation();
-	const testmethod = settings.account.testprocedures.find((testmethod) => testmethod.id === selectedMethod);
+	const testmethod = settings.account.testprocedures.find((testmethod) => testmethod.id === selectedMethod) as ITestProcedure;
 
 	let buttonUSB;
 	if (USBPresent) {
 		buttonUSB = <button onClick={() => saveToUSB(testid, testDone)}>{t("results.saveToUSB")}</button>;
 	} else {
 		buttonUSB = (
-			<button className="disabled" onClick={() => saveToUSB()}>
+			<button className="disabled" onClick={() => saveToUSB(testid, false)}>
 				{t("results.saveToUSB")}
 			</button>
 		);
 	}
 
-	const hideError = (index) => {
+	const hideError = (index: number) => {
 		setErrors((prevErrors) => prevErrors.filter((error, errIndex) => errIndex !== index));
 	};
 
-	const activateofflineMode = (errIndex) => {
+	const activateofflineMode = (errIndex: number) => {
 		setOfflineMode(true);
 		hideError(errIndex);
 	};
@@ -64,7 +64,7 @@ const TestDone = () => {
 						return (
 							<div key={i} className="errorMessage">
 								<p>{error.message}</p>
-								<button onClick={() => submitResult(testid)}>{t("common.retry")}</button>
+								<button onClick={() => submitResult(testid, false)}>{t("common.retry")}</button>
 								<button onClick={() => activateofflineMode(i)}>{t("common.offlineMode")}</button>
 							</div>
 						);
@@ -88,7 +88,7 @@ const TestDone = () => {
 		if (!resultsSubmitted) {
 			if (!offlineMode && settings.account.submitResults) {
 				//displayResults(testid)
-				submitResult(testid);
+				submitResult(testid, true);
 			}
 		}
 	}, [offlineMode, resultsSubmitted, settings.account.submitResults, testid]);
