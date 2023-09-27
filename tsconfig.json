@@ -9,7 +9,6 @@
 		/* Bundler mode */
 		"esModuleInterop": true,
 		"moduleResolution": "node",
-		"allowImportingTsExtensions": true,
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"noEmit": true,
@@ -21,6 +20,6 @@
 		"noUnusedParameters": false,
 		"noFallthroughCasesInSwitch": true
 	},
-	"include": ["src", "electron"],
+	"include": ["electron/**/*"],
 	"references": [{ "path": "./tsconfig.node.json" }]
 }

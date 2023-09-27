@@ -40,35 +40,14 @@ const Debug = () => {
 			<div className="hardwareId">
 				<h3>{`${"wellCount"}: ${settings.device.wellCount}`}</h3>
 			</div>
-			<Block
-				children={
-					<>
-						<h4>Update Settings</h4>
+			<Block column>
+				<h4>Update Settings</h4>
 
-						<Block
-							center={true}
-							children={
-								<>
-									<RadioButton
-										label="Stable"
-										value="stable"
-										name="updateType"
-										checked={updateType === "stable"}
-										onChange={handleUpdateTypeChange}
-									/>
-									<RadioButton
-										label="Beta"
-										value="beta"
-										name="updateType"
-										onChange={handleUpdateTypeChange}
-										checked={updateType === "beta" ? true : false}
-									/>
-								</>
-							}
-						/>
-					</>
-				}
-			/>
+				<Block center>
+					<RadioButton label="Stable" value="stable" name="updateType" checked={updateType === "stable"} onChange={handleUpdateTypeChange} />
+					<RadioButton label="Beta" value="beta" name="updateType" onChange={handleUpdateTypeChange} checked={updateType === "beta" ? true : false} />
+				</Block>
+			</Block>
 			<div className="buttonArea">
 				<button onClick={() => window.history.back()}>{t("common.back")}</button>
 				<button onClick={() => exit()}>{t("common.end")}</button>

@@ -1,16 +1,28 @@
 {
-	"name": "nudxpcr",
+	"name": "nu-dx-pcr",
+	"version": "1.0.21",
+	"author": "nu:healthcare GmbH",
+	"description": "Frontend app to operate BIOER PCR-Cycler and connect to nu:dx cloud platform",
 	"private": true,
-	"version": "1.0.0",
+	"main": "dist-electron/main.js",
+	"homepage": "./",
+	"license": "MIT",
+	"debug": {
+		"env": {
+			"VITE_DEV_SERVER_URL": "http://127.0.0.1:7777/"
+		}
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/lroenfeldt/nu-dx-pcr/"
+	},
 	"scripts": {
 		"dev": "vite",
-		"build": "vite build",
+		"build": "tsc && vite build && electron-builder",
 		"lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-		"package": "npm run build &&  electron-builder -w -c.extraMetadata.main=build/electron.js --publish never",
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"@types/electron": "^1.6.10",
 		"@types/jest": "^29.5.3",
 		"@types/node": "^20.4.2",
 		"@types/qrcode.react": "^1.0.2",
@@ -89,6 +101,5 @@
 		"vite-plugin-electron": "^0.13.0-beta.1",
 		"vite-plugin-electron-renderer": "^0.14.5",
 		"wait-on": "^7.0.1"
-	},
-	"main": "dist-electron/main.js"
+	}
 }
