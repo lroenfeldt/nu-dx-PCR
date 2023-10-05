@@ -36,6 +36,7 @@ const useResults = () => {
     setUSBPresent,
     results,
     setResults,
+    resultList,
     setReading,
     setSubmitting,
     setSubmitted,
@@ -181,10 +182,11 @@ const useResults = () => {
 
   const submitAll: TsubmitAll = () => {
     setSubmitting(true);
-    const resultList = results.filter(
-      (result) => result && result.submitted === false
+    const results = resultList.filter(
+      (result) => result 
     );
-    let promises = resultList.map((result) =>
+    console.log(results);
+    let promises = results.map((result) =>
       submitResult(result.testid, result.submitted)
     );
     Promise.all(promises).then(() => {

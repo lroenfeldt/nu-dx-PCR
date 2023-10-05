@@ -1,7 +1,8 @@
+import { ISettings } from './../types/interfaces/settings';
 import { useCallback } from "react";
 import { useApi, useData } from "./";
 import onlineStatus from "../api/onlineStatus";
-import { IResponse } from "../types/interfaces/interfaces";
+import { IPingResponse } from "../types/interfaces/interfaces";
 import {
   SettingsType,
   UseStatusReturnType,
@@ -28,18 +29,19 @@ export const useStatus = (): UseStatusReturnType => {
           cyclerVersion: settings.version,
         }
       );
-      const responseData = response.data as IResponse;
+      
+      const responseData = response.data as ISettings;
 
-      if (responseData.ok && responseData.data.account) {
-        let newSettings: SettingsType = {
+      if (response.ok ) {
+        let newSettings = {
           ...settings,
           account: {
-            ...responseData.data.account,
+            ...responseData.account,
             authToken: settings.account.authToken,
             initialized: settings.account.authToken !== "" ? true : false,
           },
         };
-
+       
         await saveSettings(newSettings);
       }
 

@@ -15,22 +15,11 @@ export function rebootDevice(): void {
    * */
   ipcMain.on("power", (event, reboot) => {
     if (reboot === "reboot") {
-      shutdown.reboot({
-        force: true,
-        timerseconds: 1,
-        sudo: true,
-        debug: true,
-      });
-      // console.log("rebooting...");
+     shutdown.reboot({ force: true });
+     
     } else {
-      shutdown.shutdown({
-        force: true,
-        timerseconds: 1,
-        sudo: true,
-        debug: true,
-        quitapp: true,
-      });
-      // console.log("shutdown...");
+      shutdown.shutdown({ force: true });
+     
     }
     event.returnValue = true;
   });

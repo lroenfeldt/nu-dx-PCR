@@ -280,9 +280,9 @@ export interface IAutoControl {
   device: string;
 }
 
-export interface IResponse {
+export interface IPingResponse {
   ok: boolean;
-  data: any;
+  data: ISettings;
   problem: string;
 }
 

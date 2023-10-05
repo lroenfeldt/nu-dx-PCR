@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useData, useTranslation } from "../../hooks";
 import "./style.css";
-
 const ShutdownNotification = () => {
 	const [showNotification, setShowNotification] = useState(false);
 	const [countdown, setCountdown] = useState(60);
@@ -18,17 +17,20 @@ const ShutdownNotification = () => {
 		setShowNotification(false);
 	};
 
+	let status = false;
+	if (
+		deviceStatus === "IDLE" &&
+		settings?.account?.autoShutdownMinutes &&
+		Number(settings?.account?.autoShutdownMinutes) > 0 &&
+		idleTimestamp &&
+		Date.now() - idleTimestamp >= (settings?.account?.autoShutdownMinutes - 1) * 60 * 1000 &&
+		Date.now() - idleTimestamp < settings?.account?.autoShutdownMinutes * 60 * 1000
+	)
+		status = true;
 	useEffect(() => {
 		let timeout: NodeJS.Timeout;
-		if (
-			deviceStatus === "IDLE" &&
-			settings?.account?.autoShutdownMinutes &&
-			Number(settings?.account?.autoShutdownMinutes) > 0 &&
-			idleTimestamp &&
-			Date.now() - +idleTimestamp >= (settings?.account?.autoShutdownMinutes - 1) * 60 * 1000 &&
-			Date.now() - +idleTimestamp < settings?.account?.autoShutdownMinutes * 60 * 1000
-			// converted idleTimestamp (string) to number by adding + to idleTimestamp
-		) {
+
+		if (status) {
 			setShowNotification(true);
 			setCountdown(60);
 
@@ -41,7 +43,7 @@ const ShutdownNotification = () => {
 		return () => {
 			clearInterval(timeout);
 		};
-	}, [deviceStatus, settings?.account?.autoShutdownMinutes, idleTimestamp]);
+	}, [deviceStatus, settings?.account?.autoShutdownMinutes, idleTimestamp, setShowNotification, setCountdown, status]);
 
 	if (!showNotification || countdown <= 0) {
 		return null;
@@ -49,11 +51,7 @@ const ShutdownNotification = () => {
 
 	return (
 		<div className="shutdown-notification">
-			<p
-				dangerouslySetInnerHTML={{
-					__html: t("common.deviceTurnOffInfo", countdown as any),
-				}}
-			/>
+			<p dangerouslySetInnerHTML={{ __html: t("common.deviceTurnOffInfo", { time: countdown }) }} />
 			<button onClick={handleAccept}>{t("common.acceptPowerOff")}</button>
 			<button onClick={handleContinue}>{t("common.continue")}</button>
 		</div>

@@ -38,9 +38,11 @@ const useUpdate = () => {
             parseInt(currentVersion[i]) !== parseInt(newVersion[i]) &&
             parseInt(newVersion[i]) > parseInt(currentVersion[i])
           ) {
+           
             setUpdateAvailable(true);
             break;
           } else if (parseInt(newVersion[i]) < parseInt(currentVersion[i])) {
+            
             setUpdateAvailable(false);
             break;
           }
@@ -59,7 +61,8 @@ const useUpdate = () => {
       console.error(err);
       window.api.logEvents("getLastVersion error" + err, "logErrors");
     }
-  }, [settings, setUpdateAvailable]);
+  
+  }, [settings.user.updateType, settings.version]);
 
   return { getLastVersion };
 };

@@ -208,9 +208,9 @@ const Bootup = () => {
 						setErrors(
 							errors
 
-								.filter((error) => error.type !== "offlineNotAllow")
+								.filter((error) => error.type !== "offline")
 								.concat({
-									type: "offlineNotAllow",
+									type: "offline",
 									message: t("errors.checkInternetConnection"),
 								})
 						);
@@ -299,7 +299,7 @@ const Bootup = () => {
 		} else {
 			getPairingCode();
 		}
-		if (!settings.device.wellCount) {
+		if (!settings.device.wellCount || settings.device.wellCount === 0) {
 			setErrors(
 				errors
 

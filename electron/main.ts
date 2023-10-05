@@ -13,7 +13,7 @@ import { clearConfig, getConfig, saveConfig } from "./core/configFile";
 import { archiveRun, deleteAllOverrides, deleteOverride, moveFiles } from "./core/fileOperations";
 import { checkUSB, getDeviceInfo, rebootDevice, saveToUSB, toggleLid } from "./core/deviceInteraction";
 import { editResultsHandler, endTest, getTests, getUnsubmitted, startTest } from "./core/testManagement";
-import { relaunchApp } from "./core/lifecycleManagement";
+import { exit, relaunchApp } from "./core/lifecycleManagement";
 import { copyLogos } from "./core/utilities";
 import { deleteLogs } from "./deleteLogs";
 import { logError } from "./core/logging";
@@ -21,7 +21,7 @@ import { logError } from "./core/logging";
 export let mainWindow: BrowserWindow | undefined;
 export let splash: BrowserWindow | undefined;
 export let lineGenePath: string;
-process.env.DIST = path.join(__dirname, "../dist");
+process.env.DIST = path.join(__dirname, "../dist-electron");
 process.env.PUBLIC = app.isPackaged ? process.env.DIST : path.join(process.env.DIST, "../public");
 export const killProcess = (process: string) => {
 	spawn("taskkill", ["/f", "/im", process]);
@@ -71,8 +71,9 @@ export const getDeviceType = () => {
       lineGenePath = res;
       return software.returnType;
     } catch (error) {
-      console.log(`${software.name} not found`);
-      logger(`${software.name} not found`, "logErrors");
+		console.log(`${software.name} not found`);
+		logger(`${software.name} not found`, "logErrors");
+		return 0;
     }
   }
 
@@ -185,11 +186,18 @@ function createWindow() {
 	});
 	const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
 
+ if (!fs.existsSync(path.join(__dirname, "../dist-electron"))) {
+        setTimeout(() => {
+			if (splash) splash.webContents.send("updateStatus", "launching in development mode...");
+		}, 2000);
+
+    }
 	mainWindow.loadURL(isDev && VITE_DEV_SERVER_URL ? VITE_DEV_SERVER_URL : path.join(process.env.DIST, "index.html"));
 	// Open the DevTools.
-	if (isDev || forceConsole) {
+	if (isDev) {
 		mainWindow.webContents.openDevTools({ mode: "detach", activate: true });
 	}
+	
 }
 
 /**
@@ -213,7 +221,7 @@ function createSplash() {
 	splash = new BrowserWindow(splashConfig);
 
 	// Load the splash content if the file exists.
-	const splashFilePath = path.join(__dirname, "../splash.html");
+	const splashFilePath = path.join(process.env.DIST, "/splash.html");
 
 	if (fs.existsSync(splashFilePath)) {
 		splash.loadFile(splashFilePath);
@@ -294,5 +302,6 @@ deleteOverride();
 relaunchApp();
 copyLogos();
 editResultsHandler();
+exit();
 // deviceInteraction
 // shutdownDevice();

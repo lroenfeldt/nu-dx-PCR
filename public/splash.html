@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<head>
+    <style>
+        body {
+            height: 300px; 
+            width: 500px; 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            background-color: rgb(1, 21, 60);
+            overflow: hidden;
+            font-family: sans-serif;
+            color: white;margin: 0 auto;
+        }
+        body::after {
+            content: '';
+            position: absolute;
+            height: 120%;
+            width: 100%;
+            left: 0%;
+            top: 0;
+            background-image: url('./DNA-Helix.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .title {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 20px;
+        }
+        h1 {
+            margin: 0 10px 0 0;
+            padding: 0;
+        }
+        .title img {
+            height: 50px;
+            margin-right: 10px;
+            max-width: 100%;
+            width: 300px;
+        }
+        #versionNumber {
+           
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+        }
+        .procomcure {
+            max-height: 40px;
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+        }
+        .nu-dx {
+            max-height: 30px;
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
+        }
+    </style>
+</head>
+<html lang="en">
+  <body>
+      <div class="title">
+        
+        <img src="./nu-dx PCR Logo white.png" alt="logo" >
+       
+      </div>
+      <div class="updateStatus">
+          <span id="updateMessage">Initializing...</span>
+      </div>
+
+        <img class="nu-dx" src="./nu-diagnostics white.png" alt="nu-diagnostics" width="150">
+        <span id="versionNumber">Test</span>
+  </body>
+
+  <script>
+      const getVersion = async () => {
+          const version = await window.api.getVersion()
+          const versionElement = document.getElementById('versionNumber')
+          versionElement.innerText = 'v' + version
+      }
+      getVersion()
+
+      window.api.updateStatus((event, message) => {
+        const messageElement = document.getElementById('updateMessage')
+        messageElement.innerText = message 
+      })
+
+  </script>
+</html>
+

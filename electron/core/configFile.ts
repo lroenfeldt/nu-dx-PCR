@@ -23,7 +23,6 @@ export function saveConfig(): void {
   ipcMain.handle("saveConfig", async (_event, config) => {
     try {
       store.set("settings", config);
-
       return true;
     } catch (err) {
       console.error(err);

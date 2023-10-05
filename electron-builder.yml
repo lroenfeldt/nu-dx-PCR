@@ -1,8 +1,7 @@
 appId: com.electron.nu-dx-pcr
 productName: nu:dx PCR
-asar: true
 directories:
-  output: "release/${version}"
+  buildResources: public
 files:
   - dist-electron
   - dist
@@ -12,17 +11,9 @@ mac:
     - dmg
     - zip
 win:
-  target:
-    - target: nsis
-      arch:
-        - x64
+  target: nsis
   icon: "icon.png"
-  artifactName: "${productName}_${version}.${ext}"
-nsis:
-  oneClick: false
-  perMachine: false
-  allowToChangeInstallationDirectory: true
-  deleteAppDataOnUninstall: false
+
 publish:
   provider: github
   channel: latest

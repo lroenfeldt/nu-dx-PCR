@@ -76,7 +76,6 @@ const Settings: React.FC<SettingsProps> = ({ visible }) => {
 						{updateAvailable && (
 							<button
 								onClick={async () => {
-									setUpdateAvailable(false);
 									setMenuOpen(null);
 									await window.api.relaunchApp();
 								}}

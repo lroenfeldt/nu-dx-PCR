@@ -29,4 +29,10 @@ export default defineConfig({
     // Configuration for Electron renderer process
     renderer(),
   ],
+  base: './',
+    build: {
+        outDir: 'dist-electron',
+        assetsDir: 'assets',
+        
+    },
 });

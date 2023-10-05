@@ -1,50 +1,65 @@
-import { useEffect, useCallback } from "react";
-import { useData, useResults } from "../hooks";
-
-import { useStatus } from "./useStatus";
-import useUpdate from "./useUpdate";
+import { useEffect, useCallback, useState } from 'react';
+import { useData, useResults,useCheckConnectivity} from '../hooks';
+import { useLocation } from 'react-router-dom';
+import { useStatus } from './useStatus';
+import useUpdate from './useUpdate';
+import { de } from 'date-fns/locale';
 function useBackgroundProcesses() {
   const {
-    results,
     settings,
-    shutdown,
+    deviceStatus,
     isLidOpen,
     toggleLid,
+    shutdown,
+    loadSettings,
     resultList,
-    deviceStatus,
     setResultList,
+    setIsResultFilePresent,
+    testid,
     setUSBPresent,
     idleTimestamp,
     setIdleTimestamp,
+
   } = useData();
   const { submitAll } = useResults();
+  const location = useLocation();
 
   const { ping } = useStatus();
   const { getLastVersion } = useUpdate();
-
+ 
   const checkForUnsubmittedResults = useCallback(async () => {
     const getResultList = await window.api.getUnsubmitted();
-    setResultList(getResultList);
-  }, []);
+ 
+    if(getResultList.length !== resultList.length){
+ 
+      setResultList(getResultList);
+    }
+  }, [resultList]);
 
   const autoSubmitUnsubmittedResults = useCallback(async () => {
-    if (settings?.account?.autoSubmitResults && resultList.length > 0)
-      submitAll();
+    console.log(settings?.account?.autoSubmitResults,resultList.length);
+    if (settings?.account?.autoSubmitResults && resultList.length > 0) submitAll();
   }, [resultList, settings?.account?.autoSubmitResults]);
+
+  const checkForTestResultFile = useCallback(async () => {
+    if (!testid || deviceStatus === 'IDLE') return;
+    let resultPresent = await window.api.checkResultFile(testid);
+    setIsResultFilePresent(resultPresent);
+  }, [testid, deviceStatus, setIsResultFilePresent]);
 
   const checkForUSB = useCallback(async () => {
     try {
       const usbPresent = await window.api.checkUSB();
       setUSBPresent(usbPresent);
     } catch (error) {
-      console.error(error);
-      window.api.logEvents(`checkUSB: ${error}`, "logErrors");
+      console.log(error);
+      window.api.logEvents(`checkUSB: ${error}`, 'logErrors.txt');
     }
   }, [setUSBPresent]);
 
   const lidAutoClose = useCallback(() => {
     if (
-      deviceStatus === "IDLE" &&
+      deviceStatus === 'IDLE' &&
       isLidOpen &&
       settings?.account?.autoCloseLidMinutes &&
       settings?.account?.autoCloseLidMinutes > 0 &&
@@ -52,26 +67,20 @@ function useBackgroundProcesses() {
     ) {
       toggleLid(); // toggleLid can both open and close the lid
     }
-  }, [
-    deviceStatus,
-    isLidOpen,
-    settings?.account?.autoCloseLidMinutes,
-    settings?.account?.autoCloseLidMinutes,
-  ]);
+  }, [deviceStatus, isLidOpen, settings?.account?.autoCloseLidMinutes, settings?.account?.autoCloseLidMinutes]);
 
   const autoShutdown = useCallback(() => {
     if (
-      deviceStatus === "IDLE" &&
+      deviceStatus === 'IDLE' &&
       settings?.account?.autoShutdownMinutes &&
       Number(settings?.account?.autoShutdownMinutes) > 0 &&
       idleTimestamp &&
-      Date.now() - idleTimestamp >=
-        settings?.account?.autoShutdownMinutes * 60 * 1000
+      Date.now() - idleTimestamp >= settings?.account?.autoShutdownMinutes * 60 * 1000
     ) {
       if (!settings.isDev) {
         shutdown();
       } else {
-        alert("auto shutdown");
+        alert('auto shutdown');
       }
 
       setIdleTimestamp(Date.now()); // Reset idleTimestamp after shutdown
@@ -81,16 +90,16 @@ function useBackgroundProcesses() {
   useEffect(() => {
     const interval = setInterval(() => {
       autoSubmitUnsubmittedResults();
-    }, 1000 * 60 * 5); // 5 minutes
+    }, 1000 * 60 * 5  ); // 5 minutes
     return () => clearInterval(interval);
-  }, [results]);
+  }, [resultList, settings?.account?.autoSubmitResults, ]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       getLastVersion();
     }, 1000 * 60); // 1h
     return () => clearInterval(interval);
-  }, []);
+  }, [settings.user.updateType]);
 
   useEffect(() => {
     const pingInterval = setInterval(() => {
@@ -101,9 +110,9 @@ function useBackgroundProcesses() {
   }, [deviceStatus, settings]);
 
   useEffect(() => {
-    if (deviceStatus === "IDLE" && !idleTimestamp) {
+    if (deviceStatus === 'IDLE' && !idleTimestamp) {
       setIdleTimestamp(Date.now());
-    } else if (deviceStatus !== "IDLE") {
+    } else if (deviceStatus !== 'IDLE') {
       setIdleTimestamp(null);
     }
   }, [deviceStatus, idleTimestamp]);
@@ -111,32 +120,38 @@ function useBackgroundProcesses() {
   useEffect(() => {
     let lidAutoCloseInterval = setInterval(() => {
       lidAutoClose();
-    }, settings?.account?.autoCloseLidMinutes * 60 * 1000); // 5 minutes
-
-    let autoShutdownInterval = setInterval(() => {
-      autoShutdown();
-    }, settings?.account?.autoCloseLidMinutes * 60 * 1000); // 5 minutes
+    }, 1000);
 
     return () => {
       clearInterval(lidAutoCloseInterval);
+    };
+  }, [
+    settings?.account?.autoCloseLidMinutes,
+    isLidOpen,
+  ]);
+ useEffect(() => {
+    let autoShutdownInterval = setInterval(() => {
+      autoShutdown();
+
+    },1000); 
+
+    return () => {
       clearInterval(autoShutdownInterval);
     };
   }, [
     settings?.account?.autoShutdownMinutes,
-    settings?.account?.autoCloseLidMinutes,
     deviceStatus,
     idleTimestamp,
-    isLidOpen,
   ]);
-
   useEffect(() => {
-    let interval: NodeJS.Timeout | undefined;
+    let interval: NodeJS.Timeout;
 
     const executeChecks = async () => {
       try {
         await checkForUSB();
         //await checkForTestResultFile();
         await checkForUnsubmittedResults();
+        
         if (interval) clearInterval(interval);
         interval = setInterval(executeChecks, 5000); // 5 seconds
       } catch (error) {
@@ -151,7 +166,7 @@ function useBackgroundProcesses() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, []);
+  }, [resultList]);
 }
 
 export default useBackgroundProcesses;

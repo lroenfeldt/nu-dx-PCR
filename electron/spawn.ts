@@ -32,6 +32,7 @@ export const spawn = async (cmd: string, args: string[], options?: SpawnOptions)
 			const errorMessage = `Error spawning ${cmd} ${args.join(" ")}: ${data}`;
 			console.log(errorMessage);
 			logger(errorMessage, "spawn.txt");
+			reject(data);
 		});
 
 		child.on("close", (code: number) => {
