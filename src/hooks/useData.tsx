@@ -43,7 +43,7 @@ export function DataProvider({ children }: DataProviderProps) {
 	const [offlineMode, setOfflineMode] = useState(false);
 	const [openResults, setOpenResults] = useState(false);
 	const [dbConnection, setDbConnection] = useState(true);
-	const [submitFilter, setSubmitFilter] = useState(false);
+	const [submitFilter, setSubmitFilter] = useState(true);
 	const [viewResults, setViewResults] = useState("graph");
 	const [resultsSubmitted, setSubmitted] = useState(false);
 	const [deviceStatus, setDeviceStatus] = useState("IDLE");

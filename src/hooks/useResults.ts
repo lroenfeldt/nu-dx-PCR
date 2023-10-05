@@ -289,7 +289,7 @@ const useResults = () => {
         prevErrors
           .filter((error) => error.type !== "submit")
           .concat({
-            type: "submit",
+            type: "read",
             message: t("errors.failedToReadResultData"),
           })
       );
@@ -483,7 +483,7 @@ const useResults = () => {
           prevErrors
             .filter((error) => error.type !== "submit")
             .concat({
-              type: "submit",
+              type: "read",
               message: t("errors.failedToReadResultData"),
             })
         );
