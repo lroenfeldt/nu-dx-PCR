@@ -37,6 +37,7 @@ const BarcodeInput = () => {
   const [inputs, setInputs] = useState({});
   const [inputName, setInputName] = useState('default');
   const [trailing, setTrailing] = useState(false);
+  const [controlsApplied, setControlsApplied] = useState(false);
   const testprocedure = settings.account.testprocedures.find((testprocedure) => testprocedure.id === selectedMethod);
 
   const markActive = (id) => {
@@ -81,19 +82,10 @@ const BarcodeInput = () => {
             if (j === nextWell && j > 12) return markActive(j - 12);
           }
         }
-      } else if (wellCount == 16) {
+      } else if (wellCount == 16 && active < 16) {
         do nextWell++;
-        while (barcodes.find((barcode) => barcode.id == nextWell).blocked);
-        {
-          if (testprocedure.controlSamples.length > 0) {
-            markActive(nextWell + 1);
-          } else {
-            markActive(nextWell);
-          }
-        }
-      }
-      if (active === wellCount) {
-        checkBarcode(wellCount);
+        while (barcodes.find((barcode) => barcode.id === nextWell)?.blocked);
+        markActive(nextWell);
       }
     },
     [active, barcodes, settings.device.wellCount, setBarcodes, setDisabled]
@@ -638,6 +630,8 @@ const BarcodeInput = () => {
     }
   }, [offlineMode]);
 
+
+  //Apply control samples
   useEffect(() => {
     if (testprocedure.controlSamples.length > 0 && settings.account.autoControlSamples !== 'Trailing') {
       setBarcodes((prevBarcodes) => {
@@ -647,6 +641,7 @@ const BarcodeInput = () => {
             blocked: false,
             label: barcode.posName,
             value: '',
+            valid: false
           };
         });
       });
@@ -665,6 +660,7 @@ const BarcodeInput = () => {
               blocked: true,
               label: controlSample.label,
               value: controlSample.label,
+              valid: true
             };
           } else {
             return barcode;
@@ -672,11 +668,17 @@ const BarcodeInput = () => {
         });
       });
     }
+    setControlsApplied(true);
   }, [settings.account.autoControlSamples, isNinetySix]);
+
+  //mark active well after applying controls
+  useEffect(() => {
+    nextWell();
+  }, [controlsApplied])
+
   //open lid and select first active well on startup
   useEffect(() => {
     toggleLid();
-    nextWell(true);
   }, []);
   useEffect(() => {
     setInputName(getBarcode(active).label);
@@ -806,7 +808,7 @@ const BarcodeInput = () => {
             ) : (
               ''
             )}
-            {!isNinetySix && <button type="submit">{t('common.continue')}</button>}
+            {!isNinetySix && active < 16 && <button type="submit">{t('common.continue')}</button>}
           </form>
         </div>
       </div>

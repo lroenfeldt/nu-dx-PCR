@@ -6,6 +6,8 @@
  * */
 export default function setControls(testprocedure, barcodes, wellCount) {
 
+  console.log('lol')
+
   let newBarcodes = barcodes.map( (barcode) => {
 
     let controlSample = false;
