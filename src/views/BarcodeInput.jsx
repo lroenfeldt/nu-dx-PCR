@@ -7,8 +7,20 @@ import { useData, useTranslation } from '../hooks';
 import { IoMdCloseCircle } from 'react-icons/io';
 
 const BarcodeInput = () => {
-  const { reset, errors, barcodes, settings, toggleLid, setErrors, setLoading, offlineMode, setBarcodes, isNinetySix } =
-    useData();
+  const {
+    reset,
+    errors,
+    barcodes,
+    settings,
+    toggleLid,
+    setErrors,
+    setLoading,
+    offlineMode,
+    setBarcodes,
+    isNinetySix,
+    selectedMethod,
+    setSettings,
+  } = useData();
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -24,6 +36,8 @@ const BarcodeInput = () => {
   const [clear, setClear] = useState(false);
   const [inputs, setInputs] = useState({});
   const [inputName, setInputName] = useState('default');
+  const [trailing, setTrailing] = useState(false);
+  const testprocedure = settings.account.testprocedures.find((testprocedure) => testprocedure.id === selectedMethod);
 
   const markActive = (id) => {
     setActive(id);
@@ -80,6 +94,7 @@ const BarcodeInput = () => {
   const updateBarcode = useCallback(
     (e) => {
       e.preventDefault();
+
       clearTimeout(barcodeCheckTimeout);
       setInputs({
         ...inputs,
@@ -143,7 +158,88 @@ const BarcodeInput = () => {
     },
     [offlineMode]
   );
+  const trailingHandler = () => {
+    if (settings.account.autoControlSamples === 'Trailing') {
+      setBarcodes((prevBarcodes) => {
+        let lastNotEmptyIndex = prevBarcodes.reduce((index, barcode, i) => {
+          return barcode.value !== '' ? i : index;
+        }, 0);
 
+        let newActive = lastNotEmptyIndex + 1;
+        let count = 0;
+        if (testprocedure.controlSamples.length > 0) {
+          // Mapper les controlSamples sur les barcodes et les bloquer
+          return prevBarcodes.map((barcode, index) => {
+            const controlSample = testprocedure.controlSamples[index % testprocedure.controlSamples.length];
+
+            if (barcode.id === newActive + 1 && count < testprocedure.controlSamples.length) {
+              count++;
+              newActive++;
+              return {
+                ...barcode,
+                blocked: true,
+                label: controlSample.label,
+                value: controlSample.label,
+              };
+            }
+            return barcode;
+          });
+        }
+        let tpcPosition = isNinetySix ? newActive + 12 : newActive + 1;
+        let ntcPosition = isNinetySix ? newActive + 24 : newActive + 2;
+        if (tpcPosition >= 85) {
+          ntcPosition = ntcPosition - 83 - 12;
+        }
+        if (tpcPosition >= 97) {
+          tpcPosition = tpcPosition - 83 - 12;
+        }
+        if (ntcPosition >= 97) {
+          ntcPosition = ntcPosition - 83 - 12;
+        }
+
+        return prevBarcodes.map((barcode, index) => {
+          if (
+            (barcode.label === 'NTC' || barcode.label === 'TPC') &&
+            barcode.id !== tpcPosition &&
+            barcode.id !== ntcPosition
+          ) {
+            return {
+              ...barcode,
+              blocked: false,
+              label: `${index + 1 > 8 ? 'B0' + (index + 1 - 8) : 'A0' + (index + 1)}`,
+              value: '',
+            };
+          }
+
+          if (barcode.id === tpcPosition && barcode.value === '') {
+            return {
+              ...barcode,
+              blocked: true,
+              label: 'TPC',
+            };
+          }
+
+          if (barcode.id === ntcPosition && barcode.value === '') {
+            return {
+              ...barcode,
+              blocked: true,
+              label: 'NTC',
+            };
+          }
+
+          return barcode;
+        });
+      });
+    }
+  };
+  const navigateToTestReady = () => {
+    if (settings.account.autoControlSamples == 'Trailing' && !trailing) {
+      trailingHandler();
+      setTrailing(true);
+    } else {
+      navigate('/testReady');
+    }
+  };
   const retest = async (barcode) => {
     setLoading(true);
     setBarcodes((prevBarcodes) =>
@@ -517,7 +613,43 @@ const BarcodeInput = () => {
     setBarcodesValid(result);
     return result;
   };
+  useEffect(() => {
+    if (testprocedure.controlSamples.length > 0 && settings.account.autoControlSamples !== 'Trailing') {
+      setBarcodes((prevBarcodes) => {
+        return prevBarcodes.map((barcode) => {
+          return {
+            ...barcode,
+            blocked: false,
+            label: barcode.posName,
+            value: '',
+          };
+        });
+      });
+      setBarcodes((prevBarcodes) => {
+        return prevBarcodes.map((barcode) => {
+          const controlSample = testprocedure.controlSamples.find((sample) => {
+            return (
+              (!isNinetySix && barcode.label === sample.position16) ||
+              (isNinetySix && barcode.label === sample.position96)
+            );
+          });
 
+          if (controlSample) {
+            return {
+              ...barcode,
+              blocked: true,
+              label: controlSample.label,
+              value: controlSample.label,
+            };
+          } else {
+            return {
+              ...barcode,
+            };
+          }
+        });
+      });
+    }
+  }, [settings.account.autoControlSamples, isNinetySix]);
   //open lid and select first active well on startup
   useEffect(() => {
     toggleLid();
@@ -535,10 +667,11 @@ const BarcodeInput = () => {
 
   //re check all barcodes on disabling offlineMode mode
   useEffect(() => {
-    if (!offlineMode) {
+    if (!offlineMode && !testprocedure.controlSamples.length > 0) {
       checkAll(barcodes.filter((barcode) => barcode.value.length > 0));
     }
   }, [offlineMode]);
+
   const handleReset = useCallback(() => {
     setBarcodes(
       barcodes.map((barcode) => {
@@ -678,8 +811,10 @@ const BarcodeInput = () => {
         >
           {t('common.cancel')}
         </button>
-        <button onClick={() => navigate('/testReady')} className={`${!barcodesValid ? 'disabled' : ''}`}>
-          {t('common.testStart')}
+        <button onClick={navigateToTestReady} className={`${!barcodesValid ? 'disabled' : ''}`}>
+          {!trailing && settings.account.autoControlSamples == 'Trailing'
+            ? t('default.common.continue')
+            : t('default.common.testStart')}
         </button>
       </div>
     </>

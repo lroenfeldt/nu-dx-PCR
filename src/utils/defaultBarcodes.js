@@ -27,13 +27,21 @@ export default function useDefaultBarcodes(settings) {
     let value = '';
     let valid = false;
     //Set Controls
-    if (posName === settings.user.tpcPos && settings.account.autoControl) {
+    if (
+      posName === settings.user.tpcPos &&
+      settings.account.autoControl &&
+      settings.account.autoControlSamples == 'Fixed'
+    ) {
       blocked = settings.account.autoControl;
       label = 'TPC';
       value = 'TPC';
       valid = true;
     }
-    if (posName === settings.user.ntcPos && settings.account.autoControl) {
+    if (
+      posName === settings.user.ntcPos &&
+      settings.account.autoControl &&
+      settings.account.autoControlSamples == 'Fixed'
+    ) {
       blocked = settings.account.autoControl;
       label = 'NTC';
       value = 'NTC';
