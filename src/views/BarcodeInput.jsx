@@ -1,5 +1,5 @@
 import { Block, Keyboard, Controller, RackVisualRows, ActivateKeyboard } from '../components';
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useLayoutEffect } from 'react';
 import axios from 'axios';
 import urls from '../config/settings';
 import { useNavigate } from 'react-router-dom';
@@ -43,53 +43,61 @@ const BarcodeInput = () => {
     setActive(id);
     textInput.current.focus();
   };
-  useEffect(() => {
-    setInputName(getBarcode(active).label);
-  }, [active]);
+
   const numberRegex = /^[0-9]+$/;
-  const nextWell = (next) => {
-    let nextWell = active;
-    const blockedBarcodes = barcodes
-      .filter((barcode) => barcode.blocked === true)
-      .map((blockedBarcode) => blockedBarcode.id);
-    setDisabled(false);
-    const wellCount = settings.device.wellCount;
-    if (active <= wellCount && wellCount == 96) {
-      for (let j = -13; j <= wellCount; j++) {
-        if (next === true) {
-          if (nextWell === 96 && blockedBarcodes.includes(1)) return setDisabled(true);
-          if (j === nextWell && blockedBarcodes.includes(nextWell + 12)) {
-            if (nextWell + 24 === 97) return setDisabled(true);
-            if (blockedBarcodes.includes(nextWell + 24)) return markActive(nextWell + 36);
-            return markActive(nextWell + 24);
+  const nextWell = useCallback(
+    (next) => {
+      let nextWell = active;
+
+      const blockedBarcodes = barcodes
+        .filter((barcode) => barcode.blocked === true)
+        .map((blockedBarcode) => blockedBarcode.id);
+      setDisabled(false);
+      const wellCount = settings.device.wellCount;
+      if (active <= wellCount && wellCount == 96) {
+        for (let j = -13; j <= wellCount; j++) {
+          if (next === true) {
+            if (nextWell === 96 && blockedBarcodes.includes(1)) return setDisabled(true);
+            if (j === nextWell && blockedBarcodes.includes(nextWell + 12)) {
+              if (nextWell + 24 === 97) return setDisabled(true);
+              if (blockedBarcodes.includes(nextWell + 24)) return markActive(nextWell + 36);
+              return markActive(nextWell + 24);
+            }
+            if (j === nextWell && j >= 85 && blockedBarcodes.includes(nextWell - 83))
+              return markActive(nextWell - 83 + 12);
+            if (j === nextWell && j === 96 && !blockedBarcodes.includes(1)) return markActive(1);
+            if (j === nextWell && j >= 85) return markActive(j - 83);
+            if (j === nextWell && j < 85) return markActive(j + 12);
+          } else {
+            if (j === nextWell && blockedBarcodes.includes(nextWell - 12) && blockedBarcodes.includes(nextWell - 24))
+              return markActive(96);
+            if (j === nextWell && j > 12 && j <= 24 && nextWell - 12 === 1 && blockedBarcodes.includes(nextWell - 12))
+              return markActive(96);
+            if (j === nextWell && blockedBarcodes.includes(nextWell + 12)) return markActive(nextWell + 24);
+            if (j === nextWell && j > 12 && j <= 24 && blockedBarcodes.includes(nextWell - 12))
+              return markActive(j - 12 + 83);
+            if (j === nextWell && j <= 1) return markActive(96);
+            if (j === nextWell && j <= 12) return markActive(j + 83);
+            if (j === nextWell && j > 12) return markActive(j - 12);
           }
-          if (j === nextWell && j >= 85 && blockedBarcodes.includes(nextWell - 83))
-            return markActive(nextWell - 83 + 12);
-          if (j === nextWell && j === 96 && !blockedBarcodes.includes(1)) return markActive(1);
-          if (j === nextWell && j >= 85) return markActive(j - 83);
-          if (j === nextWell && j < 85) return markActive(j + 12);
-        } else {
-          if (j === nextWell && blockedBarcodes.includes(nextWell - 12) && blockedBarcodes.includes(nextWell - 24))
-            return markActive(96);
-          if (j === nextWell && j > 12 && j <= 24 && nextWell - 12 === 1 && blockedBarcodes.includes(nextWell - 12))
-            return markActive(96);
-          if (j === nextWell && blockedBarcodes.includes(nextWell + 12)) return markActive(nextWell + 24);
-          if (j === nextWell && j > 12 && j <= 24 && blockedBarcodes.includes(nextWell - 12))
-            return markActive(j - 12 + 83);
-          if (j === nextWell && j <= 1) return markActive(96);
-          if (j === nextWell && j <= 12) return markActive(j + 83);
-          if (j === nextWell && j > 12) return markActive(j - 12);
+        }
+      } else if (wellCount == 16) {
+        do nextWell++;
+        while (barcodes.find((barcode) => barcode.id == nextWell).blocked);
+        {
+          if (testprocedure.controlSamples.length > 0) {
+            markActive(nextWell + 1);
+          } else {
+            markActive(nextWell);
+          }
         }
       }
-    } else if (wellCount == 16) {
-      do nextWell++;
-      while (barcodes.find((barcode) => barcode.id === nextWell)?.blocked);
-      markActive(nextWell);
-    }
-    if (active === wellCount) {
-      checkBarcode(wellCount);
-    }
-  };
+      if (active === wellCount) {
+        checkBarcode(wellCount);
+      }
+    },
+    [active, barcodes, settings.device.wellCount, setBarcodes, setDisabled]
+  );
 
   const updateBarcode = useCallback(
     (e) => {
@@ -206,7 +214,7 @@ const BarcodeInput = () => {
             return {
               ...barcode,
               blocked: false,
-              label: `${index + 1 > 8 ? 'B0' + (index + 1 - 8) : 'A0' + (index + 1)}`,
+              label: barcode.posName,
               value: '',
             };
           }
@@ -613,6 +621,23 @@ const BarcodeInput = () => {
     setBarcodesValid(result);
     return result;
   };
+
+  useEffect(() => {
+    getBarcode(active).askRetest = settings.account.allowRetest && settings.account.verifyBarcodes;
+    setInputName(getBarcode(active).label);
+  }, [settings.account.allowRetest, settings.account.verifyBarcodes]);
+  //check valid attribure of all barcodes to toggle button for next step
+  useEffect(() => {
+    checkAllValid();
+  }, [barcodes]);
+
+  //re check all barcodes on disabling offlineMode mode
+  useEffect(() => {
+    if (!offlineMode && !testprocedure.controlSamples.length > 0) {
+      checkAll(barcodes.filter((barcode) => barcode.value.length > 0));
+    }
+  }, [offlineMode]);
+
   useEffect(() => {
     if (testprocedure.controlSamples.length > 0 && settings.account.autoControlSamples !== 'Trailing') {
       setBarcodes((prevBarcodes) => {
@@ -642,9 +667,7 @@ const BarcodeInput = () => {
               value: controlSample.label,
             };
           } else {
-            return {
-              ...barcode,
-            };
+            return barcode;
           }
         });
       });
@@ -655,23 +678,9 @@ const BarcodeInput = () => {
     toggleLid();
     nextWell(true);
   }, []);
-
   useEffect(() => {
-    getBarcode(active).askRetest = settings.account.allowRetest && settings.account.verifyBarcodes;
     setInputName(getBarcode(active).label);
-  }, [settings.account.allowRetest, settings.account.verifyBarcodes]);
-  //check valid attribure of all barcodes to toggle button for next step
-  useEffect(() => {
-    checkAllValid();
-  }, [barcodes]);
-
-  //re check all barcodes on disabling offlineMode mode
-  useEffect(() => {
-    if (!offlineMode && !testprocedure.controlSamples.length > 0) {
-      checkAll(barcodes.filter((barcode) => barcode.value.length > 0));
-    }
-  }, [offlineMode]);
-
+  }, [active]);
   const handleReset = useCallback(() => {
     setBarcodes(
       barcodes.map((barcode) => {
