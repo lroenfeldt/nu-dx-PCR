@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { useData } from '../hooks';
 
 /**
  * Generate default barcodes depending on the device type
@@ -10,7 +8,6 @@ export default function useDefaultBarcodes(settings) {
   //Plate Setup
   let defaultBarcodes = [];
   const rowLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
-  let demoSet = false;
   const length = settings?.device?.wellCount == 96 ? 12 : 8;
   const wellCount = settings?.device?.wellCount;
 
@@ -26,39 +23,7 @@ export default function useDefaultBarcodes(settings) {
     let label = posName;
     let value = '';
     let valid = false;
-    //Set Controls
-    if (
-      posName === settings.user.tpcPos &&
-      settings.account.autoControl &&
-      settings.account.autoControlSamples == 'Fixed'
-    ) {
-      blocked = settings.account.autoControl;
-      label = 'TPC';
-      value = 'TPC';
-      valid = true;
-    }
-    if (
-      posName === settings.user.ntcPos &&
-      settings.account.autoControl &&
-      settings.account.autoControlSamples == 'Fixed'
-    ) {
-      blocked = settings.account.autoControl;
-      label = 'NTC';
-      value = 'NTC';
-      valid = true;
-    }
-    //Set Demo Code for Development
-    if (
-      settings.isDev &&
-      settings.account.autoControl &&
-      posName !== settings.user.ntcPos &&
-      posName !== settings.user.tpcPos &&
-      !demoSet
-    ) {
-      value = '3575910784';
-      valid = true;
-      demoSet = true;
-    }
+    
 
     defaultBarcodes.push({
       id: i,
