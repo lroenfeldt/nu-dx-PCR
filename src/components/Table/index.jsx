@@ -67,7 +67,7 @@ function Table({ th, tr }) {
               if (!testMethod.showCurves) element.pop();
 
               return (
-                <tr key={`tr-${index}`} onClick={handleSelected} data-animate>
+                <tr key={`tr-${index}`} data-animate>
                   {element
                     .filter((item) => item !== false)
                     .filter((item) => typeof item !== undefined)

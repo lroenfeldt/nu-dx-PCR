@@ -250,7 +250,10 @@ const ViewResults = () => {
                           style={{
                             ...(barcode.alteredResult && { border: '1px solid orange' }),
                             position:
-                              barcode.alteredResult || barcode.label == 'NTC' || barcode.label == 'TPC'
+                              barcode.alteredResult ||
+                              barcode.label == 'NTC' ||
+                              barcode.label == 'TPC' ||
+                              barcode.label.includes('TP')
                                 ? 'relative'
                                 : '',
                             color:
