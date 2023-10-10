@@ -26,7 +26,8 @@ import {
   TableRow,
 } from "../types/interfaces/interfaces";
 import { IConfigFile, ITestProcedure } from "../types/interfaces/settings";
-import { errorProps } from "src/constants/errorProps";
+import { errorProps } from "../constants/errorProps";
+
 const ViewResults: React.FC = () => {
   const [active, setActive] = useState<number>(0);
   const [activeBarcode, setActiveBarcode] = useState<IBarcode | {}>({});

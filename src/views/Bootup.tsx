@@ -5,7 +5,7 @@ import { Oval } from "react-loader-spinner";
 import pairingApi from "../api/pairingCode";
 import { useNavigate } from "react-router-dom";
 import { useData, useApi, useTranslation } from "../hooks";
-import { errorProps } from "src/constants/errorProps";
+import { errorProps } from "../constants/errorProps";
 
 const Bootup = () => {
   const navigate = useNavigate();

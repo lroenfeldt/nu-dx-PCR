@@ -10,7 +10,7 @@ import { FiSettings, FiPower, FiList } from "react-icons/fi";
 import SelectTestResults from "./SelectTestResults/SelectTestResults";
 import { useData, useTranslation, useBackgroundProcesses } from "../hooks";
 import nuDiagnostics from "../assets/Logos/nu-diagnostics/nu-diagnostics white.png";
-import { errorProps } from "src/constants/errorProps";
+import { errorProps } from "../constants/errorProps";
 
 const Header: FC = () => {
   const {

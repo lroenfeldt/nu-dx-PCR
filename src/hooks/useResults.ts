@@ -19,7 +19,7 @@ import {
   IExtractedBarcodes,
 } from "../types/interfaces/parseResults";
 import { IConfigFile, ITestProcedure } from "../types/interfaces/settings";
-import { errorProps } from "src/constants/errorProps";
+import { errorProps } from "../constants/errorProps";
 
 /**
  * hook to handle all the results related functions

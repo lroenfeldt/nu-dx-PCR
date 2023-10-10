@@ -12,7 +12,7 @@ import { IUseTranslation } from "../types/interfaces/useTranslation";
 import { IBarcode, IError } from "../types/interfaces/interfaces";
 import { ITestObject } from "../../electron/interfaces/interfaces";
 import { ISettings } from "../types/interfaces/settings";
-import { errorProps } from "src/constants/errorProps";
+import { errorProps } from "../constants/errorProps";
 
 export const DataContext = React.createContext({});
 /**

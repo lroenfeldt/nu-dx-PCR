@@ -4,7 +4,8 @@ import { useData, useTranslation } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import functions from "../utils/functions";
 import { Oval } from "react-loader-spinner";
-import { errorProps } from "src/constants/errorProps";
+import { errorProps } from "../constants/errorProps";
+
 const RunTest = () => {
   const navigate = useNavigate();
   const {

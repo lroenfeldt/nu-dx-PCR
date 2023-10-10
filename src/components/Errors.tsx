@@ -3,7 +3,7 @@ import { useData, useResults, useTranslation } from "../hooks";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IError } from "../types/interfaces/interfaces";
 import { IHideErrorProps } from "../types/components";
-import { errorProps } from "src/constants/errorProps";
+import { errorProps } from "../constants/errorProps";
 
 const Errors: React.FC = () => {
   const {
