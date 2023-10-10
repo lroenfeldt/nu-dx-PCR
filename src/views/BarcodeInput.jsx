@@ -630,11 +630,9 @@ const BarcodeInput = () => {
     }
   }, [offlineMode]);
 
-
   //Apply control samples
   useEffect(() => {
     if (testprocedure.controlSamples.length > 0 && settings.account.autoControlSamples !== 'Trailing') {
-
       setBarcodes((prevBarcodes) => {
         return prevBarcodes.map((barcode) => {
           const controlSample = testprocedure.controlSamples.find((sample) => {
@@ -650,7 +648,7 @@ const BarcodeInput = () => {
               blocked: true,
               label: controlSample.label,
               value: controlSample.label,
-              valid: true
+              valid: true,
             };
           } else {
             return barcode;
@@ -663,10 +661,10 @@ const BarcodeInput = () => {
 
   //mark active well after applying controls
   useEffect(() => {
-    if(controlsApplied) {
+    if (controlsApplied) {
       nextWell();
     }
-  }, [controlsApplied])
+  }, [controlsApplied]);
 
   //open lid and select first active well on startup
   useEffect(() => {

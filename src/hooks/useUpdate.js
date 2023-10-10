@@ -53,7 +53,7 @@ const useUpdate = () => {
       console.log(err);
       window.api.logEvents('getLastVersion error' + JSON.stringify(err), 'logErrors.txt');
     }
-  }, [settings, setUpdateAvailable]);
+  }, [settings.user.updateType, settings.version]);
 
   return { getLastVersion };
 };
