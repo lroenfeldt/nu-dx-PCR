@@ -48,7 +48,7 @@ const Footer = () => {
       </div>
       <div className="menu-right">
         {locale === "de" ? (
-          <span className="state-time-de">{stateTime}</span>
+          <div className="state-time-de">{stateTime}</div>
         ) : (
           ""
         )}
@@ -61,7 +61,7 @@ const Footer = () => {
           ""
         )}
         {locale === "fr" ? (
-          <span className="state-time-fr">{stateTime}</span>
+          <div className="state-time-fr">{stateTime}</div>
         ) : (
           ""
         )}
