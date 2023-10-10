@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useData } from './useData';
+import { useEffect } from "react";
+import { useData } from "./useData";
 
 export default function useCheckConnectivity() {
   const { setOfflineMode, offlineMode } = useData();
@@ -7,17 +7,17 @@ export default function useCheckConnectivity() {
   useEffect(() => {
     const updateOnlineStatus = () => {
       setOfflineMode(!navigator.onLine);
-      console.log(navigator.onLine ? 'online' : 'offline');
+      console.log(navigator.onLine ? "online" : "offline");
     };
 
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
+    window.addEventListener("online", updateOnlineStatus);
+    window.addEventListener("offline", updateOnlineStatus);
 
     updateOnlineStatus();
 
     return () => {
-      window.removeEventListener('online', updateOnlineStatus);
-      window.removeEventListener('offline', updateOnlineStatus);
+      window.removeEventListener("online", updateOnlineStatus);
+      window.removeEventListener("offline", updateOnlineStatus);
     };
   }, [navigator?.onLine, offlineMode]);
 

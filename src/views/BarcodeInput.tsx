@@ -14,6 +14,7 @@ import { IoMdCloseCircle } from "react-icons/io";
 import { IBarcode } from "../types/interfaces/interfaces";
 import { ITestMethod } from "../types/interfaces/parseResults";
 import { ITestProcedure } from "../types/interfaces/settings";
+import { errorProps } from "src/constants/errorProps";
 const BarcodeInput = () => {
   const {
     reset,
@@ -243,6 +244,8 @@ const BarcodeInput = () => {
           );
           dbError = true;
           newErrors.push({
+            code: errorProps.dbCon.code,
+            id: errorProps.dbCon.id,
             type: "dbCon",
             message: t("errors.checkTestSampleFail"),
           });
@@ -254,6 +257,8 @@ const BarcodeInput = () => {
           window.api.logEvents(`request: ${JSON.stringify(err.request)}`);
           dbError = true;
           newErrors.push({
+            code: errorProps.dbCon.code,
+            id: errorProps.dbCon.id,
             type: "dbCon",
             message: t("errors.dbConnectionError"),
           });
@@ -264,6 +269,8 @@ const BarcodeInput = () => {
           window.api.logEvents(`Error: ${err.message}`);
           dbError = true;
           newErrors.push({
+            code: errorProps.dbCon.code,
+            id: errorProps.dbCon.id,
             type: "dbCon",
             message: t("errors.dbConnectionError"),
           });
@@ -501,6 +508,8 @@ const BarcodeInput = () => {
               console.log(err.request);
               window.api.logEvents(`request: ${JSON.stringify(err.request)}`);
               newErrors.push({
+                code: errorProps.dbCon.code,
+                id: errorProps.dbCon.id,
                 type: "dbCon",
                 message: t("errors.dbConnectionError"),
               });
@@ -533,6 +542,8 @@ const BarcodeInput = () => {
               console.log(err.request);
               window.api.logEvents(`request: ${JSON.stringify(err.request)}`);
               newErrors.push({
+                code: errorProps.dbCon.code,
+                id: errorProps.dbCon.id,
                 type: "dbCon",
                 message: t("errors.dbConnectionError"),
               });
@@ -542,6 +553,8 @@ const BarcodeInput = () => {
               console.log("Error", err.message);
               window.api.logEvents(`Error: ${err.message}`);
               newErrors.push({
+                code: errorProps.dbCon.code,
+                id: errorProps.dbCon.id,
                 type: "dbCon",
                 message: t("errors.dbConnectionError"),
               });

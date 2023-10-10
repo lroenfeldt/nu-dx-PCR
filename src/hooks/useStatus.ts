@@ -2,11 +2,7 @@ import { ISettings } from "./../types/interfaces/settings";
 import { useCallback } from "react";
 import { useApi, useData } from "./";
 import onlineStatus from "../api/onlineStatus";
-import { IPingResponse } from "../types/interfaces/interfaces";
-import {
-  SettingsType,
-  UseStatusReturnType,
-} from "../types/interfaces/useStatuts";
+import { UseStatusReturnType } from "../types/interfaces/useStatuts";
 
 export const useStatus = (): UseStatusReturnType => {
   const onlineStatusApi = useApi(onlineStatus.postStatus);

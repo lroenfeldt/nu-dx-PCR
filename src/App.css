@@ -1288,3 +1288,7 @@ label {
   width: 239px;
   text-align: left;
 }
+
+.serial-number {
+  margin-top: 10px;
+}

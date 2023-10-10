@@ -1,7 +1,6 @@
 import { ReactNode, CSSProperties, ButtonHTMLAttributes } from "react";
 import { IAccountUser, ITestProcedure } from "../interfaces/settings";
-import { IBarcode,  } from "../interfaces/interfaces";
-import { ITestMethod } from "../interfaces/parseResults";
+import { IBarcode } from "../interfaces/interfaces";
 
 export interface TBlockProps {
   row?: boolean;
