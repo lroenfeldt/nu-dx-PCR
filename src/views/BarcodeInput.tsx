@@ -12,9 +12,9 @@ import { useNavigate } from "react-router-dom";
 import { useData, useTranslation } from "../hooks";
 import { IoMdCloseCircle } from "react-icons/io";
 import { IBarcode } from "../types/interfaces/interfaces";
-import { ITestMethod } from "../types/interfaces/parseResults";
 import { ITestProcedure } from "../types/interfaces/settings";
-import { errorProps } from "src/constants/errorProps";
+import { errorProps } from "../constants/errorProps";
+
 const BarcodeInput = () => {
   const {
     reset,

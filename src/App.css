@@ -1276,16 +1276,16 @@ label {
   margin-right: 10px;
 }
 .state-time-de {
-  width: 245px;
+  width: 250px;
   text-align: left;
 }
 .state-time-en {
   display: flex;
   justify-content: space-between;
-  width: 280px;
+  width: 290px;
 }
 .state-time-fr {
-  width: 239px;
+  width: 250px;
   text-align: left;
 }
 
