@@ -634,17 +634,7 @@ const BarcodeInput = () => {
   //Apply control samples
   useEffect(() => {
     if (testprocedure.controlSamples.length > 0 && settings.account.autoControlSamples !== 'Trailing') {
-      setBarcodes((prevBarcodes) => {
-        return prevBarcodes.map((barcode) => {
-          return {
-            ...barcode,
-            blocked: false,
-            label: barcode.posName,
-            value: '',
-            valid: false
-          };
-        });
-      });
+
       setBarcodes((prevBarcodes) => {
         return prevBarcodes.map((barcode) => {
           const controlSample = testprocedure.controlSamples.find((sample) => {
