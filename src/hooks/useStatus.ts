@@ -1,4 +1,4 @@
-import { ISettings } from './../types/interfaces/settings';
+import { ISettings } from "./../types/interfaces/settings";
 import { useCallback } from "react";
 import { useApi, useData } from "./";
 import onlineStatus from "../api/onlineStatus";
@@ -17,6 +17,9 @@ export const useStatus = (): UseStatusReturnType => {
     setErrors,
     setDbConnection,
     isStatus,
+    errors,
+    remTime,
+    testid,
   } = useData();
 
   const ping = useCallback(async () => {
@@ -27,12 +30,15 @@ export const useStatus = (): UseStatusReturnType => {
           status: deviceStatus,
           timesStamp: new Date().getTime(),
           cyclerVersion: settings.version,
-        }
+        },
+        errors,
+        remTime,
+        testid
       );
-      
+
       const responseData = response.data as ISettings;
 
-      if (response.ok ) {
+      if (response.ok) {
         let newSettings = {
           ...settings,
           account: {
@@ -41,7 +47,7 @@ export const useStatus = (): UseStatusReturnType => {
             initialized: settings.account.authToken !== "" ? true : false,
           },
         };
-       
+
         await saveSettings(newSettings);
       }
 
@@ -57,15 +63,20 @@ export const useStatus = (): UseStatusReturnType => {
         );
       }
 
-      window.api.logEvents(
-        `ping status response: ${JSON.stringify(response)}`,
-        "logInfos"
-      );
+      window.api.logEvents(`ping status response: ${JSON.stringify(response)}`);
     } catch (err: any) {
       console.error(err);
-      window.api.logEvents("ping status error:" + err, "logErrors");
+      window.api.logEvents("ping status error:" + err);
     }
-  }, [deviceStatus, settings, onlineStatusApi, isStatus]);
+  }, [
+    deviceStatus,
+    settings,
+    onlineStatusApi,
+    isStatus,
+    errors,
+    remTime,
+    testid,
+  ]);
 
   return { ping };
 };

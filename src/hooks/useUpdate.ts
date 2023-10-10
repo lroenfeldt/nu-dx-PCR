@@ -38,11 +38,9 @@ const useUpdate = () => {
             parseInt(currentVersion[i]) !== parseInt(newVersion[i]) &&
             parseInt(newVersion[i]) > parseInt(currentVersion[i])
           ) {
-           
             setUpdateAvailable(true);
             break;
           } else if (parseInt(newVersion[i]) < parseInt(currentVersion[i])) {
-            
             setUpdateAvailable(false);
             break;
           }
@@ -51,17 +49,15 @@ const useUpdate = () => {
 
       if (latestVersion) {
         window.api.logEvents(
-          `currentVersion: ${settings.version}, newVersion:${latestVersion.tag_name}`,
-          "logInfos"
+          `currentVersion: ${settings.version}, newVersion:${latestVersion.tag_name}`
         );
       } else {
-        window.api.logEvents(`No new version found`, "logInfos");
+        window.api.logEvents(`No new version found`);
       }
     } catch (err) {
       console.error(err);
-      window.api.logEvents("getLastVersion error" + err, "logErrors");
+      window.api.logEvents("getLastVersion error" + err);
     }
-  
   }, [settings.user.updateType, settings.version]);
 
   return { getLastVersion };

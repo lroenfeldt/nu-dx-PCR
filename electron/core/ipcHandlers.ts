@@ -22,7 +22,7 @@ export function checkResultFileHandler(): void {
     } catch (error: any) {
       const errorMsg = `Result file "${filepath}" is not present or not readable: ${error.message}`;
       console.error(errorMsg);
-      logger(errorMsg, "logErrors");
+      logger(errorMsg);
       return false;
       return;
     }
@@ -36,7 +36,7 @@ export function checkResultFileHandler(): void {
     } catch (error: any) {
       const errorMsg = `Result file "${filepath}" could not be moved to "${destpath}" due to error: ${error.message}`;
       console.error(errorMsg);
-      logger(errorMsg, "logErrors");
+      logger(errorMsg);
       return false;
     }
   });
@@ -61,12 +61,12 @@ export function moveResultFileHandler(): void {
     try {
       fs.renameSync(filepath, destpath);
       const successMsg = `Result file successfully moved to "${destpath}"`;
-      logger(successMsg, "logInfos");
+      logger(successMsg);
       return true;
     } catch (error: any) {
       const errorMsg = `Result file "${filepath}" could not be moved to "${destpath}" due to error: ${error.message}`;
       console.error(errorMsg);
-      logger(errorMsg, "logErrors");
+      logger(errorMsg);
       return false;
     }
   });
@@ -80,7 +80,7 @@ export function getResultHandler(): void {
       testid: string,
       done: boolean
     ): Promise<IGetResultResponse> => {
-      logger(`getResult ${testid}`, "logInfos");
+      logger(`getResult ${testid}`);
 
       const baseDir = path.resolve(
         app.getPath("userData"),
@@ -101,8 +101,7 @@ export function getResultHandler(): void {
         testStarted = fs.statSync(launchFilePath).mtime;
       } catch (error) {
         logger(
-          "test launch file not found, defaulting to current time for test start",
-          "logInfos"
+          "test launch file not found, defaulting to current time for test start"
         );
         testStarted = Date.now();
       }
@@ -112,7 +111,7 @@ export function getResultHandler(): void {
       } catch (error: any) {
         console.error(`error accessing result file for test ${testid}`);
 
-        logger(`error accessing result file for test ${testid}`, "logErrors");
+        logger(`error accessing result file for test ${testid}`);
 
         throw error;
       }
@@ -121,7 +120,7 @@ export function getResultHandler(): void {
         configFile = fs.readFileSync(configPath, "utf-8");
       } catch (error: any) {
         console.error(`error accessing config file for test ${testid}`);
-        logger(error.message, "logErrors");
+        logger(error.message);
       }
 
       const override = fs.existsSync(overridePath)

@@ -31,7 +31,7 @@ export function updater() {
       );
     }
 
-    logger(`update failed: ${err}`, "logErrors");
+    logger(`update failed: ${err}`);
     setTimeout(function () {
       if (splash && mainWindow) {
         splash.hide();

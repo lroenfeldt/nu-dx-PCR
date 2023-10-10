@@ -3,6 +3,7 @@ import { useData, useResults, useTranslation } from "../hooks";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IError } from "../types/interfaces/interfaces";
 import { IHideErrorProps } from "../types/components";
+import { errorProps } from "src/constants/errorProps";
 
 const Errors: React.FC = () => {
   const {
@@ -137,13 +138,13 @@ const Errors: React.FC = () => {
               >
                 {t("common.retry")}
               </button>
-              <button onClick={() => activateOffline(i)}>
+              {/* <button onClick={() => activateOffline(i)}>
                 {t("common.offline")}
-              </button>
+              </button> */}
               <button
                 onClick={() => {
                   hideError({ index: i });
-                  navigate("/selectMethod");
+                  // navigate("/selectMethod");
                 }}
               >
                 {t("common.close")}
@@ -178,22 +179,20 @@ const Errors: React.FC = () => {
                   setTimeout(() => {
                     if (!window.api.moveResultFile(testid)) {
                       window.api.logEvents(
-                        `Result for test ${testid} could not be moved`,
-                        "logInfos"
+                        `Result for test ${testid} could not be moved`
                       );
                       setErrors((prevErrors: IError[]) =>
                         prevErrors
                           .filter((err) => err.type != "moveResults")
                           .concat({
+                            code: errorProps.moveResults.code,
+                            id: errorProps.moveResults.id,
                             type: "moveResults",
                             message: t("errors.failedToMoveResults"),
                           })
                       );
                     } else {
-                      window.api.logEvents(
-                        `attempting to move result file`,
-                        "logInfos"
-                      );
+                      window.api.logEvents(`attempting to move result file`);
                       setTimeout(() => {
                         navigate("/uploadResults");
                       }, 2000);

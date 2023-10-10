@@ -29,8 +29,7 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.invoke("deleteOverride", testid),
   relaunchApp: () => ipcRenderer.invoke("relaunchApp"),
   copyLogos: () => ipcRenderer.invoke("copyLogos"),
-  logEvents: (message: string, logName: string) =>
-    ipcRenderer.invoke("log-Events", message, logName),
+  logEvents: (message: string) => ipcRenderer.invoke("log-Events", message),
   startLineGene: (
     testid: string,
     xmlContent: string,

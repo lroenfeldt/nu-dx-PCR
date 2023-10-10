@@ -1,13 +1,13 @@
 import { ITestObject } from "../../../electron/interfaces/interfaces";
-import { IBarcode } from "./interfaces";
+import { IBarcode, IError } from "./interfaces";
 import { IAccountUser, ISettings } from "./settings";
 
 export interface IUseData {
   openResults: boolean;
   setOpenResults: React.Dispatch<React.SetStateAction<boolean>>;
 
-  errors: { type: string; message: string }[];
-  handleErrors: (payload: { type: string; message: string }[]) => void;
+  errors: IError[];
+  handleErrors: (payload: IError[]) => void;
 
   demo: boolean;
   setDemo: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,9 +27,7 @@ export interface IUseData {
   saveSettings: (settings: any) => Promise<boolean>;
   toggleLid: () => void;
 
-  setErrors: React.Dispatch<
-    React.SetStateAction<{ type: string; message: string }[]>
-  >;
+  setErrors: React.Dispatch<React.SetStateAction<IError[]>>;
 
   barcodes: IBarcode[];
   setBarcodes: React.Dispatch<React.SetStateAction<IBarcode[]>>;

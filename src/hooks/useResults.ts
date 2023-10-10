@@ -19,6 +19,7 @@ import {
   IExtractedBarcodes,
 } from "../types/interfaces/parseResults";
 import { IConfigFile, ITestProcedure } from "../types/interfaces/settings";
+import { errorProps } from "src/constants/errorProps";
 
 /**
  * hook to handle all the results related functions
@@ -67,8 +68,7 @@ const useResults = () => {
     fetchControlUrl
   ) => {
     window.api.logEvents(
-      `Arguemnts: ${testid} ${orderKey} ${submitControlUrl} ${fetchControlUrl}`,
-      "logInfos"
+      `Arguemnts: ${testid} ${orderKey} ${submitControlUrl} ${fetchControlUrl}`
     );
     //validate input
     if (!Array.isArray(barcodes)) {
@@ -123,14 +123,12 @@ const useResults = () => {
       const response = await axios.post(submitControlUrl, autoControls);
 
       window.api.logEvents(
-        `submitAutoControls response: ${JSON.stringify(response)}`,
-        "logInfos"
+        `submitAutoControls response: ${JSON.stringify(response)}`
       );
       const createdSamples = response.data.imported_data[0].save_response;
 
       window.api.logEvents(
-        `submitAutoControls createdSamples: ${JSON.stringify(createdSamples)}`,
-        "logInfos"
+        `submitAutoControls createdSamples: ${JSON.stringify(createdSamples)}`
       );
       for (let i = 0; i < autoControls.length; i++) {
         try {
@@ -140,13 +138,13 @@ const useResults = () => {
           autoControls[i].barcode = generatedBarcode.data.sample;
         } catch (err) {
           console.error(err);
-          window.api.logEvents(`submitAutoControls error: ${err}`, "logErrors");
+          window.api.logEvents(`submitAutoControls error: ${err}`);
           throw err;
         }
       }
     } catch (err) {
       console.error(err);
-      window.api.logEvents(`submitAutoControls error: ${err}`, "logErrors");
+      window.api.logEvents(`submitAutoControls error: ${err}`);
       throw err;
     }
 
@@ -182,9 +180,7 @@ const useResults = () => {
 
   const submitAll: TsubmitAll = () => {
     setSubmitting(true);
-    const results = resultList.filter(
-      (result) => result 
-    );
+    const results = resultList.filter((result) => result);
     console.log(results);
     let promises = results.map((result) =>
       submitResult(result.testid, result.submitted)
@@ -205,7 +201,7 @@ const useResults = () => {
       setUSBPresent(await window.api.checkUSB());
     } catch (error) {
       console.error(error);
-      window.api.logEvents(`checkUSB: ${error}`, "logErrors");
+      window.api.logEvents(`checkUSB: ${error}`);
     }
   };
 
@@ -244,7 +240,7 @@ const useResults = () => {
 
     //read result file
     try {
-      window.api.logEvents(`fetching result files`, "logErrors");
+      window.api.logEvents(`fetching result files`);
 
       let fetchResult = await window.api.getResult(testid, done);
       const configFile = fetchResult.configFile;
@@ -258,11 +254,13 @@ const useResults = () => {
       ) as ITestProcedure;
     } catch (err) {
       console.error(err);
-      window.api.logEvents(`saveToUSB: ${err}`, "logErrors");
+      window.api.logEvents(`saveToUSB: ${err}`);
       setErrors((prevErrors) =>
         prevErrors
           .filter((error) => error.type !== "read")
           .concat({
+            code: errorProps.read.code,
+            id: errorProps.read.id,
             type: "read",
             message: t("errors.failedToReadTestData"),
           })
@@ -272,7 +270,7 @@ const useResults = () => {
     }
 
     //Parse Results
-    window.api.logEvents(`parse results`, "logInfos");
+    window.api.logEvents(`parse results`);
     let parsedResults;
     try {
       parsedResults = parseResultsExport(
@@ -284,11 +282,13 @@ const useResults = () => {
       );
     } catch (err) {
       console.error(err);
-      window.api.logEvents(`saveToUSB: ${err}`, "logErrors");
+      window.api.logEvents(`saveToUSB: ${err}`);
       setErrors((prevErrors) =>
         prevErrors
-          .filter((error) => error.type !== "submit")
+          .filter((error) => error.type !== "read")
           .concat({
+            code: errorProps.read.code,
+            id: errorProps.read.id,
             type: "read",
             message: t("errors.failedToReadResultData"),
           })
@@ -304,11 +304,13 @@ const useResults = () => {
       setWritingSuccess(testid, true);
     } catch (error) {
       console.error(error);
-      window.api.logEvents(`saveToUSB: ${error}`, "logErrors");
+      window.api.logEvents(`saveToUSB: ${error}`);
       setErrors((prevErrors) =>
         prevErrors
           .filter((error) => error.type !== "saveToUSB")
           .concat({
+            code: errorProps.saveToUSB.code,
+            id: errorProps.saveToUSB.id,
             type: "read",
             message: t("errors.failedToSaveResultData"),
           })
@@ -346,7 +348,7 @@ const useResults = () => {
       setResults(newResults);
     } catch (err) {
       console.error(err);
-      window.api.logEvents(`getResults: ${err}`, "logErrors");
+      window.api.logEvents(`getResults: ${err}`);
     }
     setReading(false);
   };
@@ -358,7 +360,7 @@ const useResults = () => {
    * @returns void
    */
   const submitResult: TsubmitResult = async (testid, done) => {
-    window.api.logEvents(`attempting submit`, "logInfos");
+    window.api.logEvents(`attempting submit`);
     setSubmitting(true);
     setSubmittingSingle(testid, true);
     //reset errors
@@ -378,7 +380,7 @@ const useResults = () => {
     let autoControls: IAutoControl[] | undefined = [];
 
     try {
-      window.api.logEvents(`fetching result files`, "logInfos");
+      window.api.logEvents(`fetching result files`);
 
       let fetchResult = await window.api.getResult(testid, done);
       const configFile = fetchResult.configFile;
@@ -397,7 +399,7 @@ const useResults = () => {
       hardwareId = testConfig.device.hardwareId;
     } catch (err) {
       console.error("failedToReadTestData: " + JSON.stringify(err));
-      window.api.logEvents(`submitResult: ${err}`, "logErrors");
+      window.api.logEvents(`submitResult: ${err}`);
       setFailedSubmittingResults((prevFailedSubmittingResults) =>
         prevFailedSubmittingResults.filter((id) => id !== testid).concat(testid)
       );
@@ -407,6 +409,8 @@ const useResults = () => {
           prevErrors
             .filter((error) => error.type !== "read")
             .concat({
+              code: errorProps.read.code,
+              id: errorProps.read.id,
               type: "read",
               message: t("errors.failedToReadTestData"),
             })
@@ -428,7 +432,7 @@ const useResults = () => {
       ? testConfig.account.customSubmitResultsEndpoint
       : urls.resultUrl;
     //Submit ControlSamples
-    window.api.logEvents(`check for auto controls`, "logInfos");
+    window.api.logEvents(`check for auto controls`);
     if (settings.account.preregisterControlSamples) {
       try {
         autoControls = await submitAutoControls(
@@ -441,12 +445,14 @@ const useResults = () => {
         );
       } catch (err) {
         console.error(`submitAutoControls failed: ${err}`);
-        window.api.logEvents(`submitResult: ${err}`, "logErrors");
+        window.api.logEvents(`submitResult: ${err}`);
 
         setErrors((prevErrors) =>
           prevErrors
             .filter((error) => error.type !== "submit")
             .concat({
+              code: errorProps.submit.code,
+              id: errorProps.submit.id,
               type: "submit",
               message: t("errors.failedToSaveControlSample"),
             })
@@ -458,7 +464,7 @@ const useResults = () => {
     }
 
     //Parse Results;
-    window.api.logEvents(`parse results`, "logInfos");
+    window.api.logEvents(`parse results`);
     let parsedResults;
     try {
       parsedResults = parseResultsDB(
@@ -474,15 +480,17 @@ const useResults = () => {
       );
     } catch (err) {
       console.error(`parseResultsDB failed: ${err}`);
-      window.api.logEvents(`parseResultsDB failed: ${err}`, "logErrors");
+      window.api.logEvents(`parseResultsDB failed: ${err}`);
       setFailedSubmittingResults((prevFailedSubmittingResults) =>
         prevFailedSubmittingResults.filter((id) => id !== testid).concat(testid)
       );
       if (!settings?.account?.autoSubmitResults) {
         setErrors((prevErrors) =>
           prevErrors
-            .filter((error) => error.type !== "submit")
+            .filter((error) => error.type !== "read")
             .concat({
+              code: errorProps.read.code,
+              id: errorProps.read.id,
               type: "read",
               message: t("errors.failedToReadResultData"),
             })
@@ -494,14 +502,11 @@ const useResults = () => {
     }
 
     //Submit Results
-    window.api.logEvents(`submit to db`, "logInfos");
+    window.api.logEvents(`submit to db`);
     try {
       let submitResponse = await axios.post(resultUrl, parsedResults);
 
-      window.api.logEvents(
-        `submit to db: ${JSON.stringify(submitResponse)}`,
-        "logInfos"
-      );
+      window.api.logEvents(`submit to db: ${JSON.stringify(submitResponse)}`);
       const msg = submitResponse.data.msg;
       const missing = msg.search("Fehlende Proben");
       if (missing !== -1) {
@@ -509,6 +514,8 @@ const useResults = () => {
           prevErrors
             .filter((error) => error.type !== "submit")
             .concat({
+              code: errorProps.submit.code,
+              id: errorProps.submit.id,
               type: "submit",
               message: t("errors.failedToSendSomeResults", {
                 missing: msg.substr(missing),
@@ -518,7 +525,7 @@ const useResults = () => {
       }
     } catch (err) {
       console.error(`submitResponse: ${err}`);
-      window.api.logEvents(`submitResponse: ${err}`, "logErrors");
+      window.api.logEvents(`submitResponse: ${err}`);
       setFailedSubmittingResults((prevFailedSubmittingResults) =>
         prevFailedSubmittingResults.filter((id) => id !== testid).concat(testid)
       );
@@ -527,6 +534,8 @@ const useResults = () => {
         prevErrors
           .filter((error) => error.type !== "submit")
           .concat({
+            code: errorProps.submit.code,
+            id: errorProps.submit.id,
             type: "submit",
             message: t("errors.failedToSubmitResults"),
           })
@@ -538,7 +547,7 @@ const useResults = () => {
     }
 
     //Move Result Files if successfull
-    window.api.logEvents(`move result file to done directory`, "logInfos");
+    window.api.logEvents(`move result file to done directory`);
     try {
       window.api.moveFiles(testid);
       setSubmittingSingle(testid, false);
@@ -547,14 +556,13 @@ const useResults = () => {
       setTestDone(true);
     } catch (err) {
       console.error(`move result file to done directory: ${err}`);
-      window.api.logEvents(
-        `move result file to done directory: ${err}`,
-        "logErrors"
-      );
+      window.api.logEvents(`move result file to done directory: ${err}`);
       setErrors((prevErrors) =>
         prevErrors
           .filter((error) => error.type !== "submit")
           .concat({
+            code: errorProps.submit.code,
+            id: errorProps.submit.id,
             type: "submit",
             message: t("errors.failedToMoveSubmittedFiles"),
           })

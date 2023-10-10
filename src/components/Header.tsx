@@ -10,6 +10,7 @@ import { FiSettings, FiPower, FiList } from "react-icons/fi";
 import SelectTestResults from "./SelectTestResults/SelectTestResults";
 import { useData, useTranslation, useBackgroundProcesses } from "../hooks";
 import nuDiagnostics from "../assets/Logos/nu-diagnostics/nu-diagnostics white.png";
+import { errorProps } from "src/constants/errorProps";
 
 const Header: FC = () => {
   const {
@@ -109,6 +110,8 @@ const Header: FC = () => {
         prevErrors
           .filter((error) => error.type !== "stillOffline")
           .concat({
+            code: errorProps.stillOffline.code,
+            id: errorProps.stillOffline.id,
             type: "stillOffline",
             message: t("common.stillOffline"),
           })

@@ -34,7 +34,7 @@ declare global {
       getUnsubmitted: () => any;
       getTests: () => ITestObject[];
       exit: () => void;
-      logEvents: (message: string, logName: string) => void;
+      logEvents: (message: string) => void;
       launchUpdates: () => void;
       archiveRun: () => void;
       downloadApp: () => void;

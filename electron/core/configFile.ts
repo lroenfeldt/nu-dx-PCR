@@ -26,7 +26,7 @@ export function saveConfig(): void {
       return true;
     } catch (err) {
       console.error(err);
-      logger(`saveConfig ${err}`, "logErrors");
+      logger(`saveConfig ${err}`);
       throw Error("Settings could not be saved");
     }
   });
@@ -40,7 +40,7 @@ export function clearConfig(): void {
       return true;
     } catch (err) {
       console.error(err);
-      logger(`clearConfig ${err}`, "logErrors");
+      logger(`clearConfig ${err}`);
       throw Error("Settings could not be saved");
     }
   });

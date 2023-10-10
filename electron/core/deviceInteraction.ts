@@ -5,7 +5,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { getDeviceType } from "../main";
 import { logger } from "../logger";
-import macaddress from 'macaddress';
+import macaddress from "macaddress";
 const { SerialPort } = require("serialport");
 
 export function rebootDevice(): void {
@@ -15,11 +15,9 @@ export function rebootDevice(): void {
    * */
   ipcMain.on("power", (event, reboot) => {
     if (reboot === "reboot") {
-     shutdown.reboot({ force: true });
-     
+      shutdown.reboot({ force: true });
     } else {
       shutdown.shutdown({ force: true });
-     
     }
     event.returnValue = true;
   });
@@ -33,7 +31,7 @@ export function toggleLid() {
     "toggleLid",
     (_event: Electron.IpcMainInvokeEvent): boolean => {
       ("Signal to toggle lid received.");
-      logger("Signal to toggle lid received.", "logErrors");
+      logger("Signal to toggle lid received.");
       const buffer: number[] = [
         0x7b, 0x7c, 0x0, 0x2, 0x4d, 0x1, 0x0, 0x4c, 0x7c, 0x7d,
       ];
@@ -51,16 +49,13 @@ export function toggleLid() {
           console.log(
             "Error establishing serialport connection : " + err.message
           );
-          logger(
-            `Error establishing serialport connection : ${err.message}`,
-            "logErrors"
-          );
+          logger(`Error establishing serialport connection : ${err.message}`);
           return false;
         }
         serialport.write(buffer, (err?: Error | null, result?: number) => {
           if (err) {
             console.log("Error while opening lid : " + err.message);
-            logger(`Error while opening lid : ${err.message}`, "logErrors");
+            logger(`Error while opening lid : ${err.message}`);
             return false;
           }
           if (result) {
@@ -72,8 +67,7 @@ export function toggleLid() {
                 "Error while closing serialport connection : " + err.message
               );
               logger(
-                `Error while closing serialport connection : ${err.message}`,
-                "logErrors"
+                `Error while closing serialport connection : ${err.message}`
               );
               return false;
             }
@@ -86,28 +80,28 @@ export function toggleLid() {
 }
 
 export function checkUSB() {
-	ipcMain.handle("checkUSB", (_event) => {
-		if (isDev) {
-			return true;
-		}
+  ipcMain.handle("checkUSB", (_event) => {
+    if (isDev) {
+      return true;
+    }
 
-		try {
-			fs.accessSync("D:\\", fs.constants.F_OK);
-			return true;
-		} catch (err) {
-			const errorMessage = "No Drive found or Drive not accessible";
-			console.log(errorMessage);
-			logger(errorMessage, "logInfos");
-			return false;
-		}
-	});
+    try {
+      fs.accessSync("D:\\", fs.constants.F_OK);
+      return true;
+    } catch (err) {
+      const errorMessage = "No Drive found or Drive not accessible";
+      console.log(errorMessage);
+      logger(errorMessage);
+      return false;
+    }
+  });
 }
 
 export function saveToUSB() {
   //Save to USB
   ipcMain.handle("saveToUSB", (_event, testid, results) => {
     console.log(results);
-    logger(JSON.stringify(results), "logInfos");
+    logger(JSON.stringify(results));
     const filename = testid + ".csv";
     const destPath = "D:\\nu-dx-pcr\\runs";
     const filepath = path.resolve(destPath, filename);
@@ -116,8 +110,8 @@ export function saveToUSB() {
       fs.writeFileSync(filepath, results);
     } catch (err: any) {
       console.error(err);
-      logger(err, "logErrors");
-      logger(`saveToUSB: ${err}`, "logErrors");
+      logger(err);
+      logger(`saveToUSB: ${err}`);
       throw err;
     }
     return true;
@@ -137,7 +131,7 @@ export function getDeviceInfo() {
       return { hardwareId, deviceType, serialNumber };
     } catch (err) {
       console.error(err);
-      logger(`getDeviceInfo: ${err}`, "logErrors");
+      logger(`getDeviceInfo: ${err}`);
       throw err;
     }
   });
