@@ -35,7 +35,7 @@ const WellVisual = ({ barcode, active, markActive, showResults = false, testmeth
 		        `}
         style={{
           backgroundColor:
-            barcode.label == 'NTC' || barcode.label == 'TPC'
+            barcode.label.slice(0,3) == 'NTC' || barcode.label.slice(0,3) == 'TPC'
               ? null
               : barcode.result === 'invalid'
               ? 'orange'
@@ -78,7 +78,7 @@ const WellVisual = ({ barcode, active, markActive, showResults = false, testmeth
             ${barcode.checking ? 'checking' : ''} 
             ${!barcode.checking && barcode.value.length >= 1 && !barcode.valid ? 'invalid' : ''} 
             ${barcode.blocked ? 'blocked' : ''}
-            ${(barcode.value === 'TPC' || barcode.value === 'NTC') && settings.account.autoControl ? 'blocked' : ''} 
+            ${(barcode.value.slice(0,3) === 'TPC' || barcode.value.slice(0,3) === 'NTC') && settings.account.autoControl ? 'blocked' : ''} 
             ${barcode.result ? 'res_' + barcode.result : ''}
         `}
         onClick={() => {
