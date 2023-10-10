@@ -663,7 +663,9 @@ const BarcodeInput = () => {
 
   //mark active well after applying controls
   useEffect(() => {
-    nextWell();
+    if(controlsApplied) {
+      nextWell();
+    }
   }, [controlsApplied])
 
   //open lid and select first active well on startup
