@@ -1,17 +1,25 @@
-import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useData, useTranslation } from '../hooks';
-import { Block, RadioButton } from '../components';
+import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { useData, useTranslation } from "../hooks";
+import { Block, RadioButton } from "../components";
 const Debug = () => {
-  const { settings, clearSettings, saveSettings, setSettings, exit, setUpdateType, updateType } = useData();
+  const {
+    settings,
+    clearSettings,
+    saveSettings,
+    setSettings,
+    exit,
+    setUpdateType,
+    updateType,
+  } = useData();
   const hardwareId = settings.device.hardwareId;
   const version = settings.version;
   const { t } = useTranslation();
   const navigate = useNavigate();
   const resetDevice = async () => {
     await clearSettings();
-    window.api.logEvents(`Settings loaded: ${JSON.stringify(settings)}`, 'logInfos.txt');
-    navigate('/');
+    window.api.logEvents(`Settings loaded: ${JSON.stringify(settings)}`);
+    navigate("/");
   };
   const handleUpdateTypeChange = useCallback(
     async (event: { target: { value: string } }) => {
@@ -31,14 +39,16 @@ const Debug = () => {
       </div>
       <div className="hardwareId">
         <h3>
-          {t('debug.hardwareId')}: {hardwareId}
+          {t("debug.hardwareId")}: {hardwareId}
         </h3>
       </div>
       <div className="hardwareId">
-        <h3>{`${t('debug.serialNumber')}: ${settings.account?.serialNumber}`}</h3>
+        <h3>{`${t("debug.serialNumber")}: ${
+          settings.account?.serialNumber
+        }`}</h3>
       </div>
       <div className="hardwareId">
-        <h3>{`${'wellCount'}: ${settings.device.wellCount}`}</h3>
+        <h3>{`${"wellCount"}: ${settings.device.wellCount}`}</h3>
       </div>
       <Block
         children={
@@ -53,7 +63,7 @@ const Debug = () => {
                     label="Stable"
                     value="stable"
                     name="updateType"
-                    checked={updateType === 'stable'}
+                    checked={updateType === "stable"}
                     onChange={handleUpdateTypeChange}
                   />
                   <RadioButton
@@ -61,7 +71,8 @@ const Debug = () => {
                     value="beta"
                     name="updateType"
                     onChange={handleUpdateTypeChange}
-                    checked={updateType === 'beta' ? 'checked' : ''}
+                    // checked={updateType === "beta" ? "checked" : ""}
+                    checked={updateType === "beta" ? true : false}
                   />
                 </>
               }
@@ -70,9 +81,13 @@ const Debug = () => {
         }
       />
       <div className="buttonArea">
-        <button onClick={() => window.history.back()}>{t('common.back')}</button>
-        <button onClick={() => exit()}>{t('common.end')}</button>
-        <button onClick={() => resetDevice()}>{t('common.defaultsettings')}</button>
+        <button onClick={() => window.history.back()}>
+          {t("common.back")}
+        </button>
+        <button onClick={() => exit()}>{t("common.end")}</button>
+        <button onClick={() => resetDevice()}>
+          {t("common.defaultsettings")}
+        </button>
       </div>
     </div>
   );

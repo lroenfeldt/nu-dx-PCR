@@ -1,5 +1,11 @@
-import { IExtractedBarcodes, IParsedResult, TExtractBarcodes, TParseResults, TParseResultsDB, TParseResultsExport } from '../types/interfaces/parseResults';
-
+import {
+  IExtractedBarcodes,
+  IParsedResult,
+  TExtractBarcodes,
+  TParseResults,
+  TParseResultsDB,
+  TParseResultsExport,
+} from "../types/interfaces/parseResults";
 
 /**
  * Extract Barcodes from given result file
@@ -7,19 +13,19 @@ import { IExtractedBarcodes, IParsedResult, TExtractBarcodes, TParseResults, TPa
  * @returns {Array} array of barcodes
  */
 
-export const extractBarcodes:TExtractBarcodes = (resultFile) => {
-  let extractedBarcodes:IExtractedBarcodes[] = [];
+export const extractBarcodes: TExtractBarcodes = (resultFile) => {
+  let extractedBarcodes: IExtractedBarcodes[] = [];
   let parsedResults = resultFile.split(/\r?\n/);
 
   //Parse Rows for Results
-  const resultsDataStart = parsedResults.indexOf('Quan. Result') + 1;
+  const resultsDataStart = parsedResults.indexOf("Quan. Result") + 1;
   let resultsData = parsedResults
     .slice(resultsDataStart)
-    .filter((row) => row !== '' && row.substring(0, 4) != 'Well')
-    .map((row) => row.split(','));
+    .filter((row) => row !== "" && row.substring(0, 4) != "Well")
+    .map((row) => row.split(","));
   //Validate File
   if (!resultsData) {
-    throw Error('Invalid Result File, no Barcodes found');
+    throw Error("Invalid Result File, no Barcodes found");
   }
   //Limit to one parameter (remove duplicates)
   const paramFilter = resultsData[0][4];
@@ -45,14 +51,20 @@ export const extractBarcodes:TExtractBarcodes = (resultFile) => {
  * @returns {Object} object of barcodes, parameters, labels, results and positions
  * @example {barcodes: [{value: "123456789", position: "A1", ...}]
  * */
-export const parseResults:TParseResults = (resultFile, testid, testConfig, testmethod, override) => {
-  window.api.logEvents('parsing results', 'logInfos.txt');
+export const parseResults: TParseResults = (
+  resultFile,
+  testid,
+  testConfig,
+  testmethod,
+  override
+) => {
+  window.api.logEvents("parsing results");
 
   //Check provided Input
-  if (!resultFile) throw Error('Invalid resultFile: ' + resultFile);
-  if (!testid) throw Error('Invalid testid: ' + testid);
-  if (!testConfig) throw Error('Invalid settings: ' + testConfig);
-  if (!testmethod) throw Error('Invalid testmethod: ' + testmethod);
+  if (!resultFile) throw Error("Invalid resultFile: " + resultFile);
+  if (!testid) throw Error("Invalid testid: " + testid);
+  if (!testConfig) throw Error("Invalid settings: " + testConfig);
+  if (!testmethod) throw Error("Invalid testmethod: " + testmethod);
   //Check Threshholds and provide fallback(don´t delete these two variables, they will be used in eval functions)
   let hecThreshFl = testConfig.account.hecThreshFl || 0;
   let virusThreshFl = testConfig.account.virusThreshFl || 0;
@@ -60,18 +72,17 @@ export const parseResults:TParseResults = (resultFile, testid, testConfig, testm
   let parsedResults = resultFile.split(/\r?\n/);
 
   //Parse rows for Amp Data
-  const resultsRawDataStart = parsedResults.indexOf('Quan. AmpData') + 1;
-  const resultsRawDataEnd = parsedResults.indexOf('Quan. Result');
+  const resultsRawDataStart = parsedResults.indexOf("Quan. AmpData") + 1;
+  const resultsRawDataEnd = parsedResults.indexOf("Quan. Result");
   let resultsRawData = parsedResults
     .slice(resultsRawDataStart, resultsRawDataEnd)
-    .filter((row) => row !== '' && row.substring(0, 4) != 'Well')
-    .map((row) => row.split(','));
+    .filter((row) => row !== "" && row.substring(0, 4) != "Well")
+    .map((row) => row.split(","));
 
   //Validate File
-  if (!resultsRawData) throw Error('Invalid Result File, no Raw Data found');
+  if (!resultsRawData) throw Error("Invalid Result File, no Raw Data found");
 
   let parsedResultsData: Record<string, IParsedResult> = {};
-
 
   //Read Cycle Values
   resultsRawData.forEach((row) => {
@@ -79,20 +90,18 @@ export const parseResults:TParseResults = (resultFile, testid, testConfig, testm
     const parameter = row[4].toUpperCase();
     const curveData = row.slice(5);
     const finalCycle = row.slice(5)[row.slice(5).length - 1];
-    
 
     //Pass to result object
     if (!parsedResultsData[position]) {
       parsedResultsData[position] = {
-        barcode: '',
+        barcode: "",
         parameters: {},
-        label: '',
+        label: "",
         alteredResult: false,
-        oldResult: '',
+        oldResult: "",
         isControl: false,
-        result: '',
-
-      }
+        result: "",
+      };
     }
     if (!parsedResultsData[position].parameters) {
       parsedResultsData[position].parameters = {};
@@ -100,37 +109,41 @@ export const parseResults:TParseResults = (resultFile, testid, testConfig, testm
     if (!parsedResultsData[position].parameters[parameter]) {
       parsedResultsData[position].parameters[parameter] = {
         parameter: parameter,
-        ct: '',
+        ct: "",
         curveData: [],
-        result: '',
-        orginalResult: '',
-        expectedResult: '',
-        finalCycle: '',
+        result: "",
+        orginalResult: "",
+        expectedResult: "",
+        finalCycle: "",
         threshhold: 0,
-        target: '',
-
+        target: "",
       };
     }
     parsedResultsData[position].parameters[parameter].curveData = curveData;
     parsedResultsData[position].parameters[parameter].finalCycle = finalCycle;
     parsedResultsData[position].parameters[parameter].threshhold =
-      testmethod.parameters.find((param) => param.target === parameter)?.threshhold || 0;
+      testmethod.parameters.find((param) => param.target === parameter)
+        ?.threshhold || 0;
   });
 
   //Parse Rows for Results
-  const resultsDataStart = parsedResults.indexOf('Quan. Result') + 1;
+  const resultsDataStart = parsedResults.indexOf("Quan. Result") + 1;
   const resultsDataEnd =
-    parsedResults.indexOf('SNP Result') === -1 ? parsedResults.length + 1 : parsedResults.indexOf('SNP Result');
+    parsedResults.indexOf("SNP Result") === -1
+      ? parsedResults.length + 1
+      : parsedResults.indexOf("SNP Result");
   let resultsData = parsedResults
     .slice(resultsDataStart, resultsDataEnd)
     .filter(
       (row) =>
-        row !== '' && row !== 'Well,Sample ID,Property,Target,Dye,Ct,Ct Mean,Ct SD,Concentration,Aver. Con.,Con. SD'
+        row !== "" &&
+        row !==
+          "Well,Sample ID,Property,Target,Dye,Ct,Ct Mean,Ct SD,Concentration,Aver. Con.,Con. SD"
     )
-    .map((row) => row.split(','));
+    .map((row) => row.split(","));
 
   //Validate File
-  if (!resultsData) throw Error('Invalid Result File, no results found');
+  if (!resultsData) throw Error("Invalid Result File, no results found");
 
   //Read Values
   resultsData.forEach((row, index) => {
@@ -143,15 +156,15 @@ export const parseResults:TParseResults = (resultFile, testid, testConfig, testm
     parsedResultsData[position].parameters[parameter].ct = ct;
     parsedResultsData[position].label = position;
     parsedResultsData[position].alteredResult = false;
-    parsedResultsData[position].oldResult = '';
+    parsedResultsData[position].oldResult = "";
     parsedResultsData[position].isControl = false;
     //Set labels for Controls
-    if (['Placeholder_NTC', 'SC2NTC', 'NTC'].includes(barcode)) {
-      parsedResultsData[position].label = 'NTC';
+    if (["Placeholder_NTC", "SC2NTC", "NTC"].includes(barcode)) {
+      parsedResultsData[position].label = "NTC";
       parsedResultsData[position].isControl = true;
     }
-    if (['Placeholder_TPC', 'SC2TPC', 'TPC'].includes(barcode)) {
-      parsedResultsData[position].label = 'TPC';
+    if (["Placeholder_TPC", "SC2TPC", "TPC"].includes(barcode)) {
+      parsedResultsData[position].label = "TPC";
       parsedResultsData[position].isControl = true;
     }
   });
@@ -159,39 +172,43 @@ export const parseResults:TParseResults = (resultFile, testid, testConfig, testm
   //CALCULATE RESULTS
   Object.keys(parsedResultsData).forEach((position) => {
     //Set default result to invalid
-    parsedResultsData[position].result = 'invalid';
+    parsedResultsData[position].result = "invalid";
 
     //Define functions to call upon evaluation
-    function CT(param:string) {
+    function CT(param: string) {
       const ctValue = parsedResultsData[position].parameters[param]?.ct;
       return Number(ctValue);
     }
 
-    function FL(param:string) {
+    function FL(param: string) {
       const flValue = parsedResultsData[position].parameters[param]?.finalCycle;
       return Number(flValue);
     }
 
-    function Thresh(param:string) {
-      const threshValue = parsedResultsData[position].parameters[param]?.threshhold;
+    function Thresh(param: string) {
+      const threshValue =
+        parsedResultsData[position].parameters[param]?.threshhold;
       return Number(threshValue);
     }
 
     //parse result conditions
     testmethod.results.forEach((resultType) => {
       let conditions = resultType.conditions
-        .replaceAll('(', '("')
-        .replaceAll(')', '")')
-        .replaceAll('hecThresh', 'hecThreshFl')
-        .replaceAll('virusThresh', 'virusThreshFl')
-        .replaceAll('=', '==')
-        .replaceAll('\n', '')
-        .split(',')
-        .map((s) => '(' + s.trim() + ')')
-        .join(' && ');
+        .replaceAll("(", '("')
+        .replaceAll(")", '")')
+        .replaceAll("hecThresh", "hecThreshFl")
+        .replaceAll("virusThresh", "virusThreshFl")
+        .replaceAll("=", "==")
+        .replaceAll("\n", "")
+        .split(",")
+        .map((s) => "(" + s.trim() + ")")
+        .join(" && ");
 
       //Vite does not consider declared and unused functions during compilation, hence the need to write this line to prevent the functions from being ignored.
-      CT('ROX') > 0 && CT('ROX') < 40 && (CT('FAM') == 0 || FL('FAM') > 40) && (Thresh('VIC') == 0 || CT('VIC') > 40);
+      CT("ROX") > 0 &&
+        CT("ROX") < 40 &&
+        (CT("FAM") == 0 || FL("FAM") > 40) &&
+        (Thresh("VIC") == 0 || CT("VIC") > 40);
 
       const passed = eval(conditions);
 
@@ -202,17 +219,22 @@ export const parseResults:TParseResults = (resultFile, testid, testConfig, testm
     });
 
     //Translate NTC Results
-    if (parsedResultsData[position].label === 'NTC' && parsedResultsData[position].result === 'invalid') {
-      parsedResultsData[position].result = 'negative';
-    } else if (parsedResultsData[position].label === 'NTC' && parsedResultsData[position].result === 'negative') {
-      parsedResultsData[position].result = 'invalid';
+    if (
+      parsedResultsData[position].label === "NTC" &&
+      parsedResultsData[position].result === "invalid"
+    ) {
+      parsedResultsData[position].result = "negative";
+    } else if (
+      parsedResultsData[position].label === "NTC" &&
+      parsedResultsData[position].result === "negative"
+    ) {
+      parsedResultsData[position].result = "invalid";
     }
 
     //Apply Overrides
-    console.log('override', );
+    console.log("override");
     if (override && JSON.parse(override)[position]) {
-      
-      console.log('override', JSON.parse(override)[position]);
+      console.log("override", JSON.parse(override)[position]);
       parsedResultsData[position].result = JSON.parse(override)[position];
       parsedResultsData[position].alteredResult = true;
     }
@@ -221,8 +243,6 @@ export const parseResults:TParseResults = (resultFile, testid, testConfig, testm
   return parsedResultsData;
 };
 
-
-
 /**
  * Parses the results from the result file and calculates the results
  * @param {string} resultFile - The result file to parse
@@ -230,16 +250,22 @@ export const parseResults:TParseResults = (resultFile, testid, testConfig, testm
  * @param {string} testmethod - testmethod id of the selected testmethod
  * @returns {object} - The parsed results
  */
-export const parseResultsExport:TParseResultsExport = (resultFile, testid, testConfig, testmethod, lotNumber = '') => {
-  window.api.logEvents(`parseResultsExport settings: ${testConfig}`, 'logInfos.txt');
+export const parseResultsExport: TParseResultsExport = (
+  resultFile,
+  testid,
+  testConfig,
+  testmethod,
+  lotNumber = ""
+) => {
+  window.api.logEvents(`parseResultsExport settings: ${testConfig}`);
 
   const parsedData = parseResults(resultFile, testid, testConfig, testmethod);
 
   //init export file
-  let exportFile = '';
+  let exportFile = "";
 
-  if (testmethod.type === 'Absolute') {
-    exportFile += 'Position;Barcode;CT;Result;lotNumber\n';
+  if (testmethod.type === "Absolute") {
+    exportFile += "Position;Barcode;CT;Result;lotNumber\n";
 
     //Read Data
     for (let position in parsedData) {
@@ -255,8 +281,8 @@ export const parseResultsExport:TParseResultsExport = (resultFile, testid, testC
     }
   }
 
-  if (testmethod.type === 'SNP') {
-    exportFile += 'Position;Barcode;Result;lotNumbe\n';
+  if (testmethod.type === "SNP") {
+    exportFile += "Position;Barcode;Result;lotNumbe\n";
 
     //Read Data
     for (let position in parsedData) {
@@ -279,18 +305,24 @@ export const parseResultsExport:TParseResultsExport = (resultFile, testid, testC
  * @param {Date} testStarted - Date when the test was started
  * @param {string} userId - The id of the user who started the test
  **/
-export const parseResultsDB:TParseResultsDB = (
+export const parseResultsDB: TParseResultsDB = (
   testid,
   resultFile,
   testmethod,
   testConfig,
   autoControls = [],
   testStarted,
-  userId = '',
+  userId = "",
   override,
-  lotNumber = ''
+  lotNumber = ""
 ) => {
-  const parsedData = parseResults(resultFile, testid, testConfig, testmethod, override);
+  const parsedData = parseResults(
+    resultFile,
+    testid,
+    testConfig,
+    testmethod,
+    override
+  );
 
   const runData = {
     run: testid,
@@ -304,28 +336,40 @@ export const parseResultsDB:TParseResultsDB = (
   };
 
   const samples = Object.entries(parsedData).map(([position, data]) => {
-    const { barcode: oldBarcode, parameters, isControl, result, oldResult } = data;
-    const barcode = autoControls.find(({ position: p }) => p === position)?.barcode || oldBarcode;
-    const sampleParameters = Object.entries(parameters).map(([paramName, { ct, curveData }]) => {
-      const { dbTransformation, threshhold } = testmethod.parameters.find(({ target }) => target === paramName) || {};
+    const {
+      barcode: oldBarcode,
+      parameters,
+      isControl,
+      result,
+      oldResult,
+    } = data;
+    const barcode =
+      autoControls.find(({ position: p }) => p === position)?.barcode ||
+      oldBarcode;
+    const sampleParameters = Object.entries(parameters).map(
+      ([paramName, { ct, curveData }]) => {
+        const { dbTransformation, threshhold } =
+          testmethod.parameters.find(({ target }) => target === paramName) ||
+          {};
 
-      return {
-        parameter: dbTransformation || paramName,
-        ct,
-        curveData: curveData.map((value) => parseFloat(value).toFixed(3)),
-        threshhold: threshhold || 0,
-        result: result || '',
-        orginalResult: oldResult || '',
-        expectedResult: '', //expected result for control samples as defined in nu:dx cloud. If no controll then empty
-      };
-    });
+        return {
+          parameter: dbTransformation || paramName,
+          ct,
+          curveData: curveData.map((value) => parseFloat(value).toFixed(3)),
+          threshhold: threshhold || 0,
+          result: result || "",
+          orginalResult: oldResult || "",
+          expectedResult: "", //expected result for control samples as defined in nu:dx cloud. If no controll then empty
+        };
+      }
+    );
 
     return {
       position,
       controlType: isControl || false, // TPC, NTC or whatever, fetch from account-> testmethod (dynamic controls feature)
       barcode,
-      pcrLOT: lotNumber || '',
-      pureLOT: '', //coming soon (from auth screen as well probably)
+      pcrLOT: lotNumber || "",
+      pureLOT: "", //coming soon (from auth screen as well probably)
       parameters: sampleParameters,
     };
   });

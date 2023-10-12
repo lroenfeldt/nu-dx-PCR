@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect } from 'react';
-import { useData, useTranslation } from '../../hooks';
-import { VscChromeClose } from 'react-icons/vsc';
-import './css/SelectTestResults.css';
-import { ITestResult } from '../../types/interfaces/settings';
-import { IBarcode } from '../../types/interfaces/interfaces';
+import React, { useCallback, useEffect } from "react";
+import { useData, useTranslation } from "../../hooks";
+import { VscChromeClose } from "react-icons/vsc";
+import "./css/SelectTestResults.css";
+import { ITestResult } from "../../types/interfaces/settings";
+import { IBarcode } from "../../types/interfaces/interfaces";
 
 interface Props {
   onSelect: () => void;
@@ -11,7 +11,7 @@ interface Props {
   isVisible?: boolean;
 }
 
-const SelectTestResults: React.FC<Props> = ({ onSelect, onClose, isVisible }) => {
+const SelectTestResults: React.FC<Props> = ({ onSelect, onClose }) => {
   const {
     testid,
     barcodes,
@@ -23,9 +23,11 @@ const SelectTestResults: React.FC<Props> = ({ onSelect, onClose, isVisible }) =>
   } = useData();
 
   const { t, locale } = useTranslation();
-  const testmethod = settings.account.testprocedures.find((procedure) => procedure.id == selectedMethod);
+  const testmethod = settings.account.testprocedures.find(
+    (procedure) => procedure.id == selectedMethod
+  );
   useEffect(() => {
-    var modal = document.getElementById('modal');
+    var modal = document.getElementById("modal");
     window.onclick = function (event) {
       if (event.target == modal && onClose != null) {
         onClose();
@@ -35,7 +37,9 @@ const SelectTestResults: React.FC<Props> = ({ onSelect, onClose, isVisible }) =>
   const handleChooseResult = useCallback(
     async (result: ITestResult) => {
       onSelect();
-      const barcode = barcodes.find((barcode) => barcode.posName == selectedPosition);
+      const barcode = barcodes.find(
+        (barcode) => barcode.posName == selectedPosition
+      );
       if (barcode && barcode.result == result.name) return;
 
       const newResult = {
@@ -44,7 +48,6 @@ const SelectTestResults: React.FC<Props> = ({ onSelect, onClose, isVisible }) =>
       setBarcodes((prev) => {
         return prev.map((barcode) => {
           if (barcode.posName == selectedPosition) {
-            
             return {
               ...barcode,
               result: result.name,
@@ -70,7 +73,7 @@ const SelectTestResults: React.FC<Props> = ({ onSelect, onClose, isVisible }) =>
         if (barcode.posName == selectedPosition) {
           return {
             ...barcode,
-            result: barcode.oldResult != '' ? barcode.oldResult : 'invalid',
+            result: barcode.oldResult != "" ? barcode.oldResult : "invalid",
             alteredResult: false,
           } as IBarcode;
         }
@@ -78,56 +81,59 @@ const SelectTestResults: React.FC<Props> = ({ onSelect, onClose, isVisible }) =>
       });
     });
     setSelectedPosition("");
-      window.api.editResults(testid, newResult);
+    window.api.editResults(testid, newResult);
   }, [onSelect, selectedPosition, testmethod?.id]);
 
   return (
     <>
-      <div id="modal" className={'overlay '} onClick={onClose}></div>
+      <div id="modal" className={"overlay "} onClick={onClose}></div>
       <div className={`animate overlay-body  `}>
         <div className="overlay-header">
-          <h2>{t('common.selectResult')}</h2>
+          <h2>{t("common.selectResult")}</h2>
 
           <div className="closebtn" onClick={onClose}>
             <VscChromeClose color="#fff" size={30} />
           </div>
         </div>
         <div className="overlay-content">
-          {testmethod?.results.map((result, index) => {
+          {testmethod?.results.map((result) => {
             return (
               <button
                 className={result.name}
                 style={{
-                  color: '#fff',
+                  color: "#fff",
                   background: result.color,
                   borderRadius: 15,
                 }}
                 key={result.id}
                 onClick={() => handleChooseResult(result)}
               >
-                {result['label' + locale?.toUpperCase()] || result.name.toUpperCase()}
+                {result["label" + locale?.toUpperCase()] ||
+                  result.name.toUpperCase()}
               </button>
             );
           })}
           <button
             style={{
-              color: '#fff',
-              background: 'orange',
+              color: "#fff",
+              background: "orange",
               borderRadius: 15,
             }}
-            onClick={() => handleChooseResult({ name: 'invalid' } as ITestResult)}
+            onClick={() =>
+              handleChooseResult({ name: "invalid" } as ITestResult)
+            }
           >
             Invalid
           </button>
           <button
             style={{
-              color: '#fff',
-              background: 'grey',
+              color: "#fff",
+              background: "grey",
               borderRadius: 15,
             }}
             onClick={() => handleResetResult()}
           >
-            {t('common.resetResult')}
+            {t("common.resetResult")}
           </button>
         </div>
       </div>

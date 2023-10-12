@@ -1,6 +1,9 @@
 // global.d.ts
 
-import { IGetResultResponse, ITestObject } from "../../electron/interfaces/interfaces";
+import {
+  IGetResultResponse,
+  ITestObject,
+} from "../../electron/interfaces/interfaces";
 import { IBarcode } from "./interfaces/interfaces";
 import { ITestConfig, ITestMethod } from "./interfaces/parseResults";
 import { ITestResult } from "./interfaces/settings";
@@ -17,16 +20,22 @@ declare global {
       checkUSB: () => boolean;
       saveToUSB: (testid: string, results: any) => void;
       power: (reboot: string) => void;
-      startLineGene: (testid: string, xmlContent: string, settings: any, barcodes: IBarcode[], testmethod: string) => IGetResultResponse;
+      startLineGene: (
+        testid: string,
+        xmlContent: string,
+        settings: any,
+        barcodes: IBarcode[],
+        testmethod: string
+      ) => IGetResultResponse;
       endLineGene: () => boolean;
-      toggleLid: () =>  boolean;
+      toggleLid: () => boolean;
       moveFiles: (testid: string) => void;
       getVersion: () => string;
       updateStatus: (callback: CallbackType) => void;
       getUnsubmitted: () => any;
       getTests: () => ITestObject[];
       exit: () => void;
-      logEvents: (message: string, logName: string) => void;
+      logEvents: (message: string) => void;
       launchUpdates: () => void;
       archiveRun: () => void;
       downloadApp: () => void;
@@ -39,8 +48,5 @@ declare global {
   }
 }
 
-
 type ConfigType = any;
 type CallbackType = (event: IpcRendererEvent, ...args: any[]) => void;
-
-

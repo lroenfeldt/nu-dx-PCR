@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { ImArrowRight2, ImArrowLeft2 } from 'react-icons/im';
-import { IScrollController } from '../types/interfaces/interfaces';
+import { useState } from "react";
+import { ImArrowRight2, ImArrowLeft2 } from "react-icons/im";
+import { IScrollController } from "../types/interfaces/interfaces";
 
 const ScrollController = ({ onClick, disabled }: IScrollController) => {
-  const [direction, setDirection] = useState('next');
+  const [_direction, setDirection] = useState("next");
 
   return (
     <div className="controller">
@@ -11,16 +11,16 @@ const ScrollController = ({ onClick, disabled }: IScrollController) => {
         className="prev"
         onClick={() => {
           onClick(false);
-          setDirection('prev');
+          setDirection("prev");
         }}
       >
         <ImArrowLeft2 />
       </div>
       <div
-        className={'next '}
+        className={"next "}
         style={{ opacity: !disabled ? 1 : 0.5 }}
         onClick={() => {
-          !disabled && setDirection('next');
+          !disabled && setDirection("next");
           !disabled && onClick(true);
         }}
       >

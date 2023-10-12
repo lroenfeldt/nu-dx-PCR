@@ -1,7 +1,10 @@
-export function logError(message: string, logFile: string): void {
-  // logic for logging errors
-}
+import { ipcMain } from "electron";
+import { logger } from "../logger";
 
-export function logInfo(message: string, logFile: string): void {
-  // logic for logging general info
+export function logError(): void {
+  // logic for logging errors
+  /**
+   * Log Errors or Infos
+   * */
+  ipcMain.handle("log-Events", (event, message, logName) => logger(message));
 }

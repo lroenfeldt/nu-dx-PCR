@@ -1,7 +1,7 @@
-import React from 'react'
-import { useTheme } from '../../assets/theme'
+import { useTheme } from "../../assets/theme";
+
 function useTextTheme() {
-  const { typography } = useTheme()
+  const { typography } = useTheme();
   const textTheme = {
     h1: {
       ...typography.h1,
@@ -23,7 +23,7 @@ function useTextTheme() {
     },
 
     body: {
-     ...typography.body1,
+      ...typography.body1,
     },
     caption: {
       ...typography.caption,
@@ -51,14 +51,9 @@ function useTextTheme() {
       marginLeft: 24,
       marginTop: 16,
     },
-    }
+  };
 
-  return (
-    textTheme
-
-
-    
-  )
+  return textTheme;
 }
 
-export default useTextTheme
+export default useTextTheme;

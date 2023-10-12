@@ -1,25 +1,23 @@
-import React from 'react'
-import { useTheme } from '../../assets/theme/ThemeContext'
-import { colors } from '../../assets/theme'
+import { useTheme } from "../../assets/theme/ThemeContext";
+import { colors } from "../../assets/theme";
 
 const useCloseStyle = () => {
-  const { boxShadows} = useTheme()
+  const { boxShadows } = useTheme();
   const styles = {
     closeBtn: {
-      display: 'flex',
-      width: '64px',
-      height: '64px',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: '10px',
+      display: "flex",
+      width: "64px",
+      height: "64px",
+      justifyContent: "center",
+      alignItems: "center",
+      gap: "10px",
       borderRadius: 44,
       border: `5px solid ${colors.primary.main}`,
-      background: '#FFF',
+      background: "#FFF",
       boxShadow: boxShadows.buttonShadow.main,
     },
-  }
-  return styles 
+  };
+  return styles;
+};
 
-}
-
-export default useCloseStyle
+export default useCloseStyle;

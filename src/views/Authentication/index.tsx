@@ -1,31 +1,36 @@
-import LotDoku from './LotDoku';
-import InputContainer from './InputContainer';
-import { useNavigate } from 'react-router-dom';
-import { Block, Keyboard } from '../../components';
-import { useData, useTranslation } from '../../hooks';
-import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
-import { IAccountUser } from '../../types/interfaces/settings';
-import { InputsType } from '../../types/components';
-
-
+import LotDoku from "./LotDoku";
+import InputContainer from "./InputContainer";
+import { useNavigate } from "react-router-dom";
+import { Block, Keyboard } from "../../components";
+import { useData, useTranslation } from "../../hooks";
+import React, { useState, useCallback, memo } from "react";
+import { IAccountUser } from "../../types/interfaces/settings";
+import { InputsType } from "../../types/components";
 
 function Authentication() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [isUser, setIsUser] = useState(false);
   const [signal, setSignal] = useState(false);
-  const { settings, currentUser, setCurrentUser, selectedMethod, setLotNumber, lotNumber } = useData();
+  const {
+    settings,
+    currentUser,
+    setCurrentUser,
+    selectedMethod,
+    setLotNumber,
+    lotNumber,
+  } = useData();
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [isChargenNrFocused, setIsChargenNrFocused] = useState(false);
   const [clear, setClear] = useState(false);
   const [inputs, setInputs] = useState<InputsType>({});
 
-  const [inputName, setInputName] = useState('default');
+  const [inputName, setInputName] = useState("default");
   const handleKeyPress = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter' && isValid) {
-      navigate('/enterBarcodes');
+    if (event.key === "Enter" && isValid) {
+      navigate("/enterBarcodes");
     }
   };
 
@@ -36,8 +41,11 @@ function Authentication() {
       setPassword(value);
       setSignal(value.length > 0);
 
-      const user = settings.account.users.find((user) => user.id == value) as IAccountUser;
-      const isCertified = user?.certifiedTestprocedureIds?.includes(selectedMethod);
+      const user = settings.account.users.find(
+        (user) => user.id == value
+      ) as IAccountUser;
+      const isCertified =
+        user?.certifiedTestprocedureIds?.includes(selectedMethod);
 
       setCurrentUser(user);
       if (user) {
@@ -64,15 +72,15 @@ function Authentication() {
     [settings, selectedMethod, setCurrentUser]
   );
 
-  const handleLotNumberChange = useCallback(
-    (value:string) => {
-      setLotNumber(value);
-    },
-    [setLotNumber]
-  );
+  // const handleLotNumberChange = useCallback(
+  //   (value: string) => {
+  //     setLotNumber(value);
+  //   },
+  //   [setLotNumber]
+  // );
 
   const onKeyPress = useCallback(
-    (value:string) => {
+    (value: string) => {
       setInputs((inputs) => ({ ...inputs, [inputName]: value }));
       if (isChargenNrFocused) {
         setLotNumber(value);
@@ -81,8 +89,11 @@ function Authentication() {
       }
       setSignal(value.length > 0);
 
-      const user = settings.account.users.find((user) => user.id == value) as IAccountUser;
-      const isCertified = user?.certifiedTestprocedureIds?.includes(selectedMethod);
+      const user = settings.account.users.find(
+        (user) => user.id == value
+      ) as IAccountUser;
+      const isCertified =
+        user?.certifiedTestprocedureIds?.includes(selectedMethod);
       setCurrentUser(user);
       if (user) {
         setKeyboardVisible(false);
@@ -104,18 +115,25 @@ function Authentication() {
         setKeyboardVisible(false);
       }
     },
-    [settings, selectedMethod, setCurrentUser, isChargenNrFocused, inputName, setLotNumber]
+    [
+      settings,
+      selectedMethod,
+      setCurrentUser,
+      isChargenNrFocused,
+      inputName,
+      setLotNumber,
+    ]
   );
   const getInputValue = (inputName: string) => {
-    return inputs[inputName] || '';
+    return inputs[inputName] || "";
   };
 
   return (
     <Block height={400} column center padding={10} gap={20}>
-      <h3 style={{ textAlign: 'center' }}>
+      <h3 style={{ textAlign: "center" }}>
         {settings.account.hasUserAuthentification && !isValid
-          ? t('authentication.instructions')
-          : t('authentication.currentLot')}
+          ? t("authentication.instructions")
+          : t("authentication.currentLot")}
       </h3>
 
       <Block column margin="0 325px" align="center" gap={30}>
@@ -152,11 +170,12 @@ function Authentication() {
           inputValue={isChargenNrFocused ? lotNumber : password}
           onChange={isChargenNrFocused ? setLotNumber : onKeyPress}
           style={{
-            height: keyboardVisible && isValid ? '70%' : '83%',
+            height: keyboardVisible && isValid ? "70%" : "83%",
           }}
         />
         {((settings.account.askForLot && isValid) ||
-          (settings.account.askForLot && !settings.account.hasUserAuthentification)) && (
+          (settings.account.askForLot &&
+            !settings.account.hasUserAuthentification)) && (
           <LotDoku
             setClear={setClear}
             inputName={inputName}
@@ -169,12 +188,18 @@ function Authentication() {
         )}
       </Block>
       <div className="buttonArea">
-        <button onClick={() => navigate('/selectMethod')}>{t('common.cancel')}</button>
+        <button onClick={() => navigate("/selectMethod")}>
+          {t("common.cancel")}
+        </button>
         <button
-          className={settings.account.hasUserAuthentification && (!isValid || !isUser) ? 'disabled' : ''}
-          onClick={() => navigate('/enterBarcodes')}
+          className={
+            settings.account.hasUserAuthentification && (!isValid || !isUser)
+              ? "disabled"
+              : ""
+          }
+          onClick={() => navigate("/enterBarcodes")}
         >
-          {t('common.continue')}
+          {t("common.continue")}
         </button>
       </div>
     </Block>

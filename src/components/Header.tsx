@@ -1,18 +1,17 @@
-import { useEffect, useCallback, FC } from 'react';
+import { useEffect, useCallback, FC } from "react";
+import ArrowBox from "./ArrowBox";
+import { BsEject } from "react-icons/bs";
+import { VscSync } from "react-icons/vsc";
+import Settings from "./Settings/Settings";
+import Notifications from "./Notifications";
+import { Oval } from "react-loader-spinner";
+import { useNavigate, useLocation } from "react-router-dom";
+import { FiSettings, FiPower, FiList } from "react-icons/fi";
+import SelectTestResults from "./SelectTestResults/SelectTestResults";
+import { useData, useTranslation, useBackgroundProcesses } from "../hooks";
+import nuDiagnostics from "../assets/Logos/nu-diagnostics/nu-diagnostics white.png";
 
-import ArrowBox from './ArrowBox';
-import { BsEject } from 'react-icons/bs';
-import { VscSync } from 'react-icons/vsc';
-import Settings from './Settings/Settings';
-import Notifications from './Notifications';
-import { Oval } from 'react-loader-spinner';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { FiSettings, FiPower, FiList } from 'react-icons/fi';
-import SelectTestResults from './SelectTestResults/SelectTestResults';
-import { useData, useTranslation, useBackgroundProcesses} from '../hooks';
-import nuDiagnostics from '../assets/Logos/nu-diagnostics/nu-diagnostics white.png';
-
-const Header:FC = () => {
+const Header: FC = () => {
   const {
     demo,
     reboot,
@@ -32,16 +31,16 @@ const Header:FC = () => {
     updateAvailable,
     failedSubmittingResults,
   } = useData();
-  const { t, } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   useBackgroundProcesses();
 
   const logo = () => {
     return (
-      location.pathname !== '/selectMethod' &&
+      location.pathname !== "/selectMethod" &&
       (!loading ? (
-        <div className="logoWrapper" onDoubleClick={() => navigate('/debug')}>
+        <div className="logoWrapper" onDoubleClick={() => navigate("/debug")}>
           <img src={nuDiagnostics} alt="" width={150} />
           {/*<span>nu:dx PCR</span>*/}
         </div>
@@ -54,12 +53,12 @@ const Header:FC = () => {
   };
 
   useEffect(() => {
-    if (location.pathname == '/enterBarcodes') {
-      const inputFeld = document.getElementsByTagName('input')[0];
+    if (location.pathname == "/enterBarcodes") {
+      const inputFeld = document.getElementsByTagName("input")[0];
       inputFeld.focus();
     }
   }, [menuOpen, location.pathname]);
-  const openMenu = (key:number) => {
+  const openMenu = (key: number) => {
     if (menuOpen !== key) {
       setMenuOpen(key);
     } else {
@@ -69,10 +68,14 @@ const Header:FC = () => {
 
   const showMenu = () => {
     return (
-      <ArrowBox direction={`top top-power ${menuOpen ? 'active ' : ''} `}>
+      <ArrowBox direction={`top top-power ${menuOpen ? "active " : ""} `}>
         <div className="power arrow">
-          {menuOpen === 1 && <button onClick={() => shutdown()}>{t('common.shutdown')}</button>}
-          {menuOpen === 1 && <button onClick={() => reboot()}>{t('common.reboot')}</button>}
+          {menuOpen === 1 && (
+            <button onClick={() => shutdown()}>{t("common.shutdown")}</button>
+          )}
+          {menuOpen === 1 && (
+            <button onClick={() => reboot()}>{t("common.reboot")}</button>
+          )}
           {/* <button onClick={() => {setMenuOpen(null)}}>Menü schließen</button> */}
         </div>
       </ArrowBox>
@@ -92,15 +95,17 @@ const Header:FC = () => {
     if (!dbConnection) {
       setErrors((prevErrors) =>
         prevErrors
-          .filter((error) => error.type !== 'stillOffline')
+          .filter((error) => error.type !== "stillOffline")
           .concat({
-            type: 'stillOffline',
-            message: t('common.stillOffline'),
+            type: "stillOffline",
+            message: t("common.stillOffline"),
           })
       );
     } else {
       setOfflineMode(false);
-      setErrors((prevErrors) => prevErrors.filter((error) => error.type !== 'stillOffline'));
+      setErrors((prevErrors) =>
+        prevErrors.filter((error) => error.type !== "stillOffline")
+      );
     }
   }, [dbConnection]);
 
@@ -123,10 +128,14 @@ const Header:FC = () => {
         </div>
 
         <div className="menu-right">
-          {location.pathname === '/selectMethod' && !menuOpen && (
-            <div className="menu-item" onClick={() => navigate('/ResultList')}>
+          {location.pathname === "/selectMethod" && !menuOpen && (
+            <div className="menu-item" onClick={() => navigate("/ResultList")}>
               <FiList />
-              {resultList.length > 0 ? <Notifications>{resultList.length}</Notifications> : ''}
+              {resultList.length > 0 ? (
+                <Notifications>{resultList.length}</Notifications>
+              ) : (
+                ""
+              )}
               {resultList.length > 0 && failedSubmittingResults.length > 0 ? (
                 <Notifications
                   style={{
@@ -137,17 +146,21 @@ const Header:FC = () => {
                   {"!"}
                 </Notifications>
               ) : (
-                ''
+                ""
               )}
             </div>
           )}
 
-          {location.pathname !== '/testRunning' && !menuOpen && (
+          {location.pathname !== "/testRunning" && !menuOpen && (
             <div className="menu-item" onClick={() => toggleLid()}>
               <BsEject />
             </div>
           )}
-          <div className="menu-item" onClick={() => openMenu(2)} id="menu-item-settings">
+          <div
+            className="menu-item"
+            onClick={() => openMenu(2)}
+            id="menu-item-settings"
+          >
             <FiSettings />
             {updateAvailable && (
               <Notifications>
@@ -162,7 +175,9 @@ const Header:FC = () => {
           {menuOpen == 1 && showMenu()}
         </div>
       </div>
-      {menuOpen && <div className="clickAnywhere" onClick={() => openMenu(0)}></div>}
+      {menuOpen && (
+        <div className="clickAnywhere" onClick={() => openMenu(0)}></div>
+      )}
       {openResults && (
         <SelectTestResults
           isVisible={openResults}

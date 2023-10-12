@@ -1,51 +1,67 @@
-import React, { useCallback } from 'react';
-import { useData, useResults, useTranslation } from '../hooks';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { IError } from '../types/interfaces/interfaces';
-import { IHideErrorProps } from '../types/components';
+import React, { useCallback } from "react";
+import { useData, useResults, useTranslation } from "../hooks";
+import { useNavigate, useLocation } from "react-router-dom";
+import { IError } from "../types/interfaces/interfaces";
+import { IHideErrorProps } from "../types/components";
 
-
-const Errors: React.FC  = () => {
-  const { setOfflineMode, reboot, errors, reset, testid,  setDeviceStatus, startTest, setErrors } = useData();
+const Errors: React.FC = () => {
+  const {
+    setOfflineMode,
+    reboot,
+    errors,
+    reset,
+    testid,
+    setDeviceStatus,
+    startTest,
+    setErrors,
+  } = useData();
   const { submitResult } = useResults();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
-  const hideError = ({ type, index, remember }:IHideErrorProps) => {
-    if (type) setErrors((prevErrors:IError[]) => prevErrors.filter((error) => error.type !== type));
+  const hideError = ({ type, index, remember }: IHideErrorProps) => {
+    if (type)
+      setErrors((prevErrors: IError[]) =>
+        prevErrors.filter((error) => error.type !== type)
+      );
     if (remember) setOfflineMode(true);
-    if (index || index == 0) setErrors((prevErrors:IError[]) => prevErrors.filter((error, errIndex) => errIndex != index));
+    if (index || index == 0)
+      setErrors((prevErrors: IError[]) =>
+        prevErrors.filter((error, errIndex) => errIndex != index)
+      );
   };
   const cancelTest = () => {
-    setErrors((prevErrors:IError[]) => prevErrors.filter((error) => error.type !== 'cancelTest'));
-    navigate('/selectMethod');
+    setErrors((prevErrors: IError[]) =>
+      prevErrors.filter((error) => error.type !== "cancelTest")
+    );
+    navigate("/selectMethod");
     window.api.endLineGene();
-    setDeviceStatus('IDLE');
+    setDeviceStatus("IDLE");
   };
   const launchOffline = () => {
-    setErrors(errors.filter((e) => e.type != 'offline'));
-    navigate('/selectMethod');
+    setErrors(errors.filter((e) => e.type != "offline"));
+    navigate("/selectMethod");
     setOfflineMode(true);
   };
-  const activateOffline = (errIndex:number) => {
+  const activateOffline = (errIndex: number) => {
     setOfflineMode(true);
     hideError({ index: errIndex });
   };
   const handleReadError = useCallback(
-    (errIndex:number) => {
+    (errIndex: number) => {
       reset();
       hideError({ index: errIndex });
-      if (location.pathname === '/uploadResults') {
-        navigate('/selectMethod');
+      if (location.pathname === "/uploadResults") {
+        navigate("/selectMethod");
       } else {
-        navigate('/ResultList');
+        navigate("/ResultList");
       }
     },
     [reset, hideError]
   );
 
-  const ErrorsType1 = ['pairing', 'auth', 'init'];
-  const ErrorsType2 = ['stillOffline', 'invalid', 'testFailed'];
+  const ErrorsType1 = ["pairing", "auth", "init"];
+  const ErrorsType2 = ["stillOffline", "invalid", "testFailed"];
   return (
     <div className="errorContainer">
       {errors.map((error, i) => {
@@ -56,32 +72,34 @@ const Errors: React.FC  = () => {
 
               <button
                 onClick={() => {
-                  if (error.type === 'pairing') {
-                    navigate('/pairing');
+                  if (error.type === "pairing") {
+                    navigate("/pairing");
                   } else {
                     window.location.reload();
                     hideError({ index: i });
                   }
                 }}
               >
-                {t('common.retry')}
+                {t("common.retry")}
               </button>
 
-              <button onClick={() => reboot()}>{t('common.reboot')}</button>
+              <button onClick={() => reboot()}>{t("common.reboot")}</button>
             </div>
           );
         }
-        if (error.type === 'lid') {
+        if (error.type === "lid") {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
-              <button onClick={() => reboot()}>{t('common.reboot')}</button>
-              <button onClick={() => hideError({ index: i })}>{t('common.close')}</button>
+              <button onClick={() => reboot()}>{t("common.reboot")}</button>
+              <button onClick={() => hideError({ index: i })}>
+                {t("common.close")}
+              </button>
             </div>
           );
         }
 
-        if (error.type === 'offline') {
+        if (error.type === "offline") {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
@@ -92,14 +110,18 @@ const Errors: React.FC  = () => {
                     hideError({ index: i });
                   }}
                 >
-                  {t('common.retry')}
+                  {t("common.retry")}
                 </button>
               }
-              {<button onClick={() => launchOffline()}>{t('common.offlineMode')}</button>}
+              {
+                <button onClick={() => launchOffline()}>
+                  {t("common.offlineMode")}
+                </button>
+              }
             </div>
           );
         }
-        if (error.type === 'submit') {
+        if (error.type === "submit") {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
@@ -111,16 +133,18 @@ const Errors: React.FC  = () => {
                   }, 3000);
                 }}
               >
-                {t('common.retry')}
+                {t("common.retry")}
               </button>
-              <button onClick={() => activateOffline(i)}>{t('common.offline')}</button>
+              <button onClick={() => activateOffline(i)}>
+                {t("common.offline")}
+              </button>
               <button
                 onClick={() => {
                   hideError({ index: i });
-                  navigate('/selectMethod');
+                  navigate("/selectMethod");
                 }}
               >
-                {t('common.close')}
+                {t("common.close")}
               </button>
             </div>
           );
@@ -132,17 +156,17 @@ const Errors: React.FC  = () => {
               <button
                 onClick={() => {
                   hideError({ index: i });
-                  if (error.type == 'testFailed') {
-                    navigate('/selectMethod');
+                  if (error.type == "testFailed") {
+                    navigate("/selectMethod");
                   }
                 }}
               >
-                {t('common.close')}
+                {t("common.close")}
               </button>
             </div>
           );
         }
-        if (error.type === 'moveResults') {
+        if (error.type === "moveResults") {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
@@ -151,40 +175,40 @@ const Errors: React.FC  = () => {
                   hideError({ index: i });
                   setTimeout(() => {
                     if (!window.api.moveResultFile(testid)) {
-                      
-                      window.api.logEvents(`Result for test ${testid} could not be moved`, 'logInfos.txt');
-                      setErrors((prevErrors:IError[]) =>
+                      window.api.logEvents(
+                        `Result for test ${testid} could not be moved`
+                      );
+                      setErrors((prevErrors: IError[]) =>
                         prevErrors
-                          .filter((err) => err.type != 'moveResults')
+                          .filter((err) => err.type != "moveResults")
                           .concat({
-                            type: 'moveResults',
-                            message: t('errors.failedToMoveResults'),
+                            type: "moveResults",
+                            message: t("errors.failedToMoveResults"),
                           })
                       );
                     } else {
-                     
-                      window.api.logEvents(`attempting to move result file`, 'logInfos.txt');
+                      window.api.logEvents(`attempting to move result file`);
                       setTimeout(() => {
-                        navigate('/uploadResults');
+                        navigate("/uploadResults");
                       }, 2000);
                     }
                   }, 1000);
                 }}
               >
-                {t('common.retry')}
+                {t("common.retry")}
               </button>
               <button
                 onClick={() => {
                   reset();
-                  navigate('/selectMethod');
+                  navigate("/selectMethod");
                 }}
               >
-                {t('common.cancel')}
+                {t("common.cancel")}
               </button>
             </div>
           );
         }
-        if (error.type === 'cancelTest') {
+        if (error.type === "cancelTest") {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
@@ -194,37 +218,41 @@ const Errors: React.FC  = () => {
                   reboot();
                 }}
               >
-                {t('common.testAbort') + ' & ' + t('common.reboot')}
+                {t("common.testAbort") + " & " + t("common.reboot")}
               </button>
-              <button onClick={() => hideError({ type: 'cancelTest' })}>{t('common.testResume')}</button>
+              <button onClick={() => hideError({ type: "cancelTest" })}>
+                {t("common.testResume")}
+              </button>
             </div>
           );
         }
-        if (error.type === 'startTest') {
+        if (error.type === "startTest") {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
-              <button onClick={() => startTest()}>{t('common.retry')}</button>
+              <button onClick={() => startTest()}>{t("common.retry")}</button>
               <button
                 onClick={() => {
                   reset();
-                  navigate('/selectMethod');
+                  navigate("/selectMethod");
                 }}
               >
-                {t('common.cancel')}
+                {t("common.cancel")}
               </button>
             </div>
           );
         }
-        if (error.type === 'read') {
+        if (error.type === "read") {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
-              <button onClick={() => handleReadError(i)}>{t('common.close')}</button>
+              <button onClick={() => handleReadError(i)}>
+                {t("common.close")}
+              </button>
             </div>
           );
         }
-        if (error.type === 'dbCon') {
+        if (error.type === "dbCon") {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
@@ -235,22 +263,26 @@ const Errors: React.FC  = () => {
                     hideError({ index: i });
                   }}
                 >
-                  {t('common.retry')}
+                  {t("common.retry")}
                 </button>
               }
-              <button onClick={() => hideError({ index: i, remember: true })}>{t('common.offlineMode')}</button>
+              <button onClick={() => hideError({ index: i, remember: true })}>
+                {t("common.offlineMode")}
+              </button>
             </div>
           );
         }
-        if (error.type === 'offlineNotAllow') {
+        if (error.type === "offlineNotAllow") {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
-              <button onClick={() => window.location.reload()}>{t('common.retry')}</button>
+              <button onClick={() => window.location.reload()}>
+                {t("common.retry")}
+              </button>
             </div>
           );
         }
-        return '';
+        return "";
       })}
     </div>
   );

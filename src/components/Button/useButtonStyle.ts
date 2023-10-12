@@ -1,9 +1,8 @@
-import { CSSProperties } from 'react';
-import colors from '../../assets/theme/base/colors';
+import { CSSProperties } from "react";
 
-import { useTheme } from '../../assets/theme';
+import { useTheme } from "../../assets/theme";
 const MainStyle = () => {
-  const {colors, boxShadows} = useTheme();
+  const { colors, boxShadows } = useTheme();
   const MainTheme: { [key: string]: CSSProperties } = {
     button: {
       display: "flex",
@@ -12,14 +11,13 @@ const MainStyle = () => {
       flexDirection: "column",
       justifyContent: "center",
       alignItems: "center",
-      gap:" 10px",
+      gap: " 10px",
       borderRadius: "44px",
       color: colors.white.main,
       fontFamily: "Inter",
       fontSize: "28px",
       fontStyle: "normal",
       fontWeight: 600,
-      //lineHeight: "48px",
       backgroundColor: colors.primary.main,
       cursor: "pointer",
       boxShadow: boxShadows.buttonShadow.main,

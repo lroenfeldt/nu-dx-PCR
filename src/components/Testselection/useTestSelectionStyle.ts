@@ -1,37 +1,35 @@
-import { CSSProperties } from 'react';
-import { useTheme } from '../../assets/theme';
+import { CSSProperties } from "react";
+import { useTheme } from "../../assets/theme";
 const useTestSelectionStyle = () => {
   const { colors, boxShadows, borders } = useTheme();
   const TestSelectionTheme: { [key: string]: CSSProperties } = {
     testSelection: {
-      position: 'relative',
-      display: 'inline-flex',
-      
-      height: 'auto',
-      scrollSnapType: 'x mandatory',
-      width: '100%',
+      position: "relative",
+      display: "inline-flex",
+      height: "auto",
+      scrollSnapType: "x mandatory",
+      width: "100%",
       gap: 54,
-
     },
     nextTest: {
-      position: 'fixed',
-      top: '50%',
+      position: "fixed",
+      top: "50%",
       right: 8,
-      transform: 'translateY(-50%)',
-      transition: 'all 0.3s ease-in-out',
-      border: '0px solid transparent',
-      cursor: 'pointer',
+      transform: "translateY(-50%)",
+      transition: "all 0.3s ease-in-out",
+      border: "0px solid transparent",
+      cursor: "pointer",
     },
     prevTest: {
-      position: 'fixed',
-      top: '50%',
+      position: "fixed",
+      top: "50%",
       left: 8,
-      transform: 'translateY(-50%)',
-      transition: 'all 0.3s ease-in-out',
-      border: '0px solid transparent',
-      cursor: 'pointer',
+      transform: "translateY(-50%)",
+      transition: "all 0.3s ease-in-out",
+      border: "0px solid transparent",
+      cursor: "pointer",
     },
-  
+
     testInfo: {
       display: "flex",
       width: "742px",
@@ -68,7 +66,7 @@ const useTestSelectionStyle = () => {
     },
     testInfoContentRight: {
       display: "flex",
-      alignItems:"flex-end",
+      alignItems: "flex-end",
       gap: "16px",
     },
     testInfoFooter: {
@@ -83,7 +81,7 @@ const useTestSelectionStyle = () => {
       alignItems: "flex-start",
       gap: "8px",
     },
-    testInfoDetails:{ 
+    testInfoDetails: {
       display: "flex",
       alignItems: "center",
       gap: "8px",
@@ -119,8 +117,8 @@ const useTestSelectionStyle = () => {
       fontSize: "28px",
       fontStyle: "normal",
       fontWeight: 500,
-      lineHeight: "32px"
-    }
+      lineHeight: "32px",
+    },
   };
 
   return TestSelectionTheme;

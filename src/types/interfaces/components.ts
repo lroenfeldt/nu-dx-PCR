@@ -15,7 +15,7 @@ export interface IBlock {
   bottom?: number;
   gap?: number | string;
   zIndex?: number;
-  
+
   // Margin and Padding
   margin?: string | number;
   marginTop?: number;
@@ -24,7 +24,7 @@ export interface IBlock {
   marginBottom?: number;
   marginVertical?: number;
   marginHorizontal?: number;
-  
+
   padding?: number;
   paddingTop?: number;
   paddingLeft?: number;
@@ -37,18 +37,18 @@ export interface IBlock {
   width?: number;
   height?: number;
   radius?: number;
-  align?: "start" | "end" | "center" | "space-between" | "space-around"; 
-  justify?: "start" | "end" | "center" | "space-between" | "space-around"; 
+  align?: "start" | "end" | "center" | "space-between" | "space-around";
+  justify?: "start" | "end" | "center" | "space-between" | "space-around";
   flex?: string | number;
-  position?: "absolute" | "relative" | "fixed" | "static" | "sticky"; 
-  overflow?: "visible" | "hidden" | "scroll" | "auto"; 
+  position?: "absolute" | "relative" | "fixed" | "static" | "sticky";
+  overflow?: "visible" | "hidden" | "scroll" | "auto";
   transition?: string;
-  
+
   // Colors and Appearance
   color?: string;
   borderColor?: string;
   shadow?: string;
-  intensity?: string; 
+  intensity?: string;
   border?: string;
   gray?: string;
   info?: string;
@@ -67,10 +67,9 @@ export interface IBlock {
   scroll?: string;
 }
 
-
 export interface IText {
   [x: string]: any;
-  id?: 'Text';
+  id?: "Text";
   children?: JSX.Element;
   style?: React.CSSProperties;
   center?: boolean;
@@ -124,7 +123,7 @@ export interface IText {
 }
 
 export interface IButton {
-  id?: 'button';
+  id?: "button";
   className?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   children?: React.ReactNode;

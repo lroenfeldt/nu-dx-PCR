@@ -1,13 +1,24 @@
-import { TCurveData } from './../types/interfaces/parseResults';
-import React, { useCallback } from 'react';
-import { useData, useTranslation } from '../hooks';
-import { extractBarcodes, parseResultsDB, parseResultsExport } from '../utils/parseResults';
-import axios from 'axios';
-import urls from '../config/settings';
-import { useLocation } from 'react-router-dom';
-import { TgetResults, TsaveToUSB, TsubmitAll, TsubmitAutoControls, TsubmitResult } from '../types/interfaces/useResults';
-import { IAutoControl, IExtractedBarcodes } from '../types/interfaces/parseResults';
-import { IConfigFile, ITestProcedure } from '../types/interfaces/settings';
+import { useData, useTranslation } from "../hooks";
+import {
+  extractBarcodes,
+  parseResultsDB,
+  parseResultsExport,
+} from "../utils/parseResults";
+import axios from "axios";
+import urls from "../config/settings";
+import { useLocation } from "react-router-dom";
+import {
+  TgetResults,
+  TsaveToUSB,
+  TsubmitAll,
+  TsubmitAutoControls,
+  TsubmitResult,
+} from "../types/interfaces/useResults";
+import {
+  IAutoControl,
+  IExtractedBarcodes,
+} from "../types/interfaces/parseResults";
+import { IConfigFile, ITestProcedure } from "../types/interfaces/settings";
 
 /**
  * hook to handle all the results related functions
@@ -34,7 +45,7 @@ const useResults = () => {
 
   const location = useLocation();
   const { t } = useTranslation();
-  const userId = currentUser ? currentUser?.id : '';
+  const userId = currentUser ? currentUser?.id : "";
 
   /**
    * submit Auto Controls  to db
@@ -46,30 +57,48 @@ const useResults = () => {
    * @param {string} fetchControlUrl - url to fetch the auto controls
    * @returns {object} - The parsed results
    */
-  const submitAutoControls:TsubmitAutoControls = async (barcodes, testid, orderKey, hardwareId, submitControlUrl, fetchControlUrl) => {
-  
-    window.api.logEvents(`Arguemnts: ${testid} ${orderKey} ${submitControlUrl} ${fetchControlUrl}`, 'logInfos.txt');
+  const submitAutoControls: TsubmitAutoControls = async (
+    barcodes,
+    testid,
+    orderKey,
+    hardwareId,
+    submitControlUrl,
+    fetchControlUrl
+  ) => {
+    window.api.logEvents(
+      `Arguemnts: ${testid} ${orderKey} ${submitControlUrl} ${fetchControlUrl}`
+    );
     //validate input
     if (!Array.isArray(barcodes)) {
-      throw Error('Invalid barcodes provdided: ' + barcodes);
+      throw Error("Invalid barcodes provdided: " + barcodes);
     }
     if (!(testid && orderKey && submitControlUrl && fetchControlUrl)) {
-      throw Error('insufficient arguments');
+      throw Error("insufficient arguments");
     }
     //process barcodes
-    let autoControls :IAutoControl [] = [];
-    let placeholders = ['Placeholder_NTC', 'Placeholder_TPC', 'NTC', 'TPC', 'SC2NTC', 'SC2TPC'];
+    let autoControls: IAutoControl[] = [];
+    let placeholders = [
+      "Placeholder_NTC",
+      "Placeholder_TPC",
+      "NTC",
+      "TPC",
+      "SC2NTC",
+      "SC2TPC",
+    ];
     barcodes.forEach((barcode) => {
-      if (placeholders.includes(barcode.value) || barcode.value.indexOf('-R') !== -1) {
+      if (
+        placeholders.includes(barcode.value) ||
+        barcode.value.indexOf("-R") !== -1
+      ) {
         let dbLabel = barcode.value;
-        const ntcPlaceholders = ['Placeholder_NTC', 'NTC', 'SC2NTC'];
-        const tpcPlaceholders = ['Placeholder_TPC', 'TPC', 'SC2TPC'];
+        const ntcPlaceholders = ["Placeholder_NTC", "NTC", "SC2NTC"];
+        const tpcPlaceholders = ["Placeholder_TPC", "TPC", "SC2TPC"];
 
         if (ntcPlaceholders.includes(barcode.value)) {
-          dbLabel = 'NTC';
+          dbLabel = "NTC";
         }
         if (tpcPlaceholders.includes(barcode.value)) {
-          dbLabel = 'TPC';
+          dbLabel = "TPC";
         }
 
         autoControls.push({
@@ -83,7 +112,7 @@ const useResults = () => {
     });
     //check if autocontrols present
     if (autoControls.length === 0) {
-      console.log('No Auto Control Placeholders found');
+      console.log("No Auto Control Placeholders found");
       return autoControls;
     }
 
@@ -91,30 +120,36 @@ const useResults = () => {
     try {
       const response = await axios.post(submitControlUrl, autoControls);
 
-      window.api.logEvents(`submitAutoControls response: ${JSON.stringify(response)}`, 'logInfos.txt');
+      window.api.logEvents(
+        `submitAutoControls response: ${JSON.stringify(response)}`
+      );
       const createdSamples = response.data.imported_data[0].save_response;
 
-      window.api.logEvents(`submitAutoControls createdSamples: ${JSON.stringify(createdSamples)}`, 'logInfos.txt');
+      window.api.logEvents(
+        `submitAutoControls createdSamples: ${JSON.stringify(createdSamples)}`
+      );
       for (let i = 0; i < autoControls.length; i++) {
         try {
-          const generatedBarcode = await axios.get(`${fetchControlUrl}${createdSamples[i].sample_id}`);
+          const generatedBarcode = await axios.get(
+            `${fetchControlUrl}${createdSamples[i].sample_id}`
+          );
           autoControls[i].barcode = generatedBarcode.data.sample;
         } catch (err) {
           console.log(err);
-          window.api.logEvents(`submitAutoControls error: ${err}`, 'logErrors.txt');
+          window.api.logEvents(`submitAutoControls error: ${err}`);
           throw err;
         }
       }
     } catch (err) {
       console.log(err);
-      window.api.logEvents(`submitAutoControls error: ${err}`, 'logErrors.txt');
+      window.api.logEvents(`submitAutoControls error: ${err}`);
       throw err;
     }
 
     return autoControls;
   };
 
-  const setSubmittingSingle = (testid:string, isSubmitting:boolean) => {
+  const setSubmittingSingle = (testid: string, isSubmitting: boolean) => {
     setResults((prevUnsubmittedResults) =>
       prevUnsubmittedResults.map((result) => {
         if (result.testid === testid) {
@@ -127,7 +162,7 @@ const useResults = () => {
       })
     );
   };
-  const setWritingSuccess = (testid:string, isSuccess:boolean) => {
+  const setWritingSuccess = (testid: string, isSuccess: boolean) => {
     setResults((prevUnsubmittedResults) =>
       prevUnsubmittedResults.map((result) => {
         if (result.testid === testid) {
@@ -141,10 +176,14 @@ const useResults = () => {
     );
   };
 
-  const submitAll :TsubmitAll = () => {
+  const submitAll: TsubmitAll = () => {
     setSubmitting(true);
-    const resultList = results.filter((result) => result && result.submitted === false);
-    let promises = resultList.map((result) => submitResult(result.testid, result.submitted));
+    const resultList = results.filter(
+      (result) => result && result.submitted === false
+    );
+    let promises = resultList.map((result) =>
+      submitResult(result.testid, result.submitted)
+    );
     Promise.all(promises).then(() => {
       setSubmitting(false);
     });
@@ -161,11 +200,11 @@ const useResults = () => {
       setUSBPresent(await window.api.checkUSB());
     } catch (error) {
       console.log(error);
-      window.api.logEvents(`checkUSB: ${error}`, 'logErrors.txt');
+      window.api.logEvents(`checkUSB: ${error}`);
     }
   };
 
-  const setWriting = (testid:string, isWriting:boolean) => {
+  const setWriting = (testid: string, isWriting: boolean) => {
     setResults((prevUnsubmittedResults) =>
       prevUnsubmittedResults.map((result) => {
         if (result.testid === testid) {
@@ -186,10 +225,12 @@ const useResults = () => {
    * @returns {Boolean} true if writing to USB was successful
    */
   const saveToUSB: TsaveToUSB = async (testid, done) => {
-    if (location.pathname == '/ResultList') setWriting(testid, true);
+    if (location.pathname == "/ResultList") setWriting(testid, true);
 
     //reset errors
-    setErrors((prevErrors) => prevErrors.filter((error) => error.type !== 'read'));
+    setErrors((prevErrors) =>
+      prevErrors.filter((error) => error.type !== "read")
+    );
 
     //init data
     let resultFile: string;
@@ -198,8 +239,8 @@ const useResults = () => {
 
     //read result file
     try {
-      console.log('fetching result files');
-      window.api.logEvents(`fetching result files`, 'logErrors.txt');
+      console.log("fetching result files");
+      window.api.logEvents(`fetching result files`);
 
       let fetchResult = await window.api.getResult(testid, done);
       const configFile = fetchResult.configFile;
@@ -208,67 +249,74 @@ const useResults = () => {
       if (!testConfig.testmethod) {
         testConfig.testmethod = urls.TESTMETHOD;
       }
-      testmethod = settings.account.testprocedures.find((method) => method.id === testConfig.testmethod) as ITestProcedure;
+      testmethod = settings.account.testprocedures.find(
+        (method) => method.id === testConfig.testmethod
+      ) as ITestProcedure;
     } catch (err) {
       console.log(err);
-      window.api.logEvents(`saveToUSB: ${err}`, 'logErrors.txt');
+      window.api.logEvents(`saveToUSB: ${err}`);
       setErrors((prevErrors) =>
         prevErrors
-          .filter((error) => error.type !== 'read')
+          .filter((error) => error.type !== "read")
           .concat({
-            type: 'read',
-            message: t('errors.failedToReadTestData'),
+            type: "read",
+            message: t("errors.failedToReadTestData"),
           })
       );
-      if (location.pathname == '/ResultList') setWriting(testid, false);
+      if (location.pathname == "/ResultList") setWriting(testid, false);
       return false;
     }
 
     //Parse Results
-    console.log('parse results');
-    window.api.logEvents(`parse results`, 'logInfos.txt');
+    console.log("parse results");
+    window.api.logEvents(`parse results`);
     let parsedResults;
     try {
-      parsedResults = parseResultsExport(resultFile, testid, testConfig, testmethod, lotNumber);
+      parsedResults = parseResultsExport(
+        resultFile,
+        testid,
+        testConfig,
+        testmethod,
+        lotNumber
+      );
     } catch (err) {
       console.log(err);
-      window.api.logEvents(`saveToUSB: ${err}`, 'logErrors.txt');
+      window.api.logEvents(`saveToUSB: ${err}`);
       setErrors((prevErrors) =>
         prevErrors
-          .filter((error) => error.type !== 'submit')
+          .filter((error) => error.type !== "submit")
           .concat({
-            type: 'submit',
-            message: t('errors.failedToReadResultData'),
+            type: "submit",
+            message: t("errors.failedToReadResultData"),
           })
       );
-      if (location.pathname == '/ResultList') setWriting(testid, false);
+      if (location.pathname == "/ResultList") setWriting(testid, false);
       return false;
     }
 
     //Save To USB
     try {
       await window.api.saveToUSB(testid, parsedResults);
-      if (location.pathname == '/ResultList') setWriting(testid, false);
+      if (location.pathname == "/ResultList") setWriting(testid, false);
       setWritingSuccess(testid, true);
-     
     } catch (error) {
       console.log(error);
-      window.api.logEvents(`saveToUSB: ${error}`, 'logErrors.txt');
+      window.api.logEvents(`saveToUSB: ${error}`);
       setErrors((prevErrors) =>
         prevErrors
-          .filter((error) => error.type !== 'saveToUSB')
+          .filter((error) => error.type !== "saveToUSB")
           .concat({
-            type: 'read',
-            message: t('errors.failedToSaveResultData'),
+            type: "read",
+            message: t("errors.failedToSaveResultData"),
           })
       );
-      if (location.pathname == '/ResultList') setWriting(testid, false);
+      if (location.pathname == "/ResultList") setWriting(testid, false);
       return false;
     }
     return true;
   };
 
-  const setSubmittingSuccess = (testid:string, isSuccess:boolean) => {
+  const setSubmittingSuccess = (testid: string, isSuccess: boolean) => {
     setResults((prevUnsubmittedResults) =>
       prevUnsubmittedResults.map((result) => {
         if (result.testid === testid) {
@@ -295,7 +343,7 @@ const useResults = () => {
       setResults(newResults);
     } catch (err) {
       console.log(err);
-      window.api.logEvents(`getResults: ${err}`, 'logErrors.txt');
+      window.api.logEvents(`getResults: ${err}`);
     }
     setReading(false);
   };
@@ -306,28 +354,30 @@ const useResults = () => {
    * @param {Boolean} done
    * @returns void
    */
-  const submitResult:TsubmitResult = async (testid, done) => {
-    console.log('attempting submit');
-    window.api.logEvents(`attempting submit`, 'logInfos.txt');
+  const submitResult: TsubmitResult = async (testid, done) => {
+    console.log("attempting submit");
+    window.api.logEvents(`attempting submit`);
     setSubmitting(true);
     setSubmittingSingle(testid, true);
     //reset errors
-    setErrors((prevErrors) => prevErrors.filter((error) => error.type !== 'submit'));
+    setErrors((prevErrors) =>
+      prevErrors.filter((error) => error.type !== "submit")
+    );
     //init data & fetch file
     let testConfig: IConfigFile;
-    let barcodes: IExtractedBarcodes[] = []; 
+    let barcodes: IExtractedBarcodes[] = [];
     let resultFile: string;
     let orderKey: string;
     let hardwareId: string;
-    let testStarted: string|Date;
+    let testStarted: string | Date;
     let testmethod: ITestProcedure;
     let override: string | undefined;
 
     let autoControls: IAutoControl[] | undefined = [];
 
     try {
-      console.log('fetching result files');
-      window.api.logEvents(`fetching result files`, 'logInfos.txt');
+      console.log("fetching result files");
+      window.api.logEvents(`fetching result files`);
 
       let fetchResult = await window.api.getResult(testid, done);
       const configFile = fetchResult.configFile;
@@ -339,12 +389,14 @@ const useResults = () => {
       if (!testConfig.testmethod) {
         testConfig.testmethod = urls.TESTMETHOD;
       }
-      testmethod = settings.account.testprocedures.find((method) => method.id === testConfig.testmethod) as ITestProcedure;
+      testmethod = settings.account.testprocedures.find(
+        (method) => method.id === testConfig.testmethod
+      ) as ITestProcedure;
       orderKey = testConfig.account.orderKey;
       hardwareId = testConfig.device.hardwareId;
     } catch (err) {
-      console.log('failedToReadTestData: ' + JSON.stringify(err));
-      window.api.logEvents(`submitResult: ${err}`, 'logErrors.txt');
+      console.log("failedToReadTestData: " + JSON.stringify(err));
+      window.api.logEvents(`submitResult: ${err}`);
       setFailedSubmittingResults((prevFailedSubmittingResults) =>
         prevFailedSubmittingResults.filter((id) => id !== testid).concat(testid)
       );
@@ -352,10 +404,10 @@ const useResults = () => {
       if (!settings?.account?.autoSubmitResults) {
         setErrors((prevErrors) =>
           prevErrors
-            .filter((error) => error.type !== 'read')
+            .filter((error) => error.type !== "read")
             .concat({
-              type: 'read',
-              message: t('errors.failedToReadTestData'),
+              type: "read",
+              message: t("errors.failedToReadTestData"),
             })
         );
       }
@@ -376,8 +428,8 @@ const useResults = () => {
       : urls.resultUrl;
     console.log(testConfig.account.customSubmitResultsEndpoint);
     //Submit ControlSamples
-    console.log('check for auto controls');
-    window.api.logEvents(`check for auto controls`, 'logInfos.txt');
+    console.log("check for auto controls");
+    window.api.logEvents(`check for auto controls`);
     if (settings.account.preregisterControlSamples) {
       try {
         autoControls = await submitAutoControls(
@@ -390,14 +442,14 @@ const useResults = () => {
         );
       } catch (err) {
         console.log(`submitAutoControls failed: ${err}`);
-        window.api.logEvents(`submitResult: ${err}`, 'logErrors.txt');
+        window.api.logEvents(`submitResult: ${err}`);
 
         setErrors((prevErrors) =>
           prevErrors
-            .filter((error) => error.type !== 'submit')
+            .filter((error) => error.type !== "submit")
             .concat({
-              type: 'submit',
-              message: t('errors.failedToSaveControlSample'),
+              type: "submit",
+              message: t("errors.failedToSaveControlSample"),
             })
         );
         setSubmitting(false);
@@ -407,8 +459,8 @@ const useResults = () => {
     }
 
     //Parse Results
-    console.log('parse results');
-    window.api.logEvents(`parse results`, 'logInfos.txt');
+    console.log("parse results");
+    window.api.logEvents(`parse results`);
     let parsedResults;
     try {
       parsedResults = parseResultsDB(
@@ -420,21 +472,21 @@ const useResults = () => {
         testStarted,
         userId,
         override,
-        lotNumber===null?undefined:lotNumber 
+        lotNumber === null ? undefined : lotNumber
       );
     } catch (err) {
       console.log(`parseResultsDB failed: ${err}`);
-      window.api.logEvents(`parseResultsDB failed: ${err}`, 'logErrors.txt');
+      window.api.logEvents(`parseResultsDB failed: ${err}`);
       setFailedSubmittingResults((prevFailedSubmittingResults) =>
         prevFailedSubmittingResults.filter((id) => id !== testid).concat(testid)
       );
       if (!settings?.account?.autoSubmitResults) {
         setErrors((prevErrors) =>
           prevErrors
-            .filter((error) => error.type !== 'submit')
+            .filter((error) => error.type !== "submit")
             .concat({
-              type: 'submit',
-              message: t('errors.failedToReadResultData'),
+              type: "submit",
+              message: t("errors.failedToReadResultData"),
             })
         );
       }
@@ -444,21 +496,21 @@ const useResults = () => {
     }
 
     //Submit Results
-    console.log('submit to db');
-    window.api.logEvents(`submit to db`, 'logInfos.txt');
+    console.log("submit to db");
+    window.api.logEvents(`submit to db`);
     try {
       let submitResponse = await axios.post(resultUrl, parsedResults);
       console.log(resultUrl);
-      window.api.logEvents(`submit to db: ${JSON.stringify(submitResponse)}`, 'logInfos.txt');
+      window.api.logEvents(`submit to db: ${JSON.stringify(submitResponse)}`);
       const msg = submitResponse.data.msg;
-      const missing = msg.search('Fehlende Proben');
+      const missing = msg.search("Fehlende Proben");
       if (missing !== -1) {
         setErrors((prevErrors) =>
           prevErrors
-            .filter((error) => error.type !== 'submit')
+            .filter((error) => error.type !== "submit")
             .concat({
-              type: 'submit',
-              message: t('errors.failedToSendSomeResults', {
+              type: "submit",
+              message: t("errors.failedToSendSomeResults", {
                 missing: msg.substr(missing),
               }),
             })
@@ -466,17 +518,17 @@ const useResults = () => {
       }
     } catch (err) {
       console.log(`submitResponse: ${err}`);
-      window.api.logEvents(`submitResponse: ${err}`, 'logErrors.txt');
+      window.api.logEvents(`submitResponse: ${err}`);
       setFailedSubmittingResults((prevFailedSubmittingResults) =>
         prevFailedSubmittingResults.filter((id) => id !== testid).concat(testid)
       );
       if (!settings?.account?.autoSubmitResults) {
         setErrors((prevErrors) =>
           prevErrors
-            .filter((error) => error.type !== 'submit')
+            .filter((error) => error.type !== "submit")
             .concat({
-              type: 'submit',
-              message: t('errors.failedToSubmitResults'),
+              type: "submit",
+              message: t("errors.failedToSubmitResults"),
             })
         );
       }
@@ -486,8 +538,8 @@ const useResults = () => {
     }
 
     //Move Result Files if successfull
-    console.log('move result file to done directory');
-    window.api.logEvents(`move result file to done directory`, 'logInfos.txt');
+    console.log("move result file to done directory");
+    window.api.logEvents(`move result file to done directory`);
     try {
       window.api.moveFiles(testid);
       setSubmittingSingle(testid, false);
@@ -496,13 +548,13 @@ const useResults = () => {
       setTestDone(true);
     } catch (err) {
       console.log(`move result file to done directory: ${err}`);
-      window.api.logEvents(`move result file to done directory: ${err}`, 'logErrors.txt');
+      window.api.logEvents(`move result file to done directory: ${err}`);
       setErrors((prevErrors) =>
         prevErrors
-          .filter((error) => error.type !== 'submit')
+          .filter((error) => error.type !== "submit")
           .concat({
-            type: 'submit',
-            message: t('errors.failedToMoveSubmittedFiles'),
+            type: "submit",
+            message: t("errors.failedToMoveSubmittedFiles"),
           })
       );
       setSubmitting(false);

@@ -1,26 +1,21 @@
-export interface ISoftwareList {
-  path: string;
-  returnType: '16' | '96';
-  name: 'LineGene1600' | 'LineGene1644' | 'LineGene1640' | 'LineGene9600';
+export interface IStore {
+  settings: ISettings;
 }
 
-export interface IStore {
-  settings: Settings;
- 
-}
-export interface Role {
+interface IRole {
   name: string;
   isAdmin: boolean;
 }
-export interface Settings {
-  account: AccountSettings;
-  user: UserSettings;
+
+interface ISettings {
+  account: IAccountSettings;
+  user: IUserSettings;
   isDev?: boolean;
   device?: IDevice;
   version?: string;
 }
 
-export interface AccountSettings {
+export interface IAccountSettings {
   initialized: boolean;
   authToken: string;
   maxBarcodeLength: number;
@@ -51,33 +46,15 @@ export interface AccountSettings {
     contactPerson: string;
     address: string;
     emailConfirmedAt: string;
-    role: Role;
+    role: IRole;
   };
 }
 
-export interface UserSettings {
+export interface IUserSettings {
   tpcPos: string;
   ntcPos: string;
   locale: string;
   updateType: string;
-}
-
-export interface IFile {
-  isDirectory: () => boolean;
-  // In ElectronJS and Node.js, the `isDirectory()` method is typically defined as a function
-  // that returns a boolean value indicating whether the file represented by the `File` object is a directory
-  // With this type definition, TypeScript can now infer that the `isDirectory` method returns a boolean value,
-  // which can be used for type checking and to provide IntelliSense suggestions when working with `File` objects.
-  name: string;
-}
-
-export interface ISettings {
-  account: {
-    authToken?: string;
-  };
-  barcodes: IBarcode[];
-  testid: string;
-  testmethod: Object;
 }
 
 export interface IBarcode {
@@ -91,15 +68,11 @@ export interface IBarcode {
   blocked: boolean;
 }
 
-export interface IDevice {
+interface IDevice {
   hardwareId: string;
   deviceType?: string;
   serialNumber: string;
   wellCount: number;
-}
-
-export interface IProgressObj {
-  percent: number;
 }
 
 export interface IGetResultResponse {
@@ -128,8 +101,7 @@ export interface ITestObject {
   submitted: boolean;
   testmethod: string | null;
   isSubmitting?: boolean;
-  writingSuccess ?: boolean;
+  writingSuccess?: boolean;
   isWriting?: boolean;
   submittingSuccess?: boolean;
-
 }

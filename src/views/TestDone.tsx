@@ -1,56 +1,61 @@
-import React, { useState, useEffect } from 'react';
-
-import { useData } from '../hooks';
-import urls from '../config/settings';
-import { Oval } from 'react-loader-spinner';
-import { FaCheckCircle } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
-import { extractBarcodes, parseResultsDB, parseResultsExport } from '../utils/parseResults';
-import { useResults, useTranslation } from '../hooks';
+import { useState, useEffect } from "react";
+import { useData } from "../hooks";
+import { Oval } from "react-loader-spinner";
+import { FaCheckCircle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { useResults, useTranslation } from "../hooks";
 
 const TestDone = () => {
   const {
     reset,
-    demo,
     testid,
     errors,
     setErrors,
     settings,
     offlineMode,
     setOfflineMode,
-    barcodes,
-    setBarcodes,
     testDone,
-    setTestDone,
     resultsSubmitted,
-    setSubmitted,
     currentUser,
     setDeviceStatus,
     selectedMethod,
   } = useData();
   const [USBPresent, setUSBPresent] = useState(false);
-  const userId = currentUser ? currentUser?.id : '';
+  const userId = currentUser ? currentUser?.id : "";
   const navigate = useNavigate();
-  const { checkUSB, saveToUSB, submitAll, getResults, submitResult, saveAllToUSB } = useResults();
+  const {
+    checkUSB,
+    saveToUSB,
+    submitAll,
+    getResults,
+    submitResult,
+    saveAllToUSB,
+  } = useResults();
   const { t, locale } = useTranslation();
-  const testmethod = settings.account.testprocedures.find((testmethod) => testmethod.id === selectedMethod);
+  const testmethod = settings.account.testprocedures.find(
+    (testmethod) => testmethod.id === selectedMethod
+  );
 
   let buttonUSB;
   if (USBPresent) {
-    buttonUSB = <button onClick={() => saveToUSB(testid, testDone)}>{t('results.saveToUSB')}</button>;
+    buttonUSB = (
+      <button onClick={() => saveToUSB(testid, testDone)}>
+        {t("results.saveToUSB")}
+      </button>
+    );
   } else {
     buttonUSB = (
       <button className="disabled" onClick={() => saveToUSB(testid, testDone)}>
-        {t('results.saveToUSB')}
+        {t("results.saveToUSB")}
       </button>
     );
   }
 
-  const hideError = (index:number) => {
+  const hideError = (index: number) => {
     setErrors(errors.filter((error, errIndex) => errIndex !== index));
   };
 
-  const activateofflineMode = (errIndex:number) => {
+  const activateofflineMode = (errIndex: number) => {
     setOfflineMode(true);
     hideError(errIndex);
   };
@@ -59,24 +64,30 @@ const TestDone = () => {
     return (
       <div className="errorContainer">
         {errors.map((error, i) => {
-          if (error.type === 'submit') {
+          if (error.type === "submit") {
             return (
               <div key={i} className="errorMessage">
                 <p>{error.message}</p>
-                <button onClick={() => submitResult(testid, false)}>{t('common.retry')}</button>
-                <button onClick={() => activateofflineMode(i)}>{t('common.offlineMode')}</button>
+                <button onClick={() => submitResult(testid, false)}>
+                  {t("common.retry")}
+                </button>
+                <button onClick={() => activateofflineMode(i)}>
+                  {t("common.offlineMode")}
+                </button>
               </div>
             );
           }
-          if (error.type === 'invalid') {
+          if (error.type === "invalid") {
             return (
               <div key={i} className="errorMessage">
                 <p>{error.message}</p>
-                <button onClick={() => hideError(i)}>{t('common.close')}</button>
+                <button onClick={() => hideError(i)}>
+                  {t("common.close")}
+                </button>
               </div>
             );
           }
-          return '';
+          return "";
         })}
       </div>
     );
@@ -94,7 +105,7 @@ const TestDone = () => {
 
   //Check if USB is Present
   useEffect(() => {
-    setDeviceStatus('IDLE');
+    setDeviceStatus("IDLE");
     checkUSB();
     const clearcheckUSB = setInterval(() => checkUSB(), 3000);
     return () => clearInterval(clearcheckUSB);
@@ -107,22 +118,24 @@ const TestDone = () => {
         <div className="spinnerContainer">
           <FaCheckCircle />
         </div>
-        <h2>{t('results.title')}</h2>
-        <p>{t('results.instructions')}</p>
+        <h2>{t("results.title")}</h2>
+        <p>{t("results.instructions")}</p>
         <div className="buttonArea">
-          {testmethod&&testmethod.showResults ? (
-            <button onClick={() => navigate('/ViewResults')}>{t('results.viewResults')}</button>
+          {testmethod && testmethod.showResults ? (
+            <button onClick={() => navigate("/ViewResults")}>
+              {t("results.viewResults")}
+            </button>
           ) : (
-            ''
+            ""
           )}
-          {testmethod&&testmethod.showResults ? buttonUSB : ''}
+          {testmethod && testmethod.showResults ? buttonUSB : ""}
           <button
             onClick={() => {
               reset();
-              navigate('/selectMethod');
+              navigate("/selectMethod");
             }}
           >
-            {t('results.newTest')}
+            {t("results.newTest")}
           </button>
         </div>
       </div>
@@ -133,22 +146,28 @@ const TestDone = () => {
         <div className="spinnerContainer">
           <FaCheckCircle />
         </div>
-        <h2>{!settings.account.submitResults ? t('results.success') : t('results.resultsSent')}</h2>
-        <p>{t('results.startNewTest')}</p>
+        <h2>
+          {!settings.account.submitResults
+            ? t("results.success")
+            : t("results.resultsSent")}
+        </h2>
+        <p>{t("results.startNewTest")}</p>
         <div className="buttonArea">
-          {testmethod&&testmethod.showResults ? buttonUSB : ''}
-          {testmethod&&testmethod.showResults ? (
-            <button onClick={() => navigate('/ViewResults')}>{t('results.viewResults')}</button>
+          {testmethod && testmethod.showResults ? buttonUSB : ""}
+          {testmethod && testmethod.showResults ? (
+            <button onClick={() => navigate("/ViewResults")}>
+              {t("results.viewResults")}
+            </button>
           ) : (
-            ''
+            ""
           )}
           <button
             onClick={() => {
               reset();
-              navigate('/selectMethod');
+              navigate("/selectMethod");
             }}
           >
-            {t('results.newTest')}
+            {t("results.newTest")}
           </button>
         </div>
       </div>
@@ -159,16 +178,16 @@ const TestDone = () => {
         <div className="spinnerContainer">
           <Oval height="100" width="100" color="var(--primary)" />
         </div>
-        <h2>{t('results.waitingForResults')}</h2>
-        <p>{t('results.wait')}</p>
+        <h2>{t("results.waitingForResults")}</h2>
+        <p>{t("results.wait")}</p>
         <div className="buttonArea discouraged">
           <button
             onClick={() => {
               reset();
-              navigate('/selectMethod');
+              navigate("/selectMethod");
             }}
           >
-            {t('common.cancel')}
+            {t("common.cancel")}
           </button>
         </div>
       </div>

@@ -1,12 +1,11 @@
-import React from "react";
 import { CSSProperties } from "react";
-import {  useTheme } from "../../assets/theme";
+import { useTheme } from "../../assets/theme";
 const useProbeStyle = () => {
-	const {borders, colors } = useTheme();
+  const { borders, colors } = useTheme();
 
-	const ProbeTheme: { [key: string]: CSSProperties } = {
-		default: {
-			display: "flex",
+  const ProbeTheme: { [key: string]: CSSProperties } = {
+    default: {
+      display: "flex",
       width: "108px",
       height: "108px",
       flexDirection: "column",
@@ -18,18 +17,17 @@ const useProbeStyle = () => {
       cursor: "pointer",
       transition: "all 0.3s ease-in-out",
       position: "relative",
-		},
+    },
     active: {
-        border: `${borders.borderWidth.probe}px solid ${colors.primary.main}`,
-        transform: "scale(1.1)",
-        
+      border: `${borders.borderWidth.probe}px solid ${colors.primary.main}`,
+      transform: "scale(1.1)",
     },
     valid: {
       background: colors.probe.valid,
     },
   };
 
-	return ProbeTheme;
+  return ProbeTheme;
 };
 
 export default useProbeStyle;

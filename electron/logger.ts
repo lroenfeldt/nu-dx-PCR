@@ -1,25 +1,30 @@
-import { format } from 'date-fns';
-import { v4 as uuid } from 'uuid';
-import * as path from 'path';
-import * as fs from 'fs';
-import { app } from 'electron';
+import fs from "fs";
+const { v4: uuid } = require("uuid");
+import moment from "moment";
+import "moment/dist/locale/de";
+import { filePath } from "./fileData";
 
 /**
  * @description log events
  * @param {string} message
- * @param {string} logName
  * @returns {void}
- * @example logger("Error spawning " + cmd + " " + args.join(" ") + ": " + data, "spawn.txt");
+ * @example logger("Error spawning " + cmd + " " + args.join(" ") + ": " + data);
  **/
-export const logger = async (message: string, logName: string): Promise<void> => {
-    const dateTime = `${format(new Date(), 'yyyyMMdd\tHH:mm:ss')}`;
-    const logItem = `${dateTime}\t${dateTime}\t${JSON.stringify(message)}\n`;
-    try {
-      if (!fs.existsSync(path.resolve(app.getPath('userData'), 'logs'))) {
-        await fs.promises.mkdir(path.resolve(app.getPath('userData'), 'logs'));
+
+export const logger = (message: string): void => {
+  const dateTime = `${moment().format("DD-MM-YYYY")}-${moment()
+    .locale("de")
+    .format("LT")}`;
+  const logItem = `${dateTime}\t${uuid()}\t${JSON.stringify(message)}\n`;
+
+  try {
+    fs.stat(filePath, (_err, stats) => {
+      if (stats.size >= 500000) {
+        fs.promises.writeFile(filePath, "");
       }
-      await fs.promises.appendFile(path.resolve(app.getPath('userData'), 'logs', logName), logItem);
-    } catch (err) {
-      console.log(err);
-    }
+    });
+    fs.promises.appendFile(filePath, logItem);
+  } catch (error) {
+    console.error(error);
+  }
 };

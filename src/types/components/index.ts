@@ -1,9 +1,11 @@
-import React, { ReactNode, CSSProperties, ButtonHTMLAttributes  } from 'react';
-import { IAccountUser } from '../interfaces/settings';
-import { IBarcode } from '../interfaces/interfaces';
-import { ITestMethod } from '../interfaces/parseResults';
-
-
+import React, { ReactNode, CSSProperties, ButtonHTMLAttributes } from "react";
+import {
+  IAccountUser,
+  ISettings,
+  ITestProcedure,
+} from "../interfaces/settings";
+import { IBarcode } from "../interfaces/interfaces";
+import { ITestMethod } from "../interfaces/parseResults";
 
 export interface TBlockProps {
   row?: boolean;
@@ -84,7 +86,6 @@ export interface TBlockProps {
   [key: string]: any;
 }
 
-
 export type InputsType = { [key: string]: string };
 
 export interface ILotDokuProps {
@@ -125,7 +126,10 @@ export interface IKeyboard {
   clear: boolean;
   visible: boolean;
   inputs: InputsType;
-  onChange?: ((input: string) => string) | undefined | ((value: string) => void);
+  onChange?:
+    | ((input: string) => string)
+    | undefined
+    | ((value: string) => void);
   setClear: React.Dispatch<React.SetStateAction<boolean>>;
   setInputs: React.Dispatch<React.SetStateAction<InputsType>>;
   inputName: string;
@@ -133,8 +137,8 @@ export interface IKeyboard {
   isNumeric?: boolean;
   inputValue: string | boolean | null;
   barcode?: IBarcode;
-  onPrev: () => void;
-  onNext: () => void;
+  onPrev?: () => void;
+  onNext?: () => void;
 }
 
 export interface IHideErrorProps {
@@ -217,4 +221,89 @@ export interface IWellVisualProps {
   markActive: (id: number) => void;
   showResults?: boolean;
   testmethod?: ITestMethod;
+}
+
+export interface IResultsFooterProps {
+  activeBarcode: IBarcode;
+  testmethod: ITestProcedure;
+  settings: ISettings;
+  barcodes: IBarcode[];
+  locale?: string;
+  navigate: (path: string) => void;
+}
+
+export interface IPaginationBulletsProps {
+  numberOfPages: number;
+  currentPage: number;
+  goToPage: (pageIndex: number) => void;
+}
+
+export interface ITestInfoDetailProps {
+  Icon: React.ComponentType;
+  title: string;
+  detail: string;
+  styles: { [key: string]: React.CSSProperties };
+}
+
+export interface ITestInfoQrSectionProps {
+  styles: { [key: string]: React.CSSProperties };
+}
+
+export interface ITestInfoProps {
+  onClose: () => void;
+  selectTest?: () => void;
+}
+
+export interface ITestmethodProps {
+  title: string;
+  status: string;
+  methodid: string | number;
+  image: string;
+  openInfos: () => void;
+}
+
+export interface ITextProps extends React.HTMLAttributes<HTMLElement> {
+  as?: keyof JSX.IntrinsicElements;
+  children: React.ReactNode;
+  fontSize?: string;
+  color?: string;
+  fontWeight?: number;
+  textAlign?: string;
+  h1?: boolean;
+  h2?: boolean;
+  h3?: boolean;
+  h4?: boolean;
+  h5?: boolean;
+  h6?: boolean;
+  p?: boolean;
+  className?: string;
+  animated?: boolean;
+  animationType?: string;
+  padding?: string;
+  margin?: string;
+  fontFamily?: string;
+  fontStyle?: string;
+  lineHeight?: string;
+  letterSpacing?: string;
+  textDecoration?: string;
+  textTransform?: string;
+  whiteSpace?: string;
+  wordBreak?: string;
+  wordWrap?: string;
+  overflow?: string;
+  textOverflow?: string;
+  verticalAlign?: string;
+  direction?: string;
+  cardTitle?: boolean;
+  white?: boolean;
+  black?: boolean;
+  primary?: boolean;
+  secondary?: boolean;
+  warning?: boolean;
+  success?: boolean;
+  error?: boolean;
+  grey?: boolean;
+  bold?: boolean;
+  label?: boolean;
+  small?: boolean;
 }
