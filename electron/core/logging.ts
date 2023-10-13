@@ -6,5 +6,5 @@ export function logError(): void {
   /**
    * Log Errors or Infos
    * */
-  ipcMain.handle("log-Events", (event, message, logName) => logger(message));
+  ipcMain.handle("log-Events", (event, message) => logger(message));
 }

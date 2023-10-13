@@ -13,6 +13,10 @@ export interface ISettings {
   [key: string]: any;
 }
 
+export interface IDataProviderProps {
+  children: JSX.Element;
+}
+
 export interface IUseData {
   openResults: boolean;
   setOpenResults: React.Dispatch<React.SetStateAction<boolean>>;

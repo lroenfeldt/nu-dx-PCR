@@ -3,6 +3,8 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
+    "version": "npm version patch",
+    "start": "tsc vite start",
     "dev": "vite",
     "build": "tsc && vite build && electron-builder",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -23,7 +25,7 @@
     "electron-is-dev": "^2.0.0",
     "electron-shutdown-command": "^2.0.1",
     "electron-store": "^8.1.0",
-    "electron-updater": "^5.3.0",
+    "electron-updater": "^6.1.4",
     "fs": "^0.0.1-security",
     "getmac": "^5.20.0",
     "hddserial": "^0.0.7",

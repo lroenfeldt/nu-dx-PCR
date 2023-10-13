@@ -76,7 +76,7 @@ export function getResult(): void {
   ipcMain.handle(
     "getResult",
     async (
-      event: Electron.IpcMainInvokeEvent,
+      event: IpcMainInvokeEvent,
       testid: string,
       done: boolean
     ): Promise<IGetResultResponse> => {

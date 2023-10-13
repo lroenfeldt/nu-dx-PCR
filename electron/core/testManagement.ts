@@ -5,7 +5,6 @@ import fs from "fs";
 import { logger } from "../logger";
 import { spawn } from "child_process";
 import { killProcess, lineGenePath, mainWindow } from "../main";
-import isDev from "electron-is-dev";
 
 //Define IntervalId for keeping focus
 let focusInterval: NodeJS.Timeout;

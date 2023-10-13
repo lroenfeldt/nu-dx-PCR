@@ -7,7 +7,11 @@ import React, {
 } from "react";
 import defaultBarcodes from "../utils/defaultBarcodes";
 import { useTranslation } from "./useTranslation";
-import { ISettings, IUseData } from "../types/interfaces/useData";
+import {
+  IDataProviderProps,
+  ISettings,
+  IUseData,
+} from "../types/interfaces/useData";
 import { IUseTranslation } from "../types/interfaces/useTranslation";
 import { IBarcode, IError } from "../types/interfaces/interfaces";
 import { ITestObject } from "../../electron/interfaces/interfaces";
@@ -20,11 +24,7 @@ export const DataContext = React.createContext({});
  * @example const { data, setData } = useData();
  * */
 
-interface DataProviderProps {
-  children: JSX.Element;
-}
-
-export function DataProvider({ children }: DataProviderProps) {
+export function DataProvider({ children }: IDataProviderProps) {
   const { t }: IUseTranslation = useTranslation();
   const [demo, setDemo] = useState(false);
   const [errors, setErrors] = useState<IError[]>([]);
