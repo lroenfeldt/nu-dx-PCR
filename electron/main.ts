@@ -1,4 +1,3 @@
-import { app, BrowserWindow } from "electron";
 import path from "path";
 import fs from "fs";
 import Store from "electron-store";
@@ -45,6 +44,7 @@ import { relaunchApp } from "./core/lifecycleManagement";
 import { copyLogos } from "./core/utilities";
 import { createFile } from "./createFile";
 import { deleteLogs } from "./deleteLogs";
+import { BrowserWindow, app } from "electron";
 
 export let mainWindow: BrowserWindow | undefined;
 export let splash: BrowserWindow | undefined;
@@ -91,6 +91,7 @@ const softwareList = [
  */
 export const getDeviceType = () => {
   if (isDev) return 16;
+
   for (let i = 0; i < softwareList.length; i++) {
     const software = softwareList[i];
 

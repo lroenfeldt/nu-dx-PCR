@@ -15,9 +15,11 @@ export function rebootDevice(): void {
    * */
   ipcMain.on("power", (event, reboot) => {
     if (reboot === "reboot") {
-      shutdown.reboot({ force: true });
+      // shutdown.reboot();
+      console.log("shutdown");
     } else {
-      shutdown.shutdown({ force: true });
+      // shutdown.shutdown();
+      console.log("reboot");
     }
     event.returnValue = true;
   });
