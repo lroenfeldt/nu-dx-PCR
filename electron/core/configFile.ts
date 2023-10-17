@@ -20,13 +20,12 @@ export async function getConfig(): Promise<void> {
 
 export function saveConfig(): void {
   //save config to config.json
-  ipcMain.handle("saveConfig", async (event, config) => {
+  ipcMain.handle("saveConfig", async (_event, config) => {
     try {
       store.set("settings", config);
-
       return true;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       logger(`saveConfig ${err}`);
       throw Error("Settings could not be saved");
     }
@@ -35,12 +34,12 @@ export function saveConfig(): void {
 
 export function clearConfig(): void {
   //reset config.json to defaults
-  ipcMain.handle("clearConfig", async (event) => {
+  ipcMain.handle("clearConfig", async (_event) => {
     try {
       store.clear();
       return true;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       logger(`clearConfig ${err}`);
       throw Error("Settings could not be saved");
     }

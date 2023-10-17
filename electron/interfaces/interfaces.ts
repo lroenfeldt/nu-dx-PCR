@@ -1,21 +1,19 @@
 export interface IStore {
-  settings: ISettings;
+  settings: Settings;
 }
-
-interface IRole {
+export interface Role {
   name: string;
   isAdmin: boolean;
 }
-
-interface ISettings {
-  account: IAccountSettings;
-  user: IUserSettings;
+export interface Settings {
+  account: AccountSettings;
+  user: UserSettings;
   isDev?: boolean;
   device?: IDevice;
   version?: string;
 }
 
-export interface IAccountSettings {
+export interface AccountSettings {
   initialized: boolean;
   authToken: string;
   maxBarcodeLength: number;
@@ -46,11 +44,11 @@ export interface IAccountSettings {
     contactPerson: string;
     address: string;
     emailConfirmedAt: string;
-    role: IRole;
+    role: Role;
   };
 }
 
-export interface IUserSettings {
+export interface UserSettings {
   tpcPos: string;
   ntcPos: string;
   locale: string;
@@ -68,7 +66,7 @@ export interface IBarcode {
   blocked: boolean;
 }
 
-interface IDevice {
+export interface IDevice {
   hardwareId: string;
   deviceType?: string;
   serialNumber: string;

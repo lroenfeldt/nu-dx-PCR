@@ -3,17 +3,16 @@ import { mainWindow, splash, store } from "../main";
 import { autoUpdater } from "electron-updater";
 import { logger } from "../logger";
 
-export function checkForUpdates(): void {
-  // logic for checking for updates
-  ipcMain.handle("launch-updates", (event) => updater());
+export function launchUpdates() {
+  ipcMain.handle("launch-updates", (_event) => updater());
 }
 
-/**
- * Check for updates and run the update
- * @returns {void}
- */
-
 export function updater() {
+  /**
+   * Check for updates and run the update
+   * @returns {void}
+   */
+
   console.log(store.get("settings").user.updateType === "beta");
   autoUpdater.allowPrerelease =
     store.get("settings").user.updateType === "beta";
@@ -24,7 +23,7 @@ export function updater() {
     }
   });
   autoUpdater.on("error", (err) => {
-    console.log(err);
+    console.error(err);
     if (splash) {
       splash.webContents.send(
         "updateStatus",
@@ -58,7 +57,7 @@ export function updater() {
       autoUpdater.quitAndInstall();
     }, 2000);
   });
-  autoUpdater.on("update-not-available", (info) => {
+  autoUpdater.on("update-not-available", (_info) => {
     splash &&
       splash.webContents.send(
         "updateStatus",
@@ -71,14 +70,16 @@ export function updater() {
   });
 }
 
-export function downloadUpdates(): void {
+export function downloadUpdates(/* parameters */): void {
   // logic for downloading updates
   /**
    * Download the latest version of the app
    * @returns {void}
    * */
-  ipcMain.handle("downloadApp", async (event) => {
+  ipcMain.handle("downloadApp", async (_event) => {
     autoUpdater.checkForUpdates();
     autoUpdater.downloadUpdate();
   });
 }
+
+// ... other update management functions can be added here

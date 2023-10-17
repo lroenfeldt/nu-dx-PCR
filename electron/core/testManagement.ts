@@ -1,16 +1,15 @@
 import { app, ipcMain } from "electron";
-import { ILineGeneSettings, ITestObject } from "../interfaces/interfaces";
-import path from "path";
-import fs from "fs";
-import { logger } from "../logger";
-import { spawn } from "child_process";
+import * as fs from "fs";
+import * as path from "path";
+import { spawn } from "../spawn";
 import { killProcess, lineGenePath, mainWindow } from "../main";
+import { logger } from "../logger";
+import { ILineGeneSettings, ITestObject } from "../interfaces/interfaces";
 
 //Define IntervalId for keeping focus
 let focusInterval: NodeJS.Timeout;
 
 export function startTest(): void {
-  // logic for starting a test
   /**
    * Start the test and run LineGene
    * @param {string} testid
@@ -86,12 +85,11 @@ export function startTest(): void {
 }
 
 export function endTest(): void {
-  // logic for ending a test
   /**
    * Stop the test and kill LineGene
    * @returns {Boolean} true if test stopped
    * */
-  ipcMain.handle("endLineGene", async (event: Electron.IpcMainInvokeEvent) => {
+  ipcMain.handle("endLineGene", async (_event: Electron.IpcMainInvokeEvent) => {
     try {
       ["Gene-9660.exe", "LineGene1600.exe", "PcrServer.exe"].forEach(
         killProcess
@@ -99,19 +97,19 @@ export function endTest(): void {
       clearInterval(focusInterval);
       return true;
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
       logger(`endLineGene error: ${error.message}`);
       return false;
     }
   });
 }
 
-export function getUnsubmitted(): void {
+export function getUnsubmitted() {
   /**
    * bGet unsubmitted tests
    * @returns {Array} unsubmitted tests
    * */
-  ipcMain.handle("getUnsubmitted", (event: Electron.IpcMainInvokeEvent) => {
+  ipcMain.handle("getUnsubmitted", (_event: Electron.IpcMainInvokeEvent) => {
     const filePath = path.resolve(app.getPath("userData"), "runs");
     try {
       if (!fs.existsSync(filePath)) {
@@ -165,19 +163,19 @@ export function getUnsubmitted(): void {
         });
       return unsubmittedTests;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return false;
     }
   });
 }
 
-export function getTests(): void {
+export function getTests() {
   /**
    * Get test results
    * */
   ipcMain.handle(
     "getTests",
-    (event: Electron.IpcMainInvokeEvent): ITestObject[] | boolean => {
+    (_event: Electron.IpcMainInvokeEvent): ITestObject[] | boolean => {
       const filePath = path.resolve(app.getPath("userData"), "runs");
       try {
         //Get Unsubmitted
@@ -248,6 +246,7 @@ export function getTests(): void {
               submitted: false,
               testmethod,
             };
+
             return testObject;
           });
 
@@ -255,7 +254,7 @@ export function getTests(): void {
         try {
           fs.accessSync(path.resolve(filePath, "done"), fs.constants.F_OK);
         } catch (error) {
-          console.log('no "done" directory found');
+          console.error('no "done" directory found');
           logger(`no "done" directory found`);
           return unsubmittedTests as ITestObject[];
         }
@@ -341,7 +340,7 @@ export function getTests(): void {
           return b.testStartedMS - a.testStartedMS;
         }) as ITestObject[];
       } catch (err: any) {
-        console.log(err);
+        console.error(err);
         logger(err);
         return false;
       }
@@ -349,9 +348,9 @@ export function getTests(): void {
   );
 }
 
-export function editResultsHandler(): void {
+export function editResultsHandler() {
   /** Edit test results */
-  ipcMain.handle("editResults", async (event, testid, results) => {
+  ipcMain.handle("editResults", async (_event, testid, results) => {
     try {
       let destPath = path.resolve(
         app.getPath("userData"),
@@ -392,7 +391,7 @@ export function editResultsHandler(): void {
       const newResults = { ...lastResults, ...results };
       fs.writeFileSync(destPath, JSON.stringify(newResults));
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     return true;
   });

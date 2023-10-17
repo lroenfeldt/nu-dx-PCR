@@ -21,6 +21,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "electron"],
+  "include": ["src", "electron", "../../nu-dx-PCR/electron/interfaces"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

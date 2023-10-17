@@ -2,24 +2,6 @@ import { app, ipcMain } from "electron";
 import * as fs from "fs";
 import * as path from "path";
 
-export function copyLogos(): void {
-  // logic for copying directories
-  /**
-   * copy logos to the app folder
-   * @returns {void}
-   * */
-  ipcMain.handle("copyLogos", async (event) => {
-    try {
-      const logosPath = path.resolve(__dirname, "../src/assets/Logos");
-      const destPath = path.resolve(app.getPath("userData"), "logos");
-      copyDir(logosPath, destPath);
-    } catch (err) {
-      console.log(err);
-    }
-    return true;
-  });
-}
-
 function copyDir(src: string, dest: string): void {
   if (!fs.existsSync(dest)) {
     fs.mkdirSync(dest);
@@ -39,3 +21,23 @@ function copyDir(src: string, dest: string): void {
     }
   }
 }
+
+export function copyLogos(): void {
+  // logic for copying directories
+  /**
+   * copy logos to the app folder
+   * @returns {void}
+   * */
+  ipcMain.handle("copyLogos", async (_event) => {
+    try {
+      const logosPath = path.resolve(__dirname, "../src/assets/Logos");
+      const destPath = path.resolve(app.getPath("userData"), "logos");
+      copyDir(logosPath, destPath);
+    } catch (err) {
+      console.error(err);
+    }
+    return true;
+  });
+}
+
+// ... other utility functions can be added here

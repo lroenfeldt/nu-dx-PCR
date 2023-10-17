@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { app, ipcMain } from "electron";
 
-export async function archiveRun(): Promise<void> {
+export async function archiveRun() {
   // archive run folder
   ipcMain.handle("archiveRun", async () => {
     const userDataPath = app.getPath("userData");
@@ -48,13 +48,13 @@ export function fileExists(filePath: string): boolean {
   }
 }
 
-export function moveFiles(): void {
+export function moveFiles() {
   /**
    * @param {string} filePath
    * @returns {boolean}
    * @description Moves a test from the "runs" directory to the "done" directory
    * */
-  ipcMain.handle("moveFiles", (event, testid) => {
+  ipcMain.handle("moveFiles", (_event, testid) => {
     if (testid !== "demo") {
       const sourcePath = path.resolve(app.getPath("userData"), "runs", testid);
       const destPath = path.resolve(
@@ -80,12 +80,12 @@ export function moveFiles(): void {
   });
 }
 
-export function deleteAllOverrides(): void {
+export function deleteAllOverrides() {
   /**
    * delete all override files
    * @returns {void}
    * */
-  ipcMain.handle("deleteAllOverrides", async (event) => {
+  ipcMain.handle("deleteAllOverrides", async (_event) => {
     try {
       const destPath = path.resolve(app.getPath("userData"), "runs");
       const files = fs.readdirSync(destPath);
@@ -96,18 +96,18 @@ export function deleteAllOverrides(): void {
         }
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     return true;
   });
 }
 
-export function deleteOverride(): void {
+export function deleteOverride() {
   /**
    * delete override file
    * @returns {void}
    * */
-  ipcMain.handle("deleteOverride", async (event, testid) => {
+  ipcMain.handle("deleteOverride", async (_event, testid) => {
     try {
       const destPath = path.resolve(
         app.getPath("userData"),
@@ -118,12 +118,12 @@ export function deleteOverride(): void {
       if (fs.existsSync(destPath)) {
         fs.unlink(destPath, (err) => {
           if (err) {
-            console.log(err);
+            console.error(err);
           }
         });
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     return true;
   });

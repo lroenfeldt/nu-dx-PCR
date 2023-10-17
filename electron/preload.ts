@@ -46,4 +46,5 @@ contextBridge.exposeInMainWorld("api", {
       testmethod
     ),
   endLineGene: () => ipcRenderer.invoke("endLineGene"),
+  power: (command: string) => ipcRenderer.send("power", command),
 });

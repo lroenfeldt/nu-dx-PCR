@@ -8,7 +8,7 @@ import { filePath } from "./fileData";
  * @description log events
  * @param {string} message
  * @returns {void}
- * @example logger("Error spawning " + cmd + " " + args.join(" ") + ": " + data);
+ * @example logger("Error spawning " + cmd + " " + args.join(" ") + ": " + data, "spawn.txt");
  **/
 
 export const logger = (message: string): void => {

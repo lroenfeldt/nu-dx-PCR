@@ -1,3 +1,4 @@
+import { app, BrowserWindow } from "electron";
 import path from "path";
 import fs from "fs";
 import Store from "electron-store";
@@ -7,8 +8,13 @@ import { spawn } from "./spawn";
 import { logger } from "./logger";
 import { IStore } from "./interfaces/interfaces";
 import {
+  downloadUpdates,
+  launchUpdates,
+  updater,
+} from "./core/updateManagement";
+import {
   checkResultFileHandler,
-  getResult,
+  getResultHandler,
   getVersion,
   moveResultFileHandler,
 } from "./core/ipcHandlers";
@@ -33,23 +39,16 @@ import {
   getUnsubmitted,
   startTest,
 } from "./core/testManagement";
-import { exit } from "process";
-import { logError } from "./core/logging";
-import {
-  checkForUpdates,
-  downloadUpdates,
-  updater,
-} from "./core/updateManagement";
-import { relaunchApp } from "./core/lifecycleManagement";
+import { exit, relaunchApp } from "./core/lifecycleManagement";
 import { copyLogos } from "./core/utilities";
-import { createFile } from "./createFile";
 import { deleteLogs } from "./deleteLogs";
-import { BrowserWindow, app } from "electron";
+import { logError } from "./core/logging";
+import { createFile } from "./createFile";
 
 export let mainWindow: BrowserWindow | undefined;
 export let splash: BrowserWindow | undefined;
 export let lineGenePath: string;
-process.env.DIST = path.join(__dirname, "../dist");
+process.env.DIST = path.join(__dirname, "../dist-electron");
 process.env.PUBLIC = app.isPackaged
   ? process.env.DIST
   : path.join(process.env.DIST, "../public");
@@ -91,7 +90,6 @@ const softwareList = [
  */
 export const getDeviceType = () => {
   if (isDev) return 16;
-
   for (let i = 0; i < softwareList.length; i++) {
     const software = softwareList[i];
 
@@ -104,6 +102,7 @@ export const getDeviceType = () => {
     } catch (error) {
       console.log(`${software.name} not found`);
       logger(`${software.name} not found`);
+      return 0;
     }
   }
 
@@ -220,13 +219,22 @@ function createWindow() {
   });
   const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
 
+  if (!fs.existsSync(path.join(__dirname, "../dist-electron"))) {
+    setTimeout(() => {
+      if (splash)
+        splash.webContents.send(
+          "updateStatus",
+          "launching in development mode..."
+        );
+    }, 2000);
+  }
   mainWindow.loadURL(
     isDev && VITE_DEV_SERVER_URL
       ? VITE_DEV_SERVER_URL
       : path.join(process.env.DIST, "index.html")
   );
   // Open the DevTools.
-  if (isDev || forceConsole) {
+  if (isDev) {
     mainWindow.webContents.openDevTools({ mode: "detach", activate: true });
   }
 }
@@ -268,6 +276,7 @@ app.whenReady().then(() => {
   createWindow();
   createFile();
   deleteLogs();
+
   spawn("taskkill", ["/f", "/im", "PcrServer.exe"]);
 
   //Launch app on startup
@@ -290,67 +299,47 @@ app.on("window-all-closed", () => {
   app.quit();
 });
 
-// ipcHandlers.ts
 checkResultFileHandler();
 moveResultFileHandler();
 
-// configFile.ts
 getConfig();
 
-// fileOperations.ts
 archiveRun();
 
-// configFile.ts
 saveConfig();
 clearConfig();
 
-// ipcHandler.ts
-getResult();
+getResultHandler();
 
-// deviceInteraction.ts
 rebootDevice();
 
-// testManagement.ts
 startTest();
 endTest();
 
-// deviceInteraction.ts
+// deviceInteraction
 toggleLid();
 
-// testManagement.ts
 getUnsubmitted();
-getTests();
 
-// fileOperations.ts
+getTests();
 moveFiles();
 
-// deviceInteraction.ts
 checkUSB();
 saveToUSB();
 getDeviceInfo();
 
-// ipcHandler.ts
 getVersion();
-
-// logging.ts
 logError();
 
-// updateManagement.ts
-checkForUpdates();
+launchUpdates();
+updater();
 downloadUpdates();
 
-// fileOperations.ts
 deleteAllOverrides();
+
 deleteOverride();
 
-// lifeCycleManagement
 relaunchApp();
-
-// utilities
 copyLogos();
-
-// testManagement.ts
 editResultsHandler();
-
-// lifeCycleManagement
 exit();

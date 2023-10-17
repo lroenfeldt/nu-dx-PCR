@@ -1,14 +1,14 @@
-import { IpcMainInvokeEvent, app, ipcMain } from "electron";
-import path from "path";
-import fs from "fs";
-import { logger } from "../logger";
+import * as fs from "fs";
+import * as path from "path";
+import { app, ipcMain } from "electron";
 import os from "os";
+import { logger } from "../logger";
 import { IGetResultResponse } from "../interfaces/interfaces";
 
 export function checkResultFileHandler(): void {
   // logic for IPC handler "checkResultFile"
   /**check if result file is present and move to run directory*/
-  ipcMain.handle("checkResultFile", (event, testid) => {
+  ipcMain.handle("checkResultFile", (_event, testid) => {
     if (testid === "demo") {
       return true;
     }
@@ -24,6 +24,7 @@ export function checkResultFileHandler(): void {
       console.error(errorMsg);
       logger(errorMsg);
       return false;
+      return;
     }
 
     try {
@@ -44,7 +45,7 @@ export function checkResultFileHandler(): void {
 export function moveResultFileHandler(): void {
   // logic for IPC handler "moveResultFile"
   /**move resultfile to run directory*/
-  ipcMain.handle("moveResultFile", (event, testid) => {
+  ipcMain.handle("moveResultFile", (_event, testid) => {
     if (testid === "demo") {
       return true;
     }
@@ -60,7 +61,6 @@ export function moveResultFileHandler(): void {
     try {
       fs.renameSync(filepath, destpath);
       const successMsg = `Result file successfully moved to "${destpath}"`;
-      console.log(successMsg);
       logger(successMsg);
       return true;
     } catch (error: any) {
@@ -72,11 +72,11 @@ export function moveResultFileHandler(): void {
   });
 }
 
-export function getResult(): void {
+export function getResultHandler(): void {
   ipcMain.handle(
     "getResult",
     async (
-      event: IpcMainInvokeEvent,
+      _event: Electron.IpcMainInvokeEvent,
       testid: string,
       done: boolean
     ): Promise<IGetResultResponse> => {
@@ -100,9 +100,6 @@ export function getResult(): void {
       try {
         testStarted = fs.statSync(launchFilePath).mtime;
       } catch (error) {
-        console.log(
-          "test launch file not found, defaulting to current time for test start"
-        );
         logger(
           "test launch file not found, defaulting to current time for test start"
         );
@@ -112,18 +109,17 @@ export function getResult(): void {
       try {
         resultFile = fs.readFileSync(filepath, "utf-8");
       } catch (error: any) {
-        console.log(`error accessing result file for test ${testid}`);
-        console.error(error);
+        console.error(`error accessing result file for test ${testid}`);
+
         logger(`error accessing result file for test ${testid}`);
-        logger(error.message);
+
         throw error;
       }
 
       try {
         configFile = fs.readFileSync(configPath, "utf-8");
       } catch (error: any) {
-        console.log(`error accessing config file for test ${testid}`);
-        console.error(error);
+        console.error(`error accessing config file for test ${testid}`);
         logger(error.message);
       }
 
