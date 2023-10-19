@@ -23,6 +23,7 @@ export interface TBlockProps {
   white?: boolean;
   width?: string | number;
   align?: string;
+  alignCenter?: boolean;
   right?: any;
   start?: boolean;
   shadow?: boolean;
@@ -44,6 +45,8 @@ export interface TBlockProps {
   outlined?: boolean;
   overflow?: string;
   flex?: boolean;
+  grid?: boolean;
+  spaceBetween?: boolean;
   position?: string;
   secondary?: boolean;
   marginTop?: string | number;
@@ -306,4 +309,36 @@ export interface ITextProps extends React.HTMLAttributes<HTMLElement> {
   bold?: boolean;
   label?: boolean;
   small?: boolean;
+}
+
+export interface ContainerProps {
+  children: ReactNode;
+}
+
+export interface MenuItemProps {
+  IconComponent: React.FC<any>;
+  label: string;
+  iconProps?: Record<string | number, string | number>;
+  onClick: () => void;
+}
+export enum Menus {
+  MAIN = "main",
+  HELP = "help",
+  PROFIL = "profil",
+  SYSTEM = "system",
+}
+
+export interface TLabelProps {
+  flex?: boolean;
+  row?: boolean;
+  align?: string;
+  gap?: number;
+  padding?: string;
+  border?: string;
+  radius?: number;
+  width?: number;
+  cursor?: string;
+  children?: ReactNode;
+  htmlFor?: string;
+  [key: string]: any;
 }

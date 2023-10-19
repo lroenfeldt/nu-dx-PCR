@@ -2,6 +2,8 @@ import React, { useCallback } from "react";
 import { Block, Button, Input, Logout, Text } from "..";
 import { useData, useTranslation, useTheme } from "../../hooks";
 import { useNavigate } from "react-router-dom";
+import Label from "../Label";
+
 interface LanguageButtonProps {
   locale: string;
   value: string;
@@ -14,7 +16,7 @@ const LanguageButton: React.FC<LanguageButtonProps> = ({
 }) => {
   const { colors } = useTheme();
   return (
-    <Block
+    <Label
       flex
       row
       align="center"
@@ -23,8 +25,11 @@ const LanguageButton: React.FC<LanguageButtonProps> = ({
       border={`3px solid ${colors.secondary.main}`}
       radius={8}
       width={198}
+      cursor="pointer"
+      htmlFor="lang"
     >
       <Input
+        id="language"
         type="radio"
         value={value}
         name="lang"
@@ -32,9 +37,10 @@ const LanguageButton: React.FC<LanguageButtonProps> = ({
         height={20}
         onChange={handleLocale}
         checked={locale === value}
+        style={{ cursor: "pointer" }}
       />
       <Text p>{value.charAt(0).toUpperCase() + value.slice(1)}</Text>
-    </Block>
+    </Label>
   );
 };
 

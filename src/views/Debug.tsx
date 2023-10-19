@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useData, useTranslation } from "../hooks";
-import { Block, RadioButton } from "../components";
+import { Block, RadioButton, Text } from "../components";
 const Debug = () => {
   const {
     settings,
@@ -33,29 +33,30 @@ const Debug = () => {
   );
 
   return (
-    <div>
-      <div className="version">
-        <h3>Version: {version}</h3>
-      </div>
-      <div className="hardwareId">
-        <h3>
+    <Block margin={24}>
+      <Block className="version">
+        <Text h3>Version: {version}</Text>
+      </Block>
+      <Block className="hardwareId">
+        <Text h3>
           {t("debug.hardwareId")}: {hardwareId}
-        </h3>
-      </div>
-      <div className="hardwareId">
-        <h3>{`${t("debug.serialNumber")}: ${
+        </Text>
+      </Block>
+      <Block className="hardwareId">
+        <Text h3>{`${t("debug.serialNumber")}: ${
           settings.account?.serialNumber
-        }`}</h3>
-      </div>
-      <div className="hardwareId">
-        <h3>{`${"wellCount"}: ${settings.device.wellCount}`}</h3>
-      </div>
+        }`}</Text>
+      </Block>
+      <Block className="hardwareId">
+        <Text h3>{`${"wellCount"}: ${settings.device.wellCount}`}</Text>
+      </Block>
       <Block
+        marginTop={24}
         children={
           <>
-            <h4>Update Settings</h4>
-
+            <Text h4>Update Settings</Text>
             <Block
+              marginTop={10}
               center={true}
               children={
                 <>
@@ -80,16 +81,7 @@ const Debug = () => {
           </>
         }
       />
-      <div className="buttonArea">
-        <button onClick={() => window.history.back()}>
-          {t("common.back")}
-        </button>
-        <button onClick={() => exit()}>{t("common.end")}</button>
-        <button onClick={() => resetDevice()}>
-          {t("common.defaultsettings")}
-        </button>
-      </div>
-    </div>
+    </Block>
   );
 };
 

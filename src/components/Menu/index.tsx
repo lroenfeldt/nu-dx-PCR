@@ -1,19 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Block, Help, Info, Profil, RightArrow, Text, Update } from "..";
-import { useTheme } from "../../hooks";
+import { useData, useTheme } from "../../hooks";
 import MenuNavigator from "./MenuNavigator";
-interface MenuItemProps {
-  IconComponent: React.FC<any>;
-  label: string;
-  iconProps?: Record<string | number, string | number>;
-  onClick: () => void;
-}
-enum Menus {
-  MAIN = "main",
-  HELP = "help",
-  PROFIL = "profil",
-  SYSTEM = "system",
-}
+import { MenuItemProps, Menus } from "../../types/components";
+
 const MenuItem: React.FC<MenuItemProps> = ({
   IconComponent,
   label,
@@ -41,9 +31,8 @@ const MenuItem: React.FC<MenuItemProps> = ({
   );
 };
 
-const Menu = ({ onClose }: { onClose: () => void }) => {
-  const { colors } = useTheme();
-  const [currentMenu, setCurrentMenu] = useState(Menus.SYSTEM);
+const Menu = (_props: { onClose: () => void }) => {
+  const { currentMenu, setCurrentMenu } = useData();
   const menuItems = [
     {
       IconComponent: Info,
@@ -84,7 +73,7 @@ const Menu = ({ onClose }: { onClose: () => void }) => {
     }
   };
   return (
-    <Block height={"100%"}>
+    <Block>
       <Block
         position="fixed"
         right={0}
@@ -93,12 +82,6 @@ const Menu = ({ onClose }: { onClose: () => void }) => {
         white
         dropShadowLarge
       >
-        {/*<Block flex align="center" width={606} padding="24px 32px" borderBottom={`2px solid ${colors.secondary.main}`} white>
-					<Block flex align="center" justify="space-between" style={{ flex: "1 0 0" }}>
-						<Text h1>Menü</Text>
-						<Close onClick={onClose} />
-					</Block>
-				</Block>*/}
         <Block flex column width={606} padding={32} gap={16} align="flex-start">
           {menuItems.map((item, index) => (
             <MenuItem key={index} {...item} />

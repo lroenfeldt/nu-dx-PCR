@@ -3,6 +3,7 @@ import QRCode from "qrcode.react";
 import { useApi, useData, useTranslation } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import pairingCodeApi from "../api/pairingCode";
+import { Block, Text } from "../components";
 
 const Pairing: FC = () => {
   const navigate = useNavigate();
@@ -115,20 +116,37 @@ const Pairing: FC = () => {
   }, [pairingCode]);
 
   return (
-    <div className="Pairing">
-      <h2>{t("pairing.welcome")}</h2>
-      <p>{t("pairing.instructions")}</p>
-      <div className="pairingContainer">
-        <div className="qr-container">
-          <h4>{t("pairing.scanQrcode")}</h4>
-          <QRCode value={"https://cloud.nu-dx.com/pairing/" + pairingCode} />
-        </div>
-        <div className="codeContainer">
-          <h4>{t("pairing.scanQrcodeInstructions")}</h4>
-          <span>{pairingCode}</span>
-        </div>
-      </div>
-    </div>
+    <Block flex column center height={"100%"} alignCenter>
+      <Block>
+        {" "}
+        <Text h2>{t("pairing.welcome")}</Text>
+        <Text h4>{t("pairing.instructions")}</Text>
+        <Text h4>{t("pairing.ways")}</Text>
+      </Block>
+      <Block flex marginTop={40}>
+        <Block>
+          <Text h4>{t("pairing.scanQrcode")}</Text>
+          <Block marginTop={24}></Block>
+          <QRCode
+            style={{ marginLeft: "110.5px" }}
+            size={176}
+            value={"https://cloud.nu-dx.com/pairing/" + pairingCode}
+          />
+        </Block>
+        <Block
+          marginLeft={24}
+          marginRight={24}
+          borderRight="4px solid black"
+        ></Block>
+        <Block width={380}>
+          <Text h4>{t("pairing.scanQrcodeInstructions")}</Text>
+          <Block flex column center height={"50%"} alignCenter>
+            {" "}
+            <Text h1>{pairingCode}</Text>
+          </Block>
+        </Block>
+      </Block>
+    </Block>
   );
 };
 

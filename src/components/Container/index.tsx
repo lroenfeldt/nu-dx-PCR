@@ -1,9 +1,6 @@
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import { Block } from "..";
-
-interface ContainerProps {
-  children: ReactNode;
-}
+import { ContainerProps } from "../../types/components";
 
 const Container: FC<ContainerProps> = ({ children }) => {
   return (

@@ -15,6 +15,7 @@ import {
 import { IUseTranslation } from "../types/interfaces/useTranslation";
 import { IBarcode, IError } from "../types/interfaces/interfaces";
 import { ITestObject } from "../../electron/interfaces/interfaces";
+import { Menus } from "../types/components";
 
 export const DataContext = React.createContext({});
 /**
@@ -35,7 +36,8 @@ export function DataProvider({ children }: IDataProviderProps) {
   const [testrun, setTestrun] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [currentMenu, setCurrentMenu] = useState(Menus.MAIN);
   const [testDone, setTestDone] = useState(false);
   const [lotNumber, setLotNumber] = useState(null);
   const [isStatus, setIsStatus] = useState(true);
@@ -263,6 +265,8 @@ export function DataProvider({ children }: IDataProviderProps) {
 
   const contextValue = useMemo(
     () => ({
+      currentMenu,
+      setCurrentMenu,
       openResults,
       setOpenResults,
 
@@ -361,6 +365,8 @@ export function DataProvider({ children }: IDataProviderProps) {
       setViewType,
     }),
     [
+      currentMenu,
+      setCurrentMenu,
       openResults,
       setOpenResults,
       errors,

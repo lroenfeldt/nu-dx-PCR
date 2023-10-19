@@ -23,6 +23,7 @@ const Next: React.FC<INextProps> = ({
       viewBox="0 0 104 104"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      cursor="pointer"
     >
       <g filter="url(#filter0_d_326_1081)">
         <rect

@@ -22,6 +22,7 @@ const Open: React.FC<IOpenProps> = ({
       viewBox="0 0 88 64"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      cursor="pointer"
     >
       <rect width="88" height="64" rx="8" fill={color} fillOpacity="0.5" />
       <path

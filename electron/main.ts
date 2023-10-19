@@ -56,8 +56,6 @@ export const killProcess = (process: string) => {
   spawn("taskkill", ["/f", "/im", process]);
 };
 
-const forceConsole: boolean = false;
-
 /**
  * check installed version of LineGene
  * @returns {string} the version of LineGene

@@ -18,6 +18,9 @@ export interface IDataProviderProps {
 }
 
 export interface IUseData {
+  currentMenu: any;
+  setCurrentMenu: React.Dispatch<React.SetStateAction<any>>;
+
   openResults: boolean;
   setOpenResults: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -80,8 +83,8 @@ export interface IUseData {
   currentUser: IAccountUser;
   setCurrentUser: React.Dispatch<React.SetStateAction<IAccountUser>>;
 
-  menuOpen: number | null;
-  setMenuOpen: React.Dispatch<React.SetStateAction<number | null>>;
+  menuOpen: boolean;
+  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;

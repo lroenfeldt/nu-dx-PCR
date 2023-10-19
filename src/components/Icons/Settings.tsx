@@ -14,6 +14,7 @@ const Settings: React.FC<ISettingsProps> = ({
 }) => {
   const { colors } = useTheme();
   color = color || colors.secondary.main;
+
   return (
     <svg
       onClick={onClick}
@@ -22,6 +23,7 @@ const Settings: React.FC<ISettingsProps> = ({
       viewBox="0 0 88 64"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      cursor="pointer"
     >
       <rect
         width={width}

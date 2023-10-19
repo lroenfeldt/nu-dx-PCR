@@ -1,7 +1,7 @@
 import LotDoku from "./LotDoku";
 import InputContainer from "./InputContainer";
 import { useNavigate } from "react-router-dom";
-import { Block, Keyboard } from "../../components";
+import { Block, Keyboard, Text } from "../../components";
 import { useData, useTranslation } from "../../hooks";
 import React, { useState, useCallback, memo } from "react";
 import { IAccountUser } from "../../types/interfaces/settings";
@@ -72,12 +72,12 @@ function Authentication() {
     [settings, selectedMethod, setCurrentUser]
   );
 
-  // const handleLotNumberChange = useCallback(
-  //   (value: string) => {
-  //     setLotNumber(value);
-  //   },
-  //   [setLotNumber]
-  // );
+  const handleLotNumberChange = useCallback(
+    (value: string) => {
+      setLotNumber(value);
+    },
+    [setLotNumber]
+  );
 
   const onKeyPress = useCallback(
     (value: string) => {
@@ -130,11 +130,11 @@ function Authentication() {
 
   return (
     <Block height={400} column center padding={10} gap={20}>
-      <h3 style={{ textAlign: "center" }}>
+      <Text h3 style={{ textAlign: "center" }}>
         {settings.account.hasUserAuthentification && !isValid
           ? t("authentication.instructions")
           : t("authentication.currentLot")}
-      </h3>
+      </Text>
 
       <Block column margin="0 325px" align="center" gap={30}>
         {settings.account.hasUserAuthentification && (
@@ -159,6 +159,7 @@ function Authentication() {
             inputs={inputs}
           />
         )}
+
         <Keyboard
           clear={clear}
           inputs={inputs}
@@ -187,7 +188,7 @@ function Authentication() {
           />
         )}
       </Block>
-      <div className="buttonArea">
+      {/* <div className="buttonArea">
         <button onClick={() => navigate("/selectMethod")}>
           {t("common.cancel")}
         </button>
@@ -201,7 +202,7 @@ function Authentication() {
         >
           {t("common.continue")}
         </button>
-      </div>
+      </div> */}
     </Block>
   );
 }

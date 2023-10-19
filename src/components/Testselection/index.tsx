@@ -101,11 +101,13 @@ const Testselection = () => {
           <Text h1>{t("common.testSelection")}</Text>
         </Block>
         <Block
-          position="relative"
+          paddingLeft={45}
+          paddingRight={45}
+          grid
+          spaceBetween
           inlineFlex
           height="auto"
           width="100%"
-          gap={54}
           paddingBottom={40}
           ref={testSelectionRef}
           padding={"0px 22px"}
