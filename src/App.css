@@ -445,7 +445,7 @@ button {
   color: var(--black);
   transition: 0.5s;
   padding: 0px 90px 0px 0px;
-  background-color: var(--white);
+
   width: 92%;
 }
 
@@ -1033,8 +1033,8 @@ input {
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  width: 80px;
-  height: 40px;
+  width: 71.5px;
+  height: 44px;
   background: var(--grey);
   border-radius: 100px;
   position: relative;
@@ -1045,10 +1045,10 @@ input {
 .react-switch-label .react-switch-button {
   content: "";
   position: absolute;
-  top: 2px;
+  top: 2.5px;
   left: 2px;
-  width: 35px;
-  height: 35px;
+  width: 38.5px;
+  height: 38.5px;
   border-radius: 45px;
   transition: 0.2s;
   background: var(--white);

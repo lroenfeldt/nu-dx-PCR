@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Toggle } from "../components";
+import { Text, Toggle } from "../components";
 import { Oval } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import { BsCloudCheckFill } from "react-icons/bs";
@@ -277,14 +277,14 @@ const ResultList = () => {
   return (
     <div className="ResultList">
       <div id="stickyHeader" className="titleArea">
-        <h2>{t("resultList.title")}</h2>
+        <Text h2>{t("resultList.title")}</Text>
         {(submitting || reading) && (
           <div className="spinnerContainer">
             <Oval height="50" width="50" color="var(--primary)" />
           </div>
         )}
         <label>
-          <span>{t("resultList.onlyPending")}</span>
+          <Text h4>{t("resultList.onlyPending")}</Text>
           <Toggle
             isOn={submitFilter}
             handleToggle={() => handleSubmitToggleChange()}
@@ -292,28 +292,6 @@ const ResultList = () => {
         </label>
       </div>
       {tableRows}
-      <div className="buttonArea">
-        <button
-          onClick={() => {
-            navigate("/selectMethod");
-          }}
-        >
-          {t("common.back")}
-        </button>
-        {submitFilter ? (
-          <button onClick={() => submitAll()}>
-            {t("resultList.submitAll")}
-          </button>
-        ) : (
-          ""
-        )}
-        <button
-          className={!USBPresent ? "disabled" : ""}
-          onClick={() => saveAllToUSB()}
-        >
-          {t("resultList.exportAll")}
-        </button>
-      </div>
     </div>
   );
 };

@@ -1,3 +1,4 @@
+import { colors } from "../assets/theme";
 import { IToggle } from "../types/interfaces/interfaces";
 
 const Toggle = ({ isOn, handleToggle }: IToggle) => {
@@ -11,7 +12,7 @@ const Toggle = ({ isOn, handleToggle }: IToggle) => {
         type="checkbox"
       />
       <label
-        style={{ background: isOn ? "#06D6A0" : "#ccc" }}
+        style={{ background: isOn ? colors.primary.main : colors.grey[400] }}
         className="react-switch-label"
         htmlFor={`react-switch-new`}
       >
