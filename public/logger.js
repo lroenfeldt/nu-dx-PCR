@@ -15,9 +15,12 @@ module.exports = {
   logger: async (message, logName) => {
     const dateTime = `${format(new Date(), 'yyyyMMdd\tHH:mm:ss')}`;
     const logItem = `${dateTime}\t${uuid()}\t${JSON.stringify(message)}\n`;
+    console.log(path.resolve(app.getPath('userData'), 'logs'))
+  
     try {
       if (!fs.existsSync(path.resolve(app.getPath('userData'), 'logs'))) {
         await fs.promises.mkdir(path.resolve(app.getPath('userData'), 'logs'));
+        
       }
       await fs.promises.appendFile(path.resolve(app.getPath('userData'), 'logs', logName), logItem);
     } catch (err) {

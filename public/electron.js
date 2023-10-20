@@ -12,9 +12,7 @@ const os = require('os');
 const macaddress = require('macaddress');
 const { spawn } = require('./spawn');
 const { logger } = require('./logger');
-const { createFile } = require('./createFile');
-const { saveLogs } = require('./saveLogs');
-const { deleteLogs } = require('./deleteLogs');
+
 let mainWindow;
 let splash;
 let lineGenePath;
@@ -218,11 +216,6 @@ app.whenReady().then(() => {
   createSplash();
   createWindow();
   spawn('taskkill', ['/f', '/im', 'PcrServer.exe']);
-
-  // improve logging
-  // createFile();
-  // saveLogs();
-  // deleteLogs();
 
   //Launch app on startup
   let autoLaunch = new AutoLaunch({
