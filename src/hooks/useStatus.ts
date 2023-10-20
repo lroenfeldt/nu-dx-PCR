@@ -28,7 +28,7 @@ export const useStatus = (): UseStatusReturnType => {
           cyclerVersion: settings.version,
         },
         errors,
-        remTime,
+        remTime, // mit datum und uhrzeit an dem der test endet
         testid
       );
 
