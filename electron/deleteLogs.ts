@@ -3,8 +3,8 @@ import * as fs from "fs";
 import { logsDir } from "./fileData";
 
 export const deleteLogs = () => {
-
-  fs.readdir(logsDir, (_err, files) => {
+ 
+  fs.readdir(logsDir, (err, files) => {
     files.forEach((file) => {
       const filePath = path.join(logsDir, file);
 

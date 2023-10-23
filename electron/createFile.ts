@@ -1,8 +1,8 @@
 import fs from "fs";
-import { log, logsDir } from "./fileData";
-import { deleteLogs } from "./deleteLogs";
+import { filePath, logsDir } from "./fileData";
 
 export const createFile: () => void = () => {
+  const log = fs.promises.writeFile(filePath, "");
 
   try {
     if (!fs.existsSync(logsDir)) {
@@ -11,7 +11,7 @@ export const createFile: () => void = () => {
     if (!log) {
       log;
     }
-    deleteLogs()
+  
     } catch (error) {
   console.error(error);
   }

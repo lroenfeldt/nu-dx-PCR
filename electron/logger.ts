@@ -2,7 +2,8 @@ import fs from "fs";
 const { v4: uuid } = require("uuid");
 import moment from "moment";
 import "moment/dist/locale/de";
-import { filePath } from "./fileData";
+import { app } from "electron";
+import path from "path";
 
 /**
  * @description log events
@@ -16,6 +17,11 @@ export const logger = (message: string): void => {
     .locale("de")
     .format("LT")}`;
   const logItem = `${dateTime}\t${uuid()}\t${JSON.stringify(message)}\n`;
+  const fileName = `logs-${moment().format("DD-MM-YYYY")}-${moment()
+    .locale("de")
+    .format("LT")}.txt`;
+  
+  const filePath = path.resolve(app.getPath("userData"), "logs", fileName);
 
   try {
     fs.stat(filePath, (_err, stats) => {

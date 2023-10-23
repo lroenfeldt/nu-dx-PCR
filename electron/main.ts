@@ -89,7 +89,7 @@ const softwareList = [
  * @returns number
  */
 export const getDeviceType = () => {
-  if (isDev) return 16;
+  // if (isDev) return 16;
   for (let i = 0; i < softwareList.length; i++) {
     const software = softwareList[i];
 
@@ -275,6 +275,7 @@ app.whenReady().then(() => {
   createSplash();
   createWindow();
   createFile();
+  // deleteLogs()
 
   spawn("taskkill", ["/f", "/im", "PcrServer.exe"]);
 
