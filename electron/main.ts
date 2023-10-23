@@ -275,7 +275,6 @@ app.whenReady().then(() => {
   createSplash();
   createWindow();
   createFile();
-  deleteLogs();
 
   spawn("taskkill", ["/f", "/im", "PcrServer.exe"]);
 

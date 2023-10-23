@@ -17,7 +17,7 @@ const Footer = () => {
   const [stateTime, setStateTime] = useState(
     moment().locale(locale).format("LL") +
       " " +
-      moment().locale(locale).format("hh:mm:ss")
+      moment().locale(locale).format("LTS")
   );
 
   const logo =
@@ -34,7 +34,7 @@ const Footer = () => {
       setStateTime(
         moment().locale(locale).format("LL") +
           " " +
-          moment().locale(locale).format("hh:mm:ss")
+          moment().locale(locale).format("LTS")
       );
     }, 1000);
     return () => clearInterval(interval);
@@ -47,24 +47,7 @@ const Footer = () => {
         <span></span>
       </div>
       <div className="menu-right">
-        {locale === "de" ? (
-          <div className="state-time-de">{stateTime}</div>
-        ) : (
-          ""
-        )}
-        {locale === "en" ? (
-          <div className="state-time-en">
-            <div>{stateTime}</div>
-            <div>PM</div>
-          </div>
-        ) : (
-          ""
-        )}
-        {locale === "fr" ? (
-          <div className="state-time-fr">{stateTime}</div>
-        ) : (
-          ""
-        )}
+        {stateTime}
         <div>
           <TbMinusVertical color="#fff" size={40} />
         </div>
