@@ -17,6 +17,8 @@ const RunTest = () => {
     toggleLid,
     isNinetySix,
     selectedMethod,
+    startedAt,
+    setStartedAt
   } = useData();
   const procedure = settings.account.testprocedures.find(
     (procedure) => procedure.id === selectedMethod
@@ -26,7 +28,6 @@ const RunTest = () => {
   const { t } = useTranslation();
   const startTime = demo ? 360 : testDuration;
   const [remTime, setRemTime] = useState(startTime);
-  const [startedAt, setStartedAt] = useState(Math.floor(Date.now() / 1000));
   const finishedAt = startedAt + startTime;
   const [waitingForResults, setWaitingForResults] = useState(false);
   const [resultPresent, setResultPresent] = useState(false);

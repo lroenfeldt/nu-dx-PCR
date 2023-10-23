@@ -141,4 +141,7 @@ export interface IUseData {
   setFailedSubmittingResults: React.Dispatch<React.SetStateAction<string[]>>;
   viewType: string;
   setViewType: React.Dispatch<React.SetStateAction<string>>;
+
+  startedAt: number
+  setStartedAt: React.Dispatch<React.SetStateAction<number>>;
 }

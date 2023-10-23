@@ -78,6 +78,7 @@ export function DataProvider({ children }: DataProviderProps) {
     string[]
   >([]);
   const [viewType, setViewType] = useState("sample");
+  const [startedAt, setStartedAt] = useState(Math.floor(Date.now() / 1000));
   /**
    * Resets values to default
    * @returns {void}
@@ -370,6 +371,8 @@ export function DataProvider({ children }: DataProviderProps) {
       setFailedSubmittingResults,
       viewType,
       setViewType,
+      startedAt,
+      setStartedAt
     }),
     [
       openResults,
@@ -465,6 +468,8 @@ export function DataProvider({ children }: DataProviderProps) {
       setFailedSubmittingResults,
       viewType,
       setViewType,
+      startedAt,
+      setStartedAt
     ]
   );
   return (

@@ -1,10 +1,11 @@
 import * as path from "path";
 import * as fs from "fs";
-import { logsDir } from "./fileData";
+import { app } from "electron";
 
 export const deleteLogs = () => {
- 
-  fs.readdir(logsDir, (err, files) => {
+  const logsDir: string = path.resolve(app.getPath("userData"), "logs");
+
+  fs.readdir(logsDir, (_err, files) => {
     files.forEach((file) => {
       const filePath = path.join(logsDir, file);
 
