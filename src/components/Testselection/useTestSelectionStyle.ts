@@ -33,7 +33,7 @@ const useTestSelectionStyle = () => {
     testInfo: {
       display: "flex",
       width: "742px",
-      height: "504px",
+      height: "704px",
       padding: "32px",
       flexDirection: "column",
       justifyContent: "space-between",
