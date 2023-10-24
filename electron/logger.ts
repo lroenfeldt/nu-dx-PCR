@@ -1,8 +1,8 @@
 import fs from "fs";
 const { v4: uuid } = require("uuid");
-import moment from "moment";
 import "moment/dist/locale/de";
-import { filePath } from "./fileData";
+import { app } from "electron";
+import path from "path";
 
 /**
  * @description log events
@@ -12,18 +12,25 @@ import { filePath } from "./fileData";
  **/
 
 export const logger = (message: string): void => {
-  const dateTime = `${moment().format("DD-MM-YYYY")}-${moment()
-    .locale("de")
-    .format("LT")}`;
+  const dateTime = `${new Date().toLocaleString("DE-de")}`;
   const logItem = `${dateTime}\t${uuid()}\t${JSON.stringify(message)}\n`;
+  const logsDir: string = path.resolve(app.getPath("userData"), "logs");
 
   try {
-    fs.stat(filePath, (_err, stats) => {
-      if (stats.size >= 500000) {
-        fs.promises.writeFile(filePath, "");
-      }
+    fs.readdir(logsDir, (err, files) => {
+      const lastFile = files[files.length - 1];
+      const filePath = path.join(logsDir, lastFile)
+      fs.promises.appendFile(filePath, logItem);
+      setTimeout(() => {
+        fs.stat(filePath, (_err, stats) => {
+          if (stats.size >= 500000) {
+            fs.promises.writeFile(filePath, "")
+          }
+        });
+      },5000)
+      
     });
-    fs.promises.appendFile(filePath, logItem);
+
   } catch (error) {
     console.error(error);
   }
