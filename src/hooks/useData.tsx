@@ -79,6 +79,8 @@ export function DataProvider({ children }: DataProviderProps) {
   >([]);
   const [viewType, setViewType] = useState("sample");
   const [startedAt, setStartedAt] = useState(Math.floor(Date.now() / 1000));
+  const [resetStartedAt, setResetStartedAt] = useState(startedAt * 1000);
+
   /**
    * Resets values to default
    * @returns {void}
@@ -372,7 +374,9 @@ export function DataProvider({ children }: DataProviderProps) {
       viewType,
       setViewType,
       startedAt,
-      setStartedAt
+      setStartedAt,
+      resetStartedAt, 
+      setResetStartedAt
     }),
     [
       openResults,
@@ -469,7 +473,9 @@ export function DataProvider({ children }: DataProviderProps) {
       viewType,
       setViewType,
       startedAt,
-      setStartedAt
+      setStartedAt,
+      resetStartedAt, 
+      setResetStartedAt
     ]
   );
   return (

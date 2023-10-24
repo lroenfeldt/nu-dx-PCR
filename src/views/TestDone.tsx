@@ -25,8 +25,8 @@ const TestDone = () => {
     currentUser,
     setDeviceStatus,
     selectedMethod,
+    USBPresent
   } = useData();
-  const [USBPresent, setUSBPresent] = useState(false);
   const userId = currentUser ? currentUser?.id : "";
   const navigate = useNavigate();
   const {

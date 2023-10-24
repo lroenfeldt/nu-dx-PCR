@@ -15,7 +15,7 @@ export const useStatus = (): UseStatusReturnType => {
     isStatus,
     errors,
     testid,
-    startedAt
+    resetStartedAt
   } = useData();
 
   const ping = useCallback(async () => {
@@ -29,7 +29,7 @@ export const useStatus = (): UseStatusReturnType => {
         },
         errors,
         testid,
-        startedAt
+        resetStartedAt
       );
 
       const responseData = response.data as ISettings;
@@ -70,7 +70,7 @@ export const useStatus = (): UseStatusReturnType => {
     onlineStatusApi,
     isStatus,
     errors,
-    startedAt,
+    resetStartedAt,
     testid,
   ]);
 

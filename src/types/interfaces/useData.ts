@@ -144,4 +144,7 @@ export interface IUseData {
 
   startedAt: number
   setStartedAt: React.Dispatch<React.SetStateAction<number>>;
+
+  resetStartedAt: number
+  setResetStartedAt: React.Dispatch<React.SetStateAction<number>>;
 }
