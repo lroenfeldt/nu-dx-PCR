@@ -27,7 +27,7 @@ export const logger = (message: string): void => {
             fs.promises.writeFile(filePath, "")
           }
         });
-      },10000)
+      },5000)
       
     });
 
