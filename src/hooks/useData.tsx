@@ -30,7 +30,6 @@ export function DataProvider({ children }: DataProviderProps) {
   const { t }: IUseTranslation = useTranslation();
   const [demo, setDemo] = useState(false);
   const [errors, setErrors] = useState<IError[]>([]);
-  const [remTime, setRemTime] = useState(0);
   const [testid, setTestid] = useState<string>("");
   const [results, setResults] = useState<ITestObject[]>([]);
   const [reading, setReading] = useState(true);
@@ -79,7 +78,8 @@ export function DataProvider({ children }: DataProviderProps) {
   >([]);
   const [viewType, setViewType] = useState("sample");
   const [startedAt, setStartedAt] = useState(Math.floor(Date.now() / 1000));
-  const [resetStartedAt, setResetStartedAt] = useState(startedAt * 1000);
+  const [remTime, setRemTime] = useState(0);
+  const [testFinishedAt, setTestFinishedAt] = useState(new Date(startedAt + remTime));
 
   /**
    * Resets values to default
@@ -375,8 +375,8 @@ export function DataProvider({ children }: DataProviderProps) {
       setViewType,
       startedAt,
       setStartedAt,
-      resetStartedAt, 
-      setResetStartedAt
+      testFinishedAt, 
+      setTestFinishedAt
     }),
     [
       openResults,
@@ -474,8 +474,8 @@ export function DataProvider({ children }: DataProviderProps) {
       setViewType,
       startedAt,
       setStartedAt,
-      resetStartedAt, 
-      setResetStartedAt
+      testFinishedAt, 
+      setTestFinishedAt
     ]
   );
   return (

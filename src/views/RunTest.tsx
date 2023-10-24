@@ -18,7 +18,6 @@ const RunTest = () => {
     isNinetySix,
     selectedMethod,
     startedAt,
-    setStartedAt
   } = useData();
   const procedure = settings.account.testprocedures.find(
     (procedure) => procedure.id === selectedMethod
