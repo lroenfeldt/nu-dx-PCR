@@ -12,7 +12,8 @@ const Testmethod: React.FC<TestmethodProps> = ({ title, status, methodid }) => {
       settings.account.hasUserAuthentification ||
       settings.account.askForLot
     ) {
-      navigate("/auth");
+      navigate("/enterBarcodes");
+      //navigate("/auth");
     } else {
       navigate("/enterBarcodes");
     }

@@ -16,8 +16,8 @@ const RunTest = () => {
     setErrors,
     toggleLid,
     isNinetySix,
-    selectedMethod,
-    startedAt,
+    selectedMethod, 
+    setTestFinishedAt
   } = useData();
   const procedure = settings.account.testprocedures.find(
     (procedure) => procedure.id === selectedMethod
@@ -25,12 +25,14 @@ const RunTest = () => {
   const testDuration = procedure ? procedure.durationMinutes * 60 : 0;
 
   const { t } = useTranslation();
-  const startTime = demo ? 360 : testDuration;
-  const [remTime, setRemTime] = useState(startTime);
+  const [startedAt, setStartedAt] = useState(Math.floor(Date.now() / 1000));
+  const startTime =  demo ? 360 * 60 : testDuration
   const finishedAt = startedAt + startTime;
+  const [remTime, setRemTime] = useState(startTime);
   const [waitingForResults, setWaitingForResults] = useState(false);
   const [resultPresent, setResultPresent] = useState(false);
   const [flapClosed, setFlapClosed] = useState(true);
+
   const showCancel = () => {
     let newErrors = errors.filter((error) => error.type !== "cancelTest");
     newErrors.push({
@@ -41,6 +43,13 @@ const RunTest = () => {
     });
     setErrors(newErrors);
   };
+
+  useEffect(() => {
+    const calc = startedAt * 1000 + remTime 
+    const testWhenDone = calc
+    setTestFinishedAt(testWhenDone)
+  },[])
+
   useEffect(() => {
     if (isNinetySix) {
       setFlapClosed(false);
@@ -58,7 +67,7 @@ const RunTest = () => {
       }
     }, 1000);
     if (remTime <= 2) {
-      setWaitingForResults(true);
+      setWaitingForResults(true)  
     }
 
     return () => clearInterval(countdown);

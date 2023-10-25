@@ -77,15 +77,15 @@ export function DataProvider({ children }: DataProviderProps) {
     string[]
   >([]);
   const [viewType, setViewType] = useState("sample");
-  const [startedAt, setStartedAt] = useState(Math.floor(Date.now() / 1000));
   const [remTime, setRemTime] = useState(0);
-  const [testFinishedAt, setTestFinishedAt] = useState(new Date(startedAt + remTime));
+  const [testFinishedAt, setTestFinishedAt] = useState(0);
 
   /**
    * Resets values to default
    * @returns {void}
    **/
   const reset = useCallback(() => {
+    setTestFinishedAt(0)
     setRemTime(0);
     setErrors([]);
     setTestid("");
@@ -373,8 +373,6 @@ export function DataProvider({ children }: DataProviderProps) {
       setFailedSubmittingResults,
       viewType,
       setViewType,
-      startedAt,
-      setStartedAt,
       testFinishedAt, 
       setTestFinishedAt
     }),
@@ -472,8 +470,6 @@ export function DataProvider({ children }: DataProviderProps) {
       setFailedSubmittingResults,
       viewType,
       setViewType,
-      startedAt,
-      setStartedAt,
       testFinishedAt, 
       setTestFinishedAt
     ]

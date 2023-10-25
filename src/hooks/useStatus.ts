@@ -1,10 +1,11 @@
 import { ISettings } from "./../types/interfaces/settings";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useApi, useData } from "./";
 import onlineStatus from "../api/onlineStatus";
 import { UseStatusReturnType } from "../types/interfaces/useStatuts";
 
 export const useStatus = (): UseStatusReturnType => {
+
   const onlineStatusApi = useApi(onlineStatus.postStatus);
   const {
     saveSettings,
@@ -15,9 +16,9 @@ export const useStatus = (): UseStatusReturnType => {
     isStatus,
     errors,
     testid,
-    testFinishedAt
+    testFinishedAt,
   } = useData();
-
+  
   const ping = useCallback(async () => {
     try {
       const response = await onlineStatusApi.request(
@@ -29,10 +30,10 @@ export const useStatus = (): UseStatusReturnType => {
         },
         errors,
         testid,
-        testFinishedAt
+        testFinishedAt,
       );
-
       const responseData = response.data as ISettings;
+
 
       if (response.ok) {
         let newSettings = {
