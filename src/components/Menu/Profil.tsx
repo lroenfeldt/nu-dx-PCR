@@ -76,8 +76,9 @@ const Profil = () => {
         justify="flex-start"
         gap={44}
         width={436}
+       
       >
-        <Block flex column align="flex-start" justify="flex-start" gap={16}>
+        <Block flex column align="flex-start" justify="flex-start" gap={16} >
           <Text h3>Profil </Text>
           <Text p>{settings.account.data.name} </Text>
           <Text p>{settings.account.data.email} </Text>
