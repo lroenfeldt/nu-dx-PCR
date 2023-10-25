@@ -1,9 +1,11 @@
 import fs from "fs";
 import { app } from "electron";
 import path from "path";
+import moment from "moment";
+import "moment/dist/locale/de";
 
 export const createFile: () => void = () => {
-  const fileName = `logs-${new Date().toLocaleDateString("DE-de")}-${new Date().getHours()}-${new Date().getMinutes()}.txt`;
+  const fileName = `logs-${moment().format("DD-MM-YYYY")}-${new Date().getHours().toLocaleString("de-DE")}-${new Date().getMinutes().toLocaleString("de-DE")}.txt`;
   const filePath = path.resolve(app.getPath("userData"), "logs", fileName);
   const log = fs.promises.writeFile(filePath, "");
   const logsDir: string = path.resolve(app.getPath("userData"), "logs");

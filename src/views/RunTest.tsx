@@ -26,7 +26,7 @@ const RunTest = () => {
 
   const { t } = useTranslation();
   const [startedAt, setStartedAt] = useState(Math.floor(Date.now() / 1000));
-  const startTime =  demo ? 360 * 60 : testDuration
+  const startTime =  demo ? 360000 : testDuration
   const finishedAt = startedAt + startTime;
   const [remTime, setRemTime] = useState(startTime);
   const [waitingForResults, setWaitingForResults] = useState(false);
@@ -48,6 +48,10 @@ const RunTest = () => {
     const calc = startedAt * 1000 + remTime 
     const testWhenDone = calc
     setTestFinishedAt(testWhenDone)
+    console.log(new Date().toLocaleTimeString("de-DE"))
+    console.log(new Date(testWhenDone).toLocaleTimeString("de-DE"))
+    // converte in cloud new Date(testWhenDone).toLocaleString("de-DE")
+    // for german date and time format
   },[])
 
   useEffect(() => {
