@@ -5,7 +5,6 @@ import onlineStatus from "../api/onlineStatus";
 import { UseStatusReturnType } from "../types/interfaces/useStatuts";
 
 export const useStatus = (): UseStatusReturnType => {
-
   const onlineStatusApi = useApi(onlineStatus.postStatus);
   const {
     saveSettings,
@@ -18,7 +17,7 @@ export const useStatus = (): UseStatusReturnType => {
     testid,
     testFinishedAt,
   } = useData();
-  
+
   const ping = useCallback(async () => {
     try {
       const response = await onlineStatusApi.request(
@@ -30,10 +29,10 @@ export const useStatus = (): UseStatusReturnType => {
         },
         errors,
         testid,
-        testFinishedAt,
+        testFinishedAt
       );
       const responseData = response.data as ISettings;
-      console.log(new Date(testFinishedAt).toLocaleTimeString("de-DE"))
+      console.log(new Date(testFinishedAt).toLocaleTimeString("de-DE"));
       if (response.ok) {
         let newSettings = {
           ...settings,
@@ -71,7 +70,7 @@ export const useStatus = (): UseStatusReturnType => {
     isStatus,
     errors,
     testid,
-    testFinishedAt
+    testFinishedAt,
   ]);
 
   return { ping };

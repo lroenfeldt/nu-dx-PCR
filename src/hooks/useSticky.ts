@@ -1,5 +1,5 @@
-import { useEffect, useCallback, useState } from 'react';
-import { IUseStick } from '../types/interfaces/interfaces';
+import { useEffect, useCallback, useState } from "react";
+import { IUseStick } from "../types/interfaces/interfaces";
 
 const useSticky = ({ top, id, stickyClass }: IUseStick) => {
   const [isSticky, setIsSticky] = useState(false);
@@ -15,14 +15,16 @@ const useSticky = ({ top, id, stickyClass }: IUseStick) => {
   useEffect(() => {
     if (stickyClass) {
       let body = document.getElementsByClassName(stickyClass)[0];
-      body.addEventListener('scroll', () => {
+      body.addEventListener("scroll", () => {
         const stickyElement = document.getElementById(id);
         if (stickyElement !== null) {
-          body.scrollTop > top ? stickyElement.classList.add('sticky') : stickyElement.classList.remove('sticky');
+          body.scrollTop > top
+            ? stickyElement.classList.add("sticky")
+            : stickyElement.classList.remove("sticky");
         }
       });
       return () => {
-        body.removeEventListener('scroll', handleScroll);
+        body.removeEventListener("scroll", handleScroll);
       };
     }
   }, []);
