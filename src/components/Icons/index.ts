@@ -9,7 +9,7 @@ import Time from "./Time";
 import Bulb from "./Bulb";
 import Help from "./Help";
 import Plus from "./Plus";
-import Open  from "./Open";
+import Open from "./Open";
 import Alert from "./Alert";
 import Close from "./Close";
 import Graph from "./Graph";
@@ -29,9 +29,10 @@ import Keyboard from "./Keyboard";
 import Settings from "./Settings";
 import QrCodeScan from "./QrCodeScan";
 import RightArrow from "./RightArrow";
-
+import HomeIcon from "./HomeIcon";
 
 export {
+  HomeIcon,
   IFU,
   Off,
   Help,
@@ -64,6 +65,3 @@ export {
   QrCodeScan,
   RightArrow,
 };
-
-
-

@@ -71,7 +71,7 @@ export interface TBlockProps {
   transition?: string;
   gap?: string | number;
   zIndex?: number;
-  bgColor?: string;
+  bgColor?: string | null;
   inlineFlex?: boolean;
   flexShrink?: number;
   cursor?: boolean;

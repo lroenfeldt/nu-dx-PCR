@@ -14,7 +14,6 @@ export interface IColorSet {
   hover?: string;
   active?: string;
   transparency?: string;
-  
 }
 
 export interface IGradientSet {
@@ -55,6 +54,10 @@ export interface IColors {
   grey: {
     [key: number]: string;
   };
+  progressBar: {
+    standby: string;
+    running: string;
+  };
   gradients: {
     primary: IGradientSet;
     secondary: IGradientSet;
@@ -67,5 +70,3 @@ export interface IColors {
   };
   inputColors: IInputColors;
 }
-
-

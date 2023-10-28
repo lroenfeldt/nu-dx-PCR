@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { ProgressBar } from "../components";
-import { useData, useTranslation } from "../hooks";
+import { Block, Button, ProgressBar, Text } from "../components";
+import { useData, useTheme, useTranslation } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import functions from "../utils/functions";
 import { Oval } from "react-loader-spinner";
@@ -16,6 +16,7 @@ const RunTest = () => {
     isNinetySix,
     selectedMethod,
   } = useData();
+  const { colors } = useTheme();
   const procedure = settings.account.testprocedures.find(
     (procedure) => procedure.id === selectedMethod
   );
@@ -127,35 +128,35 @@ const RunTest = () => {
   const displayTime = functions.secondsToHms(remTime);
 
   return (
-    <div className="RunTest">
+    <Block flex column center height={"100%"} alignCenter gap={32}>
       {!waitingForResults ? (
         <>
-          <h2>
+          <Text h2>
             {flapClosed
               ? t("runTest.testRunning")
               : t("runTest.testRunningFlapClose")}
-          </h2>
-          <div className="progressVisualization">
-            <ProgressBar startTime={startTime} remTime={remTime} />
-          </div>
-          <h2 className="timeLeft">
+          </Text>
+          <Block width="728px" height="16px">
+            <ProgressBar remTime={remTime} startTime={startTime} />
+          </Block>
+          <Text h2>
             {remTime == 0
               ? t("runTest.endOfTest")
               : t("common.still") + " " + displayTime}
-          </h2>
+          </Text>
+          <Block>
+            <Button outlined onClick={() => showCancel()}>
+              {t("runTest.cancel")}
+            </Button>
+          </Block>
         </>
       ) : (
-        <div>
-          <div className="spinnerContainer">
-            <Oval height="100" width="100" color="var(--primary)" />
-          </div>
-          <h2>{t("runTest.waitingForResult")}...</h2>
-        </div>
+        <Block flex column center height={"80%"} alignCenter gap={32}>
+          <Oval height="100" width="100" color="var(--primary)" />
+          <Text h2>{t("runTest.waitingForResult")}</Text>
+        </Block>
       )}
-      <div className="buttonArea discouraged">
-        {<button onClick={() => showCancel()}>{t("common.cancel")}</button>}
-      </div>
-    </div>
+    </Block>
   );
 };
 

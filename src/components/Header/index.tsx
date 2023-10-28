@@ -39,20 +39,35 @@ const Header = () => {
         gap={11}
         padding="8px 26px"
         center
-        cursor
-        onClick={() => window.history.back()}
+        bgColor={
+          location.pathname === "/selectMethod" ? null : colors.secondary.focus
+        }
       >
-        <Back />
-        <Text
-          p
-          white
-          fontSize="28px"
-          fontStyle="normal"
-          fontWeight={600}
-          lineHeight="48px"
-        >
-          {t("common.back")}
-        </Text>
+        {location.pathname === "/selectMethod" ? null : (
+          <>
+            <Block
+              align="center"
+              flex
+              gap={11}
+              center
+              onClick={() => window.history.back()}
+              style={{ cursor: "pointer" }}
+            >
+              <Back />
+              <Text
+                p
+                white
+                fontSize="28px"
+                fontStyle="normal"
+                fontWeight={600}
+                lineHeight="48px"
+                style={{ cursor: "pointer" }}
+              >
+                {t("common.back")}
+              </Text>
+            </Block>
+          </>
+        )}
       </Block>
       {location.pathname === "/ViewResults" && (
         <Block flex align="flex-start">

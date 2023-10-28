@@ -78,10 +78,9 @@ const Menu = (_props: { onClose: () => void }) => {
         position="fixed"
         right={0}
         top={0}
-     
         white
         dropShadowLarge
-        style={{borderBottomLeftRadius:"16px"}}
+        style={{ borderBottomLeftRadius: "16px" }}
       >
         <Block flex column width={606} padding={32} gap={16} align="flex-start">
           {menuItems.map((item, index) => (

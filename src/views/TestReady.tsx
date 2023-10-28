@@ -110,17 +110,20 @@ const TestReady: React.FC = () => {
     );
   } else {
     return (
-      <Block flex center height={"100%"} width="100%">
-        <Block flex column center gap={50}>
-          <Block flex justify="space-around" gap={10} align="center">
-            <Alert />
+      <Block flex center height={"100%"} alignCenter>
+        <Block flex column center gap={32}>
+          <Block flex column center gap={10} align="center">
+            <Alert color="#F18D13" />
             <Text h3>
               {isNinetySix
                 ? t("testReady.ninetySixsInstructions")
                 : t("testReady.instructions")}
             </Text>
+            <Text h3>
+              {isNinetySix ? null : t("testReady.instructionsTwo")}
+            </Text>
           </Block>
-          <Block flex justify="space-around">
+          <Block flex center gap={32}>
             <Button
               outlined
               onClick={() => {
@@ -128,9 +131,9 @@ const TestReady: React.FC = () => {
                 setDeviceStatus("IDLE");
               }}
             >
-              {t("testReady.noGoBack")}
+              {t("common.back")}
             </Button>
-            <Button onClick={startTest}>{t("testReady.yesStartTest")}</Button>
+            <Button onClick={startTest}>{t("common.testStart")}</Button>
           </Block>
         </Block>
       </Block>

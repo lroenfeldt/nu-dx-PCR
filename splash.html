@@ -8,7 +8,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background-color: rgb(1, 21, 60);
+      background-color: #062b56;
       overflow: hidden;
       font-family: sans-serif;
       color: white;
@@ -25,7 +25,8 @@
       background-size: contain;
       background-repeat: no-repeat;
       z-index: -1;
-      opacity: 0.1;
+      opacity: 0.2;
+      transform: rotate(-25deg) scale(1.2);
     }
 
     .title {
@@ -67,15 +68,7 @@
     <div class="title">
       <img src="./src/img/nu-dx PCR Logo white.png" alt="logo" />
     </div>
-    <div class="updateStatus">
-      <span id="updateMessage">Initializing...</span>
-    </div>
-    <img
-      class="nu-dx"
-      src="./src/assets/Logos/nu-diagnostics/nu-diagnostics white.png"
-      alt="nu-diagnostics"
-      width="150"
-    />
+    <span id="updateMessage" class="nu-dx">Downloading Updates 17%</span>
     <span id="versionNumber">Test</span>
   </body>
 
@@ -83,7 +76,7 @@
     const getVersion = async () => {
       const version = await window.api.getVersion();
       const versionElement = document.getElementById("versionNumber");
-      versionElement.innerText = "v" + version;
+      versionElement.innerText = "Version" + " " + version;
     };
     getVersion();
 

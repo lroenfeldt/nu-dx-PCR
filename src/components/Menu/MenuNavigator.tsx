@@ -38,6 +38,7 @@ const MenuNavigator: React.FC<MenuNavigatorProps> = ({
           padding="16px 32px"
           cursor
           onClick={navigateBack}
+          overflow="hiddin"
         >
           <Back />
           <Text label white>

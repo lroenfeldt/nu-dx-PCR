@@ -4,6 +4,7 @@ import { Oval } from "react-loader-spinner";
 import { FaCheckCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useResults, useTranslation } from "../hooks";
+import { Block, Button, Text } from "../components";
 
 const TestDone = () => {
   const {
@@ -39,15 +40,15 @@ const TestDone = () => {
   let buttonUSB;
   if (USBPresent) {
     buttonUSB = (
-      <button onClick={() => saveToUSB(testid, testDone)}>
+      <Button onClick={() => saveToUSB(testid, testDone)}>
         {t("results.saveToUSB")}
-      </button>
+      </Button>
     );
   } else {
     buttonUSB = (
-      <button className="disabled" onClick={() => saveToUSB(testid, testDone)}>
+      <Button disabled onClick={() => saveToUSB(testid, testDone)}>
         {t("results.saveToUSB")}
-      </button>
+      </Button>
     );
   }
 
@@ -114,83 +115,73 @@ const TestDone = () => {
   //Output
   if (offlineMode) {
     return (
-      <div className="TestDone">
-        <div className="spinnerContainer">
+      <Block flex column center height={"100%"} alignCenter gap={32}>
+        <Block className="spinnerContainer">
           <FaCheckCircle />
-        </div>
-        <h2>{t("results.title")}</h2>
-        <p>{t("results.instructions")}</p>
-        <div className="buttonArea">
+        </Block>
+
+        <Block flex center alignCenter>
+          {testmethod && testmethod.showResults ? buttonUSB : ""}
+          <Block marginLeft={16} marginRight={16}></Block>
           {testmethod && testmethod.showResults ? (
-            <button onClick={() => navigate("/ViewResults")}>
+            <Button onClick={() => navigate("/ViewResults")}>
               {t("results.viewResults")}
-            </button>
+            </Button>
           ) : (
             ""
           )}
-          {testmethod && testmethod.showResults ? buttonUSB : ""}
-          <button
+        </Block>
+        <Block flex center alignCenter>
+          <Button
             onClick={() => {
               reset();
               navigate("/selectMethod");
             }}
           >
             {t("results.newTest")}
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Block>
+      </Block>
     );
   } else if (resultsSubmitted || !settings.account.submitResults) {
     return (
-      <div className="TestDone">
-        <div className="spinnerContainer">
+      <Block flex column center height={"100%"} alignCenter gap={32}>
+        <Block className="spinnerContainer">
           <FaCheckCircle />
-        </div>
-        <h2>
-          {!settings.account.submitResults
-            ? t("results.success")
-            : t("results.resultsSent")}
-        </h2>
-        <p>{t("results.startNewTest")}</p>
-        <div className="buttonArea">
+        </Block>
+
+        <Block flex center alignCenter>
           {testmethod && testmethod.showResults ? buttonUSB : ""}
+          <Block marginLeft={16} marginRight={16}></Block>
           {testmethod && testmethod.showResults ? (
-            <button onClick={() => navigate("/ViewResults")}>
+            <Button onClick={() => navigate("/ViewResults")}>
               {t("results.viewResults")}
-            </button>
+            </Button>
           ) : (
             ""
           )}
-          <button
+        </Block>
+        <Block flex center alignCenter>
+          <Button
             onClick={() => {
               reset();
               navigate("/selectMethod");
             }}
           >
             {t("results.newTest")}
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Block>
+      </Block>
     );
   } else {
     return (
-      <div className="TestDone">
-        <div className="spinnerContainer">
+      <Block flex column center height={"90%"} alignCenter gap={32}>
+        <Block>
           <Oval height="100" width="100" color="var(--primary)" />
-        </div>
-        <h2>{t("results.waitingForResults")}</h2>
-        <p>{t("results.wait")}</p>
-        <div className="buttonArea discouraged">
-          <button
-            onClick={() => {
-              reset();
-              navigate("/selectMethod");
-            }}
-          >
-            {t("common.cancel")}
-          </button>
-        </div>
-      </div>
+        </Block>
+        <Text h2>{t("results.waitingForResults")}</Text>
+        <Text p>{t("results.wait")}</Text>
+      </Block>
     );
   }
 };

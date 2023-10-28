@@ -88,11 +88,11 @@
     "success": "Résultats enregistrés avec succès !",
     "startNewTest": "Vous pouvez maintenant commencer un nouveau test",
     "instructions": "Vous pouvez soumettre les résultats dès que vous disposez à nouveau d'une connexion Internet. En attendant, vous pouvez continuer à utiliser l'appareil comme d'habitude.",
-    "viewResults": "Voir les résultats",
-    "newTest": "Commencer un nouveau test",
-    "wait": "Veuillez patienter s'il vous plaît...",
-    "waitingForResults": "Les résultats seront envoyés",
-    "saveToUSB": "Enregistrer sur USB",
+    "viewResults": "Annonces",
+    "newTest": "Prêt",
+    "wait": "Chargement...",
+    "waitingForResults": "Les résultats sont transmis",
+    "saveToUSB": "Exporter",
     "resultsSent": "Les résultats ont été envoyés avec succès !"
   },
   "pairing": {
@@ -105,13 +105,15 @@
   "runTest": {
     "endOfTest": "Test terminé",
     "waitingForResult": "En attente de résultats",
+    "cancel": "Annuler Test",
     "cancelTest": "Voulez-vous vraiment annuler le test ? Dans ce cas, aucun résultat n'est donné et vous ne pouvez pas utiliser le matériau d'échantillon inséré pour une nouvelle analyse. (Cependant, les codes-barres restent valables)",
-    "testRunning": "Test en cours...",
+    "testRunning": "Test en cours",
     "testRunningFlapClose": "Test en cours... Fermeture du volet"
   },
   "testReady": {
     "startTest": "Le test est lancé, veuillez patienter...",
-    "instructions": "Tous les échantillons à analyser sont-ils insérés et le volet fermé ?",
+    "instructions": "Tous les échantillons à analyser sont-ils en place ?",
+    "instructionsTwo": "Le volet est-il fermé ?",
     "noGoBack": "Non, revenir en arrière",
     "yesStartTest": "OUI, lancer le test",
     "flapClosing": "Veuillez patienter pendant la fermeture du volet",
