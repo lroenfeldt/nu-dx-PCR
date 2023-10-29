@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { hexToRGB } from "../utils/helper";
 import { Oval } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import { parseResults } from "../utils/parseResults";
@@ -8,7 +7,6 @@ import urls from "../config/settings";
 import {
   Table,
   Block,
-  Checkmark,
   Button,
   RackVisualRows,
   ChangeResults,
@@ -224,7 +222,7 @@ const ViewResults: React.FC = () => {
           )}
           {/* TABLE VIEW */}
           {viewType === "list" && (
-            <Block flex center marginTop={150} height={"100%"}>
+            <Block flex center marginTop={100} height={"100%"}>
               <Table
                 th={[
                   "Position",
@@ -240,7 +238,7 @@ const ViewResults: React.FC = () => {
                     })) ||
                     []),
                   t("common.result"),
-                  testmethod && testmethod.showResults ? "" : "",
+                  testmethod && testmethod.showResults ? "Graph" : "",
                 ]}
                 tr={
                   [
@@ -276,53 +274,51 @@ const ViewResults: React.FC = () => {
                         barcode.result &&
                         testmethod &&
                         testmethod.showResults ? (
-                          <Block row gap={4}>
+                          <>
                             <Block
                               key={barcode.id.toString()}
-                              className="resultBadge-table"
+                              height={36}
+                              radius={8}
+                              width="125px"
                               style={{
                                 ...(barcode.alteredResult && {
-                                  border: "1px solid orange",
+                                  border: `3px solid ${colors.text.default}`,
                                 }),
-                                position:
-                                  barcode.alteredResult ||
-                                  barcode.label == "NTC" ||
-                                  barcode.label == "TPC"
-                                    ? "relative"
-                                    : undefined,
-                                color:
+                                border:
                                   barcode.result == "invalid"
-                                    ? "orange"
-                                    : testmethod.results.find((result) =>
-                                        result.name.includes(barcode.result)
-                                      )?.color,
-                                border: "1px solid orange",
-                                borderColor:
+                                    ? `3px solid ${colors.text.default}`
+                                    : "",
+                                backgroundColor:
                                   barcode.result == "invalid"
-                                    ? "orange"
-                                    : testmethod.results.find((result) =>
-                                        result.name.includes(barcode.result)
-                                      )?.color,
-                                backgroundColor: hexToRGB(
-                                  (testmethod &&
-                                    testmethod.results.find((result) =>
-                                      result.name.includes(barcode.result)
-                                    )?.color) ||
-                                    "orange",
-                                  0.1
-                                ),
-                                minWidth: 114,
-                                fontSize: "small",
+                                    ? colors.test.invalid
+                                    : barcode.result == "positive"
+                                    ? colors.test.positive
+                                    : colors.test.negative,
                               }}
                             >
-                              {barcode.result === "invalid"
-                                ? "invalid"
-                                : (testmethod
-                                    ? testmethod.results.find((result) =>
-                                        result.name.includes(barcode.result)
-                                      )?.["label" + locale?.toUpperCase()]
-                                    : undefined) ||
-                                  barcode.result.toUpperCase()}
+                              <Text
+                                h4
+                                style={{
+                                  color:
+                                    barcode.result == "invalid"
+                                      ? colors.text.default
+                                      : "#fff",
+                                }}
+                              >
+                                {barcode.result == "positive"
+                                  ? "+"
+                                  : barcode.result == "negative"
+                                  ? "-"
+                                  : ""}
+                                {barcode.result === "invalid"
+                                  ? "invalid"
+                                  : (testmethod
+                                      ? testmethod.results.find((result) =>
+                                          result.name.includes(barcode.result)
+                                        )?.["label" + locale?.toUpperCase()]
+                                      : undefined) ||
+                                    barcode.result.toUpperCase()}
+                              </Text>
 
                               <AlteredResult
                                 activeBarcode={barcode}
@@ -337,34 +333,25 @@ const ViewResults: React.FC = () => {
                                   height: "100%",
                                 }}
                               />
-                              <Checkmark
-                                barcode={barcode}
-                                style={{
-                                  top: 20,
-                                  right: -9,
-                                  width: 20,
-                                  height: 20,
-                                  color: "white",
-                                }}
-                              />
                             </Block>
                             <ChangeResults
                               activeBarcode={barcode}
                               testmethod={testmethod}
                               isTable={true}
                             />
-                          </Block>
+                          </>
                         ) : (
                           ""
                         ),
 
                         testmethod && testmethod.showCurves && (
-                          <Button bgColor={colors.secondary.main}>
-                            <Graph
-                              onClick={() =>
-                                navigate(`/viewCurves/${barcode.id}`)
-                              }
-                            />
+                          <Button
+                            onClick={() =>
+                              navigate(`/viewCurves/${barcode.id}`)
+                            }
+                            outlined
+                          >
+                            <Graph />
                           </Button>
                         ),
                       ];

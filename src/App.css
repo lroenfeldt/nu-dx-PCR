@@ -1225,7 +1225,7 @@ form {
   opacity: 0.7;
 }
 
-.resultBadge-table {
+/* .resultBadge-table {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1235,7 +1235,7 @@ form {
   border-radius: 4px;
   padding: 3px;
   border: "1px solid orange";
-}
+} */
 .resultContainer .buttonArea {
   position: relative;
   bottom: 0;

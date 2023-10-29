@@ -10,7 +10,7 @@ const Graph: React.FC<IGraphProps> = ({
   onClick,
   height = 28,
   width = 30,
-  color = "#FFF",
+  color = "#1172E5",
 }) => {
   return (
     <svg

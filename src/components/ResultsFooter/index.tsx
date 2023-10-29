@@ -97,10 +97,10 @@ const ResultsFooter: React.FC<IResultsFooterProps> = ({
           center
           align="center"
           gap={8}
-          bgColor={colors.secondary.main}
+          outlined
         >
           <Graph />
-          <Text bold white>
+          <Text bold color={colors.primary.main}>
             Graph
           </Text>
         </Button>

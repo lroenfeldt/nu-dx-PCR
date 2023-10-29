@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from "react";
 import { useData, useSticky } from "../../hooks";
 import "./css/table.css";
 import { ITableProps } from "../../types/interfaces/interfaces";
+import { Text } from "..";
 
 const Table: React.FC<ITableProps> = ({ th, tr }) => {
   const { settings, selectedMethod } = useData();
@@ -13,14 +14,14 @@ const Table: React.FC<ITableProps> = ({ th, tr }) => {
   if (testMethod && !testMethod.showCurves) th.pop();
 
   // Initialize the sticky header
-  useSticky({ top: 5, id: "stickyHeader", stickyClass: "table" });
-  const handleSelected = (e: React.MouseEvent) => {
-    const selected = document.querySelector(".selected");
-    if (selected) selected.classList.remove("selected");
-    const target = e.target as Element;
-    const row = target.closest("tr");
-    if (row) row.classList.add("selected");
-  };
+  // useSticky({ top: 5, id: "stickyHeader", stickyClass: "table" });
+  // const handleSelected = (e: React.MouseEvent) => {
+  //   const selected = document.querySelector(".selected");
+  //   if (selected) selected.classList.remove("selected");
+  //   const target = e.target as Element;
+  //   const row = target.closest("tr");
+  //   if (row) row.classList.add("selected");
+  // };
 
   const containerRef: React.RefObject<HTMLDivElement> = useRef(null);
 
@@ -55,34 +56,40 @@ const Table: React.FC<ITableProps> = ({ th, tr }) => {
   return (
     <div className="table" ref={containerRef}>
       <table>
-        <thead id="stickyHeader" className="header">
+        <thead className="header">
           <tr>
             {th
               .filter((item) => item !== false)
               .filter((item) => typeof item !== undefined)
               .map((item, i) => (
                 <th key={`th-${i}`} className="th">
-                  {item}
+                  <Text h4 white>
+                    {" "}
+                    {item}
+                  </Text>
                 </th>
               ))}
           </tr>
         </thead>
+
         <tbody>
           {tr
-
             .filter((item) => typeof item !== undefined)
             .map((element, index) => {
               // Remove the last element in the row if showCurves is false
               if (testMethod && !testMethod.showCurves) element.pop();
-
               return (
-                <tr key={`tr-${index}`} onClick={handleSelected} data-animate>
+                <tr
+                  key={`tr-${index}`}
+                  // onClick={handleSelected}
+                  data-animate
+                >
                   {element
                     .filter((item) => item !== false)
                     .filter((item) => typeof item !== undefined)
                     .map((item, i) => (
                       <td key={`row-${index}-${i}`} className="row">
-                        {item ? item : "-"}
+                        <Text h4> {item ? item : "-"}</Text>
                       </td>
                     ))}
                 </tr>
