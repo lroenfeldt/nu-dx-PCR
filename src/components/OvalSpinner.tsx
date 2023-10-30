@@ -6,7 +6,7 @@ import { IOvalSPinner } from "../types/components";
 function OvalSpinner(props: IOvalSPinner) {
   const { colors } = useTheme();
   return (
-    <Block flex center style={{ fontSize: "90px" }}>
+    <Block flex center>
       <Oval
         height={props.height}
         width={props.width}
