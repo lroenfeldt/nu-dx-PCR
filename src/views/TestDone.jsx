@@ -28,8 +28,10 @@ const TestDone = () => {
     test,
     setDeviceStatus,
     selectedMethod,
+    USBPresent,
+    setUSBPresent,
   } = useData();
-  const [USBPresent, setUSBPresent] = useState(false);
+
   const userId = currentUser ? currentUser?.id : '';
   const navigate = useNavigate();
   const { checkUSB, saveToUSB, submitAll, getResults, submitResult, saveAllToUSB } = useResults();

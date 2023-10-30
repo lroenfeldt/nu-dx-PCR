@@ -124,10 +124,12 @@ export const parseResults = (resultFile, testid, testConfig, testmethod, overrid
     parsedResultsData[position].oldResult = '';
     parsedResultsData[position].isControl = false;
     //Set labels for Controls
-    if (['Placeholder_NTC', 'SC2NTC', 'NTC', 'Placeholder_TPC', 'SC2TPC', 'TPC'].includes(barcode) 
-      || barcode.slice(0,3) == 'TPC' 
-      || barcode.slice(0,3) == 'NTC') {
-        parsedResultsData[position].isControl = true;
+    if (
+      ['Placeholder_NTC', 'SC2NTC', 'NTC', 'Placeholder_TPC', 'SC2TPC', 'TPC'].includes(barcode) ||
+      barcode.slice(0, 3) == 'TPC' ||
+      barcode.slice(0, 3) == 'NTC'
+    ) {
+      parsedResultsData[position].isControl = true;
     }
     if (['Placeholder_NTC', 'SC2NTC', 'NTC'].includes(barcode)) {
       parsedResultsData[position].label = 'NTC';
@@ -191,7 +193,7 @@ export const parseResults = (resultFile, testid, testConfig, testmethod, overrid
     } else if (parsedResultsData[position].label === 'NTC' && parsedResultsData[position].result === 'negative') {
       parsedResultsData[position].result = 'invalid';
     }
-    
+
     //Apply Overrides
     if (override && JSON.parse(override)[position]) {
       parsedResultsData[position].result = JSON.parse(override)[position];
@@ -229,37 +231,65 @@ export const parseResultsExport = (resultFile, testid, testConfig, testmethod, l
 
   const parsedData = parseResults(resultFile, testid, testConfig, testmethod);
 
-  //init export file
+  // Initialize export file
   let exportFile = '';
 
   if (testmethod.type === 'Absolute') {
-    exportFile += 'Position;Barcode;CT;Result;lotNumber\n';
+    // Column headers
+    const ctHeaders = testmethod.parameters
+      .filter((parameter) => parameter.showCT)
+      .map((parameter) => 'CT-' + parameter.label)
+      .join(';');
 
-    //Read Data
+    const flHeaders = testmethod.parameters
+      .filter((parameter) => parameter.showFL)
+      .map((parameter) => 'FL-' + parameter.label)
+      .join(';');
+
+    exportFile += `Position;Barcode;CT;Result;lotNumber;${ctHeaders};${flHeaders}\n`;
+
+    // Read Data
     for (let position in parsedData) {
       let data = parsedData[position];
 
-      for (let paramName in data.parameters) {
-        let paramData = data.parameters[paramName];
+      const ctColumns = testmethod.parameters
+        .map((parameter) => {
+          if (parameter.showCT) {
+            return data.parameters[parameter.target]?.ct || data.parameters[parameter.target.toLowerCase()]?.ct || '-';
+          }
+          return null;
+        })
+        .filter((value) => value)
+        .join(';');
 
-        //Add result entry for each parameter
-        exportFile += `${position};${data.barcode};${paramData.ct};${data.result};${lotNumber}\n`;
-        break;
-      }
+      const flColumns = testmethod.parameters
+        .map((parameter) => {
+          if (parameter.showFL) {
+            const flValue =
+              data.parameters[parameter.target]?.finalCycle ||
+              data.parameters[parameter.target.toLowerCase()]?.finalCycle;
+            return flValue !== undefined ? parseInt(flValue) : '-';
+          }
+          return null;
+        })
+        .filter((value) => value)
+        .join(';');
+
+      exportFile += `${position};${data.barcode};${data.parameters?.ct};${data.result};${lotNumber};${ctColumns};${flColumns}\n`;
     }
   }
 
   if (testmethod.type === 'SNP') {
     exportFile += 'Position;Barcode;Result\n';
 
-    //Read Data
+    // Read Data
     for (let position in parsedData) {
       let data = parsedData[position];
       exportFile += `${position};${data.barcode};${data.result}\n`;
     }
   }
 
-  //return
+  // Return the constructed export file content
   return exportFile;
 };
 
