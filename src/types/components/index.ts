@@ -342,3 +342,8 @@ export interface TLabelProps {
   htmlFor?: string;
   [key: string]: any;
 }
+
+export interface IOvalSPinner {
+  height: string;
+  width: string;
+}

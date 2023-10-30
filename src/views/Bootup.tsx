@@ -1,11 +1,11 @@
 import { useCallback, useEffect } from "react";
 import auth from "../api/auth";
 import jwt_decode from "jwt-decode";
-import { Oval } from "react-loader-spinner";
 import pairingApi from "../api/pairingCode";
 import { useNavigate } from "react-router-dom";
 import { useData, useApi, useTranslation } from "../hooks";
 import { Block, Text } from "../components";
+import OvalSpinner from "../components/OvalSpinner";
 
 const Bootup = () => {
   const navigate = useNavigate();
@@ -165,7 +165,7 @@ const Bootup = () => {
 
   return (
     <Block flex column center height={"90%"} alignCenter>
-      <Oval height="100" width="100" color="var(--primary)" />
+      <OvalSpinner height="100px" width="100px" />
       <Block marginTop={24}></Block>
       <Text h2>{t("bootup.deviceStart")}</Text>
     </Block>

@@ -1,6 +1,5 @@
 import "./App.css";
 import { Layout } from "./components";
-import { Oval } from "react-loader-spinner";
 import {
   Route,
   Routes,
@@ -23,14 +22,13 @@ import {
 } from "./views";
 import { DataProvider, TranslationProvider } from "./hooks";
 import { ThemeProvider } from "./assets/theme/ThemeContext";
+import OvalSpinner from "./components/OvalSpinner";
 
 function App() {
   if (typeof window.api == "undefined" && window.api !== undefined) {
     return (
       <div className="App">
-        <div className="spinnerContainer">
-          <Oval height="100" width="100" color="var(--primary)" />
-        </div>
+        <OvalSpinner height="100px" width="100px" />
       </div>
     );
   }

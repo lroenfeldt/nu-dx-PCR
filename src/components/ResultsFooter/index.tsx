@@ -23,7 +23,7 @@ const ResultsFooter: React.FC<IResultsFooterProps> = ({
   const currentResult = currentBarcode?.result as string;
   const resultColor =
     currentResult === "invalid"
-      ? "orange"
+      ? colors.test.main
       : testmethod.results.find(
           (result) =>
             result.name.includes(currentResult) || result.name === currentResult
@@ -79,7 +79,6 @@ const ResultsFooter: React.FC<IResultsFooterProps> = ({
                 position: "relative",
                 backgroundColor: resultColor,
                 color: "#fff",
-                borderWidth: 0,
                 cursor: !settings.account.changeResults ? "auto" : "pointer",
               }}
             >

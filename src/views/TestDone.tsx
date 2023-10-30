@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useData } from "../hooks";
-import { Oval } from "react-loader-spinner";
 import { FaCheckCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useResults, useTranslation } from "../hooks";
 import { Block, Button, Text } from "../components";
+import OvalSpinner from "../components/OvalSpinner";
 
 const TestDone = () => {
   const {
@@ -177,7 +177,7 @@ const TestDone = () => {
     return (
       <Block flex column center height={"90%"} alignCenter gap={32}>
         <Block>
-          <Oval height="100" width="100" color="var(--primary)" />
+          <OvalSpinner height="100px" width="100px" />
         </Block>
         <Text h2>{t("results.waitingForResults")}</Text>
         <Text p>{t("results.wait")}</Text>

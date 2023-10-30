@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Oval } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import { parseResults } from "../utils/parseResults";
 import { useData, useTranslation, useResults } from "../hooks";
@@ -24,6 +23,7 @@ import {
 import { IConfigFile, ITestProcedure } from "../types/interfaces/settings";
 import { useTheme } from "../assets/theme";
 import { Bulb } from "../components/Icons";
+import OvalSpinner from "../components/OvalSpinner";
 
 const ViewResults: React.FC = () => {
   const [active, setActive] = useState<number>(0);
@@ -367,9 +367,7 @@ const ViewResults: React.FC = () => {
   } else {
     return (
       <div className="ViewResults">
-        <div className="spinnerContainer">
-          <Oval height={50} width="50" color="var(--primary)" />
-        </div>
+        <OvalSpinner height="50px" width="50px" />
       </div>
     );
   }

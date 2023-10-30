@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Oval } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import { useData, useTranslation } from "../hooks";
 import { IBarcode, IError } from "../types/interfaces/interfaces";
 import { ITestProcedure } from "../types/interfaces/settings";
 import { Alert, Block, Button, Text } from "../components";
+import OvalSpinner from "../components/OvalSpinner";
 
 const TestReady: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -102,9 +102,7 @@ const TestReady: React.FC = () => {
   if (loading) {
     return (
       <div className="TestReady">
-        <div className="spinnerContainer">
-          <Oval height="100" width="100" color="var(--primary)" />
-        </div>
+        <OvalSpinner height="100px" width="100px" />
         <h3>{message}</h3>
       </div>
     );

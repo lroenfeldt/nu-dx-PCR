@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { Text, Toggle } from "../components";
-import { Oval } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import { BsCloudCheckFill } from "react-icons/bs";
 import { PiWarningCircleFill } from "react-icons/pi";
@@ -9,6 +8,7 @@ import { AiFillUsb } from "react-icons/ai";
 import { FaMicroscope, FaCloudUploadAlt, FaCheck } from "react-icons/fa";
 import { useResults, useSticky } from "../hooks";
 import urls from "../config/settings";
+import OvalSpinner from "../components/OvalSpinner";
 
 const ResultList = () => {
   const navigate = useNavigate();
@@ -68,9 +68,7 @@ const ResultList = () => {
             className="button"
             onClick={() => submitResult(result.testid, result.submitted)}
           >
-            <div className="spinnerContainer">
-              <Oval height="30" width="30" color="white" />
-            </div>
+            <OvalSpinner height="30" width="30" />
           </div>
         );
       } else if (!result.isSubmitting) {
@@ -140,9 +138,7 @@ const ResultList = () => {
               className="button"
               onClick={() => saveToUSB(result.testid, result.submitted)}
             >
-              <div className="spinnerContainer">
-                <Oval height="30" width="30" color="white" />
-              </div>
+              <OvalSpinner height="30px" width="30px" />
             </div>
           );
         } else if (result.writingSuccess) {
@@ -278,11 +274,7 @@ const ResultList = () => {
     <div className="ResultList">
       <div id="stickyHeader" className="titleArea">
         <Text h2>{t("resultList.title")}</Text>
-        {(submitting || reading) && (
-          <div className="spinnerContainer">
-            <Oval height="50" width="50" color="var(--primary)" />
-          </div>
-        )}
+        {(submitting || reading) && <OvalSpinner height="50px" width="50px" />}
         <label>
           <Text h4>{t("resultList.onlyPending")}</Text>
           <Toggle

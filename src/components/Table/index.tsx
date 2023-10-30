@@ -14,14 +14,14 @@ const Table: React.FC<ITableProps> = ({ th, tr }) => {
   if (testMethod && !testMethod.showCurves) th.pop();
 
   // Initialize the sticky header
-  // useSticky({ top: 5, id: "stickyHeader", stickyClass: "table" });
-  // const handleSelected = (e: React.MouseEvent) => {
-  //   const selected = document.querySelector(".selected");
-  //   if (selected) selected.classList.remove("selected");
-  //   const target = e.target as Element;
-  //   const row = target.closest("tr");
-  //   if (row) row.classList.add("selected");
-  // };
+  useSticky({ top: 100, id: "stickyHeader", stickyClass: "table" });
+  const handleSelected = (e: React.MouseEvent) => {
+    const selected = document.querySelector(".selected");
+    if (selected) selected.classList.remove("selected");
+    const target = e.target as Element;
+    const row = target.closest("tr");
+    if (row) row.classList.add("selected");
+  };
 
   const containerRef: React.RefObject<HTMLDivElement> = useRef(null);
 
@@ -56,7 +56,7 @@ const Table: React.FC<ITableProps> = ({ th, tr }) => {
   return (
     <div className="table" ref={containerRef}>
       <table>
-        <thead className="header">
+        <thead id="stickyHeader" className="header">
           <tr>
             {th
               .filter((item) => item !== false)

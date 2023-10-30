@@ -82,7 +82,7 @@ const colors = {
 
   progressBar: {
     standby: "#DEE0E3",
-    running: "#50A254",
+    running: "#1172E5",
   },
 
   gradients: {

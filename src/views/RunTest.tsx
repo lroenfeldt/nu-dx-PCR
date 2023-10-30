@@ -3,7 +3,8 @@ import { Block, Button, ProgressBar, Text } from "../components";
 import { useData, useTheme, useTranslation } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import functions from "../utils/functions";
-import { Oval } from "react-loader-spinner";
+import OvalSpinner from "../components/OvalSpinner";
+
 const RunTest = () => {
   const navigate = useNavigate();
   const {
@@ -152,7 +153,7 @@ const RunTest = () => {
         </>
       ) : (
         <Block flex column center height={"80%"} alignCenter gap={32}>
-          <Oval height="100" width="100" color="var(--primary)" />
+          <OvalSpinner height="100px" width="100px" />
           <Text h2>{t("runTest.waitingForResult")}</Text>
         </Block>
       )}

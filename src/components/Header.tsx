@@ -4,12 +4,12 @@ import { BsEject } from "react-icons/bs";
 import { VscSync } from "react-icons/vsc";
 import Settings from "./Settings/Settings";
 import Notifications from "./Notifications";
-import { Oval } from "react-loader-spinner";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FiSettings, FiPower, FiList } from "react-icons/fi";
 import SelectTestResults from "./SelectTestResults/SelectTestResults";
 import { useData, useTranslation, useBackgroundProcesses } from "../hooks";
 import nuDiagnostics from "../assets/Logos/nu-diagnostics/nu-diagnostics white.png";
+import OvalSpinner from "./OvalSpinner";
 
 const Header: FC = () => {
   const {
@@ -45,9 +45,7 @@ const Header: FC = () => {
           {/*<span>nu:dx PCR</span>*/}
         </div>
       ) : (
-        <div className="spinnerContainer">
-          <Oval height="30" width="30" color="white" />
-        </div>
+        <OvalSpinner height="30px" width="30px" />
       ))
     );
   };
