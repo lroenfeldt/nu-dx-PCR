@@ -9,6 +9,8 @@ import { AiFillUsb } from "react-icons/ai";
 import { FaMicroscope, FaCloudUploadAlt, FaCheck } from "react-icons/fa";
 import { useResults, useSticky } from "../hooks";
 import urls from "../config/settings";
+import { errorProps } from "../constants/errorProps";
+
 const ResultList = () => {
   const navigate = useNavigate();
   const {
@@ -24,6 +26,7 @@ const ResultList = () => {
     reading,
     submitting,
     failedSubmittingResults,
+    setErrors,
   } = useData();
   const {
     checkUSB,
@@ -47,6 +50,19 @@ const ResultList = () => {
     navigate("/ViewResults");
   };
 
+  const openError = () => {
+    setErrors((prevErrors) =>
+      prevErrors
+        .filter((error) => error.type !== "submit")
+        .concat({
+          code: errorProps.submit.code,
+          id: errorProps.submit.id,
+          type: "submit",
+          message: t("errors.failedToSaveControlSample"),
+        })
+    );
+  };
+
   //Create Table
 
   let tableRows: any[] = [];
@@ -59,6 +75,7 @@ const ResultList = () => {
       let buttonUSB;
       let buttonSubmit;
       let buttonView;
+      let submittingFailed;
 
       //button for db submit
       if (result.isSubmitting) {
@@ -72,7 +89,10 @@ const ResultList = () => {
             </div>
           </div>
         );
-      } else if (!result.isSubmitting) {
+      } else if (
+        !result.isSubmitting &&
+        !failedSubmittingResults.includes(result.testid)
+      ) {
         buttonSubmit = (
           <div
             className="button"
@@ -81,11 +101,15 @@ const ResultList = () => {
             <FaCheck />
           </div>
         );
+      } else if (failedSubmittingResults.includes(result.testid)) {
+        buttonSubmit = (
+          <div onClick={() => openError()} className="button error">
+            <PiWarningCircleFill size={30} />
+          </div>
+        );
       } else if (offlineMode) {
         buttonSubmit = (
-          <div className="button disabled">
-            <FaCloudUploadAlt />
-          </div>
+          <div className="button disabled">{/* <FaCloudUploadAlt /> */}</div>
         );
       } else if (
         !settings.account.testprocedures.find(
@@ -196,14 +220,13 @@ const ResultList = () => {
           );
         }
       }
-      let submittingFailed;
-      if (failedSubmittingResults.includes(result.testid)) {
-        submittingFailed = (
-          <div className="button error">
-            <PiWarningCircleFill size={30} />
-          </div>
-        );
-      }
+      // if (failedSubmittingResults.includes(result.testid)) {
+      //   submittingFailed = (
+      //     <div onClick={() => openError()} className="button error">
+      //       <PiWarningCircleFill size={30} />
+      //     </div>
+      //   );
+      // }
 
       //Testmethod name
       let testMethodName = "unsupported";
@@ -237,7 +260,7 @@ const ResultList = () => {
             </span>
           </div>
           <div className="buttons">
-            {submittingFailed}
+            {/* {submittingFailed} */}
             {buttonView}
             {buttonSubmit}
             {buttonUSB}

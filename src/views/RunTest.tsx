@@ -45,13 +45,8 @@ const RunTest = () => {
   };
 
   useEffect(() => {
-    const calc = startedAt * 1000 + remTime;
-    const testWhenDone = calc;
+    const testWhenDone = startedAt * 1000 + remTime;
     setTestFinishedAt(testWhenDone);
-    console.log(new Date().toLocaleTimeString("de-DE"));
-    console.log(new Date(testWhenDone).toLocaleTimeString("de-DE"));
-    // converte in cloud new Date(testWhenDone).toLocaleString("de-DE")
-    // for german date and time format
   }, []);
 
   useEffect(() => {
