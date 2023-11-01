@@ -14,6 +14,7 @@ const Errors: React.FC = () => {
     testid,
     setDeviceStatus,
     setErrors,
+    results,
   } = useData();
   const { submitResult } = useResults();
   const { t } = useTranslation();
@@ -138,13 +139,9 @@ const Errors: React.FC = () => {
               >
                 {t("common.retry")}
               </button>
-              {/* <button onClick={() => activateOffline(i)}>
-                {t("common.offline")}
-              </button> */}
               <button
                 onClick={() => {
                   hideError({ index: i });
-                  // navigate("/selectMethod");
                 }}
               >
                 {t("common.close")}

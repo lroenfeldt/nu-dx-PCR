@@ -85,7 +85,7 @@ export function DataProvider({ children }: DataProviderProps) {
    * @returns {void}
    **/
   const reset = useCallback(() => {
-    setTestFinishedAt(0)
+    setTestFinishedAt(0);
     setRemTime(0);
     setErrors([]);
     setTestid("");
@@ -373,8 +373,8 @@ export function DataProvider({ children }: DataProviderProps) {
       setFailedSubmittingResults,
       viewType,
       setViewType,
-      testFinishedAt, 
-      setTestFinishedAt
+      testFinishedAt,
+      setTestFinishedAt,
     }),
     [
       openResults,
@@ -470,8 +470,8 @@ export function DataProvider({ children }: DataProviderProps) {
       setFailedSubmittingResults,
       viewType,
       setViewType,
-      testFinishedAt, 
-      setTestFinishedAt
+      testFinishedAt,
+      setTestFinishedAt,
     ]
   );
   return (

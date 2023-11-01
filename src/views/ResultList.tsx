@@ -10,6 +10,7 @@ import { FaMicroscope, FaCloudUploadAlt, FaCheck } from "react-icons/fa";
 import { useResults, useSticky } from "../hooks";
 import urls from "../config/settings";
 import { errorProps } from "../constants/errorProps";
+import { error } from "console";
 
 const ResultList = () => {
   const navigate = useNavigate();
@@ -64,7 +65,6 @@ const ResultList = () => {
   };
 
   //Create Table
-
   let tableRows: any[] = [];
   results
     .sort(
@@ -96,7 +96,10 @@ const ResultList = () => {
         buttonSubmit = (
           <div
             className="button"
-            onClick={() => submitResult(result.testid, result.submitted)}
+            onClick={() => {
+              submitResult(result.testid, result.submitted);
+              setTestid(result.testid);
+            }}
           >
             <FaCheck />
           </div>
