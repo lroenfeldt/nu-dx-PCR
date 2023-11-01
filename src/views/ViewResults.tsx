@@ -279,7 +279,7 @@ const ViewResults: React.FC = () => {
                               key={barcode.id.toString()}
                               height={36}
                               radius={8}
-                              width="125px"
+                              padding="0 16px"
                               style={{
                                 ...(barcode.alteredResult && {
                                   border: `3px solid ${colors.text.default}`,
@@ -315,9 +315,9 @@ const ViewResults: React.FC = () => {
                                   : (testmethod
                                       ? testmethod.results.find((result) =>
                                           result.name.includes(barcode.result)
-                                        )?.["label" + locale?.toUpperCase()]
+                                        )?.["label" + locale?.toLowerCase()]
                                       : undefined) ||
-                                    barcode.result.toUpperCase()}
+                                    barcode.result.toLowerCase()}
                               </Text>
 
                               <AlteredResult

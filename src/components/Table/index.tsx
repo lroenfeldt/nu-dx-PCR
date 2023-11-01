@@ -2,7 +2,6 @@ import React, { useRef, useEffect } from "react";
 import { useData, useSticky } from "../../hooks";
 import "./css/table.css";
 import { ITableProps } from "../../types/interfaces/interfaces";
-import { Text } from "..";
 
 const Table: React.FC<ITableProps> = ({ th, tr }) => {
   const { settings, selectedMethod } = useData();
@@ -15,6 +14,7 @@ const Table: React.FC<ITableProps> = ({ th, tr }) => {
 
   // Initialize the sticky header
   useSticky({ top: 100, id: "stickyHeader", stickyClass: "table" });
+
   const handleSelected = (e: React.MouseEvent) => {
     const selected = document.querySelector(".selected");
     if (selected) selected.classList.remove("selected");
@@ -30,7 +30,7 @@ const Table: React.FC<ITableProps> = ({ th, tr }) => {
       if (containerRef.current) {
         const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
 
-        document.querySelector(".fade-out");
+        const fadeOut = document.querySelector(".fade-out");
         if (scrollLeft + clientWidth >= scrollWidth) {
           containerRef.current.classList.add("end-reached");
         } else {
@@ -63,21 +63,19 @@ const Table: React.FC<ITableProps> = ({ th, tr }) => {
               .filter((item) => typeof item !== undefined)
               .map((item, i) => (
                 <th key={`th-${i}`} className="th">
-                  <Text h4 white>
-                    {" "}
-                    {item}
-                  </Text>
+                  {item}
                 </th>
               ))}
           </tr>
         </thead>
-
         <tbody>
           {tr
+
             .filter((item) => typeof item !== undefined)
             .map((element, index) => {
               // Remove the last element in the row if showCurves is false
               if (testMethod && !testMethod.showCurves) element.pop();
+
               return (
                 <tr
                   key={`tr-${index}`}
@@ -89,7 +87,7 @@ const Table: React.FC<ITableProps> = ({ th, tr }) => {
                     .filter((item) => typeof item !== undefined)
                     .map((item, i) => (
                       <td key={`row-${index}-${i}`} className="row">
-                        <Text h4> {item ? item : "-"}</Text>
+                        {item ? item : "-"}
                       </td>
                     ))}
                 </tr>

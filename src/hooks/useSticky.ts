@@ -2,7 +2,7 @@ import { useEffect, useCallback, useState } from "react";
 import { IUseStick } from "../types/interfaces/interfaces";
 
 const useSticky = ({ top, id, stickyClass }: IUseStick) => {
-  const [_isSticky, setIsSticky] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
 
   const handleScroll = useCallback(() => {
     if (window.scrollY > top) {
