@@ -32,7 +32,6 @@ export const useStatus = (): UseStatusReturnType => {
         testFinishedAt
       );
       const responseData = response.data as ISettings;
-      console.log(new Date(testFinishedAt).toLocaleTimeString("de-DE"));
       if (response.ok) {
         let newSettings = {
           ...settings,
