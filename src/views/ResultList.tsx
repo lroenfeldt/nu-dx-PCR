@@ -10,7 +10,6 @@ import { FaMicroscope, FaCloudUploadAlt, FaCheck } from "react-icons/fa";
 import { useResults, useSticky } from "../hooks";
 import urls from "../config/settings";
 import { errorProps } from "../constants/errorProps";
-import { error } from "console";
 
 const ResultList = () => {
   const navigate = useNavigate();
@@ -223,13 +222,6 @@ const ResultList = () => {
           );
         }
       }
-      // if (failedSubmittingResults.includes(result.testid)) {
-      //   submittingFailed = (
-      //     <div onClick={() => openError()} className="button error">
-      //       <PiWarningCircleFill size={30} />
-      //     </div>
-      //   );
-      // }
 
       //Testmethod name
       let testMethodName = "unsupported";
