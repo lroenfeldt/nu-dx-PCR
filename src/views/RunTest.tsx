@@ -27,11 +27,11 @@ const RunTest = () => {
   const { t } = useTranslation();
   const [startedAt, setStartedAt] = useState(Math.floor(Date.now() / 1000));
   const startTime = demo ? 360 : testDuration;
-  const finishedAt = startedAt + startTime;
   const [remTime, setRemTime] = useState(startTime);
   const [waitingForResults, setWaitingForResults] = useState(false);
   const [resultPresent, setResultPresent] = useState(false);
   const [flapClosed, setFlapClosed] = useState(true);
+  const finishedAt = startedAt + startTime;
 
   const showCancel = () => {
     let newErrors = errors.filter((error) => error.type !== "cancelTest");
@@ -45,8 +45,7 @@ const RunTest = () => {
   };
 
   useEffect(() => {
-    const testWhenDone = startedAt * 1000 + remTime;
-    setTestFinishedAt(testWhenDone);
+    setTestFinishedAt(finishedAt * 1000);
   }, []);
 
   useEffect(() => {
