@@ -50,12 +50,6 @@ export interface IChangeResults {
   isTable?: boolean;
 }
 
-export interface ICheckmark {
-  barcode: IBarcode | IActiveBarcode;
-  style?: React.CSSProperties;
-  isNinetySix?: boolean;
-}
-
 export interface IBarcode {
   isControl?: boolean | null;
   position?: string;

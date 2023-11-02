@@ -1,71 +1,37 @@
-import { IoClose, IoCheckmarkSharp } from 'react-icons/io5';
-import { ICheckmark } from '../types/interfaces/interfaces';
+import { IoClose, IoCheckmarkSharp } from "react-icons/io5";
+import { ICheckmark } from "../types/components";
 
-const Checkmark = ({ barcode, style }: ICheckmark) => {
-  if (barcode?.label === 'NTC' && barcode?.result == 'negative') {
-    return (
-      <div
-        className={`checkmark`}
-        style={{
-          backgroundColor: 'var(--green)',
-          ...style,
-        }}
-      >
-        <IoCheckmarkSharp
+const Checkmark = ({ barcode, style, testmethod }: ICheckmark) => {
+  testmethod.controlSamples.map((sample, index) => {
+    if (sample.expectedResult == barcode.result) {
+      return (
+        <div
+          className={`checkmark`}
           style={{
-            fontSize: 'smaller',
+            backgroundColor: "var(--green)",
+            ...style,
           }}
-        />
-      </div>
-    );
-  }
-
-  if (barcode?.label === 'NTC' && barcode?.result != 'negative') {
-    return (
-      <div
-        className={`checkmark`}
-        style={{
-          backgroundColor: 'var(--red)',
-          ...style,
-        }}
-      >
-        <IoClose />
-      </div>
-    );
-  }
-
-  if (barcode?.label === 'TPC' && barcode?.result === 'positive') {
-    return (
-      <div
-        className={`checkmark`}
-        style={{
-          backgroundColor: 'var(--green)',
-          ...style,
-        }}
-      >
-        <IoCheckmarkSharp
+        >
+          <IoCheckmarkSharp
+            style={{
+              fontSize: "smaller",
+            }}
+          />
+        </div>
+      );
+    } else
+      return (
+        <div
+          className={`checkmark`}
           style={{
-            fontSize: 'smaller',
+            backgroundColor: "var(--red)",
+            ...style,
           }}
-        />
-      </div>
-    );
-  }
-
-  if (barcode?.label === 'TPC' && barcode?.result != 'positive') {
-    return (
-      <div
-        className={`checkmark`}
-        style={{
-          backgroundColor: 'var(--red)',
-          ...style,
-        }}
-      >
-        <IoClose />
-      </div>
-    );
-  }
-  return null;
+        >
+          <IoClose />
+        </div>
+      );
+  });
 };
 
 export default Checkmark;

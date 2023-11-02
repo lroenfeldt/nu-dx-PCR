@@ -65,7 +65,7 @@ export interface IAccount {
   orderLabelHeightMM: number | null;
   authToken: string;
   initialized: boolean;
-  preregisterControlSamples: boolean;
+  preregister: boolean;
   verifyBarcodes: boolean;
 }
 
@@ -103,6 +103,19 @@ export interface ITestProcedure {
   additionalAttributes: any[];
   parameters: ITestParameter[];
   parameter: ITestParameterMapping;
+  controlSamples: IControlSample[];
+}
+
+export interface IControlSample {
+  id: string;
+  name: string;
+  label: string;
+  expectedResult: string;
+  position16: string;
+  position96: string;
+  barcodes: IBarcode[];
+  testTypeId: string;
+  order: number;
 }
 
 export interface ITestParameterMapping {

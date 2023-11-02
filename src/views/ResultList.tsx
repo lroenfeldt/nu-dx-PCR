@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Toggle } from "../components";
 import { Oval } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
@@ -96,8 +96,8 @@ const ResultList = () => {
           <div
             className="button"
             onClick={() => {
-              submitResult(result.testid, result.submitted);
               setTestid(result.testid);
+              submitResult(result.testid, result.submitted);
             }}
           >
             <FaCheck />
