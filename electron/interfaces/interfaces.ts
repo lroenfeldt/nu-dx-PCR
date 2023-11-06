@@ -46,18 +46,6 @@ export interface AccountSettings {
     emailConfirmedAt: string;
     role: Role;
   };
-  controlSamples: IControlSample[];
-}
-export interface IControlSample {
-  id: string;
-  name: string;
-  label: string;
-  expectedResult: string;
-  position16: string;
-  position96: string;
-  barcodes: IBarcode[];
-  testTypeId: string;
-  order: number;
 }
 
 export interface UserSettings {

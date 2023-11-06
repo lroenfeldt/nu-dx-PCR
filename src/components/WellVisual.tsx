@@ -57,7 +57,11 @@ const WellVisual: FC<IWellVisualProps> = ({
         }}
       >
         <div>
-          <span>{barcode.label}</span>
+          {testmethod.controlSamples.map((sample, index) => {
+            if (sample.label) {
+              return <span key={index}>{sample.label}</span>;
+            } else return <span key={index}>{barcode.label}</span>;
+          })}
           <br />
           {testmethod.parameters.map((testparameter) => {
             if (
@@ -82,7 +86,11 @@ const WellVisual: FC<IWellVisualProps> = ({
         <div key={barcode.label.toString()} className="spinnerContainer">
           <TailSpin height="70" width="70" color="white" />
         </div>
-        <Checkmark barcode={barcode} isNinetySix={isNinetySix} />
+        <Checkmark
+          testmethod={testmethod}
+          barcode={barcode}
+          isNinetySix={isNinetySix}
+        />
       </div>
     );
   } else {

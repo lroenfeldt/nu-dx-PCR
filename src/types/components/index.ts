@@ -1,6 +1,7 @@
 import { ReactNode, CSSProperties, ButtonHTMLAttributes } from "react";
 import { IAccountUser, ITestProcedure } from "../interfaces/settings";
 import { IActiveBarcode, IBarcode } from "../interfaces/interfaces";
+import { ITestMethod } from "../interfaces/parseResults";
 
 export interface TBlockProps {
   row?: boolean;
@@ -268,11 +269,4 @@ export interface IText {
   paddingVertical?: number;
   paddingRight?: number;
   paddingLeft?: number;
-}
-
-export interface ICheckmark {
-  barcode: IBarcode | IActiveBarcode;
-  style?: React.CSSProperties;
-  isNinetySix?: boolean;
-  testmethod: ITestProcedure;
 }

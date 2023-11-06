@@ -135,7 +135,7 @@ const ViewResults: React.FC = () => {
       });
 
       //console.log(newBarcodes);
-      console.log(newBarcodes);
+
       setBarcodes(newBarcodes as IBarcode[]);
       setTestLoaded(true);
       setActive((prevActive) => (prevActive == 0 ? 1 : prevActive));
@@ -269,7 +269,7 @@ const ViewResults: React.FC = () => {
                   })) ||
                   []),
                 t("common.result"),
-                testmethod && testmethod.showResults ? "" : "",
+                testmethod && testmethod.showResults ? "Graph" : "",
               ]}
               tr={
                 [
@@ -311,12 +311,7 @@ const ViewResults: React.FC = () => {
                               ...(barcode.alteredResult && {
                                 border: "1px solid orange",
                               }),
-                              position:
-                                barcode.alteredResult ||
-                                barcode.label == "NTC" ||
-                                barcode.label == "TPC"
-                                  ? "relative"
-                                  : undefined,
+                              position: "relative",
                               color:
                                 barcode.result == "invalid"
                                   ? "orange"
@@ -363,7 +358,9 @@ const ViewResults: React.FC = () => {
                                 height: "100%",
                               }}
                             />
+
                             <Checkmark
+                              testmethod={testmethod}
                               barcode={barcode}
                               style={{
                                 top: 20,

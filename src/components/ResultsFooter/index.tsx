@@ -110,6 +110,7 @@ const ResultsFooter: React.FC<ResultsFooterProps> = ({
               testmethod={testmethod}
             />
             <Checkmark
+              testmethod={testmethod}
               barcode={
                 barcodes.filter((barcode) => barcode.id == activeBarcode.id)[0]
               }

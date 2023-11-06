@@ -38,6 +38,13 @@ export interface IAlteredResult {
   style?: React.CSSProperties;
 }
 
+export interface ICheckmark {
+  barcode: IBarcode | IActiveBarcode;
+  style?: React.CSSProperties;
+  isNinetySix?: boolean;
+  testmethod: ITestMethod;
+}
+
 export interface IArrowBox {
   children: JSX.Element;
   style?: React.CSSProperties;

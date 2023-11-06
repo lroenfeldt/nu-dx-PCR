@@ -1,11 +1,18 @@
 import { IoClose, IoCheckmarkSharp } from "react-icons/io5";
-import { ICheckmark } from "../types/components";
+import { ICheckmark } from "../types/interfaces/interfaces";
+import { useData } from "../hooks";
 
 const Checkmark = ({ barcode, style, testmethod }: ICheckmark) => {
-  testmethod.controlSamples.map((sample, index) => {
-    if (sample.expectedResult == barcode.result) {
+  const { isNinetySix } = useData();
+  return testmethod.controlSamples.map((sample, index) => {
+    const position = isNinetySix ? sample.position96 : sample.position16;
+    if (
+      (position == barcode?.label || sample.label == barcode?.label) &&
+      sample.expectedResult == barcode?.result
+    ) {
       return (
         <div
+          key={index}
           className={`checkmark`}
           style={{
             backgroundColor: "var(--green)",
@@ -19,9 +26,13 @@ const Checkmark = ({ barcode, style, testmethod }: ICheckmark) => {
           />
         </div>
       );
-    } else
+    } else if (
+      (position == barcode?.label || sample.label == barcode?.label) &&
+      sample.expectedResult !== barcode?.result
+    ) {
       return (
         <div
+          key={index}
           className={`checkmark`}
           style={{
             backgroundColor: "var(--red)",
@@ -31,6 +42,7 @@ const Checkmark = ({ barcode, style, testmethod }: ICheckmark) => {
           <IoClose />
         </div>
       );
+    }
   });
 };
 
