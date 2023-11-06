@@ -159,13 +159,28 @@ export const parseResults: TParseResults = (
     parsedResultsData[position].oldResult = "";
     parsedResultsData[position].isControl = false;
     //Set labels for Controls
+    if (
+      [
+        "Placeholder_NTC",
+        "SC2NTC",
+        "NTC",
+        "Placeholder_TPC",
+        "SC2TPC",
+        "TPC",
+      ].includes(barcode) ||
+      barcode.slice(0, 3) == "TPC" ||
+      barcode.slice(0, 3) == "NTC"
+    ) {
+      parsedResultsData[position].isControl = true;
+    }
     if (["Placeholder_NTC", "SC2NTC", "NTC"].includes(barcode)) {
       parsedResultsData[position].label = "NTC";
-      parsedResultsData[position].isControl = true;
     }
     if (["Placeholder_TPC", "SC2TPC", "TPC"].includes(barcode)) {
       parsedResultsData[position].label = "TPC";
-      parsedResultsData[position].isControl = true;
+    }
+    if (["TPC1", "TPC2"].includes(barcode)) {
+      parsedResultsData[position].label = barcode;
     }
   });
 

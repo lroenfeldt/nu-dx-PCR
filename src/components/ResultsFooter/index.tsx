@@ -35,7 +35,7 @@ const ResultsFooter: React.FC<ResultsFooterProps> = ({
         align={"center"}
         shadow
       >
-        <h4>{activeBarcode.value} </h4>
+        <h4>{activeBarcode.value}</h4>
       </Block>
       {testmethod.showResults && (
         <div

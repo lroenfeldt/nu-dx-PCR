@@ -57,11 +57,17 @@ const WellVisual: FC<IWellVisualProps> = ({
         }}
       >
         <div>
-          {testmethod.controlSamples.map((sample, index) => {
-            if (sample.label) {
-              return <span key={index}>{sample.label}</span>;
-            } else return <span key={index}>{barcode.label}</span>;
-          })}
+          <span>
+            {testmethod.controlSamples.find((sample) => {
+              const position = isNinetySix
+                ? sample.position96
+                : sample.position16;
+              return (
+                position == barcode?.label || sample.label == barcode?.label
+              );
+            })?.label || barcode.label}
+          </span>
+
           <br />
           {testmethod.parameters.map((testparameter) => {
             if (
