@@ -153,7 +153,7 @@ const RunTest = () => {
         </>
       ) : (
         <Block flex column center height={"80%"} alignCenter gap={32}>
-          <OvalSpinner height="100px" width="100px" />
+          <OvalSpinner size="100px" />
           <Text h2>{t("runTest.waitingForResult")}</Text>
         </Block>
       )}

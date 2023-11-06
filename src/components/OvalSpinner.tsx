@@ -8,8 +8,8 @@ function OvalSpinner(props: IOvalSPinner) {
   return (
     <Block flex center>
       <Oval
-        height={props.height}
-        width={props.width}
+        height={props.size}
+        width={props.size}
         color={colors.progressBar.running}
         secondaryColor={colors.progressBar.standby}
       />

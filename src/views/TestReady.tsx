@@ -102,7 +102,7 @@ const TestReady: React.FC = () => {
   if (loading) {
     return (
       <div className="TestReady">
-        <OvalSpinner height="100px" width="100px" />
+        <OvalSpinner size="100px" />
         <h3>{message}</h3>
       </div>
     );

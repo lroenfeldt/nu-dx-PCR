@@ -177,7 +177,7 @@ const TestDone = () => {
     return (
       <Block flex column center height={"90%"} alignCenter gap={32}>
         <Block>
-          <OvalSpinner height="100px" width="100px" />
+          <OvalSpinner size="100px" />
         </Block>
         <Text h2>{t("results.waitingForResults")}</Text>
         <Text p>{t("results.wait")}</Text>

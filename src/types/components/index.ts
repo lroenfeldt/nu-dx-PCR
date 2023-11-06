@@ -344,6 +344,5 @@ export interface TLabelProps {
 }
 
 export interface IOvalSPinner {
-  height: string;
-  width: string;
+  size: string;
 }

@@ -45,7 +45,7 @@ const Header: FC = () => {
           {/*<span>nu:dx PCR</span>*/}
         </div>
       ) : (
-        <OvalSpinner height="30px" width="30px" />
+        <OvalSpinner size="30px" />
       ))
     );
   };

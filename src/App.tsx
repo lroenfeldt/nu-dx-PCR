@@ -1,5 +1,5 @@
 import "./App.css";
-import { Layout } from "./components";
+import { Block, Layout } from "./components";
 import {
   Route,
   Routes,
@@ -27,9 +27,17 @@ import OvalSpinner from "./components/OvalSpinner";
 function App() {
   if (typeof window.api == "undefined" && window.api !== undefined) {
     return (
-      <div className="App">
-        <OvalSpinner height="100px" width="100px" />
-      </div>
+      <Block
+        align="center"
+        black
+        width={"100vw"}
+        height={"100vh"}
+        flex
+        column
+        center
+      >
+        <OvalSpinner size="100px" />
+      </Block>
     );
   }
 

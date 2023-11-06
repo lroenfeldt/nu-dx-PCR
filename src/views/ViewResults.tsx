@@ -367,7 +367,7 @@ const ViewResults: React.FC = () => {
   } else {
     return (
       <div className="ViewResults">
-        <OvalSpinner height="50px" width="50px" />
+        <OvalSpinner size="50px" />
       </div>
     );
   }

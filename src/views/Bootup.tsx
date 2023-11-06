@@ -165,7 +165,7 @@ const Bootup = () => {
 
   return (
     <Block flex column center height={"90%"} alignCenter>
-      <OvalSpinner height="100px" width="100px" />
+      <OvalSpinner size="100px" />
       <Block marginTop={24}></Block>
       <Text h2>{t("bootup.deviceStart")}</Text>
     </Block>

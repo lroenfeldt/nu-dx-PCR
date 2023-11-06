@@ -68,7 +68,7 @@ const ResultList = () => {
             className="button"
             onClick={() => submitResult(result.testid, result.submitted)}
           >
-            <OvalSpinner height="30" width="30" />
+            <OvalSpinner size="30px" />
           </div>
         );
       } else if (!result.isSubmitting) {
@@ -138,7 +138,7 @@ const ResultList = () => {
               className="button"
               onClick={() => saveToUSB(result.testid, result.submitted)}
             >
-              <OvalSpinner height="30px" width="30px" />
+              <OvalSpinner size="30px" />
             </div>
           );
         } else if (result.writingSuccess) {
