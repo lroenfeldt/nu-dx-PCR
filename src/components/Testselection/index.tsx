@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import Next from "./../Icons/Next";
 import Prev from "./../Icons/Prev";
 import Testsmethod from "./Testmethod";
-import { useData, useTranslation } from "../../hooks";
+import { useData, useTheme, useTranslation } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 import rsv from "../../assets/images/tests/rsv.png";
 import covid from "../../assets/images/tests/covid.png";
@@ -13,6 +13,7 @@ import PaginationBullets from "./PaginationBullets";
 import ModalTestInfo from "../ModalTestInfo/ModalTestInfo";
 
 const Testselection = () => {
+  const { colors } = useTheme();
   const testSelectionRef = useRef<HTMLDivElement>(null);
   const { testrun, settings } = useData();
   const [currentPage, setCurrentPage] = useState(0);
@@ -103,28 +104,34 @@ const Testselection = () => {
         <Block padding={"0px 22px"} marginBottom={20}>
           <Text h1>{t("common.testSelection")}</Text>
         </Block>
-        {currentPage !== lastPage && (
-          <Block
-            position="fixed"
-            top="50%"
-            right={0}
-            transform="translateY(-50%)"
-            transition="all 0.3s ease-in-out"
-            border="0px solid transparent"
-            cursor
-            onMouseDown={() => setScrolling("right")}
-            onClick={() => scroll("right")}
-            onMouseUp={() => setScrolling(null)}
-          >
-            <Next />
-          </Block>
-        )}
+
+        <Block
+          position="fixed"
+          top="50%"
+          right={0}
+          transform="translateY(-50%)"
+          transition="all 0.3s ease-in-out"
+          border="0px solid transparent"
+          cursor
+          onMouseDown={() => setScrolling("right")}
+          onClick={() => scroll("right")}
+          onMouseUp={() => setScrolling(null)}
+        >
+          <Next
+            color={
+              currentPage == lastPage
+                ? colors.primary.disabled
+                : colors.primary.main
+            }
+            disabled={currentPage == lastPage ? true : false}
+          />
+        </Block>
+
         <Block
           paddingLeft={45}
           paddingRight={45}
           grid
           gap={45}
-          spaceBetween
           inlineFlex
           height="auto"
           width="100%"
@@ -145,22 +152,27 @@ const Testselection = () => {
             />
           ))}
         </Block>
-        {currentPage !== 0 && (
-          <Block
-            position="fixed"
-            top="50%"
-            left={0}
-            transform="translateY(-50%)"
-            transition="all 0.3s ease-in-out"
-            border="0px solid transparent"
-            cursor
-            onMouseDown={() => setScrolling("left")}
-            onClick={() => scroll("left")}
-            onMouseUp={() => setScrolling(null)}
-          >
-            <Prev />
-          </Block>
-        )}
+
+        <Block
+          position="fixed"
+          top="50%"
+          left={0}
+          transform="translateY(-50%)"
+          transition="all 0.3s ease-in-out"
+          border="0px solid transparent"
+          cursor
+          onMouseDown={() => setScrolling("left")}
+          onClick={() => scroll("left")}
+          onMouseUp={() => setScrolling(null)}
+        >
+          <Prev
+            color={
+              currentPage == 0 ? colors.primary.disabled : colors.primary.main
+            }
+            disabled={currentPage == 0 ? true : false}
+          />
+        </Block>
+
         {testsCount > 3 && (
           <PaginationBullets
             numberOfPages={numberOfPages || 0}
