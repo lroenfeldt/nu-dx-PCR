@@ -67,6 +67,7 @@ export interface IAccount {
   initialized: boolean;
   preregister: boolean;
   verifyBarcodes: boolean;
+  preregisterControlSamples: boolean;
 }
 
 export interface IAccountData {

@@ -30,6 +30,7 @@ export const useStatus = (): UseStatusReturnType => {
         errors,
         testid,
         testFinishedAt
+        // device status nutze um null oder timestamp zu senden
       );
       const responseData = response.data as ISettings;
       if (response.ok) {
