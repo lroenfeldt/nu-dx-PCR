@@ -78,14 +78,14 @@ export function DataProvider({ children }: DataProviderProps) {
   >([]);
   const [viewType, setViewType] = useState("sample");
   const [remTime, setRemTime] = useState(0);
-  const [testFinishedAt, setTestFinishedAt] = useState(0);
+  const [testFinishedAt, setTestFinishedAt] = useState(null);
 
   /**
    * Resets values to default
    * @returns {void}
    **/
   const reset = useCallback(() => {
-    setTestFinishedAt(0);
+    setTestFinishedAt(null);
     setRemTime(0);
     setErrors([]);
     setTestid("");

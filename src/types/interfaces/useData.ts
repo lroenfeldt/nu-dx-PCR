@@ -142,6 +142,6 @@ export interface IUseData {
   viewType: string;
   setViewType: React.Dispatch<React.SetStateAction<string>>;
 
-  testFinishedAt: number
-  setTestFinishedAt: React.Dispatch<React.SetStateAction<number>>;
+  testFinishedAt: number | null;
+  setTestFinishedAt: React.Dispatch<React.SetStateAction<number | null>>;
 }
