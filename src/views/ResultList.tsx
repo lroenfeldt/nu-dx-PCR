@@ -279,7 +279,10 @@ const ResultList = () => {
   useSticky({ top: 70, id: "stickyHeader", stickyClass: "ResultList" });
   return (
     <div className="ResultList">
-      <div id="stickyHeader" className="titleArea">
+      <div
+        // id="stickyHeader"
+        className="titleArea"
+      >
         <h2>{t("resultList.title")}</h2>
         {(submitting || reading) && (
           <div className="spinnerContainer">
