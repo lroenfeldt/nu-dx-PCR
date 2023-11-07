@@ -8,9 +8,9 @@ import rsv from "../../assets/images/tests/rsv.png";
 import covid from "../../assets/images/tests/covid.png";
 import hepatitis from "../../assets/images/tests/hepatitis.png";
 import { Block, Text } from "..";
-import { Modal } from "..";
 import TestInfos from "./TestInfos";
 import PaginationBullets from "./PaginationBullets";
+import ModalTestInfo from "../ModalTestInfo/ModalTestInfo";
 
 const Testselection = () => {
   const testSelectionRef = useRef<HTMLDivElement>(null);
@@ -25,9 +25,12 @@ const Testselection = () => {
   const totalContentWidth = el?.scrollWidth;
   const pageWidth = el?.offsetWidth;
   const testsCount = settings.account.testprocedures.length;
+
   const numberOfPages =
     totalContentWidth && pageWidth && Math.ceil(totalContentWidth / pageWidth);
   const navigate = useNavigate();
+  const lastPage = (numberOfPages as number) - 1;
+
   const scroll = (direction: "left" | "right") => {
     const el = testSelectionRef.current;
     if (!el) return;
@@ -35,7 +38,6 @@ const Testselection = () => {
     const pageWidth = el.offsetWidth - 44;
     const scrollAmount = direction === "left" ? -pageWidth : pageWidth;
     const newPage = direction === "left" ? currentPage - 1 : currentPage + 1;
-    console.log(newPage);
 
     el.scrollTo({
       left: el.scrollLeft + scrollAmount,
@@ -44,6 +46,7 @@ const Testselection = () => {
     if (numberOfPages && (newPage < 0 || newPage > numberOfPages - 1)) return;
     setCurrentPage(newPage);
   };
+
   const goToPage = (pageIndex: number) => {
     const el = testSelectionRef.current;
     if (!el) return;
@@ -90,20 +93,37 @@ const Testselection = () => {
   return (
     <Block flex width={"100%"} height={"100%"}>
       <Block flex column center align="flex-start" width={"100%"}>
-        <Modal isVisible={isVisible} setIsvisible={setIsvisible}>
+        <ModalTestInfo isVisible={isVisible} setIsvisible={setIsvisible}>
           <TestInfos
             onClose={() => setIsvisible(false)}
             selectTest={selectTest}
           />
-        </Modal>
+        </ModalTestInfo>
 
         <Block padding={"0px 22px"} marginBottom={20}>
           <Text h1>{t("common.testSelection")}</Text>
         </Block>
+        {currentPage !== lastPage && (
+          <Block
+            position="fixed"
+            top="50%"
+            right={0}
+            transform="translateY(-50%)"
+            transition="all 0.3s ease-in-out"
+            border="0px solid transparent"
+            cursor
+            onMouseDown={() => setScrolling("right")}
+            onClick={() => scroll("right")}
+            onMouseUp={() => setScrolling(null)}
+          >
+            <Next />
+          </Block>
+        )}
         <Block
           paddingLeft={45}
           paddingRight={45}
           grid
+          gap={45}
           spaceBetween
           inlineFlex
           height="auto"
@@ -114,23 +134,6 @@ const Testselection = () => {
           align="flex-start"
           scrollX
         >
-          {testsCount > 3 && (
-            <Block
-              position="fixed"
-              top="50%"
-              right={0}
-              transform="translateY(-50%)"
-              transition="all 0.3s ease-in-out"
-              border="0px solid transparent"
-              cursor
-              onMouseDown={() => setScrolling("right")}
-              onClick={() => scroll("right")}
-              onMouseUp={() => setScrolling(null)}
-            >
-              <Next />
-            </Block>
-          )}
-
           {settings.account.testprocedures.map((test, i) => (
             <Testsmethod
               key={i}
@@ -141,30 +144,30 @@ const Testselection = () => {
               openInfos={() => setIsvisible(true)}
             />
           ))}
-          {testsCount > 3 && (
-            <Block
-              position="fixed"
-              top="50%"
-              left={0}
-              transform="translateY(-50%)"
-              transition="all 0.3s ease-in-out"
-              border="0px solid transparent"
-              cursor
-              onMouseDown={() => setScrolling("left")}
-              onClick={() => scroll("left")}
-              onMouseUp={() => setScrolling(null)}
-            >
-              <Prev />
-            </Block>
-          )}
-          {testsCount > 3 && (
-            <PaginationBullets
-              numberOfPages={numberOfPages || 0}
-              currentPage={currentPage}
-              goToPage={goToPage}
-            />
-          )}
         </Block>
+        {currentPage !== 0 && (
+          <Block
+            position="fixed"
+            top="50%"
+            left={0}
+            transform="translateY(-50%)"
+            transition="all 0.3s ease-in-out"
+            border="0px solid transparent"
+            cursor
+            onMouseDown={() => setScrolling("left")}
+            onClick={() => scroll("left")}
+            onMouseUp={() => setScrolling(null)}
+          >
+            <Prev />
+          </Block>
+        )}
+        {testsCount > 3 && (
+          <PaginationBullets
+            numberOfPages={numberOfPages || 0}
+            currentPage={currentPage}
+            goToPage={goToPage}
+          />
+        )}
       </Block>
     </Block>
   );

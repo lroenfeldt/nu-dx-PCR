@@ -1,13 +1,17 @@
 import React, { useEffect, FC } from "react";
-import useModalStyle from "./useModalStyle";
+import useModalTestInfoStyle from "./useModalTestInfo";
 
-interface ModalProps {
+interface ModalTestInfoPros {
   children: JSX.Element;
   isVisible: boolean;
   setIsvisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const Modal: FC<ModalProps> = ({ children, isVisible, setIsvisible }) => {
-  const styles = useModalStyle();
+const ModalTestInfo: FC<ModalTestInfoPros> = ({
+  children,
+  isVisible,
+  setIsvisible,
+}) => {
+  const styles = useModalTestInfoStyle();
   useEffect(() => {
     var modal = document.getElementById("modal");
 
@@ -31,4 +35,4 @@ const Modal: FC<ModalProps> = ({ children, isVisible, setIsvisible }) => {
   );
 };
 
-export default Modal;
+export default ModalTestInfo;
