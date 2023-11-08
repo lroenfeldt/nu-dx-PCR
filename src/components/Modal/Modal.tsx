@@ -9,7 +9,7 @@ interface ModalProps {
 const Modal: FC<ModalProps> = ({ children, isVisible, setIsvisible }) => {
   const styles = useModalStyle();
   useEffect(() => {
-    var modal = document.getElementById("modal");
+    let modal = document.getElementById("modal");
 
     window.onclick = function (event) {
       if (modal && event.target == modal) {

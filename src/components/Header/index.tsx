@@ -142,12 +142,18 @@ const Header = () => {
           }
         />
       </Block>
-      <Modal isVisible={controlMenu} setIsvisible={() => setControlMenu(false)}>
-        <ControlMenu onClose={() => setControlMenu(false)} />
-      </Modal>
-      <Modal isVisible={menuOpen} setIsvisible={() => closeBoth()}>
-        <Menu onClose={() => setMenuOpen(false)} />
-      </Modal>
+      {controlMenu ? (
+        <Modal
+          isVisible={controlMenu}
+          setIsvisible={() => setControlMenu(false)}
+        >
+          <ControlMenu onClose={() => setControlMenu(false)} />
+        </Modal>
+      ) : menuOpen ? (
+        <Modal isVisible={menuOpen} setIsvisible={() => closeBoth()}>
+          <Menu onClose={() => setMenuOpen(false)} />
+        </Modal>
+      ) : null}
     </Block>
   );
 };
