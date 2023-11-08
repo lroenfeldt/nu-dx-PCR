@@ -321,6 +321,12 @@ export interface MenuItemProps {
   iconProps?: Record<string | number, string | number>;
   onClick: () => void;
 }
+export interface ControlMenuItemProps {
+  IconComponent: React.FC<any>;
+  label: string;
+  iconProps?: Record<string | number, string | number>;
+  onClick: () => void;
+}
 export enum Menus {
   MAIN = "main",
   HELP = "help",

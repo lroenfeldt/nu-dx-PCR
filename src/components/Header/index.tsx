@@ -8,18 +8,44 @@ import { Block, List, Menu, Modal, Proben, Text } from "..";
 import { useTheme } from "../../assets/theme";
 import ViewTypeOption from "./ViewTypeOption";
 import { Menus } from "../../types/components";
+import ControlMenu from "../controlMenu";
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { viewType, setViewType, setCurrentMenu, menuOpen, setMenuOpen } =
-    useData();
+  const {
+    viewType,
+    setViewType,
+    setCurrentMenu,
+    menuOpen,
+    setMenuOpen,
+    controlMenu,
+    setControlMenu,
+  } = useData();
   const { colors } = useTheme();
   const { t } = useTranslation();
 
   const closeBoth = () => {
     setCurrentMenu(Menus.MAIN);
     setMenuOpen(false);
+  };
+
+  const closeMenuOpenResults = () => {
+    setMenuOpen(false);
+    setControlMenu(false);
+    setCurrentMenu(Menus.MAIN);
+    navigate("/ResultList");
+  };
+
+  const openMenu = () => {
+    setControlMenu(false);
+    setMenuOpen(true);
+  };
+
+  const openControlMenu = () => {
+    setMenuOpen(false);
+    setCurrentMenu(Menus.MAIN);
+    setControlMenu(true);
   };
 
   useBackgroundProcesses();
@@ -102,14 +128,23 @@ const Header = () => {
         </Block>
       )}
       <Block flex align="flex-start" alignSelf="baseline" gap="12px">
-        <Open onClick={() => navigate("/ResultList")} />
-        <Settings
+        <Open
           onClick={() => {
-            !menuOpen ? setMenuOpen(true) : closeBoth();
+            menuOpen || controlMenu
+              ? closeMenuOpenResults()
+              : navigate("/ResultList");
           }}
         />
-        <Power />
+        <Settings onClick={() => (!menuOpen ? openMenu() : closeBoth())} />
+        <Power
+          onClick={() =>
+            !controlMenu ? openControlMenu() : setControlMenu(false)
+          }
+        />
       </Block>
+      <Modal isVisible={controlMenu} setIsvisible={() => setControlMenu(false)}>
+        <ControlMenu onClose={() => setControlMenu(false)} />
+      </Modal>
       <Modal isVisible={menuOpen} setIsvisible={() => closeBoth()}>
         <Menu onClose={() => setMenuOpen(false)} />
       </Modal>

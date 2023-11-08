@@ -161,4 +161,7 @@ export interface IUseData {
   setFailedSubmittingResults: React.Dispatch<React.SetStateAction<string[]>>;
   viewType: string;
   setViewType: React.Dispatch<React.SetStateAction<string>>;
+
+  controlMenu: boolean;
+  setControlMenu: React.Dispatch<React.SetStateAction<boolean>>;
 }
