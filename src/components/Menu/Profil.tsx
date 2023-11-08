@@ -68,54 +68,53 @@ const Profil = () => {
   const languages = ["de", "en", "fr"];
 
   return (
-    <>
+    <Block
+      flex
+      column
+      align="flex-start"
+      justify="flex-start"
+      gap={44}
+      width={436}
+      scroll={false}
+    >
+      <Block flex column align="flex-start" justify="flex-start" gap={16}>
+        <Text h3>Profil </Text>
+        <Text p>{settings.account.data.name} </Text>
+        <Text p>{settings.account.data.email} </Text>
+        <Button
+          secondary
+          row
+          flex
+          padding={"14px 32px"}
+          gap={16}
+          onClick={resetDevice}
+        >
+          <Logout />
+          <Text p label>
+            {t("common.logout")}
+          </Text>
+        </Button>
+      </Block>
       <Block
         flex
         column
         align="flex-start"
+        height={192}
         justify="flex-start"
-        gap={44}
-        width={436}
+        gap={24}
+        alignSelf="stretch"
       >
-        <Block flex column align="flex-start" justify="flex-start" gap={16}>
-          <Text h3>Profil </Text>
-          <Text p>{settings.account.data.name} </Text>
-          <Text p>{settings.account.data.email} </Text>
-          <Button
-            secondary
-            row
-            flex
-            padding={"14px 32px"}
-            gap={16}
-            onClick={resetDevice}
-          >
-            <Logout />
-            <Text p label>
-              {t("common.logout")}
-            </Text>
-          </Button>
-        </Block>
-        <Block
-          flex
-          column
-          align="flex-start"
-          height={192}
-          justify="flex-start"
-          gap={24}
-          alignSelf="stretch"
-        >
-          <Text h4>{t("common.language")}</Text>
-          {languages.map((lang) => (
-            <LanguageButton
-              key={lang}
-              locale={locale}
-              value={lang}
-              handleLocale={handleLocale}
-            />
-          ))}
-        </Block>
+        <Text h4>{t("common.language")}</Text>
+        {languages.map((lang) => (
+          <LanguageButton
+            key={lang}
+            locale={locale}
+            value={lang}
+            handleLocale={handleLocale}
+          />
+        ))}
       </Block>
-    </>
+    </Block>
   );
 };
 

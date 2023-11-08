@@ -63,10 +63,11 @@ const System = () => {
         column
         justify="space-between"
         align="flex-start"
-        position="absolute"
+        position="fixed"
         right={0}
+        transition="all 0.3s ease-in-out"
       >
-        <Block transform="rotate(-90deg)">
+        <Block border="0px solid transparent" cursor transform="rotate(-90deg)">
           <Next />
         </Block>
         <Block transform="rotate(-90deg)">
