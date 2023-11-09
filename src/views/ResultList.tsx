@@ -100,7 +100,7 @@ const ResultList = () => {
               submitResult(result.testid, result.submitted);
             }}
           >
-            <FaCheck />
+            <FaCloudUploadAlt />
           </div>
         );
       } else if (failedSubmittingResults.includes(result.testid)) {
@@ -129,7 +129,36 @@ const ResultList = () => {
             className="button"
             onClick={() => submitResult(result.testid, result.submitted)}
           >
-            <FaCloudUploadAlt />
+            <FaCheck />
+          </div>
+        );
+      }
+      if (result.submitted) {
+        buttonSubmit = (
+          <div
+            onClick={() => submitResult(result.testid, result.submitted)}
+            className="button"
+          >
+            <FaCheck />
+          </div>
+        );
+      }
+      if (failedSubmittingResults.includes(result.testid)) {
+        buttonSubmit = (
+          <div onClick={() => openError()} className="button error">
+            <PiWarningCircleFill size={30} />
+          </div>
+        );
+      }
+      if (result.isSubmitting) {
+        buttonSubmit = (
+          <div
+            className="button"
+            onClick={() => submitResult(result.testid, result.submitted)}
+          >
+            <div className="spinnerContainer">
+              <Oval height="30" width="30" color="white" />
+            </div>
           </div>
         );
       }
