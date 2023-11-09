@@ -132,9 +132,7 @@ const Errors: React.FC = () => {
               <button
                 onClick={() => {
                   hideError({ index: i });
-                  setTimeout(() => {
-                    submitResult(testid, false);
-                  }, 3000);
+                  submitResult(testid, false);
                 }}
               >
                 {t("common.retry")}
