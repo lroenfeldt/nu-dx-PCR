@@ -198,7 +198,7 @@ const useResults = () => {
 
   const checkUSB = async () => {
     try {
-      setUSBPresent(await window.api.checkUSB());
+      setUSBPresent(window.api.checkUSB());
     } catch (error) {
       console.error(error);
       window.api.logEvents(`checkUSB: ${error}`);

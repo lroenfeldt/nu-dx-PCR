@@ -81,18 +81,12 @@ export function toggleLid() {
 
 export function checkUSB() {
   ipcMain.handle("checkUSB", (_event) => {
-    if (isDev) {
-      return true;
-    }
-
     try {
       fs.accessSync("D:\\", fs.constants.F_OK);
       return true;
     } catch (err) {
       const errorMessage = "No Drive found or Drive not accessible";
-      console.log(errorMessage);
-      logger(errorMessage);
-      return false;
+      return false; // Return false if there's an error accessing the directory
     }
   });
 }
