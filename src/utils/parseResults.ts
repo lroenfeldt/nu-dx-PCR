@@ -349,7 +349,7 @@ export const parseResultsDB: TParseResultsDB = (
     specificationId: testmethod.specificationId,
     device: testConfig.device.hardwareId,
     wellCount: testConfig.device.wellCount,
-    orderKey: testConfig.account.orderKey,
+    customerId: testConfig.account.orderKey,
     userId,
     testStarted,
   };
