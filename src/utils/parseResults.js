@@ -166,8 +166,12 @@ export const parseResults = (resultFile, testid, testConfig, testmethod, overrid
     //parse result conditions
     testmethod.results.forEach((resultType) => {
       let conditions = resultType.conditions
-        .replaceAll('(', '("')
-        .replaceAll(')', '")')
+        .replaceAll('(FAM)', '("FAM")')
+        .replaceAll('(HEX)', '("HEX")')
+        .replaceAll('(VIC)', '("VIC")')
+        .replaceAll('(ROX)', '("ROX")')
+        .replaceAll('(CY5)', '("CY5")')
+        .replaceAll('(CY5.5)', '("CY5.5")')
         .replaceAll('hecThresh', 'hecThreshFl')
         .replaceAll('virusThresh', 'virusThreshFl')
         .replaceAll('=', '==')
