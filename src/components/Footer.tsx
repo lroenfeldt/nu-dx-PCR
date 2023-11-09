@@ -15,7 +15,7 @@ const Footer = () => {
   const { locale } = useTranslation();
   const location = useLocation();
   const [stateTime, setStateTime] = useState(
-    moment().locale(locale).format("LL") +
+    moment().locale(locale).format("L") +
       " " +
       moment().locale(locale).format("LTS")
   );
@@ -32,7 +32,7 @@ const Footer = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setStateTime(
-        moment().locale(locale).format("LL") +
+        moment().locale(locale).format("L") +
           " " +
           moment().locale(locale).format("LTS")
       );
