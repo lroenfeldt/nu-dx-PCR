@@ -302,7 +302,11 @@ const ResultList = () => {
   //Check if USB is Present
   useEffect(() => {
     checkUSB();
-    const clearcheckUSB = setInterval(() => checkUSB(), 3000);
+    console.log(USBPresent);
+    const clearcheckUSB = setInterval(() => {
+      checkUSB();
+    }, 3000);
+
     return () => clearInterval(clearcheckUSB);
   }, []);
   useSticky({ top: 70, id: "stickyHeader", stickyClass: "ResultList" });
