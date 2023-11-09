@@ -48,7 +48,7 @@ function useBackgroundProcesses() {
 
   const checkForUSB = useCallback(async () => {
     try {
-      const usbPresent = await window.api.checkUSB();
+      const usbPresent = window.api.checkUSB();
       setUSBPresent(usbPresent);
     } catch (error) {
       console.log(error);

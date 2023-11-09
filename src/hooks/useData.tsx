@@ -13,6 +13,7 @@ import { IBarcode, IError } from "../types/interfaces/interfaces";
 import { ITestObject } from "../../electron/interfaces/interfaces";
 import { ISettings } from "../types/interfaces/settings";
 import { errorProps } from "../constants/errorProps";
+import useResults from "./useResults";
 
 export const DataContext = React.createContext({});
 /**
