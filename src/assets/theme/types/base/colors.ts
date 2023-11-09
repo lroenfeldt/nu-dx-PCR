@@ -39,7 +39,9 @@ export interface IColors {
   test: {
     main: string;
     positive: string;
+    plus: string;
     negative: string;
+    minus: string;
     invalid: string;
   };
   probe: {

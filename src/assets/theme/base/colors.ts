@@ -39,9 +39,11 @@ const colors = {
 
   test: {
     main: "#858EAA",
-    positive: "#C94130",
-    negative: "#50A254",
-    invalid: "#D1D5DF",
+    positive: "#ECB7B0",
+    plus: "#C94130",
+    negative: "#BCDEBD",
+    minus: "#50A254",
+    invalid: "#DEE0E3",
   },
   probe: {
     main: "#858EAA",

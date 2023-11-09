@@ -15,7 +15,7 @@ const Negative = () => {
       right={-10}
       bottom={-20}
     >
-      <Ellipse width={44} height={44} color={colors.test.negative} />
+      <Ellipse width={44} height={44} color={colors.test.minus} />
       <Block position="absolute" top={20}>
         <Minus />
       </Block>

@@ -18,7 +18,6 @@ const Bootup = () => {
     setSettings,
     pairingCode,
     saveSettings,
-    clearSettings,
     setPairingCode,
   } = useData();
   const getPairingCodeApi = useApi<[]>(pairingApi.pollPairingCode);

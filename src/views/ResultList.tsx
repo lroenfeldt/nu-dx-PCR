@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import { Text, Toggle } from "../components";
+import { Block, Button, Text, Toggle } from "../components";
 import { useNavigate } from "react-router-dom";
 import { BsCloudCheckFill } from "react-icons/bs";
 import { PiWarningCircleFill } from "react-icons/pi";
-import { useData, useTranslation } from "../hooks";
+import { useData, useTheme, useTranslation } from "../hooks";
 import { AiFillUsb } from "react-icons/ai";
 import { FaMicroscope, FaCloudUploadAlt, FaCheck } from "react-icons/fa";
-import { useResults, useSticky } from "../hooks";
+import { useResults } from "../hooks";
 import urls from "../config/settings";
 import OvalSpinner from "../components/OvalSpinner";
 
@@ -26,22 +26,16 @@ const ResultList = () => {
     submitting,
     failedSubmittingResults,
   } = useData();
-  const {
-    checkUSB,
-    saveToUSB,
-    submitAll,
-    getResults,
-    submitResult,
-    saveAllToUSB,
-  } = useResults();
+  const { checkUSB, saveToUSB, getResults, submitResult } = useResults();
   const { t, locale } = useTranslation();
+  const { colors } = useTheme();
 
   const handleSubmitToggleChange = () => {
     getResults(!submitFilter);
     setSubmitFilter(!submitFilter);
   };
 
-  const viewResult = (testid, done) => {
+  const viewResult = (testid: string, done: boolean) => {
     resetBarcodes();
     setTestid(testid);
     setTestDone(done);
@@ -49,8 +43,7 @@ const ResultList = () => {
   };
 
   //Create Table
-
-  let tableRows = [];
+  let tableRows: JSX.Element[] = [];
   results
     .sort(
       (a, b) =>
@@ -162,7 +155,7 @@ const ResultList = () => {
           ) ||
           settings.account.testprocedures.find(
             (testmethod) => testmethod.id === result.testmethod
-          ).showResults == false
+          )?.showResults == false
         ) {
           buttonUSB = (
             <div className="button disabled">
@@ -187,7 +180,7 @@ const ResultList = () => {
           ) ||
           settings.account.testprocedures.find(
             (testmethod) => testmethod.id === result.testmethod
-          ).showResults == false
+          )?.showResults == false
         ) {
           buttonView = (
             <div className="button disabled">
@@ -224,37 +217,78 @@ const ResultList = () => {
           (testmethod) => testmethod.id === result.testmethod
         )
       ) {
+        const testLable: string = "label" + locale.toUpperCase();
         testMethodName =
           settings.account.testprocedures.find(
             (testmethod) => testmethod.id === result.testmethod
-          )["label" + locale.toUpperCase()] ||
+          )?.[testLable] ||
           settings.account.testprocedures.find(
             (testmethod) => testmethod.id === result.testmethod
-          ).name;
+          )?.name;
       } else {
         testMethodName = "unsupported";
       }
 
       tableRows.push(
-        <div className="result" key={`${result.testid}-${index}`}>
-          <div className="testinfo">
-            <h4>{result.testid}</h4>
-            <h4>{testMethodName}</h4>
-            <span className="date">
-              {t("common.started")}: {result.testStarted.toLocaleString()}
-            </span>
-            <span className="date">
-              {t("common.ended")}: {result.testFinished.toLocaleString()}
-            </span>
-          </div>
-          <div className="buttons">
-            {submittingFailed}
-            {buttonView}
-            {buttonSubmit}
-            {buttonUSB}
-            {cloudBadge}
-          </div>
-        </div>
+        <Block
+          flex
+          column
+          marginTop={24}
+          marginLeft={32}
+          paddingTop={24}
+          paddingLeft={45}
+          paddingRight={45}
+          paddingBottom={24}
+          border={`3.5px solid ${colors.text.default}`}
+          radius="12px"
+          width="1103px"
+          height="180px"
+          key={`${result.testid}-${index}`}
+        >
+          <Block>
+            <Text h5>{testMethodName as string}</Text>
+            <Text h6 style={{ fontWeight: 600 }}>
+              {result.testid}
+            </Text>
+
+            <Block marginTop={24} flex row spaceBetween alignCenter>
+              <Block>
+                <Text h5>Test: {testMethodName as string}</Text>
+                <Block flex row>
+                  <Text h5>{t("common.started")}:&nbsp;</Text>
+                  <Text h5 style={{ fontWeight: 500 }}>
+                    {result.testStarted.toLocaleString()}
+                  </Text>
+                </Block>
+              </Block>
+              <Block flex row alignCenter gap={16}>
+                <Button
+                  onClick={() => viewResult(result.testid, result.submitted)}
+                  outlined
+                  height="56px"
+                  width="194px"
+                >
+                  <Text
+                    h4
+                    color={colors.primary.main}
+                    style={{ fontWeight: 600 }}
+                  >
+                    Anzeigen
+                  </Text>
+                </Button>
+                <Button
+                  onClick={() => submitResult(result.testid, result.submitted)}
+                  height="56px"
+                  width="194px"
+                >
+                  <Text h4 white style={{ fontWeight: 600 }}>
+                    Exportieren
+                  </Text>
+                </Button>
+              </Block>
+            </Block>
+          </Block>
+        </Block>
       );
     });
 
@@ -269,22 +303,33 @@ const ResultList = () => {
     const clearcheckUSB = setInterval(() => checkUSB(), 3000);
     return () => clearInterval(clearcheckUSB);
   }, []);
-  useSticky({ top: 70, id: "stickyHeader", stickyClass: "ResultList" });
+  // useSticky({ top: 70, id: "stickyHeader", stickyClass: "ResultList" });
   return (
-    <div className="ResultList">
-      <div id="stickyHeader" className="titleArea">
-        <Text h2>{t("resultList.title")}</Text>
-        {(submitting || reading) && <OvalSpinner height="50px" width="50px" />}
-        <label>
-          <Text h4>{t("resultList.onlyPending")}</Text>
+    <Block flex column height={"100vh"} scrollY>
+      <Block
+        flex
+        spaceBetween
+        paddingTop={32}
+        paddingLeft={32}
+        paddingRight={145}
+      >
+        <Text h2 style={{ fontWeight: 700 }}>
+          {t("resultList.title")}
+        </Text>
+        {(submitting || reading) && <OvalSpinner size="50px" />}
+
+        <Block flex alignCenter>
+          <Text h4 style={{ fontWeight: 700 }}>
+            {t("resultList.onlyPending")}
+          </Text>
           <Toggle
             isOn={submitFilter}
             handleToggle={() => handleSubmitToggleChange()}
           />
-        </label>
-      </div>
-      {tableRows}
-    </div>
+        </Block>
+      </Block>
+      <Block marginBottom={100}>{tableRows}</Block>
+    </Block>
   );
 };
 

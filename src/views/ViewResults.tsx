@@ -278,8 +278,11 @@ const ViewResults: React.FC = () => {
                             <Block
                               key={barcode.id.toString()}
                               height={36}
+                              width={144}
                               radius={8}
                               padding="0 16px"
+                              align="center"
+                              paddingTop={1}
                               style={{
                                 ...(barcode.alteredResult && {
                                   border: `3px solid ${colors.text.default}`,
@@ -292,8 +295,8 @@ const ViewResults: React.FC = () => {
                                   barcode.result == "invalid"
                                     ? colors.test.invalid
                                     : barcode.result == "positive"
-                                    ? colors.test.positive
-                                    : colors.test.negative,
+                                    ? colors.test.plus
+                                    : colors.test.minus,
                               }}
                             >
                               <Text
