@@ -83,9 +83,14 @@ export function checkUSB() {
   ipcMain.handle("checkUSB", (_event) => {
     try {
       fs.accessSync("D:\\", fs.constants.F_OK);
+      if (isDev) {
+        return true;
+      }
       return true;
     } catch (err) {
       const errorMessage = "No Drive found or Drive not accessible";
+      console.log(errorMessage);
+      logger(errorMessage);
       return false; // Return false if there's an error accessing the directory
     }
   });
