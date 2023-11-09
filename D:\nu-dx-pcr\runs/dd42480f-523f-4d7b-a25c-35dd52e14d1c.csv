@@ -1,9 +1,0 @@
-Position;Barcode;CT;Result;lotNumber
-A01;TPC1;27.63;positive;
-A02;TPC2;26.15;positive;
-A03;NTC;0;negative;
-A04;infa;32.77;positive;
-A05;infb;32.32;positive;
-A06;rsv;0;positive;
-A07;sc;0;positive;
-A08;jp;0;negative;
