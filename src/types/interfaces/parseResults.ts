@@ -17,7 +17,7 @@ export interface IParsedResult {
   barcode: string;
   label?: string;
   alteredResult?: boolean;
-  oldResult?: string;
+  calculatedResult?: string;
   isControl?: boolean;
   parameters: Record<string, IParameter>;
   result?: string;

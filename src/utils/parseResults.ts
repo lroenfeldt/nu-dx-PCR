@@ -98,7 +98,7 @@ export const parseResults: TParseResults = (
         parameters: {},
         label: "",
         alteredResult: false,
-        oldResult: "",
+        calculatedResult: "",
         isControl: false,
         result: "",
       };
@@ -156,7 +156,7 @@ export const parseResults: TParseResults = (
     parsedResultsData[position].parameters[parameter].ct = ct;
     parsedResultsData[position].label = position;
     parsedResultsData[position].alteredResult = false;
-    parsedResultsData[position].oldResult = "";
+    parsedResultsData[position].calculatedResult = "";
     parsedResultsData[position].isControl = false;
     //Set labels for Controls
     if (
@@ -188,6 +188,7 @@ export const parseResults: TParseResults = (
   Object.keys(parsedResultsData).forEach((position) => {
     //Set default result to invalid
     parsedResultsData[position].result = "invalid";
+    parsedResultsData[position].calculatedResult = "invalid";
 
     //Define functions to call upon evaluation
     function CT(param: string) {
@@ -208,7 +209,7 @@ export const parseResults: TParseResults = (
 
     //parse result conditions
     testmethod.results.forEach((resultType) => {
-      let conditions = resultType.conditions
+      const conditions = resultType.conditions
         .replaceAll('(FAM)', '("FAM")')
         .replaceAll('(HEX)', '("HEX")')
         .replaceAll('(VIC)', '("VIC")')
@@ -233,7 +234,7 @@ export const parseResults: TParseResults = (
 
       if (passed) {
         parsedResultsData[position].result = resultType.name;
-        parsedResultsData[position].oldResult = resultType.name;
+        parsedResultsData[position].calculatedResult = resultType.name;
       }
     });
 
@@ -356,29 +357,29 @@ export const parseResultsDB: TParseResultsDB = (
 
   const samples = Object.entries(parsedData).map(([position, data]) => {
     const {
-      barcode: oldBarcode,
+      barcode,
       parameters,
       isControl,
       result,
-      oldResult,
+      calculatedResult,
     } = data;
-    const barcode =
-      autoControls.find(({ position: p }) => p === position)?.barcode ||
-      oldBarcode;
+
+    const expectedResult = testmethod.controlSamples
+      .find(({position16, position96}) => 
+        testConfig.device.wellCount == 16 && position16 == position 
+        || testConfig.device.wellCount == 96 && position96 == position)
+        ?.expectedResult || ""
+    
     const sampleParameters = Object.entries(parameters).map(
       ([paramName, { ct, curveData }]) => {
         const { dbTransformation, threshhold } =
           testmethod.parameters.find(({ target }) => target === paramName) ||
           {};
-
         return {
-          parameter: dbTransformation || paramName,
+          parameter: paramName, //dbTransformation not needed for new database anymore
           ct,
           curveData: curveData.map((value) => parseFloat(value).toFixed(3)),
           threshhold: threshhold || 0,
-          result: result || "",
-          orginalResult: oldResult || "",
-          expectedResult: "", //expected result for control samples as defined in nu:dx cloud. If no controll then empty
         };
       }
     );
@@ -390,6 +391,10 @@ export const parseResultsDB: TParseResultsDB = (
       pcrLOT: lotNumber || "",
       pureLOT: "", //coming soon (from auth screen as well probably)
       parameters: sampleParameters,
+      resultParameter: testmethod.resultParameter || "RESULT",
+      result,
+      originalResult : calculatedResult || "",
+      expectedResult, //expected result for control samples as defined in nu:dx cloud. If no controll then empty
     };
   });
 
