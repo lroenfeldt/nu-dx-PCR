@@ -100,7 +100,8 @@
     "wait": "Loading...",
     "waitingForResults": "The results are transmitted",
     "saveToUSB": "Export",
-    "resultsSent": "Results successfully sent"
+    "resultsSent": "Results successfully sent",
+    "upload": "Uploaded to cloud"
   },
   "runTest": {
     "endOfTest": "End of Test",
@@ -178,6 +179,7 @@
     "failtedToStartTest": "Test could not be started. Please restart the device and try again. If the problem persists, please contact our customer support",
     "failedToMoveResults": "Resultfile could not be moved. Filesystem may be damaged. Please contact our customer support",
     "failedTosaveSettings": "Settings could not be saved. Please restart the device and try again. If the problem persists, please contact our customer support",
-    "errorCloseLid": "The test flap could not be opened. Please check if the flap is blocked from the outside and try again. If necessary, restart the device. If the problem persists, please contact our customer support."
+    "errorCloseLid": "The test flap could not be opened. Please check if the flap is blocked from the outside and try again. If necessary, restart the device. If the problem persists, please contact our customer support.",
+    "failedToUpload": "Failed to upload"
   }
 }

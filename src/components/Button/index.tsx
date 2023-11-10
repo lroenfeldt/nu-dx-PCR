@@ -55,6 +55,7 @@ const Button: React.FC<IButtonProps> = (props) => {
     intensity,
     tint,
     position,
+    disabled,
     disable,
     right,
     left,
@@ -63,7 +64,6 @@ const Button: React.FC<IButtonProps> = (props) => {
     end,
     start,
     neumorphism,
-    disabled,
     bgColor,
     rounded,
     ...rest
@@ -137,6 +137,7 @@ const Button: React.FC<IButtonProps> = (props) => {
     ...(bottom !== undefined && { bottom }),
     ...(end !== undefined && { end }),
     ...(disabled && { opacity: 0.5 }),
+    ...(disable && { opacity: 0.5 }),
     ...(start !== undefined && { start }),
     ...(rounded && {
       borderRadius: "100%",

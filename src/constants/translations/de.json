@@ -102,7 +102,8 @@
     "wait": "Laden...",
     "waitingForResults": "Die Ergebnisse werden übermittelt",
     "saveToUSB": "Exportieren",
-    "resultsSent": "Ergebnisse erfolgreich übermittelt"
+    "resultsSent": "Ergebnisse erfolgreich übermittelt",
+    "upload": "In die Cloud hochgeladen"
   },
   "runTest": {
     "endOfTest": "Ende des Tests",
@@ -180,6 +181,7 @@
     "failtedToStartTest": "Test konnte nicht gestartet werden. Bitte starten Sie das Gerät neu und versuchen Sie es erneut. Sollte das Problem weiterhin auftreten, wenden Sie sich bitte an unseren Kundensupport",
     "failedToMoveResults": "Testdatei konnte nicht verschoben werden. Möglicherweise ist das Dateisystem beschädigt. Bitte wenden Sie sich an unseren Kundensupport.",
     "failedTosaveSettings": "Einstellungen konnten nicht gespeichert werden. Bitte starten Sie das Gerät neu und versuchen Sie es erneut. Sollte das Problem weiterhin auftreten, wenden Sie sich bitte an unseren Kundensupport",
-    "errorCloseLid": "Die Testklappe konnte nicht geöffnet werden. Bitte prüfen Sie, ob die Klappe von außen blockiert ist und versuchen Sie es erneut. Starten Sie gegebenenfalls das Gerät neu. Sollte das Problem weiterhin bestehen, wenden Sie sich bitte an unseren Kundensupport."
+    "errorCloseLid": "Die Testklappe konnte nicht geöffnet werden. Bitte prüfen Sie, ob die Klappe von außen blockiert ist und versuchen Sie es erneut. Starten Sie gegebenenfalls das Gerät neu. Sollte das Problem weiterhin bestehen, wenden Sie sich bitte an unseren Kundensupport.",
+    "failedToUpload": "Hochladen fehlgeschlagen"
   }
 }

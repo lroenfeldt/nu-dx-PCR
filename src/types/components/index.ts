@@ -166,6 +166,8 @@ export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   gradient?: boolean;
   primary?: boolean;
   secondary?: boolean;
+  disabled?: boolean;
+  disable?: boolean;
   tertiary?: boolean;
   black?: boolean;
   white?: boolean;
@@ -199,7 +201,6 @@ export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   intensity?: boolean;
   tint?: boolean;
   position?: string;
-  disable?: boolean;
   right?: number;
   left?: number;
   top?: number;

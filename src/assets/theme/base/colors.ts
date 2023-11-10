@@ -66,7 +66,7 @@ const colors = {
   },
 
   error: {
-    main: "#ea0606",
+    main: "#C94130",
     focus: "#c70505",
     alert: "rgba(201, 65, 48, 0.10)",
   },

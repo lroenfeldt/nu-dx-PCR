@@ -25,6 +25,7 @@ function useTextTheme() {
     body: {
       ...typography.body1,
     },
+
     caption: {
       ...typography.caption,
     },

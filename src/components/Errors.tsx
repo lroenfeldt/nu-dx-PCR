@@ -12,7 +12,7 @@ const Errors: React.FC = () => {
     reset,
     testid,
     setDeviceStatus,
-    startTest,
+    // startTest,
     setErrors,
   } = useData();
   const { submitResult } = useResults();
@@ -128,20 +128,14 @@ const Errors: React.FC = () => {
               <button
                 onClick={() => {
                   hideError({ index: i });
-                  setTimeout(() => {
-                    submitResult(testid, false);
-                  }, 3000);
+                  submitResult(testid, false);
                 }}
               >
                 {t("common.retry")}
               </button>
-              <button onClick={() => activateOffline(i)}>
-                {t("common.offline")}
-              </button>
               <button
                 onClick={() => {
                   hideError({ index: i });
-                  navigate("/selectMethod");
                 }}
               >
                 {t("common.close")}
@@ -230,7 +224,7 @@ const Errors: React.FC = () => {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
-              <button onClick={() => startTest()}>{t("common.retry")}</button>
+              {/* <button onClick={() => startTest()}>{t("common.retry")}</button> */}
               <button
                 onClick={() => {
                   reset();

@@ -93,7 +93,8 @@
     "wait": "Chargement...",
     "waitingForResults": "Les résultats sont transmis",
     "saveToUSB": "Exporter",
-    "resultsSent": "Les résultats ont été envoyés avec succès !"
+    "resultsSent": "Les résultats ont été envoyés avec succès !",
+    "upload": "Téléchargé sur le nuage"
   },
   "pairing": {
     "welcome": "Bienvenue sur nu:dx PCR",
@@ -178,6 +179,7 @@
     "failtedToStartTest": "Le test n'a pas pu démarrer. Veuillez redémarrer l'appareil et réessayer. Si le problème persiste, veuillez contacter notre support client",
     "failedToMoveResults": "Les résultats n'ont pas pu être déplacés. Le système de fichiers est peut-être endommagé. Veuillez contacter notre support client.",
     "failedTosaveSettings": "Les paramètres n'ont pas pu être enregistrés. Veuillez vérifier si le support amovible est correctement inséré et non protégé en écriture, puis réessayez. Si le problème persiste, veuillez contacter notre service client.",
-    "errorCloseLid": "Le volet de test n'a pas pu être ouverte. Veuillez vérifier si le volet est bloqué de l'extérieur et réessayez. Si nécessaire, redémarrez l'appareil. Si le problème persiste, veuillez contacter notre support client."
+    "errorCloseLid": "Le volet de test n'a pas pu être ouverte. Veuillez vérifier si le volet est bloqué de l'extérieur et réessayez. Si nécessaire, redémarrez l'appareil. Si le problème persiste, veuillez contacter notre support client.",
+    "failedToUpload": "Échec du téléchargement"
   }
 }
