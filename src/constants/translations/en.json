@@ -101,7 +101,13 @@
     "waitingForResults": "The results are transmitted",
     "saveToUSB": "Export",
     "resultsSent": "Results successfully sent",
-    "upload": "Uploaded to cloud"
+    "upload": "Uploaded to cloud",
+    "resutltExport": "Result export",
+    "cloud": "Upload test results to the Nu:Dx Cloud.",
+    "cloudExport": "Cloud export",
+    "usbExport": "Save the test results to a USB stick",
+    "csvExport": "CSV export",
+    "pdfExport": "PDF export"
   },
   "runTest": {
     "endOfTest": "End of Test",
@@ -174,7 +180,9 @@
     "failedToSaveControlSample": "Control samples could not be created in the database. Please check if you have a stable internet connection and try again. If necessary, restart the device. If the problems persist, please contact our customer support",
     "failedToSaveResults": "Results could not be processed. Result file not valid.",
     "failedToSendSomeResults": "Some results could not be submitted because the barcode used is invalid or has already been used. {{missing}}",
-    "failedToSubmitResults": "Results could not be transmitted. Please check if you have a stable internet connection and try again. If necessary, restart the device. If the problems persist, please contact our customer support",
+    "failedToSubmitResults": "No connection to the database",
+    "failedToSubmitResultsTextOne": "Please check your Internet connection and try again. If necessary, restart the device.",
+    "failedToSubmitResultsTextTwo": "If the problem persists, please contact our customer support.",
     "failedToMoveSubmittedFiles": "Submitted files could not be moved",
     "failtedToStartTest": "Test could not be started. Please restart the device and try again. If the problem persists, please contact our customer support",
     "failedToMoveResults": "Resultfile could not be moved. Filesystem may be damaged. Please contact our customer support",

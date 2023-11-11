@@ -1,17 +1,25 @@
-import { useEffect } from "react";
-import { Block, Button, Errors, Text, Toggle } from "../components";
+import { useEffect, useRef, useState } from "react";
+import {
+  Block,
+  Button,
+  Errors,
+  Modal,
+  Prev,
+  Text,
+  Toggle,
+} from "../components";
 import { useNavigate } from "react-router-dom";
-import { BsCloudCheckFill } from "react-icons/bs";
-import { PiWarningCircleFill } from "react-icons/pi";
 import { useData, useTheme, useTranslation } from "../hooks";
 import { AiFillUsb } from "react-icons/ai";
-import { FaMicroscope, FaCloudUploadAlt, FaCheck } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 import { useResults } from "../hooks";
 import urls from "../config/settings";
 import OvalSpinner from "../components/OvalSpinner";
 import AlertRounded from "../components/Icons/AlertRounded";
 import ViewResultMsg from "../components/ViewResultMsg";
 import CloudSmall from "../components/Icons/CloudSmall";
+import Export from "../components/Icons/Export";
+import ViewResultsModal from "../components/ViewResultsModal";
 
 const ResultList = () => {
   const navigate = useNavigate();
@@ -20,19 +28,21 @@ const ResultList = () => {
     settings,
     setTestid,
     resetBarcodes,
-    offlineMode,
     setTestDone,
     submitFilter,
     setSubmitFilter,
     results,
-    reading,
-    submitting,
     failedSubmittingResults,
     testid,
+    setErrors,
+    openMenu,
+    setOpenMenu,
   } = useData();
   const { checkUSB, saveToUSB, getResults, submitResult } = useResults();
   const { t, locale } = useTranslation();
   const { colors } = useTheme();
+
+  const [resultSubmitted, setResultSubmitted] = useState<boolean>(false);
 
   const handleSubmitToggleChange = () => {
     getResults(!submitFilter);
@@ -46,6 +56,31 @@ const ResultList = () => {
     navigate("/ViewResults");
   };
 
+  const startPoint = useRef<HTMLDivElement>(null);
+  const scroll = (direction: "up" | "down") => {
+    const el = startPoint.current;
+    if (!el) return;
+
+    const scrollHeight = 150;
+    const scrollAmount = direction === "up" ? -scrollHeight : scrollHeight;
+
+    el.scrollBy({
+      top: scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
+  const openError = () => {
+    setErrors((prevErrors) =>
+      prevErrors
+        .filter((error) => error.type !== "submit")
+        .concat({
+          type: "submit",
+          message: t("errors.failedToSaveControlSample"),
+        })
+    );
+  };
+
   //Create Table
   let tableRows: JSX.Element[] = [];
   results
@@ -55,158 +90,51 @@ const ResultList = () => {
     )
     .forEach((result, index) => {
       let buttonUSB;
-      let buttonSubmit;
-      let buttonView;
-
-      //button for db submit
-      if (result.isSubmitting) {
-        buttonSubmit = (
+      //button for usb export
+      if (result.isWriting) {
+        buttonUSB = (
           <div
             className="button"
-            onClick={() => submitResult(result.testid, result.submitted)}
+            onClick={() => saveToUSB(result.testid, result.submitted)}
           >
             <OvalSpinner size="30px" />
           </div>
         );
-      } else if (!result.isSubmitting) {
-        buttonSubmit = (
+      } else if (result.writingSuccess) {
+        buttonUSB = (
           <div
             className="button"
-            onClick={() => submitResult(result.testid, result.submitted)}
+            onClick={() => saveToUSB(result.testid, result.submitted)}
           >
             <FaCheck />
           </div>
         );
-      } else if (offlineMode) {
-        buttonSubmit = (
+      } else if (!USBPresent) {
+        buttonUSB = (
           <div className="button disabled">
-            <FaCloudUploadAlt />
+            <AiFillUsb />
           </div>
         );
       } else if (
         !settings.account.testprocedures.find(
           (testmethod) => testmethod.id === result.testmethod
-        )
+        ) ||
+        settings.account.testprocedures.find(
+          (testmethod) => testmethod.id === result.testmethod
+        )?.showResults == false
       ) {
-        buttonSubmit = (
+        buttonUSB = (
           <div className="button disabled">
-            <FaCloudUploadAlt />
+            <AiFillUsb />
           </div>
         );
       } else {
-        buttonSubmit = (
+        buttonUSB = (
           <div
             className="button"
-            onClick={() => submitResult(result.testid, result.submitted)}
+            onClick={() => saveToUSB(result.testid, result.submitted)}
           >
-            <FaCloudUploadAlt />
-          </div>
-        );
-      }
-
-      let cloudBadge;
-      if (result.submitted) {
-        cloudBadge = (
-          <div className="cloudBadge">
-            <BsCloudCheckFill />
-          </div>
-        );
-      }
-      if (
-        failedSubmittingResults.includes(result.testid) ||
-        result.isSubmitting == false
-      ) {
-        cloudBadge = (
-          <div className="cloudBadge error">
-            <PiWarningCircleFill />
-          </div>
-        );
-      }
-
-      if (
-        settings.account.testprocedures.find(
-          (testmethod) => testmethod.id === result.testmethod
-        )?.showResults
-      ) {
-        //button for usb export
-        if (result.isWriting) {
-          buttonUSB = (
-            <div
-              className="button"
-              onClick={() => saveToUSB(result.testid, result.submitted)}
-            >
-              <OvalSpinner size="30px" />
-            </div>
-          );
-        } else if (result.writingSuccess) {
-          buttonUSB = (
-            <div
-              className="button"
-              onClick={() => saveToUSB(result.testid, result.submitted)}
-            >
-              <FaCheck />
-            </div>
-          );
-        } else if (!USBPresent) {
-          buttonUSB = (
-            <div className="button disabled">
-              <AiFillUsb />
-            </div>
-          );
-        } else if (
-          !settings.account.testprocedures.find(
-            (testmethod) => testmethod.id === result.testmethod
-          ) ||
-          settings.account.testprocedures.find(
-            (testmethod) => testmethod.id === result.testmethod
-          )?.showResults == false
-        ) {
-          buttonUSB = (
-            <div className="button disabled">
-              <AiFillUsb />
-            </div>
-          );
-        } else {
-          buttonUSB = (
-            <div
-              className="button"
-              onClick={() => saveToUSB(result.testid, result.submitted)}
-            >
-              <AiFillUsb />
-            </div>
-          );
-        }
-
-        //button for view
-        if (
-          !settings.account.testprocedures.find(
-            (testmethod) => testmethod.id === result.testmethod
-          ) ||
-          settings.account.testprocedures.find(
-            (testmethod) => testmethod.id === result.testmethod
-          )?.showResults == false
-        ) {
-          buttonView = (
-            <div className="button disabled">
-              <FaMicroscope />
-            </div>
-          );
-        } else {
-          buttonView = (
-            <div
-              className="button"
-              onClick={() => viewResult(result.testid, result.submitted)}
-            >
-              <FaMicroscope />
-            </div>
-          );
-        }
-      }
-      let submittingFailed;
-      if (failedSubmittingResults.includes(result.testid)) {
-        submittingFailed = (
-          <div className="button error">
-            <PiWarningCircleFill size={30} />
+            <AiFillUsb />
           </div>
         );
       }
@@ -262,12 +190,14 @@ const ResultList = () => {
             </Block>
             <Block marginTop={-24} marginRight={-45}>
               {failedSubmittingResults.includes(result.testid) ? (
-                <ViewResultMsg
-                  text={t("errors.failedToUpload")}
-                  icon={<AlertRounded />}
-                  bgColor={colors.error.main}
-                  iconBgColor={"#FFF"}
-                />
+                <Block cursor onClick={openError}>
+                  <ViewResultMsg
+                    text={t("errors.failedToUpload")}
+                    icon={<AlertRounded />}
+                    bgColor={colors.error.main}
+                    iconBgColor={"#FFF"}
+                  />
+                </Block>
               ) : null}
               {result.submitted ? (
                 <ViewResultMsg
@@ -308,19 +238,18 @@ const ResultList = () => {
               <Button
                 onClick={() => {
                   setTestid(result.testid);
-                  submitResult(result.testid, result.submitted);
+                  setResultSubmitted(result.submitted);
+                  setOpenMenu(true);
                 }}
                 height="56px"
-                width="194px"
-                disable={result.isSubmitting ? true : false}
+                width="240px"
               >
-                <Text h4 white style={{ fontWeight: 600 }}>
-                  {result.isSubmitting ? (
-                    <OvalSpinner size="30px" />
-                  ) : (
-                    t("results.saveToUSB")
-                  )}
-                </Text>
+                <Block flex center row gap={8} alignCenter>
+                  <Export />
+                  <Text h4 white style={{ fontWeight: 600 }}>
+                    {t("results.saveToUSB")}
+                  </Text>
+                </Block>
               </Button>
             </Block>
           </Block>
@@ -339,15 +268,38 @@ const ResultList = () => {
     const clearcheckUSB = setInterval(() => checkUSB(), 3000);
     return () => clearInterval(clearcheckUSB);
   }, []);
-  // useSticky({ top: 70, id: "stickyHeader", stickyClass: "ResultList" });
   return (
     <>
-      {/* {(submitting || reading) && (
-        <Block grid center height="90vh" alignCenter>
-          <OvalSpinner size="100px" />
+      <Block
+        position="absolute"
+        top={"50%"}
+        right={-80}
+        transform="rotate(90deg)"
+        flex
+        row
+        center
+        alignCenter
+        gap={100}
+      >
+        <Block
+          transition="all 0.3s ease-in-out"
+          border="0px solid transparent"
+          cursor
+          onClick={() => scroll("up")}
+        >
+          <Prev />
         </Block>
-      )} */}
-      <Block flex column height={"100vh"} scrollY>
+        <Block
+          transform="scaleX(-1)"
+          transition="all 0.3s ease-in-out"
+          border="0px solid transparent"
+          cursor
+          onClick={() => scroll("down")}
+        >
+          <Prev />
+        </Block>
+      </Block>
+      <Block ref={startPoint} flex column height={"100vh"} scrollY>
         <Block
           flex
           spaceBetween
@@ -374,7 +326,17 @@ const ResultList = () => {
             return <Block key={index}>{tables}</Block>;
           })}
         </Block>
-        {/* <Errors /> */}
+        <Errors />
+        {openMenu ? (
+          <Modal isVisible={openMenu} setIsvisible={() => setOpenMenu(false)}>
+            <ViewResultsModal
+              onClose={() => setOpenMenu(false)}
+              onCloudExport={() => submitResult(testid, resultSubmitted)}
+              onCSVExport={() => {}}
+              onPDFExport={() => {}}
+            />
+          </Modal>
+        ) : null}
       </Block>
     </>
   );

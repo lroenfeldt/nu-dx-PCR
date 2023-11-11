@@ -30,6 +30,12 @@ import Settings from "./Settings";
 import QrCodeScan from "./QrCodeScan";
 import RightArrow from "./RightArrow";
 import HomeIcon from "./HomeIcon";
+import AlertRounded from "./AlertRounded";
+import Export from "./Export";
+import CloudSmall from "./CloudSmall";
+import ClosingIcon from "./ClosingIcon";
+import Email from "./Email";
+import Phone from "./Phone";
 
 export {
   HomeIcon,
@@ -64,4 +70,10 @@ export {
   Settings,
   QrCodeScan,
   RightArrow,
+  AlertRounded,
+  Export,
+  CloudSmall,
+  ClosingIcon,
+  Email,
+  Phone,
 };

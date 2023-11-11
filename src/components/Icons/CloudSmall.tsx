@@ -4,6 +4,7 @@ interface CloudSmall {
   color?: string;
   width?: string | number;
   height?: string | number;
+  style?: React.CSSProperties;
 }
 
 const CloudSmall: FC<CloudSmall> = ({

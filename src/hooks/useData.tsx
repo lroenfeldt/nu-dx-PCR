@@ -37,6 +37,7 @@ export function DataProvider({ children }: IDataProviderProps) {
   const [isModal, setIsModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
   const [controlMenu, setControlMenu] = useState(false);
   const [currentMenu, setCurrentMenu] = useState(Menus.MAIN);
   const [testDone, setTestDone] = useState(false);
@@ -367,6 +368,8 @@ export function DataProvider({ children }: IDataProviderProps) {
 
       controlMenu,
       setControlMenu,
+      openMenu,
+      setOpenMenu,
     }),
     [
       currentMenu,
@@ -467,6 +470,8 @@ export function DataProvider({ children }: IDataProviderProps) {
 
       controlMenu,
       setControlMenu,
+      openMenu,
+      setOpenMenu,
     ]
   );
   return (

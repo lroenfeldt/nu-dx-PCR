@@ -15,8 +15,9 @@ const ViewResultMsg = (props: {
       style={{ borderBottomLeftRadius: "8px" }}
       flex
       row
-      spaceBetween
+      center
       alignCenter
+      gap={8}
     >
       <Block>
         <Text
@@ -29,7 +30,6 @@ const ViewResultMsg = (props: {
           {props.text}
         </Text>
       </Block>
-      &nbsp;
       <Block
         bgColor={props.iconBgColor}
         width="20px"

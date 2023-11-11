@@ -94,7 +94,13 @@
     "waitingForResults": "Les résultats sont transmis",
     "saveToUSB": "Exporter",
     "resultsSent": "Les résultats ont été envoyés avec succès !",
-    "upload": "Téléchargé sur le nuage"
+    "upload": "Téléchargé sur le nuage",
+    "resutltExport": "Exportation des résultats",
+    "cloud": "Télécharger les résultats des tests sur le Nu:Dx Cloud.",
+    "cloudExport": "Cloud Exporter",
+    "usbExport": "Enregistrez les résultats des tests sur une clé USB",
+    "csvExport": "CSV-Exportation",
+    "pdfExport": "PDF-Exportation"
   },
   "pairing": {
     "welcome": "Bienvenue sur nu:dx PCR",
@@ -174,7 +180,9 @@
     "failedToSaveControlSample": "Les échantillons de contrôle n'ont pas pu être créés dans la base de données. Veuillez vérifier si vous disposez d'une connexion Internet stable et réessayer. Si nécessaire, redémarrez l'appareil. Si les problèmes persistent, veuillez contacter notre support client",
     "failedToSaveResults": "Les résultats n'ont pas pu être traités. Fichier de résultats non valide.",
     "failedToSendSomeResults": "Certains résultats n'ont pas pu être soumis car le code-barres utilisé n'est pas valide ou a déjà été utilisé. {{missing}}",
-    "failedToSubmitResults": "Les résultats n'ont pas pu être envoyés. Veuillez vérifier si vous disposez d'une connexion Internet stable et réessayer. Si nécessaire, redémarrez l'appareil. Si les problèmes persistent, veuillez contacter notre support client",
+    "failedToSubmitResults": "Pas de connexion à la base de données",
+    "failedToSubmitResultsTextOne": "Veuillez vérifier votre connexion Internet et réessayer. Redémarrez l'appareil si nécessaire.",
+    "failedToSubmitResultsTextTwo": "Si le problème persiste, veuillez contacter notre service d'assistance à la clientèle.",
     "failedToMoveSubmittedFiles": "Les fichiers soumis n'ont pas pu être déplacés",
     "failtedToStartTest": "Le test n'a pas pu démarrer. Veuillez redémarrer l'appareil et réessayer. Si le problème persiste, veuillez contacter notre support client",
     "failedToMoveResults": "Les résultats n'ont pas pu être déplacés. Le système de fichiers est peut-être endommagé. Veuillez contacter notre support client.",

@@ -353,3 +353,10 @@ export interface TLabelProps {
 export interface IOvalSPinner {
   size: string;
 }
+
+export interface IViewResultsModal {
+  onClose: () => void;
+  onCloudExport: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onCSVExport: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onPDFExport: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}

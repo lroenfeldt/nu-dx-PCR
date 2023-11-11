@@ -1,8 +1,10 @@
-import React, { useCallback } from "react";
-import { useData, useResults, useTranslation } from "../hooks";
+import React, { useCallback, useMemo } from "react";
+import { useData, useResults, useTheme, useTranslation } from "../hooks";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IError } from "../types/interfaces/interfaces";
 import { IHideErrorProps } from "../types/components";
+import { Block, Button, Text } from ".";
+import { Email, Phone } from "./Icons";
 
 const Errors: React.FC = () => {
   const {
@@ -19,6 +21,7 @@ const Errors: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+  const { colors } = useTheme();
   const hideError = ({ type, index, remember }: IHideErrorProps) => {
     if (type)
       setErrors((prevErrors: IError[]) =>
@@ -30,6 +33,7 @@ const Errors: React.FC = () => {
         prevErrors.filter((error, errIndex) => errIndex != index)
       );
   };
+
   const cancelTest = () => {
     setErrors((prevErrors: IError[]) =>
       prevErrors.filter((error) => error.type !== "cancelTest")
@@ -123,24 +127,66 @@ const Errors: React.FC = () => {
         }
         if (error.type === "submit") {
           return (
-            <div key={i} className="errorMessage">
-              <p>{error.message}</p>
-              <button
-                onClick={() => {
-                  hideError({ index: i });
-                  submitResult(testid, false);
-                }}
-              >
-                {t("common.retry")}
-              </button>
-              <button
-                onClick={() => {
-                  hideError({ index: i });
-                }}
-              >
-                {t("common.close")}
-              </button>
-            </div>
+            <Block
+              padding={32}
+              bgColor="#FFF"
+              width={708}
+              key={i}
+              radius={16}
+              flex
+              column
+              dropShadowLarge
+              gap={32}
+            >
+              <Block>
+                <Text style={{ marginBottom: "8px" }} h3>
+                  {error.message}
+                </Text>
+                <Text h4>{error.messageOne}</Text>
+              </Block>
+              <Block flex row spaceBetween>
+                <Button
+                  outlined
+                  width="300px"
+                  onClick={() => {
+                    hideError({ index: i });
+                  }}
+                >
+                  {t("common.close")}
+                </Button>
+
+                <Button
+                  width="300px"
+                  onClick={() => {
+                    hideError({ index: i });
+                    submitResult(testid, false);
+                  }}
+                >
+                  {t("common.retry")}
+                </Button>
+              </Block>
+              <Block bgColor="#CAE4FC" radius={16} padding={16}>
+                <Text style={{ fontWeight: 500 }} h5>
+                  {error.messageTwo}
+                </Text>
+
+                <Block marginTop={16} flex row gap={32}>
+                  <Block flex row gap={5}>
+                    <Email />
+                    <Text style={{ fontWeight: 500 }} h5>
+                      support@nu-diagnostics.com
+                    </Text>
+                  </Block>
+
+                  <Block flex row gap={5}>
+                    <Phone />
+                    <Text style={{ fontWeight: 500 }} h5>
+                      +494123/123456789
+                    </Text>
+                  </Block>
+                </Block>
+              </Block>
+            </Block>
           );
         }
         if (ErrorsType2.includes(error.type)) {

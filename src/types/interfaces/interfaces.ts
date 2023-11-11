@@ -199,6 +199,8 @@ export interface IErrorObject {
 
 export interface IError {
   message: string;
+  messageOne?: string;
+  messageTwo?: string;
   type: string;
 }
 

@@ -8,7 +8,7 @@ import { Block, List, Menu, Modal, Proben, Text } from "..";
 import { useTheme } from "../../assets/theme";
 import ViewTypeOption from "./ViewTypeOption";
 import { Menus } from "../../types/components";
-import ControlMenu from "../controlMenu";
+import ControlMenu from "../ControlMenu";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -151,7 +151,11 @@ const Header = () => {
         </Modal>
       ) : menuOpen ? (
         <Modal isVisible={menuOpen} setIsvisible={() => closeBoth()}>
-          <Menu onClose={() => setMenuOpen(false)} />
+          <Menu
+            onClose={() => {
+              setMenuOpen(false);
+            }}
+          />
         </Modal>
       ) : null}
     </Block>

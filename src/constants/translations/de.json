@@ -103,7 +103,13 @@
     "waitingForResults": "Die Ergebnisse werden übermittelt",
     "saveToUSB": "Exportieren",
     "resultsSent": "Ergebnisse erfolgreich übermittelt",
-    "upload": "In die Cloud hochgeladen"
+    "upload": "In die Cloud hochgeladen",
+    "resutltExport": "Ergebnis-Export",
+    "cloud": "Laden Sie Testergebnisse in die Nu:Dx Cloud.",
+    "cloudExport": "Cloud Export",
+    "usbExport": "Speichern Sie die Testergebnisse auf USB.",
+    "csvExport": "CSV-Export",
+    "pdfExport": "PDF-Export"
   },
   "runTest": {
     "endOfTest": "Ende des Tests",
@@ -176,7 +182,9 @@
     "failedToSaveControlSample": "Kontrollproben konnten nicht in Datenbank angelegt werden. Bitte prüfen Sie, ob Sie über eine stabile Internetverbindung verfügen und versuchen Sie es erneut. Starten Sie gegebenfalls das Gerät neu. Sollten die Probleme weiterhin bestehen, wenden Sie ich bitte an unseren Kundensupport",
     "failedToSaveResults": "Ergebnisse konnten nicht verarbeitet werden.  Ergebnisdatei ungültig.",
     "failedToSendSomeResults": "Einige Ergebnisse konnten nicht übermittelt werden, da der verwendete Barcode ungültig ist oder bereits verwendet wurde. {{missing}}",
-    "failedToSubmitResults": "Ergebnisse konnten nicht übermittelt werden. Bitte prüfen Sie, ob Sie über eine stabile Internetverbindung verfügen und versuchen Sie es erneut. Starten Sie gegebenfalls das Gerät neu. Sollten die Probleme weiterhin bestehen, wenden Sie sich bitte an unseren Kundensupport",
+    "failedToSubmitResults": "Keine Verbindung zur Datenbank",
+    "failedToSubmitResultsTextOne": "Bitte prüfen Sie Ihre Internetverbindung und versuchen sie es erneut. Starten sie gegebenenfalls das Gerät neu.",
+    "failedToSubmitResultsTextTwo": "Sollte das Problem weiterhin bestehen, kontaktieren Sie bitte unseren Kundensupport.",
     "failedToMoveSubmittedFiles": "Übermittelte Dateien konnten nicht verschoben werden",
     "failtedToStartTest": "Test konnte nicht gestartet werden. Bitte starten Sie das Gerät neu und versuchen Sie es erneut. Sollte das Problem weiterhin auftreten, wenden Sie sich bitte an unseren Kundensupport",
     "failedToMoveResults": "Testdatei konnte nicht verschoben werden. Möglicherweise ist das Dateisystem beschädigt. Bitte wenden Sie sich an unseren Kundensupport.",

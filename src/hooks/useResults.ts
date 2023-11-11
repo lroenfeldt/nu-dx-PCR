@@ -19,6 +19,7 @@ import {
   IExtractedBarcodes,
 } from "../types/interfaces/parseResults";
 import { IConfigFile, ITestProcedure } from "../types/interfaces/settings";
+import { IError } from "../types/interfaces/interfaces";
 
 /**
  * hook to handle all the results related functions
@@ -505,7 +506,7 @@ const useResults = () => {
       const msg = submitResponse.data.msg;
       const missing = msg.search("Fehlende Proben");
       if (missing !== -1) {
-        setErrors((prevErrors) =>
+        setErrors((prevErrors: IError[]) =>
           prevErrors
             .filter((error) => error.type !== "submit")
             .concat({
@@ -513,6 +514,8 @@ const useResults = () => {
               message: t("errors.failedToSendSomeResults", {
                 missing: msg.substr(missing),
               }),
+              messageOne: t("errors.failedToSubmitResultsTextOne"),
+              messageTwo: t("errors.failedToSubmitResultsTextTwo"),
             })
         );
       }
@@ -523,12 +526,14 @@ const useResults = () => {
         prevFailedSubmittingResults.filter((id) => id !== testid).concat(testid)
       );
       if (!settings?.account?.autoSubmitResults) {
-        setErrors((prevErrors) =>
+        setErrors((prevErrors: IError[]) =>
           prevErrors
             .filter((error) => error.type !== "submit")
             .concat({
               type: "submit",
               message: t("errors.failedToSubmitResults"),
+              messageOne: t("errors.failedToSubmitResultsTextOne"),
+              messageTwo: t("errors.failedToSubmitResultsTextTwo"),
             })
         );
       }
