@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo } from "react";
-import { useData, useResults, useTheme, useTranslation } from "../hooks";
+import React, { useCallback } from "react";
+import { useData, useResults, useTranslation } from "../hooks";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IError } from "../types/interfaces/interfaces";
 import { IHideErrorProps } from "../types/components";
@@ -21,7 +21,6 @@ const Errors: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
-  const { colors } = useTheme();
   const hideError = ({ type, index, remember }: IHideErrorProps) => {
     if (type)
       setErrors((prevErrors: IError[]) =>
@@ -30,7 +29,7 @@ const Errors: React.FC = () => {
     if (remember) setOfflineMode(true);
     if (index || index == 0)
       setErrors((prevErrors: IError[]) =>
-        prevErrors.filter((error, errIndex) => errIndex != index)
+        prevErrors.filter((_error, errIndex) => errIndex != index)
       );
   };
 
@@ -47,10 +46,10 @@ const Errors: React.FC = () => {
     navigate("/selectMethod");
     setOfflineMode(true);
   };
-  const activateOffline = (errIndex: number) => {
-    setOfflineMode(true);
-    hideError({ index: errIndex });
-  };
+  // const activateOffline = (errIndex: number) => {
+  //   setOfflineMode(true);
+  //   hideError({ index: errIndex });
+  // };
   const handleReadError = useCallback(
     (errIndex: number) => {
       reset();
