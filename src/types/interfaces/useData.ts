@@ -164,4 +164,7 @@ export interface IUseData {
 
   openMenu: boolean;
   setOpenMenu: React.Dispatch<React.SetStateAction<boolean>>;
+
+  resultSubmitted: boolean;
+  setResultSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 }

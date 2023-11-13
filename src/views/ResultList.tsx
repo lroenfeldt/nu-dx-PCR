@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   Block,
   Button,
@@ -33,16 +33,14 @@ const ResultList = () => {
     setSubmitFilter,
     results,
     failedSubmittingResults,
-    testid,
     setErrors,
     openMenu,
     setOpenMenu,
+    setResultSubmitted,
   } = useData();
-  const { checkUSB, saveToUSB, getResults, submitResult } = useResults();
+  const { checkUSB, saveToUSB, getResults } = useResults();
   const { t, locale } = useTranslation();
   const { colors } = useTheme();
-
-  const [resultSubmitted, setResultSubmitted] = useState<boolean>(false);
 
   const handleSubmitToggleChange = () => {
     getResults(!submitFilter);
@@ -322,14 +320,7 @@ const ResultList = () => {
         <Errors />
         {openMenu ? (
           <Modal isVisible={openMenu} setIsvisible={() => setOpenMenu(false)}>
-            <ViewResultsModal
-              onClose={() => setOpenMenu(false)}
-              onCloudExport={() => {
-                submitResult(testid, resultSubmitted);
-              }}
-              onCSVExport={() => saveToUSB(testid, resultSubmitted)}
-              onPDFExport={() => saveToUSB(testid, resultSubmitted)}
-            />
+            <ViewResultsModal onClose={() => setOpenMenu(false)} />
           </Modal>
         ) : null}
       </Block>

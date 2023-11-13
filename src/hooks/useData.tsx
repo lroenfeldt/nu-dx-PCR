@@ -80,14 +80,15 @@ export function DataProvider({ children }: IDataProviderProps) {
     string[]
   >([]);
   const [viewType, setViewType] = useState("sample");
+  const [resultSubmitted, setResultSubmitted] = useState<boolean>(false);
   /**
    * Resets values to default
    * @returns {void}
    **/
   const reset = useCallback(() => {
     setRemTime(0);
+    // removed setTestid("")
     setErrors([]);
-    setTestid("");
     setTestrun(false);
     setTestDone(false);
     setSubmitted(false);
@@ -370,6 +371,8 @@ export function DataProvider({ children }: IDataProviderProps) {
       setControlMenu,
       openMenu,
       setOpenMenu,
+      resultSubmitted,
+      setResultSubmitted,
     }),
     [
       currentMenu,
@@ -472,6 +475,8 @@ export function DataProvider({ children }: IDataProviderProps) {
       setControlMenu,
       openMenu,
       setOpenMenu,
+      resultSubmitted,
+      setResultSubmitted,
     ]
   );
   return (

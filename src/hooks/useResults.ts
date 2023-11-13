@@ -20,6 +20,7 @@ import {
 } from "../types/interfaces/parseResults";
 import { IConfigFile, ITestProcedure } from "../types/interfaces/settings";
 import { IError } from "../types/interfaces/interfaces";
+import { useCallback } from "react";
 
 /**
  * hook to handle all the results related functions
@@ -42,6 +43,7 @@ const useResults = () => {
     setSubmitted,
     lotNumber,
     setFailedSubmittingResults,
+    setTestid,
   } = useData();
 
   const location = useLocation();
@@ -225,100 +227,104 @@ const useResults = () => {
    * @param {Boolean} done
    * @returns {Boolean} true if writing to USB was successful
    */
-  const saveToUSB: TsaveToUSB = async (testid, done) => {
-    console.error(testid);
-    if (location.pathname == "/ResultList") {
-      setWriting(testid, true);
-    }
-
-    //reset errors
-    setErrors((prevErrors) =>
-      prevErrors.filter((error) => error.type !== "read")
-    );
-
-    //init data
-    let resultFile: string;
-    let testConfig: IConfigFile;
-    let testmethod: ITestProcedure;
-
-    //read result file
-    try {
-      console.log("fetching result files");
-      window.api.logEvents(`fetching result files`);
-
-      let fetchResult = await window.api.getResult(testid, done);
-      const configFile = fetchResult.configFile;
-      resultFile = fetchResult.resultFile;
-      testConfig = JSON.parse(configFile);
-      if (!testConfig.testmethod) {
-        testConfig.testmethod = urls.TESTMETHOD;
+  const saveToUSB: TsaveToUSB = useCallback(
+    async (testid, done) => {
+      setTestid(testid);
+      console.error(testid);
+      if (location.pathname == "/ResultList") {
+        setWriting(testid, true);
       }
-      testmethod = settings.account.testprocedures.find(
-        (method) => method.id === testConfig.testmethod
-      ) as ITestProcedure;
-    } catch (err) {
-      console.log(err);
-      window.api.logEvents(`saveToUSB: ${err}`);
-      setErrors((prevErrors) =>
-        prevErrors
-          .filter((error) => error.type !== "read")
-          .concat({
-            type: "read",
-            message: t("errors.failedToReadTestData"),
-          })
-      );
-      if (location.pathname == "/ResultList") setWriting(testid, false);
-      return false;
-    }
 
-    //Parse Results
-    console.log("parse results");
-    window.api.logEvents(`parse results`);
-    let parsedResults;
-    try {
-      parsedResults = parseResultsExport(
-        resultFile,
-        testid,
-        testConfig,
-        testmethod,
-        lotNumber
-      );
-    } catch (err) {
-      console.log(err);
-      window.api.logEvents(`saveToUSB: ${err}`);
+      //reset errors
       setErrors((prevErrors) =>
-        prevErrors
-          .filter((error) => error.type !== "submit")
-          .concat({
-            type: "submit",
-            message: t("errors.failedToReadResultData"),
-          })
+        prevErrors.filter((error) => error.type !== "read")
       );
-      if (location.pathname == "/ResultList") setWriting(testid, false);
-      return false;
-    }
 
-    //Save To USB
-    try {
-      await window.api.saveToUSB(testid, parsedResults);
-      if (location.pathname == "/ResultList") setWriting(testid, false);
-      setWritingSuccess(testid, true);
-    } catch (error) {
-      console.log(error);
-      window.api.logEvents(`saveToUSB: ${error}`);
-      setErrors((prevErrors) =>
-        prevErrors
-          .filter((error) => error.type !== "saveToUSB")
-          .concat({
-            type: "read",
-            message: t("errors.failedToSaveResultData"),
-          })
-      );
-      if (location.pathname == "/ResultList") setWriting(testid, false);
-      return false;
-    }
-    return true;
-  };
+      //init data
+      let resultFile: string;
+      let testConfig: IConfigFile;
+      let testmethod: ITestProcedure;
+
+      //read result file
+      try {
+        console.log("fetching result files");
+        window.api.logEvents(`fetching result files`);
+
+        let fetchResult = await window.api.getResult(testid, done);
+        const configFile = fetchResult.configFile;
+        resultFile = fetchResult.resultFile;
+        testConfig = JSON.parse(configFile);
+        if (!testConfig.testmethod) {
+          testConfig.testmethod = urls.TESTMETHOD;
+        }
+        testmethod = settings.account.testprocedures.find(
+          (method) => method.id === testConfig.testmethod
+        ) as ITestProcedure;
+      } catch (err) {
+        console.log(err);
+        window.api.logEvents(`saveToUSB: ${err}`);
+        setErrors((prevErrors) =>
+          prevErrors
+            .filter((error) => error.type !== "read")
+            .concat({
+              type: "read",
+              message: t("errors.failedToReadTestData"),
+            })
+        );
+        if (location.pathname == "/ResultList") setWriting(testid, false);
+        return false;
+      }
+
+      //Parse Results
+      console.log("parse results");
+      window.api.logEvents(`parse results`);
+      let parsedResults;
+      try {
+        parsedResults = parseResultsExport(
+          resultFile,
+          testid,
+          testConfig,
+          testmethod,
+          lotNumber
+        );
+      } catch (err) {
+        console.log(err);
+        window.api.logEvents(`saveToUSB: ${err}`);
+        setErrors((prevErrors) =>
+          prevErrors
+            .filter((error) => error.type !== "submit")
+            .concat({
+              type: "submit",
+              message: t("errors.failedToReadResultData"),
+            })
+        );
+        if (location.pathname == "/ResultList") setWriting(testid, false);
+        return false;
+      }
+
+      //Save To USB
+      try {
+        await window.api.saveToUSB(testid, parsedResults);
+        if (location.pathname == "/ResultList") setWriting(testid, false);
+        setWritingSuccess(testid, true);
+      } catch (error) {
+        console.log(error);
+        window.api.logEvents(`saveToUSB: ${error}`);
+        setErrors((prevErrors) =>
+          prevErrors
+            .filter((error) => error.type !== "saveToUSB")
+            .concat({
+              type: "read",
+              message: t("errors.failedToSaveResultData"),
+            })
+        );
+        if (location.pathname == "/ResultList") setWriting(testid, false);
+        return false;
+      }
+      return true;
+    },
+    [location.pathname, lotNumber]
+  );
 
   const setSubmittingSuccess = (testid: string, isSuccess: boolean) => {
     setResults((prevUnsubmittedResults) =>
