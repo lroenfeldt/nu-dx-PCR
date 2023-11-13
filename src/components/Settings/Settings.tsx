@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { FiLogOut } from "react-icons/fi";
 import ArrowBox from "../ArrowBox";
 import deFlag from "../../assets/images/flags/de.png";
@@ -55,6 +55,13 @@ const Settings: React.FC<SettingsProps> = ({ visible }) => {
     [locale, setLocale, settings, saveSettings]
   );
 
+  const [autoUpdate, setAutoUpdate] = useState<boolean>(true);
+  const handleAutoUpdate = () => {
+    autoUpdate ? setAutoUpdate(false) : setAutoUpdate(true);
+  };
+
+  window.api.autoUpdate(autoUpdate);
+
   return (
     <div>
       <ArrowBox direction={`top ${visible ? "active" : "disable"}`}>
@@ -99,13 +106,21 @@ const Settings: React.FC<SettingsProps> = ({ visible }) => {
               </button>
             )}
           </div>
-          {settings.isDev && (
+          {/* {settings.isDev && (
             <Switch
               label={settings.device.wellCount}
               onClick={handleWellCount}
               checked={settings.device.wellCount === 96}
             />
-          )}
+          )} */}
+
+          <span className="auto-update">{t("common.autoUpdate")}</span>
+          <Switch
+            label={autoUpdate ? t("common.on") : t("common.off")}
+            onClick={handleAutoUpdate}
+            checked={autoUpdate}
+          />
+
           <span className="serial-number">
             S/N: {settings.account.serialNumber}
           </span>

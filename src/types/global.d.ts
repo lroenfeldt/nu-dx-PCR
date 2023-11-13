@@ -43,6 +43,7 @@ declare global {
       deleteOverride: (testid: string) => void;
       relaunchApp: () => void;
       copyLogos: () => void;
+      autoUpdate: (stateParameter: boolean) => boolean;
     };
   }
 }

@@ -70,15 +70,22 @@ export function updater() {
   });
 }
 
+function handleAutoUpdate() {
+  ipcMain.handle("autoUpdate", (event, stateParameter) => {
+    console.log(stateParameter);
+    stateParameter ? autoUpdater.downloadUpdate() : null;
+  });
+}
+
 export function downloadUpdates(/* parameters */): void {
   // logic for downloading updates
   /**
    * Download the latest version of the app
    * @returns {void}
    * */
-  ipcMain.handle("downloadApp", async (_event) => {
+  ipcMain.handle("downloadApp", async (event) => {
     autoUpdater.checkForUpdates();
-    autoUpdater.downloadUpdate();
+    handleAutoUpdate();
   });
 }
 
