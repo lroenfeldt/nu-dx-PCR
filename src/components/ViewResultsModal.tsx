@@ -14,6 +14,7 @@ const ViewResultsModal: React.FC<IViewResultsModal> = ({
   const { t } = useTranslation();
   const { colors } = useTheme();
   const { reading, submitting } = useData();
+
   return (
     <>
       <Block

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Block,
   Button,
@@ -128,16 +128,9 @@ const ResultList = () => {
             <AiFillUsb />
           </div>
         );
-      } else {
-        buttonUSB = (
-          <div
-            className="button"
-            onClick={() => saveToUSB(result.testid, result.submitted)}
-          >
-            <AiFillUsb />
-          </div>
-        );
       }
+
+      // |-------><-------|
 
       //Testmethod name
       let testMethodName;
@@ -273,7 +266,7 @@ const ResultList = () => {
       <Block
         position="absolute"
         top={"50%"}
-        right={-80}
+        right={-75}
         transform="rotate(90deg)"
         flex
         row
@@ -331,9 +324,11 @@ const ResultList = () => {
           <Modal isVisible={openMenu} setIsvisible={() => setOpenMenu(false)}>
             <ViewResultsModal
               onClose={() => setOpenMenu(false)}
-              onCloudExport={() => submitResult(testid, resultSubmitted)}
-              onCSVExport={() => {}}
-              onPDFExport={() => {}}
+              onCloudExport={() => {
+                submitResult(testid, resultSubmitted);
+              }}
+              onCSVExport={() => saveToUSB(testid, resultSubmitted)}
+              onPDFExport={() => saveToUSB(testid, resultSubmitted)}
             />
           </Modal>
         ) : null}

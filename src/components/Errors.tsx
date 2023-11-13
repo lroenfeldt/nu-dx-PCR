@@ -21,6 +21,7 @@ const Errors: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+
   const hideError = ({ type, index, remember }: IHideErrorProps) => {
     if (type)
       setErrors((prevErrors: IError[]) =>

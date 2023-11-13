@@ -1,0 +1,5 @@
+Position;Barcode;CT;Result;lotNumber
+A01;Placeholder_TPC;23.6;positive;null
+A02;Placeholder_NTC;0;negative;null
+A03;1187163520;23.81;positive;null
+A04;560536192;0;invalid;null

@@ -26,10 +26,10 @@ import {
   moveFiles,
 } from "./core/fileOperations";
 import {
+  checkAndSaveToUSB,
   checkUSB,
   getDeviceInfo,
   rebootDevice,
-  saveToUSB,
   toggleLid,
 } from "./core/deviceInteraction";
 import {
@@ -323,7 +323,7 @@ getTests();
 moveFiles();
 
 checkUSB();
-saveToUSB();
+checkAndSaveToUSB();
 getDeviceInfo();
 
 getVersion();

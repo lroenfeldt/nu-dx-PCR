@@ -226,7 +226,10 @@ const useResults = () => {
    * @returns {Boolean} true if writing to USB was successful
    */
   const saveToUSB: TsaveToUSB = async (testid, done) => {
-    if (location.pathname == "/ResultList") setWriting(testid, true);
+    console.error(testid);
+    if (location.pathname == "/ResultList") {
+      setWriting(testid, true);
+    }
 
     //reset errors
     setErrors((prevErrors) =>

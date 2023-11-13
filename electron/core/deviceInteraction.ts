@@ -84,7 +84,6 @@ export function checkUSB() {
     if (isDev) {
       return true;
     }
-
     try {
       fs.accessSync("D:\\", fs.constants.F_OK);
       return true;
@@ -97,7 +96,7 @@ export function checkUSB() {
   });
 }
 
-export function saveToUSB() {
+function saveToUSB() {
   //Save to USB
   ipcMain.handle("saveToUSB", (_event, testid, results) => {
     console.log(results);
@@ -106,8 +105,18 @@ export function saveToUSB() {
     const destPath = "D:\\nu-dx-pcr\\runs";
     const filepath = path.resolve(destPath, filename);
     try {
-      fs.mkdirSync(path.dirname(filepath), { recursive: true });
-      fs.writeFileSync(filepath, results);
+      // if (!isDev) {
+      //   if (fs.accessSync("D:\\", fs.constants.F_OK) as any) {
+      //     fs.mkdirSync(path.dirname(filepath), { recursive: true });
+      //     fs.writeFileSync(filepath, results);
+      //   } else false;
+      // } else if (isDev) {
+      //   return true;
+      // }
+      if (fs.accessSync("D:\\", fs.constants.F_OK) as any) {
+        fs.mkdirSync(path.dirname(filepath), { recursive: true });
+        fs.writeFileSync(filepath, results);
+      } else false;
     } catch (err: any) {
       console.error(err);
       logger(err);
@@ -116,6 +125,17 @@ export function saveToUSB() {
     }
     return true;
   });
+}
+
+export function checkAndSaveToUSB() {
+  try {
+    saveToUSB();
+  } catch (error) {
+    const errMsg: string = "Propblem with function checkAndSaveToUSB";
+    console.error(error);
+    console.error(errMsg);
+    logger(errMsg);
+  }
 }
 
 export function getDeviceInfo() {
