@@ -1,3 +1,5 @@
+import { IpcRendererEvent } from "electron";
+
 export interface IStore {
   settings: Settings;
 }
@@ -103,3 +105,5 @@ export interface ITestObject {
   isWriting?: boolean;
   submittingSuccess?: boolean;
 }
+
+export type CallbackType = (event: IpcRendererEvent, ...args: any[]) => void;

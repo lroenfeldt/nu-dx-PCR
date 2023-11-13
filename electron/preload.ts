@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
+import { CallbackType } from "./interfaces/interfaces";
 
 contextBridge.exposeInMainWorld("api", {
   checkResultFile: (testid: string) =>
@@ -47,4 +48,7 @@ contextBridge.exposeInMainWorld("api", {
     ),
   endLineGene: () => ipcRenderer.invoke("endLineGene"),
   power: (command: string) => ipcRenderer.send("power", command),
+  updateStatus: (callback: CallbackType) => {
+    return ipcRenderer.on("updateStatus", callback);
+  },
 });

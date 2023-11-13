@@ -316,7 +316,6 @@ rebootDevice();
 startTest();
 endTest();
 
-// deviceInteraction
 toggleLid();
 
 getUnsubmitted();
