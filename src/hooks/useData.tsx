@@ -89,7 +89,6 @@ export function DataProvider({ children }: DataProviderProps) {
     setTestFinishedAt(null);
     setRemTime(0);
     setErrors([]);
-    setTestid("");
     setTestrun(false);
     setTestDone(false);
     setSubmitted(false);
