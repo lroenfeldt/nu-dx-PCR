@@ -57,7 +57,7 @@
     "resetResult": "Réinitialiser le résultat",
     "deviceTurnOffInfo": "L'appareil va automatiquement s'éteindre dans <strong>%{time}</strong> secondes",
     "autoUpdate": "Activer la mise à jour automatique",
-    "on": "SUR",
+    "on": "ACTIVÉ",
     "off": "ÉTEINT"
   },
   "authentication": {

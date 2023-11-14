@@ -7,11 +7,7 @@ import AutoLaunch from "auto-launch";
 import { spawn } from "./spawn";
 import { logger } from "./logger";
 import { IStore } from "./interfaces/interfaces";
-import {
-  downloadUpdates,
-  launchUpdates,
-  updater,
-} from "./core/updateManagement";
+import { launchUpdates, updater } from "./core/updateManagement";
 import {
   checkResultFileHandler,
   getResultHandler,
@@ -162,6 +158,7 @@ export const store = new Store<IStore>({
         ntcPos: "A02",
         locale: "en",
         updateType: "stable",
+        autoUpdate: true,
       },
     },
   },
@@ -331,8 +328,6 @@ getVersion();
 logError();
 
 launchUpdates();
-updater();
-downloadUpdates();
 
 deleteAllOverrides();
 

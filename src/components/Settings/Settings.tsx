@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { FiLogOut } from "react-icons/fi";
 import ArrowBox from "../ArrowBox";
 import deFlag from "../../assets/images/flags/de.png";
@@ -24,7 +24,7 @@ const Settings: React.FC<SettingsProps> = ({ visible }) => {
     setMenuOpen,
     clearSettings,
     updateAvailable,
-    setUpdateAvailable,
+    setSettings,
   } = useData();
 
   const { t, setLocale, locale } = useTranslation();
@@ -55,15 +55,11 @@ const Settings: React.FC<SettingsProps> = ({ visible }) => {
     [locale, setLocale, settings, saveSettings]
   );
 
-  const [autoUpdate, setAutoUpdate] = useState<boolean>(true);
-  const handleSwitch = () => {
-    setAutoUpdate(!autoUpdate);
-  };
-
-  useEffect(() => {
-    console.log(autoUpdate);
-    window.api.autoUpdate(autoUpdate);
-  }, [autoUpdate]);
+  const handleSwitch = useCallback(async () => {
+    const newSettings = settings;
+    newSettings.user.autoUpdate = !settings.user.autoUpdate;
+    await saveSettings(settings);
+  }, [settings.user.autoUpdate]);
 
   return (
     <div>
@@ -109,19 +105,19 @@ const Settings: React.FC<SettingsProps> = ({ visible }) => {
               </button>
             )}
           </div>
-          {/* {settings.isDev && (
+          {settings.isDev && (
             <Switch
               label={settings.device.wellCount}
               onClick={handleWellCount}
               checked={settings.device.wellCount === 96}
             />
-          )} */}
+          )}
 
           <span className="auto-update">{t("common.autoUpdate")}</span>
           <Switch
-            label={autoUpdate ? t("common.on") : t("common.off")}
+            label={settings.user.autoUpdate ? t("common.on") : t("common.off")}
             onClick={handleSwitch}
-            checked={autoUpdate}
+            checked={settings.user.autoUpdate}
           />
 
           <span className="serial-number">
@@ -145,4 +141,4 @@ const Settings: React.FC<SettingsProps> = ({ visible }) => {
   );
 };
 
-export default Settings;
+export default memo(Settings);

@@ -55,6 +55,7 @@ export interface UserSettings {
   ntcPos: string;
   locale: string;
   updateType: string;
+  autoUpdate: boolean;
 }
 
 export interface IBarcode {

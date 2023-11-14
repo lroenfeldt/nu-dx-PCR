@@ -175,4 +175,5 @@ export interface IUserSettings {
   ntcPos: string;
   locale: string;
   updateType: string;
+  autoUpdate: boolean;
 }
