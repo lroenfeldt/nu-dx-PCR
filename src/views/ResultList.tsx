@@ -37,6 +37,8 @@ const ResultList = () => {
     saveAllToUSB,
   } = useResults();
   const { t, locale } = useTranslation();
+  const [buttonIsVisible, setButtonIsVisible] = useState<boolean>(false);
+  const [resultSubmitted, setResultSubmitted] = useState<boolean | null>(null);
 
   const handleSubmitToggleChange = () => {
     getResults(!submitFilter);
@@ -63,6 +65,17 @@ const ResultList = () => {
     );
   };
 
+  useEffect(() => {
+    if (resultSubmitted) {
+      setButtonIsVisible(true);
+      const timeoutId = setTimeout(() => {
+        setButtonIsVisible(false);
+      }, 2000);
+      // Clear the timeout if the component is unmounted
+      return () => clearTimeout(timeoutId);
+    }
+  }, [resultSubmitted, buttonIsVisible]);
+
   //Create Table
   let tableRows: any[] = [];
   results
@@ -81,7 +94,10 @@ const ResultList = () => {
         buttonSubmit = (
           <div
             className="button"
-            onClick={() => submitResult(result.testid, result.submitted)}
+            onClick={() => {
+              setResultSubmitted(result.submitted);
+              submitResult(result.testid, result.submitted);
+            }}
           >
             <div className="spinnerContainer">
               <Oval height="30" width="30" color="white" />
@@ -97,6 +113,7 @@ const ResultList = () => {
             className="button"
             onClick={() => {
               setTestid(result.testid);
+              setResultSubmitted(result.submitted);
               submitResult(result.testid, result.submitted);
             }}
           >
@@ -134,14 +151,11 @@ const ResultList = () => {
         );
       }
       if (result.submitted) {
-        buttonSubmit = (
-          <div
-            onClick={() => submitResult(result.testid, result.submitted)}
-            className="button"
-          >
+        buttonSubmit = buttonIsVisible ? (
+          <div className="button">
             <FaCheck />
           </div>
-        );
+        ) : null;
       }
       if (failedSubmittingResults.includes(result.testid)) {
         buttonSubmit = (
@@ -150,6 +164,7 @@ const ResultList = () => {
           </div>
         );
       }
+
       if (result.isSubmitting) {
         buttonSubmit = (
           <div

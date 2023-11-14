@@ -70,13 +70,6 @@ export function updater() {
   });
 }
 
-function handleAutoUpdate() {
-  ipcMain.handle("autoUpdate", (event, stateParameter) => {
-    console.log(stateParameter);
-    stateParameter ? autoUpdater.downloadUpdate() : null;
-  });
-}
-
 export function downloadUpdates(/* parameters */): void {
   // logic for downloading updates
   /**
@@ -85,8 +78,24 @@ export function downloadUpdates(/* parameters */): void {
    * */
   ipcMain.handle("downloadApp", async (event) => {
     autoUpdater.checkForUpdates();
+    // autoUpdater.downloadUpdate();
     handleAutoUpdate();
   });
 }
 
 // ... other update management functions can be added here
+function handleAutoUpdate(): void {
+  ipcMain.on("autoUpdate", (event, stateParameter) => {
+    try {
+      if (stateParameter) {
+        return autoUpdater.downloadUpdate();
+      } else console.log("auto update disabled");
+    } catch (error) {
+      console.log(error);
+    }
+  });
+}
+
+ipcMain.on("autoUpdate", (event, stateParameter) => {
+  console.log(stateParameter);
+});

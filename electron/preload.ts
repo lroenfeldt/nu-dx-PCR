@@ -52,5 +52,5 @@ contextBridge.exposeInMainWorld("api", {
     return ipcRenderer.on("updateStatus", callback);
   },
   autoUpdate: (stateParameter: boolean) =>
-    ipcRenderer.invoke("autoUpdate", stateParameter),
+    ipcRenderer.send("autoUpdate", stateParameter),
 });

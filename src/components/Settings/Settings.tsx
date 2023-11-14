@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FiLogOut } from "react-icons/fi";
 import ArrowBox from "../ArrowBox";
 import deFlag from "../../assets/images/flags/de.png";
@@ -56,11 +56,14 @@ const Settings: React.FC<SettingsProps> = ({ visible }) => {
   );
 
   const [autoUpdate, setAutoUpdate] = useState<boolean>(true);
-  const handleAutoUpdate = () => {
-    autoUpdate ? setAutoUpdate(false) : setAutoUpdate(true);
+  const handleSwitch = () => {
+    setAutoUpdate(!autoUpdate);
   };
 
-  window.api.autoUpdate(autoUpdate);
+  useEffect(() => {
+    console.log(autoUpdate);
+    window.api.autoUpdate(autoUpdate);
+  }, [autoUpdate]);
 
   return (
     <div>
@@ -117,7 +120,7 @@ const Settings: React.FC<SettingsProps> = ({ visible }) => {
           <span className="auto-update">{t("common.autoUpdate")}</span>
           <Switch
             label={autoUpdate ? t("common.on") : t("common.off")}
-            onClick={handleAutoUpdate}
+            onClick={handleSwitch}
             checked={autoUpdate}
           />
 
