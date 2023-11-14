@@ -15,6 +15,7 @@ const Errors: React.FC = () => {
     setDeviceStatus,
     setErrors,
     results,
+    resultSubmitted,
   } = useData();
   const { submitResult } = useResults();
   const { t } = useTranslation();
@@ -132,7 +133,7 @@ const Errors: React.FC = () => {
               <button
                 onClick={() => {
                   hideError({ index: i });
-                  submitResult(testid, false);
+                  submitResult(testid, resultSubmitted);
                 }}
               >
                 {t("common.retry")}

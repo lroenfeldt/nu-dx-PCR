@@ -80,6 +80,7 @@ export function DataProvider({ children }: DataProviderProps) {
   const [viewType, setViewType] = useState("sample");
   const [remTime, setRemTime] = useState(0);
   const [testFinishedAt, setTestFinishedAt] = useState(null);
+  const [resultSubmitted, setResultSubmitted] = useState<boolean | null>(null);
 
   /**
    * Resets values to default
@@ -375,6 +376,8 @@ export function DataProvider({ children }: DataProviderProps) {
       setViewType,
       testFinishedAt,
       setTestFinishedAt,
+      resultSubmitted,
+      setResultSubmitted,
     }),
     [
       openResults,
@@ -472,6 +475,8 @@ export function DataProvider({ children }: DataProviderProps) {
       setViewType,
       testFinishedAt,
       setTestFinishedAt,
+      resultSubmitted,
+      setResultSubmitted,
     ]
   );
   return (

@@ -27,6 +27,8 @@ const ResultList = () => {
     submitting,
     failedSubmittingResults,
     setErrors,
+    resultSubmitted,
+    setResultSubmitted,
   } = useData();
   const {
     checkUSB,
@@ -38,7 +40,6 @@ const ResultList = () => {
   } = useResults();
   const { t, locale } = useTranslation();
   const [buttonIsVisible, setButtonIsVisible] = useState<boolean>(false);
-  const [resultSubmitted, setResultSubmitted] = useState<boolean | null>(null);
 
   const handleSubmitToggleChange = () => {
     getResults(!submitFilter);
@@ -317,7 +318,6 @@ const ResultList = () => {
   //Check if USB is Present
   useEffect(() => {
     checkUSB();
-    console.log(USBPresent);
     const clearcheckUSB = setInterval(() => {
       checkUSB();
     }, 3000);

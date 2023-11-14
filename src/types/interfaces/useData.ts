@@ -144,4 +144,7 @@ export interface IUseData {
 
   testFinishedAt: number | null;
   setTestFinishedAt: React.Dispatch<React.SetStateAction<number | null>>;
+
+  resultSubmitted: boolean;
+  setResultSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 }
