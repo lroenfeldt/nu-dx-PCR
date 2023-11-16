@@ -282,6 +282,7 @@ const BarcodeInput = () => {
       });
     }
   };
+
   const navigateToTestReady = () => {
     if (settings?.account.autoControlSamples == "Trailing" && !trailing) {
       trailingHandler();
@@ -750,7 +751,7 @@ const BarcodeInput = () => {
     ) {
       setBarcodes((prevBarcodes) => {
         return prevBarcodes.map((barcode) => {
-          const controlSample = testprocedure?.controlSamples.find((sample) => {
+          const controlSample = testprocedure.controlSamples.find((sample) => {
             return (
               (!isNinetySix && barcode.label === sample.position16) ||
               (isNinetySix && barcode.label === sample.position96)
