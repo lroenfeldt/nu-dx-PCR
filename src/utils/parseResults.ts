@@ -219,6 +219,8 @@ export const parseResults: TParseResults = (
         .replaceAll("hecThresh", "hecThreshFl")
         .replaceAll("virusThresh", "virusThreshFl")
         .replaceAll("=", "==")
+        .replaceAll("==>", "=>")
+        .replaceAll("<==", "<=")
         .replaceAll("\n", "")
         .split(",")
         .map((s) => "(" + s.trim() + ")")
