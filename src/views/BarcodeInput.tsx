@@ -56,7 +56,6 @@ const BarcodeInput = () => {
     setActive(id);
     if (textInput.current) textInput.current.focus();
   };
-
   const numberRegex = /^[0-9]+$/;
   const nextWell = useCallback(
     (next: boolean) => {
@@ -211,7 +210,7 @@ const BarcodeInput = () => {
 
         let newActive = lastNotEmptyIndex + 1;
         let count = 0;
-        if (testprocedure.controlSamples.length > 0) {
+        if (testprocedure?.controlSamples.length > 0) {
           // Mapper les controlSamples sur les barcodes et les bloquer
           return prevBarcodes.map((barcode, index) => {
             const controlSample =
@@ -751,7 +750,7 @@ const BarcodeInput = () => {
     ) {
       setBarcodes((prevBarcodes) => {
         return prevBarcodes.map((barcode) => {
-          const controlSample = testprocedure.controlSamples.find((sample) => {
+          const controlSample = testprocedure?.controlSamples.find((sample) => {
             return (
               (!isNinetySix && barcode.label === sample.position16) ||
               (isNinetySix && barcode.label === sample.position96)

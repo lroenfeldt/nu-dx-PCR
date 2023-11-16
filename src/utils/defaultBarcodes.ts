@@ -23,11 +23,10 @@ export default function useDefaultBarcodes(settings: ISettings): IBarcode[] {
     "K",
     "L",
   ];
-  let demoSet = false;
+  const length = settings?.device?.wellCount == 96 ? 12 : 8;
   const wellCount = settings?.device?.wellCount;
-  const length = wellCount == 96 ? 12 : 8;
 
-  for (let i = 1; i <= +wellCount; i++) {
+  for (let i = 1; i <= wellCount; i++) {
     let rowIndex = Math.ceil(i / length) - 1;
     let blocked = false;
 
@@ -39,19 +38,6 @@ export default function useDefaultBarcodes(settings: ISettings): IBarcode[] {
     let label = posName;
     let value = "";
     let valid = false;
-    //Set Controls
-    if (posName === settings.user.tpcPos && settings.account.autoControl) {
-      blocked = settings.account.autoControl;
-      label = "TPC";
-      value = "TPC";
-      valid = true;
-    }
-    if (posName === settings.user.ntcPos && settings.account.autoControl) {
-      blocked = settings.account.autoControl;
-      label = "NTC";
-      value = "NTC";
-      valid = true;
-    }
 
     defaultBarcodes.push({
       id: i,
