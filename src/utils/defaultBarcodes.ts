@@ -30,9 +30,6 @@ export default function useDefaultBarcodes(settings: ISettings): IBarcode[] {
   for (let i = 1; i <= +wellCount; i++) {
     let rowIndex = Math.ceil(i / length) - 1;
     let blocked = false;
-    // wellCount is working with types. usually its string.
-    // in defaultBarcodes.ts wellCount needs to be a number.
-    // converted wellCount to number by adding a + operator
 
     //Set Position Name
     let posName =
@@ -54,18 +51,6 @@ export default function useDefaultBarcodes(settings: ISettings): IBarcode[] {
       label = "NTC";
       value = "NTC";
       valid = true;
-    }
-    //Set Demo Code for Development
-    if (
-      settings.isDev &&
-      settings.account.autoControl &&
-      posName !== settings.user.ntcPos &&
-      posName !== settings.user.tpcPos &&
-      !demoSet
-    ) {
-      value = "3575910784";
-      valid = true;
-      demoSet = true;
     }
 
     defaultBarcodes.push({

@@ -11,9 +11,9 @@ import urls from "../config/settings";
 import { useNavigate } from "react-router-dom";
 import { useData, useTranslation } from "../hooks";
 import { IoMdCloseCircle } from "react-icons/io";
-import { IBarcode } from "../types/interfaces/interfaces";
 import { ITestProcedure } from "../types/interfaces/settings";
 import { errorProps } from "../constants/errorProps";
+import { IBarcode } from "../types/interfaces/interfaces";
 
 const BarcodeInput = () => {
   const {
@@ -46,92 +46,96 @@ const BarcodeInput = () => {
   const [clear, setClear] = useState(false);
   const [inputs, setInputs] = useState({});
   const [inputName, setInputName] = useState("default");
-  const testmethod = settings.account.testprocedures.find(
-    (procedure) => procedure.id == selectedMethod
+  const [trailing, setTrailing] = useState(false);
+  const [controlsApplied, setControlsApplied] = useState(false);
+  const testprocedure = settings.account.testprocedures.find(
+    (testprocedure) => testprocedure.id === selectedMethod
   ) as ITestProcedure;
+
   const markActive = (id: number) => {
     setActive(id);
     if (textInput.current) textInput.current.focus();
   };
-  useEffect(() => {
-    setInputName(getBarcode(active).label);
-  }, [active]);
+
   const numberRegex = /^[0-9]+$/;
-  const nextWell = (next: boolean) => {
-    let nextWell = active;
-    const blockedBarcodes = barcodes
-      .filter((barcode) => barcode.blocked === true)
-      .map((blockedBarcode) => blockedBarcode.id);
-    setDisabled(false);
-    const wellCount = settings.device.wellCount;
-    if (active <= wellCount && wellCount == 96) {
-      for (let j = -13; j <= wellCount; j++) {
-        if (next === true) {
-          if (nextWell === 96 && blockedBarcodes.includes(1))
-            return setDisabled(true);
-          if (j === nextWell && blockedBarcodes.includes(nextWell + 12)) {
-            if (nextWell + 24 === 97) return setDisabled(true);
-            if (blockedBarcodes.includes(nextWell + 24))
-              return markActive(nextWell + 36);
-            return markActive(nextWell + 24);
+  const nextWell = useCallback(
+    (next: boolean) => {
+      let nextWell = active;
+
+      const blockedBarcodes = barcodes
+        .filter((barcode) => barcode.blocked === true)
+        .map((blockedBarcode) => blockedBarcode.id);
+      setDisabled(false);
+      const wellCount = settings.device.wellCount;
+      if (active <= wellCount && wellCount == 96) {
+        for (let j = -13; j <= wellCount; j++) {
+          if (next === true) {
+            if (nextWell === 96 && blockedBarcodes.includes(1))
+              return setDisabled(true);
+            if (j === nextWell && blockedBarcodes.includes(nextWell + 12)) {
+              if (nextWell + 24 === 97) return setDisabled(true);
+              if (blockedBarcodes.includes(nextWell + 24))
+                return markActive(nextWell + 36);
+              return markActive(nextWell + 24);
+            }
+            if (
+              j === nextWell &&
+              j >= 85 &&
+              blockedBarcodes.includes(nextWell - 83)
+            )
+              return markActive(nextWell - 83 + 12);
+            if (j === nextWell && j === 96 && !blockedBarcodes.includes(1))
+              return markActive(1);
+            if (j === nextWell && j >= 85) return markActive(j - 83);
+            if (j === nextWell && j < 85) return markActive(j + 12);
+          } else {
+            if (
+              j === nextWell &&
+              blockedBarcodes.includes(nextWell - 12) &&
+              blockedBarcodes.includes(nextWell - 24)
+            )
+              return markActive(96);
+            if (
+              j === nextWell &&
+              j > 12 &&
+              j <= 24 &&
+              nextWell - 12 === 1 &&
+              blockedBarcodes.includes(nextWell - 12)
+            )
+              return markActive(96);
+            if (j === nextWell && blockedBarcodes.includes(nextWell + 12))
+              return markActive(nextWell + 24);
+            if (
+              j === nextWell &&
+              j > 12 &&
+              j <= 24 &&
+              blockedBarcodes.includes(nextWell - 12)
+            )
+              return markActive(j - 12 + 83);
+            if (j === nextWell && j <= 1) return markActive(96);
+            if (j === nextWell && j <= 12) return markActive(j + 83);
+            if (j === nextWell && j > 12) return markActive(j - 12);
           }
-          if (
-            j === nextWell &&
-            j >= 85 &&
-            blockedBarcodes.includes(nextWell - 83)
-          )
-            return markActive(nextWell - 83 + 12);
-          if (j === nextWell && j === 96 && !blockedBarcodes.includes(1))
-            return markActive(1);
-          if (j === nextWell && j >= 85) return markActive(j - 83);
-          if (j === nextWell && j < 85) return markActive(j + 12);
-        } else {
-          if (
-            j === nextWell &&
-            blockedBarcodes.includes(nextWell - 12) &&
-            blockedBarcodes.includes(nextWell - 24)
-          )
-            return markActive(96);
-          if (
-            j === nextWell &&
-            j > 12 &&
-            j <= 24 &&
-            nextWell - 12 === 1 &&
-            blockedBarcodes.includes(nextWell - 12)
-          )
-            return markActive(96);
-          if (j === nextWell && blockedBarcodes.includes(nextWell + 12))
-            return markActive(nextWell + 24);
-          if (
-            j === nextWell &&
-            j > 12 &&
-            j <= 24 &&
-            blockedBarcodes.includes(nextWell - 12)
-          )
-            return markActive(j - 12 + 83);
-          if (j === nextWell && j <= 1) return markActive(96);
-          if (j === nextWell && j <= 12) return markActive(j + 83);
-          if (j === nextWell && j > 12) return markActive(j - 12);
         }
+      } else if (wellCount == 16 && active < 16) {
+        do nextWell++;
+        while (barcodes.find((barcode) => barcode.id === nextWell)?.blocked);
+        markActive(nextWell);
       }
-    } else if (wellCount == 16) {
-      do nextWell++;
-      while (barcodes.find((barcode) => barcode.id === nextWell)?.blocked);
-      markActive(nextWell);
-    }
-    if (active === wellCount) {
-      checkBarcode(getBarcode(active));
-    }
-  };
+    },
+    [active, barcodes, settings.device.wellCount, setBarcodes, setDisabled]
+  );
 
   const updateBarcode = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       e.preventDefault();
-      if (barcodeCheckTimeout) clearTimeout(barcodeCheckTimeout);
+
+      clearTimeout(barcodeCheckTimeout as number);
       setInputs({
         ...inputs,
         [inputName]: e.target.value,
       });
+
       setBarcodesValid(false);
       setBarcodes((prevBarcodes) =>
         prevBarcodes.map((barcode) => ({ ...barcode, checking: false }))
@@ -155,11 +159,13 @@ const BarcodeInput = () => {
         setBarcodeCheckTimeout(null);
       }, 500);
     },
+
     [active, barcodes, barcodeCheckTimeout, setBarcodes, setBarcodeCheckTimeout]
   );
+
   const onKeyPress = useCallback(
     (value: string) => {
-      if (barcodeCheckTimeout) clearTimeout(barcodeCheckTimeout);
+      clearTimeout(barcodeCheckTimeout as number);
 
       setBarcodesValid(false);
       setBarcodes((prevBarcodes) =>
@@ -186,6 +192,7 @@ const BarcodeInput = () => {
     },
     [active, barcodes, barcodeCheckTimeout, setBarcodes, setBarcodeCheckTimeout]
   );
+
   const checkAll = useCallback(
     async (barcodes: IBarcode[]) => {
       for (let i = 0; i < barcodes.length; i++) {
@@ -194,6 +201,95 @@ const BarcodeInput = () => {
     },
     [offlineMode]
   );
+
+  const trailingHandler = () => {
+    if (settings.account.autoControlSamples === "Trailing") {
+      setBarcodes((prevBarcodes) => {
+        let lastNotEmptyIndex = prevBarcodes.reduce((index, barcode, i) => {
+          return barcode.value !== "" ? i : index;
+        }, 0);
+
+        let newActive = lastNotEmptyIndex + 1;
+        let count = 0;
+        if (testprocedure.controlSamples.length > 0) {
+          // Mapper les controlSamples sur les barcodes et les bloquer
+          return prevBarcodes.map((barcode, index) => {
+            const controlSample =
+              testprocedure.controlSamples[
+                index % testprocedure.controlSamples.length
+              ];
+
+            if (
+              barcode.id === newActive + 1 &&
+              count < testprocedure.controlSamples.length
+            ) {
+              count++;
+              newActive++;
+              return {
+                ...barcode,
+                blocked: true,
+                label: controlSample.label,
+                value: controlSample.label,
+              };
+            }
+            return barcode;
+          });
+        }
+        let tpcPosition = isNinetySix ? newActive + 12 : newActive + 1;
+        let ntcPosition = isNinetySix ? newActive + 24 : newActive + 2;
+        if (tpcPosition >= 85) {
+          ntcPosition = ntcPosition - 83 - 12;
+        }
+        if (tpcPosition >= 97) {
+          tpcPosition = tpcPosition - 83 - 12;
+        }
+        if (ntcPosition >= 97) {
+          ntcPosition = ntcPosition - 83 - 12;
+        }
+
+        return prevBarcodes.map((barcode, index) => {
+          if (
+            (barcode.label === "NTC" || barcode.label === "TPC") &&
+            barcode.id !== tpcPosition &&
+            barcode.id !== ntcPosition
+          ) {
+            return {
+              ...barcode,
+              blocked: false,
+              label: barcode.posName,
+              value: "",
+            };
+          }
+
+          if (barcode.id === tpcPosition && barcode.value === "") {
+            return {
+              ...barcode,
+              blocked: true,
+              label: "TPC",
+            };
+          }
+
+          if (barcode.id === ntcPosition && barcode.value === "") {
+            return {
+              ...barcode,
+              blocked: true,
+              label: "NTC",
+            };
+          }
+
+          return barcode;
+        });
+      });
+    }
+  };
+  const navigateToTestReady = () => {
+    if (settings?.account.autoControlSamples == "Trailing" && !trailing) {
+      trailingHandler();
+      setTrailing(true);
+    } else {
+      navigate("/testReady");
+    }
+  };
 
   const retest = async (barcode: IBarcode) => {
     setLoading(true);
@@ -250,9 +346,6 @@ const BarcodeInput = () => {
             message: t("errors.checkTestSampleFail"),
           });
         } else if (err.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
           console.log(err.request);
           window.api.logEvents(`request: ${JSON.stringify(err.request)}`);
           dbError = true;
@@ -263,8 +356,6 @@ const BarcodeInput = () => {
             message: t("errors.dbConnectionError"),
           });
         } else {
-          // Something happened in setting up the request that triggered an Error
-
           console.log("Error", err.message);
           window.api.logEvents(`Error: ${err.message}`);
           dbError = true;
@@ -314,10 +405,11 @@ const BarcodeInput = () => {
         barcode.id === newBarcode.id ? newBarcode : barcode
       )
     );
-    setInputs({ ...inputs, [newBarcode.label]: newBarcode.value });
+    setInputs({ ...inputs, [newBarcode.label]: newBarcode.value }); // same value as input field
 
     let isValid = true;
     let validationErr = null;
+    // break check
     if (!settings.account.verifyBarcodes) {
       setBarcodes((prevBarcodes) =>
         prevBarcodes.map((barcode) =>
@@ -328,7 +420,9 @@ const BarcodeInput = () => {
       );
       return;
     }
+
     //Check for control placeholders
+    // feature for testing
     const controlPlaceholders = [
       "Placeholder_NTC",
       "Placeholder_TPC",
@@ -373,7 +467,6 @@ const BarcodeInput = () => {
     if (!(newBarcode.value.length >= 1)) {
       isValid = false;
     }
-
     //Check for special Barcodes
     if (
       newBarcode.value.substr(0, 1) === "R" ||
@@ -508,20 +601,14 @@ const BarcodeInput = () => {
               console.log(err.request);
               window.api.logEvents(`request: ${JSON.stringify(err.request)}`);
               newErrors.push({
-                code: errorProps.dbCon.code,
-                id: errorProps.dbCon.id,
                 type: "dbCon",
                 message: t("errors.dbConnectionError"),
+                code: errorProps.dbCon.code,
+                id: errorProps.dbCon.id,
               });
               validationErr = t("errors.notVerifiedDbError");
             }
             if (err.response) {
-              // The request was made and the server responded with a status code
-              // that falls out of the range of 2xx
-              console.log(err);
-              console.log(err.response.data);
-              console.log(err.response.status);
-              console.log(err.response.headers);
               window.api.logEvents(
                 `status: ${err.response.status} headers: ${
                   err.response.headers
@@ -536,27 +623,22 @@ const BarcodeInput = () => {
                 });
               }
             } else if (err.request) {
-              // The request was made but no response was received
-              // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-              // http.ClientRequest in node.js
-              console.log(err.request);
               window.api.logEvents(`request: ${JSON.stringify(err.request)}`);
               newErrors.push({
-                code: errorProps.dbCon.code,
-                id: errorProps.dbCon.id,
                 type: "dbCon",
                 message: t("errors.dbConnectionError"),
+                code: errorProps.dbCon.code,
+                id: errorProps.dbCon.id,
               });
               validationErr = t("errors.notVerifiedDbError");
             } else {
-              // Something happened in setting up the request that triggered an Error
               console.log("Error", err.message);
               window.api.logEvents(`Error: ${err.message}`);
               newErrors.push({
-                code: errorProps.dbCon.code,
-                id: errorProps.dbCon.id,
                 type: "dbCon",
                 message: t("errors.dbConnectionError"),
+                code: errorProps.dbCon.code,
+                id: errorProps.dbCon.id,
               });
               validationErr = t("errors.notVerifiedDbError");
             }
@@ -616,7 +698,6 @@ const BarcodeInput = () => {
         error: "",
         askRetest: null,
       } as IBarcode;
-
       if (id == null || id === 0) {
         return result;
       }
@@ -644,12 +725,6 @@ const BarcodeInput = () => {
     return result;
   };
 
-  //open lid and select first active well on startup
-  useEffect(() => {
-    toggleLid();
-    nextWell(true);
-  }, []);
-
   useEffect(() => {
     getBarcode(active).askRetest =
       settings.account.allowRetest && settings.account.verifyBarcodes;
@@ -666,6 +741,54 @@ const BarcodeInput = () => {
       checkAll(barcodes.filter((barcode) => barcode.value.length > 0));
     }
   }, [offlineMode]);
+
+  //Apply control samples
+  useEffect(() => {
+    if (
+      testprocedure?.controlSamples.length > 0 &&
+      settings.account.autoControlSamples !== "Trailing"
+    ) {
+      setBarcodes((prevBarcodes) => {
+        return prevBarcodes.map((barcode) => {
+          const controlSample = testprocedure?.controlSamples.find((sample) => {
+            return (
+              (!isNinetySix && barcode.label === sample.position16) ||
+              (isNinetySix && barcode.label === sample.position96)
+            );
+          });
+
+          if (controlSample) {
+            return {
+              ...barcode,
+              blocked: true,
+              label: controlSample.label,
+              value: controlSample.label,
+              valid: true,
+            };
+          } else {
+            return barcode;
+          }
+        });
+      });
+    }
+    setControlsApplied(true);
+  }, [settings.account.autoControlSamples, isNinetySix]);
+
+  //mark active well after applying controls
+  useEffect(() => {
+    if (controlsApplied) {
+      nextWell(true);
+    }
+  }, [controlsApplied]);
+
+  //open lid and select first active well on startup
+  useEffect(() => {
+    toggleLid();
+  }, []);
+  useEffect(() => {
+    setInputName(getBarcode(active).label);
+  }, [active]);
+
   const handleReset = useCallback(() => {
     setBarcodes(
       barcodes.map((barcode) => {
@@ -699,7 +822,7 @@ const BarcodeInput = () => {
           active={active}
           markActive={markActive}
           showResults={false}
-          testmethod={testmethod}
+          testmethod={testprocedure}
         />
 
         <div className={`inputContainer ${isNinetySix ? " ninetySix" : ""}`}>
@@ -816,7 +939,7 @@ const BarcodeInput = () => {
             ) : (
               ""
             )}
-            {!isNinetySix && (
+            {!isNinetySix && active < 16 && (
               <button type="submit">{t("common.continue")}</button>
             )}
           </form>
@@ -833,10 +956,12 @@ const BarcodeInput = () => {
           {t("common.cancel")}
         </button>
         <button
-          onClick={() => navigate("/testReady")}
+          onClick={navigateToTestReady}
           className={`${!barcodesValid ? "disabled" : ""}`}
         >
-          {t("common.testStart")}
+          {!trailing && settings.account.autoControlSamples == "Trailing"
+            ? t("default.common.continue")
+            : t("default.common.testStart")}
         </button>
       </div>
     </>
