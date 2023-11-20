@@ -15,7 +15,7 @@ export default defineConfig({
       { entry: "electron/createFile.ts" },
       { entry: "electron/logger.ts" },
       { entry: "electron/spawn.ts" },
-      { entry: "electron/deleteLogs.ts" },
+      { entry: "electron/deleteFiles.ts" },
 
       // Preload script configuration
       {
