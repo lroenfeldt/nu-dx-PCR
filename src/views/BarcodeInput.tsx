@@ -28,6 +28,7 @@ const BarcodeInput = () => {
     setBarcodes,
     isNinetySix,
     selectedMethod,
+    setSettings,
   } = useData();
 
   const { t } = useTranslation();
@@ -202,7 +203,7 @@ const BarcodeInput = () => {
   );
 
   const trailingHandler = () => {
-    if (settings.account.autoControlSamples === "Trailing") {
+    if (settings.account.autoControlSamples == "Trailing") {
       setBarcodes((prevBarcodes) => {
         let lastNotEmptyIndex = prevBarcodes.reduce((index, barcode, i) => {
           return barcode.value !== "" ? i : index;

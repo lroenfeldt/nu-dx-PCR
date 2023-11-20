@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from "electron";
-import path, { dirname } from "path";
+import path from "path";
 import fs from "fs";
 import Store from "electron-store";
 import isDev from "electron-is-dev";

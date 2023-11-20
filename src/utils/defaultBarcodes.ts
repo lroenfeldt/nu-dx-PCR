@@ -55,5 +55,5 @@ export default function useDefaultBarcodes(settings: ISettings): IBarcode[] {
     });
   }
 
-  return defaultBarcodes as IBarcode[];
+  return defaultBarcodes;
 }
