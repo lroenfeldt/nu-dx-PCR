@@ -1,5 +1,4 @@
 import fs, { readdirSync } from "fs";
-const { v4: uuid } = require("uuid");
 import "moment/dist/locale/de";
 import { app } from "electron";
 import path from "path";
@@ -13,7 +12,9 @@ import path from "path";
 
 export const logger = async (message: string): Promise<void> => {
   const dateTime = `${new Date().toLocaleString("DE-de")}`;
-  const logItem = `${dateTime}\t${uuid()}\t${JSON.stringify(message)}\n`;
+  const logItem = `${dateTime}\t${crypto.randomUUID()}\t${JSON.stringify(
+    message
+  )}\n`;
   const logsDir: string = path.resolve(app.getPath("userData"), "logs");
   try {
     const files = readdirSync(logsDir);

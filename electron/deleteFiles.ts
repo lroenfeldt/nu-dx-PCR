@@ -2,7 +2,7 @@ import * as path from "path";
 import * as fs from "fs";
 import { app } from "electron";
 
-export const deleteLogs = () => {
+export const deleteFiles = () => {
   try {
     const logsDir: string = path.resolve(app.getPath("userData"), "logs");
     const files = fs.readdirSync(logsDir);

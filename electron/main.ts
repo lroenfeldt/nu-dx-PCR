@@ -37,7 +37,7 @@ import {
 } from "./core/testManagement";
 import { exit, relaunchApp } from "./core/lifecycleManagement";
 import { copyLogos } from "./core/utilities";
-import { deleteLogs } from "./deleteLogs";
+import { deleteFiles } from "./deleteFiles";
 import { logError } from "./core/logging";
 import { createFile } from "./createFile";
 
@@ -272,7 +272,7 @@ app.whenReady().then(() => {
   createSplash();
   createWindow();
   createFile();
-  deleteLogs();
+  deleteFiles();
 
   spawn("taskkill", ["/f", "/im", "PcrServer.exe"]);
 
