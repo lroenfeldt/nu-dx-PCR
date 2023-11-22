@@ -815,6 +815,10 @@ const BarcodeInput = () => {
     if (textInput.current) textInput.current.focus();
   }, [barcodes, active]);
 
+  useEffect(() => {
+    console.log(settings.account.autoControlSamples);
+  }, [settings.account.autoControlSamples]);
+
   return (
     <>
       <div className={`BarcodeInput ${isNinetySix ? " ninetySix" : ""}`}>
