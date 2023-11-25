@@ -117,6 +117,7 @@ export interface IControlSample {
   barcodes: IBarcode[];
   testTypeId: string;
   order: number;
+  position: string;
 }
 
 export interface ITestParameterMapping {

@@ -4,8 +4,8 @@ import fs from "fs";
 import Store from "electron-store";
 import isDev from "electron-is-dev";
 import AutoLaunch from "auto-launch";
-import { spawn } from "./spawn";
-import { logger } from "./logger";
+import { spawn } from "./core/logs/spawn";
+import { logger } from "./core/logs/logger";
 import { IStore } from "./interfaces/interfaces";
 import { launchUpdates, updater } from "./core/updateManagement";
 import {
@@ -37,9 +37,9 @@ import {
 } from "./core/testManagement";
 import { exit, relaunchApp } from "./core/lifecycleManagement";
 import { copyLogos } from "./core/utilities";
-import { deleteFiles } from "./deleteFiles";
+import { deleteFiles } from "./core/logs/deleteFiles";
 import { logError } from "./core/logging";
-import { createFile } from "./createFile";
+import { createFile } from "./core/logs/createFile";
 
 export let mainWindow: BrowserWindow | undefined;
 export let splash: BrowserWindow | undefined;

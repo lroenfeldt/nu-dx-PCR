@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
 import { mainWindow, splash, store } from "../main";
 import { autoUpdater } from "electron-updater";
-import { logger } from "../logger";
+import { logger } from "./logs/logger";
 
 export function launchUpdates() {
   try {

@@ -28,7 +28,6 @@ const BarcodeInput = () => {
     setBarcodes,
     isNinetySix,
     selectedMethod,
-    setSettings,
   } = useData();
 
   const { t } = useTranslation();
@@ -52,6 +51,7 @@ const BarcodeInput = () => {
   const testprocedure = settings.account.testprocedures.find(
     (testprocedure) => testprocedure.id === selectedMethod
   ) as ITestProcedure;
+  const [controlSamplePosition, setcontrolSamplePosition] = useState("");
 
   const markActive = (id: number) => {
     setActive(id);
@@ -203,93 +203,101 @@ const BarcodeInput = () => {
   );
 
   const trailingHandler = () => {
-    if (settings.account.autoControlSamples == "Trailing") {
-      setBarcodes((prevBarcodes) => {
-        let lastNotEmptyIndex = prevBarcodes.reduce((index, barcode, i) => {
-          return barcode.value !== "" ? i : index;
-        }, 0);
+    settings.account.testprocedures.map((testprocedure, index) => {
+      testprocedure.controlSamples.map((sample, index) => {
+        if (sample.position == "trailing") {
+          setBarcodes((prevBarcodes) => {
+            let lastNotEmptyIndex = prevBarcodes.reduce((index, barcode, i) => {
+              return barcode.value !== "" ? i : index;
+            }, 0);
 
-        let newActive = lastNotEmptyIndex + 1;
-        let count = 0;
-        if (testprocedure?.controlSamples.length > 0) {
-          // Mapper les controlSamples sur les barcodes et les bloquer
-          return prevBarcodes.map((barcode, index) => {
-            const controlSample =
-              testprocedure.controlSamples[
-                index % testprocedure.controlSamples.length
-              ];
+            let newActive = lastNotEmptyIndex + 1;
+            let count = 0;
+            if (testprocedure?.controlSamples.length > 0) {
+              // Mapper les controlSamples sur les barcodes et les bloquer
+              return prevBarcodes.map((barcode, index) => {
+                const controlSample =
+                  testprocedure.controlSamples[
+                    index % testprocedure.controlSamples.length
+                  ];
 
-            if (
-              barcode.id === newActive + 1 &&
-              count < testprocedure.controlSamples.length
-            ) {
-              count++;
-              newActive++;
-              return {
-                ...barcode,
-                blocked: true,
-                label: controlSample.label,
-                value: controlSample.label,
-              };
+                if (
+                  barcode.id === newActive + 1 &&
+                  count < testprocedure.controlSamples.length
+                ) {
+                  count++;
+                  newActive++;
+                  return {
+                    ...barcode,
+                    blocked: true,
+                    label: controlSample.label,
+                    value: controlSample.label,
+                  };
+                }
+                return barcode;
+              });
             }
-            return barcode;
+            let tpcPosition = isNinetySix ? newActive + 12 : newActive + 1;
+            let ntcPosition = isNinetySix ? newActive + 24 : newActive + 2;
+            if (tpcPosition >= 85) {
+              ntcPosition = ntcPosition - 83 - 12;
+            }
+            if (tpcPosition >= 97) {
+              tpcPosition = tpcPosition - 83 - 12;
+            }
+            if (ntcPosition >= 97) {
+              ntcPosition = ntcPosition - 83 - 12;
+            }
+
+            return prevBarcodes.map((barcode, index) => {
+              if (
+                (barcode.label === "NTC" || barcode.label === "TPC") &&
+                barcode.id !== tpcPosition &&
+                barcode.id !== ntcPosition
+              ) {
+                return {
+                  ...barcode,
+                  blocked: false,
+                  label: barcode.posName,
+                  value: "",
+                };
+              }
+
+              if (barcode.id === tpcPosition && barcode.value === "") {
+                return {
+                  ...barcode,
+                  blocked: true,
+                  label: "TPC",
+                };
+              }
+
+              if (barcode.id === ntcPosition && barcode.value === "") {
+                return {
+                  ...barcode,
+                  blocked: true,
+                  label: "NTC",
+                };
+              }
+
+              return barcode;
+            });
           });
         }
-        let tpcPosition = isNinetySix ? newActive + 12 : newActive + 1;
-        let ntcPosition = isNinetySix ? newActive + 24 : newActive + 2;
-        if (tpcPosition >= 85) {
-          ntcPosition = ntcPosition - 83 - 12;
-        }
-        if (tpcPosition >= 97) {
-          tpcPosition = tpcPosition - 83 - 12;
-        }
-        if (ntcPosition >= 97) {
-          ntcPosition = ntcPosition - 83 - 12;
-        }
-
-        return prevBarcodes.map((barcode, index) => {
-          if (
-            (barcode.label === "NTC" || barcode.label === "TPC") &&
-            barcode.id !== tpcPosition &&
-            barcode.id !== ntcPosition
-          ) {
-            return {
-              ...barcode,
-              blocked: false,
-              label: barcode.posName,
-              value: "",
-            };
-          }
-
-          if (barcode.id === tpcPosition && barcode.value === "") {
-            return {
-              ...barcode,
-              blocked: true,
-              label: "TPC",
-            };
-          }
-
-          if (barcode.id === ntcPosition && barcode.value === "") {
-            return {
-              ...barcode,
-              blocked: true,
-              label: "NTC",
-            };
-          }
-
-          return barcode;
-        });
       });
-    }
+    });
   };
 
   const navigateToTestReady = () => {
-    if (settings?.account.autoControlSamples == "Trailing" && !trailing) {
-      trailingHandler();
-      setTrailing(true);
-    } else {
-      navigate("/testReady");
-    }
+    settings.account.testprocedures.map((testprocedure) => {
+      testprocedure.controlSamples.map((sample) => {
+        if (sample.position == "trailing" && !trailing) {
+          trailingHandler();
+          setTrailing(true);
+        } else {
+          navigate("/testReady");
+        }
+      });
+    });
   };
 
   const retest = async (barcode: IBarcode) => {
@@ -726,6 +734,20 @@ const BarcodeInput = () => {
     return result;
   };
 
+  // set State of controlSample position
+  useEffect(() => {
+    settings.account.testprocedures.map((testprocedure, index) => {
+      testprocedure.controlSamples.map((sample, index) => {
+        if (sample.position == "trailing") {
+          setcontrolSamplePosition(sample.position);
+        }
+        if (sample.position == "fixed") {
+          setcontrolSamplePosition(sample.position);
+        }
+      });
+    });
+  }, [controlSamplePosition, settings.account.testprocedures]);
+
   useEffect(() => {
     getBarcode(active).askRetest =
       settings.account.allowRetest && settings.account.verifyBarcodes;
@@ -743,37 +765,41 @@ const BarcodeInput = () => {
     }
   }, [offlineMode]);
 
-  //Apply control samples
+  // Apply control samples when fixed
   useEffect(() => {
-    if (
-      testprocedure?.controlSamples.length > 0 &&
-      settings.account.autoControlSamples !== "Trailing"
-    ) {
-      setBarcodes((prevBarcodes) => {
-        return prevBarcodes.map((barcode) => {
-          const controlSample = testprocedure?.controlSamples.find((sample) => {
-            return (
-              (!isNinetySix && barcode.label === sample.position16) ||
-              (isNinetySix && barcode.label === sample.position96)
-            );
+    settings.account.testprocedures.map((testprocedure) => {
+      testprocedure.controlSamples.map((sample) => {
+        if (
+          settings.account.testprocedures.length > 0 &&
+          sample.position == "fixed"
+        )
+          setBarcodes((prevBarcodes) => {
+            return prevBarcodes.map((barcode) => {
+              const controlSample = testprocedure?.controlSamples.find(
+                (sample) => {
+                  return (
+                    (!isNinetySix && barcode.label === sample.position16) ||
+                    (isNinetySix && barcode.label === sample.position96)
+                  );
+                }
+              );
+              if (controlSample) {
+                return {
+                  ...barcode,
+                  blocked: true,
+                  label: controlSample.label,
+                  value: "",
+                  valid: true,
+                };
+              } else {
+                return barcode;
+              }
+            });
           });
-
-          if (controlSample) {
-            return {
-              ...barcode,
-              blocked: true,
-              label: controlSample.label,
-              value: controlSample.label,
-              valid: true,
-            };
-          } else {
-            return barcode;
-          }
-        });
       });
-    }
+    });
     setControlsApplied(true);
-  }, [settings.account.autoControlSamples, isNinetySix]);
+  }, [isNinetySix, settings.account.testprocedures]);
 
   //mark active well after applying controls
   useEffect(() => {
@@ -814,10 +840,6 @@ const BarcodeInput = () => {
     });
     if (textInput.current) textInput.current.focus();
   }, [barcodes, active]);
-
-  useEffect(() => {
-    console.log(settings.account.autoControlSamples);
-  }, [settings.account.autoControlSamples]);
 
   return (
     <>
@@ -960,11 +982,12 @@ const BarcodeInput = () => {
         >
           {t("common.cancel")}
         </button>
+
         <button
           onClick={navigateToTestReady}
           className={`${!barcodesValid ? "disabled" : ""}`}
         >
-          {!trailing && settings.account.autoControlSamples == "Trailing"
+          {!trailing && controlSamplePosition == "trailing"
             ? t("default.common.continue")
             : t("default.common.testStart")}
         </button>
