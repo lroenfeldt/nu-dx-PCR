@@ -1,5 +1,4 @@
 import { FC } from "react";
-
 import { TailSpin } from "react-loader-spinner";
 import { useData } from "../hooks";
 import Checkmark from "./Checkmark";

@@ -14,6 +14,7 @@ import { IoMdCloseCircle } from "react-icons/io";
 import { ITestProcedure } from "../types/interfaces/settings";
 import { errorProps } from "../constants/errorProps";
 import { IBarcode } from "../types/interfaces/interfaces";
+import useDefaultBarcodes from "../utils/defaultBarcodes";
 
 const BarcodeInput = () => {
   const {
@@ -51,7 +52,7 @@ const BarcodeInput = () => {
   const testprocedure = settings.account.testprocedures.find(
     (testprocedure) => testprocedure.id === selectedMethod
   ) as ITestProcedure;
-  const [controlSamplePosition, setcontrolSamplePosition] = useState("");
+  const [samplePosition, setSamplePosition] = useState("");
 
   const markActive = (id: number) => {
     setActive(id);
@@ -739,14 +740,14 @@ const BarcodeInput = () => {
     settings.account.testprocedures.map((testprocedure, index) => {
       testprocedure.controlSamples.map((sample, index) => {
         if (sample.position == "trailing") {
-          setcontrolSamplePosition(sample.position);
+          setSamplePosition("trailing");
         }
         if (sample.position == "fixed") {
-          setcontrolSamplePosition(sample.position);
+          setSamplePosition("fixed");
         }
       });
     });
-  }, [controlSamplePosition, settings.account.testprocedures]);
+  }, [samplePosition, settings.account.testprocedures]);
 
   useEffect(() => {
     getBarcode(active).askRetest =
@@ -765,16 +766,22 @@ const BarcodeInput = () => {
     }
   }, [offlineMode]);
 
-  // Apply control samples when fixed
+  // Apply control samples
   useEffect(() => {
     settings.account.testprocedures.map((testprocedure) => {
       testprocedure.controlSamples.map((sample) => {
         if (
-          settings.account.testprocedures.length > 0 &&
-          sample.position == "fixed"
-        )
+          (settings.account.testprocedures.length > 0 &&
+            sample.position == "fixed") ||
+          sample.position == "trailing"
+        ) {
           setBarcodes((prevBarcodes) => {
             return prevBarcodes.map((barcode) => {
+              // prevBarcodes.find((barcode) => {
+              //   if (barcode.blocked == false) {
+              //     return function wich sets the first barcode.blocked !== true
+              //   }
+              // });
               const controlSample = testprocedure?.controlSamples.find(
                 (sample) => {
                   return (
@@ -783,7 +790,13 @@ const BarcodeInput = () => {
                   );
                 }
               );
-              if (controlSample) {
+              if (controlSample?.position == "trailing") {
+                return {
+                  ...barcode,
+                  blocked: false,
+                  label: barcode.label,
+                };
+              } else if (controlSample?.position == "fixed") {
                 return {
                   ...barcode,
                   blocked: true,
@@ -791,11 +804,10 @@ const BarcodeInput = () => {
                   value: "",
                   valid: true,
                 };
-              } else {
-                return barcode;
-              }
+              } else return barcode;
             });
           });
+        }
       });
     });
     setControlsApplied(true);
@@ -987,7 +999,7 @@ const BarcodeInput = () => {
           onClick={navigateToTestReady}
           className={`${!barcodesValid ? "disabled" : ""}`}
         >
-          {!trailing && controlSamplePosition == "trailing"
+          {!trailing && samplePosition == "trailing"
             ? t("default.common.continue")
             : t("default.common.testStart")}
         </button>

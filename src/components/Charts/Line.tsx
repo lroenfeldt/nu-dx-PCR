@@ -1,105 +1,146 @@
 import React from "react";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import { Line as LineChart } from "react-chartjs-2";
 import { useData } from "../../hooks";
 import { ITestProcedure } from "../../types/interfaces/settings";
 import { ILineProps } from "../../types/components";
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const Line: React.FC<ILineProps> = ({ barcode }) => {
-	const { selectedMethod, settings } = useData();
-	const testMethod = settings.account.testprocedures.find((method) => method.id === selectedMethod) as ITestProcedure;
-	const { parameters } = testMethod;
+  const { selectedMethod, settings } = useData();
+  const testMethod = settings.account.testprocedures.find(
+    (method) => method.id === selectedMethod
+  ) as ITestProcedure;
 
-	const options = {
-		responsive: true,
-		maintainAspectRatio: false,
-		plugins: {
-			tooltips: {
-				bodySpacing: 4,
-				mode: "nearest",
-				intersect: 0,
-				position: "nearest",
-				xPadding: 10,
-				yPadding: 10,
-				caretPadding: 10,
-			},
-			legend: {
-				display: true,
-				labels: {
-					usePointStyle: true,
-					pointStyle: "line",
-					borderWidth: 3,
-					pointSize: 20,
-				},
-			},
-			title: {
-				display: true,
-				text: barcode.value,
-				labels: {
-					usePointStyle: true,
-				},
-			},
-		},
-		scales: {
-			y: {
-				type: "linear" as "linear",
-				grid: {
-					zeroLineColor: "transparent",
-					drawBorder: true,
-					drawTicks: true,
-					drawOnChartArea: true,
-				},
-				ticks: {
-					maxTicksLimit: 7,
-				},
-			},
-			x: {
-				type: "linear" as "linear",
-				display: true,
-				ticks: {
-					display: true,
-				},
-			},
-		},
-		layout: {
-			padding: { left: 0, right: 0, top: 15, bottom: 15 },
-		},
-	};
-	const labels = [
-		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-	];
+  const { parameters } = testMethod;
 
-	let datasets = [];
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      tooltips: {
+        bodySpacing: 4,
+        mode: "nearest",
+        intersect: 0,
+        position: "nearest",
+        xPadding: 10,
+        yPadding: 10,
+        caretPadding: 10,
+      },
+      legend: {
+        display: true,
+        labels: {
+          usePointStyle: true,
+          pointStyle: "line",
+          borderWidth: 3,
+          pointSize: 20,
+        },
+      },
+      title: {
+        display: true,
+        text: barcode.value,
+        labels: {
+          usePointStyle: true,
+        },
+      },
+    },
+    scales: {
+      y: {
+        type: "linear" as "linear",
+        grid: {
+          zeroLineColor: "transparent",
+          drawBorder: true,
+          drawTicks: true,
+          drawOnChartArea: true,
+        },
+        ticks: {
+          maxTicksLimit: 7,
+        },
+      },
+      x: {
+        type: "linear" as "linear",
+        display: true,
+        ticks: {
+          display: true,
+        },
+      },
+    },
+    layout: {
+      padding: { left: 0, right: 0, top: 15, bottom: 15 },
+    },
+  };
 
-	for (let param in barcode.parameters) {
-		let parameter = barcode.parameters[param];
-		let dataset = {
-			label: parameters.find((p) => p.target == param.toUpperCase())?.label,
-			data: parameter.curveData,
-			borderColor: parameters.find((p) => p.target == param.toUpperCase())?.color,
-			borderWidth: 3,
-		};
-		datasets.push(dataset);
+  //   const labels = [
+  //     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+  //     22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+  //     41, 42, 43,
+  //   ];
 
-		const iShowThreshhold = parameters.find((p) => p.target == param.toUpperCase())?.showThreshhold;
-		if (iShowThreshhold) {
-			datasets.push({
-				label: parameters.find((p) => p.target == param.toUpperCase())?.label + " Threshhold",
-				data: new Array(40).fill(parameters.find((p) => p.target == param.toUpperCase())?.threshhold),
-				borderColor: parameters.find((p) => p.target == param.toUpperCase())?.color,
-				borderWidth: 3,
-				borderDash: [5, 5],
-				pointRadius: 0,
-			});
-		}
-	}
+  let datasets = [];
+  let count = 0;
+  let labelsLength: number[] = [];
 
-	const data = {
-		labels,
-		datasets,
-	};
-	return <LineChart options={options} data={data} />;
+  for (let param in barcode.parameters) {
+    let parameter = barcode.parameters[param];
+    let dataset = {
+      label: parameters.find((p) => p.target == param.toUpperCase())?.label,
+      data: parameter.curveData, // Array of strings
+      borderColor: parameters.find((p) => p.target == param.toUpperCase())
+        ?.color,
+      borderWidth: 3,
+    };
+    datasets.push(dataset);
+
+    count = parameter.curveData.length;
+    const number = count;
+    const resultArray = [];
+    for (let i = 1; i <= number; i++) {
+      resultArray.push(i);
+    }
+    labelsLength = resultArray;
+
+    const iShowThreshhold = parameters.find(
+      (p) => p.target == param.toUpperCase()
+    )?.showThreshhold;
+    if (iShowThreshhold) {
+      datasets.push({
+        label:
+          parameters.find((p) => p.target == param.toUpperCase())?.label +
+          " Threshhold",
+        data: new Array(40).fill(
+          parameters.find((p) => p.target == param.toUpperCase())?.threshhold
+        ),
+        borderColor: parameters.find((p) => p.target == param.toUpperCase())
+          ?.color,
+        borderWidth: 3,
+        borderDash: [5, 5],
+        pointRadius: 0,
+      });
+    }
+  }
+  const labels = labelsLength;
+  const data = {
+    labels,
+    datasets,
+  };
+  return <LineChart options={options} data={data} />;
 };
 
 export default Line;

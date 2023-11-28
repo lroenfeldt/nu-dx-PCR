@@ -31,6 +31,7 @@ export const useStatus = (): UseStatusReturnType => {
         testid,
         testFinishedAt
       );
+      console.log(testFinishedAt);
       const responseData = response.data as ISettings;
       if (response.ok) {
         let newSettings = {
