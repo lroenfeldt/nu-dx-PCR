@@ -97,7 +97,7 @@ export const getDeviceType = () => {
     } catch (error) {
       console.log(`${software.name} not found`);
       logger(`${software.name} not found`);
-      return 0;
+      continue;
     }
   }
 
