@@ -210,15 +210,17 @@ export const parseResults: TParseResults = (
     //parse result conditions
     testmethod.results.forEach((resultType) => {
       const conditions = resultType.conditions
-        .replaceAll('(FAM)', '("FAM")')
-        .replaceAll('(HEX)', '("HEX")')
-        .replaceAll('(VIC)', '("VIC")')
-        .replaceAll('(ROX)', '("ROX")')
-        .replaceAll('(CY5)', '("CY5")')
-        .replaceAll('(CY5.5)', '("CY5.5")')
+        .replaceAll("(FAM)", '("FAM")')
+        .replaceAll("(HEX)", '("HEX")')
+        .replaceAll("(VIC)", '("VIC")')
+        .replaceAll("(ROX)", '("ROX")')
+        .replaceAll("(CY5)", '("CY5")')
+        .replaceAll("(CY5.5)", '("CY5.5")')
         .replaceAll("hecThresh", "hecThreshFl")
         .replaceAll("virusThresh", "virusThreshFl")
         .replaceAll("=", "==")
+        .replaceAll("==>", "=>")
+        .replaceAll("<==", "<=")
         .replaceAll("\n", "")
         .split(",")
         .map((s) => "(" + s.trim() + ")")
@@ -356,20 +358,15 @@ export const parseResultsDB: TParseResultsDB = (
   };
 
   const samples = Object.entries(parsedData).map(([position, data]) => {
-    const {
-      barcode,
-      parameters,
-      isControl,
-      result,
-      calculatedResult,
-    } = data;
+    const { barcode, parameters, isControl, result, calculatedResult } = data;
 
-    const expectedResult = testmethod.controlSamples
-      .find(({position16, position96}) => 
-        testConfig.device.wellCount == 16 && position16 == position 
-        || testConfig.device.wellCount == 96 && position96 == position)
-        ?.expectedResult || ""
-    
+    const expectedResult =
+      testmethod.controlSamples.find(
+        ({ position16, position96 }) =>
+          (testConfig.device.wellCount == 16 && position16 == position) ||
+          (testConfig.device.wellCount == 96 && position96 == position)
+      )?.expectedResult || "";
+
     const sampleParameters = Object.entries(parameters).map(
       ([paramName, { ct, curveData }]) => {
         const { dbTransformation, threshhold } =
@@ -393,7 +390,7 @@ export const parseResultsDB: TParseResultsDB = (
       parameters: sampleParameters,
       resultParameter: testmethod.resultParameter || "RESULT",
       result,
-      originalResult : calculatedResult || "",
+      originalResult: calculatedResult || "",
       expectedResult, //expected result for control samples as defined in nu:dx cloud. If no controll then empty
     };
   });

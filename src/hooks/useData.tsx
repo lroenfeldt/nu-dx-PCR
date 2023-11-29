@@ -54,7 +54,7 @@ export function DataProvider({ children }: DataProviderProps) {
   const [resultsSubmitted, setSubmitted] = useState(false);
   const [deviceStatus, setDeviceStatus] = useState("IDLE");
   const [idleTimestamp, setIdleTimestamp] = useState(null);
-  const [selectedMethod, setSelectedMethod] = useState("");
+  const [selectedMethod, setSelectedMethod] = useState(null);
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState("");
   const [settings, setSettings] = useState(window.api.getConfig());
@@ -92,9 +92,10 @@ export function DataProvider({ children }: DataProviderProps) {
     setTestrun(false);
     setTestDone(false);
     setSubmitted(false);
-    setSelectedMethod("");
+    setSelectedMethod(null);
     setDeviceStatus("IDLE");
     setBarcodes(defaultBarcodes(settings));
+    setTestid("");
   }, [settings]);
 
   const resetBarcodes = useCallback(() => {

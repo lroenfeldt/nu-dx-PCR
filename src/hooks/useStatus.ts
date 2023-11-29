@@ -14,8 +14,8 @@ export const useStatus = (): UseStatusReturnType => {
     setDbConnection,
     isStatus,
     errors,
-    testid,
     testFinishedAt,
+    selectedMethod,
   } = useData();
 
   const ping = useCallback(async () => {
@@ -27,10 +27,11 @@ export const useStatus = (): UseStatusReturnType => {
           timesStamp: new Date().getTime(),
           cyclerVersion: settings.version,
           errors: errors,
-          testId: testid,
+          methodId: selectedMethod,
           testFinishedAt: testFinishedAt,
         }
       );
+      console.log(selectedMethod);
       const responseData = response.data as ISettings;
       if (response.ok) {
         let newSettings = {
@@ -68,7 +69,7 @@ export const useStatus = (): UseStatusReturnType => {
     onlineStatusApi,
     isStatus,
     errors,
-    testid,
+    selectedMethod,
     testFinishedAt,
   ]);
 

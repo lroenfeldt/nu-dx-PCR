@@ -20,7 +20,7 @@ const Testmethod: React.FC<TestmethodProps> = ({ title, status, methodid }) => {
   };
 
   return (
-    <div className={`Testmethod ${status}`} onClick={() => selectTest()}>
+    <div className={`Testmethod ${status}`} onClick={selectTest}>
       <span>{title as string}</span>
     </div>
   );
