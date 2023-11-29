@@ -14,7 +14,6 @@ import { IoMdCloseCircle } from "react-icons/io";
 import { ITestProcedure } from "../types/interfaces/settings";
 import { errorProps } from "../constants/errorProps";
 import { IBarcode } from "../types/interfaces/interfaces";
-import useDefaultBarcodes from "../utils/defaultBarcodes";
 
 const BarcodeInput = () => {
   const {
@@ -49,10 +48,13 @@ const BarcodeInput = () => {
   const [inputName, setInputName] = useState("default");
   const [trailing, setTrailing] = useState(false);
   const [controlsApplied, setControlsApplied] = useState(false);
-  const testprocedure = settings.account.testprocedures.find(
-    (testprocedure) => testprocedure.id === selectedMethod
-  ) as ITestProcedure;
   const [samplePosition, setSamplePosition] = useState("");
+
+  const [testprocedure, setTestprocedure] = useState(
+    settings.account.testprocedures.find(
+      (testprocedure) => testprocedure.id === selectedMethod
+    ) as ITestProcedure
+  );
 
   const markActive = (id: number) => {
     setActive(id);
@@ -768,50 +770,41 @@ const BarcodeInput = () => {
 
   // Apply control samples
   useEffect(() => {
-    settings.account.testprocedures.map((testprocedure) => {
-      testprocedure.controlSamples.map((sample) => {
-        if (
-          (settings.account.testprocedures.length > 0 &&
-            sample.position == "fixed") ||
-          sample.position == "trailing"
-        ) {
-          setBarcodes((prevBarcodes) => {
-            return prevBarcodes.map((barcode) => {
-              // prevBarcodes.find((barcode) => {
-              //   if (barcode.blocked == false) {
-              //     return function wich sets the first barcode.blocked !== true
-              //   }
-              // });
-              const controlSample = testprocedure?.controlSamples.find(
-                (sample) => {
-                  return (
-                    (!isNinetySix && barcode.label === sample.position16) ||
-                    (isNinetySix && barcode.label === sample.position96)
-                  );
-                }
-              );
-              if (controlSample?.position == "trailing") {
-                return {
-                  ...barcode,
-                  blocked: false,
-                  label: barcode.label,
-                };
-              } else if (controlSample?.position == "fixed") {
-                return {
-                  ...barcode,
-                  blocked: true,
-                  label: controlSample.label,
-                  value: "",
-                  valid: true,
-                };
-              } else return barcode;
-            });
-          });
+    setBarcodes((prevBarcodes) => {
+      return prevBarcodes.map((barcode) => {
+        const controlSample = testprocedure?.controlSamples.find((sample) => {
+          return (
+            (!isNinetySix && barcode.label === sample.position16) ||
+            (isNinetySix && barcode.label === sample.position96)
+          );
+        });
+        if (controlSample?.position == "trailing") {
+          return {
+            ...barcode,
+            blocked: false,
+            label: controlSample?.position16,
+          };
         }
+        if (controlSample?.position == "fixed") {
+          return {
+            ...barcode,
+            blocked: true,
+            label: controlSample.label,
+          };
+        }
+        return barcode;
       });
     });
     setControlsApplied(true);
-  }, [isNinetySix, settings.account.testprocedures]);
+  }, [isNinetySix, testprocedure]);
+
+  useEffect(() => {
+    setTestprocedure(
+      settings.account.testprocedures.find(
+        (testprocedure) => testprocedure.id === selectedMethod
+      ) as ITestProcedure
+    );
+  }, [settings.account.testprocedures]);
 
   //mark active well after applying controls
   useEffect(() => {

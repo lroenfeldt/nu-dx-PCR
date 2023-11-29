@@ -26,12 +26,11 @@ export const useStatus = (): UseStatusReturnType => {
           status: deviceStatus,
           timesStamp: new Date().getTime(),
           cyclerVersion: settings.version,
-        },
-        errors,
-        testid,
-        testFinishedAt
+          errors: errors,
+          testId: testid,
+          testFinishedAt: testFinishedAt,
+        }
       );
-      console.log(testFinishedAt);
       const responseData = response.data as ISettings;
       if (response.ok) {
         let newSettings = {
