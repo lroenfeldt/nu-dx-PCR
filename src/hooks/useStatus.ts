@@ -27,7 +27,7 @@ export const useStatus = (): UseStatusReturnType => {
           timesStamp: new Date().getTime(),
           cyclerVersion: settings.version,
           errors: errors,
-          methodId: selectedMethod,
+          testId: selectedMethod,
           testFinishedAt: testFinishedAt,
         }
       );
