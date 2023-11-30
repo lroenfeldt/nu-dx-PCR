@@ -1,5 +1,5 @@
 import { ISettings } from "./../types/interfaces/settings";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useApi, useData } from "./";
 import onlineStatus from "../api/onlineStatus";
 import { UseStatusReturnType } from "../types/interfaces/useStatuts";
@@ -26,12 +26,11 @@ export const useStatus = (): UseStatusReturnType => {
           status: deviceStatus,
           timesStamp: new Date().getTime(),
           cyclerVersion: settings.version,
-          errors: errors,
           testId: selectedMethod,
           testFinishedAt: testFinishedAt,
+          errors: errors,
         }
       );
-      console.log(selectedMethod);
       const responseData = response.data as ISettings;
       if (response.ok) {
         let newSettings = {

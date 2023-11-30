@@ -39,6 +39,7 @@
     "electron-shutdown-command": "^2.0.1",
     "electron-store": "^8.1.0",
     "electron-updater": "^5.3.0",
+    "formik": "^2.4.5",
     "fs": "^0.0.1-security",
     "getmac": "^5.20.0",
     "hddserial": "^0.0.7",
