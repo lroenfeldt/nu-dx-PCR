@@ -88,7 +88,7 @@ function useBackgroundProcesses() {
       getLastVersion();
     }, 1000 * 60 * 60); // 1h
     return () => clearInterval(interval);
-  }, []);
+  }, [settings.user.updateType]);
 
   useEffect(() => {
     const pingInterval = setInterval(() => {

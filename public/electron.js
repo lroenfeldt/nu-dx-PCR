@@ -778,12 +778,9 @@ ipcMain.handle('moveFiles', (event, testid) => {
  * @returns {boolean}
  * */
 ipcMain.handle('checkUSB', (event) => {
-  if (isDev) {
-    return true;
-  }
-
   try {
     fs.accessSync('D:\\', fs.constants.F_OK);
+
     return true;
   } catch (err) {
     console.log('No Drive found or Drive not accessible');

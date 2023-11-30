@@ -36,7 +36,7 @@ const Checkmark = ({ barcode, isNinetySix = false, style }) => {
     );
   }
 
-  if (barcode?.label === 'TPC' && barcode?.result === 'positive') {
+  if (barcode?.label.slice(0,3) === 'TPC' && barcode?.result === 'positive') {
     return (
       <div
         className={`checkmark`}
@@ -54,7 +54,7 @@ const Checkmark = ({ barcode, isNinetySix = false, style }) => {
     );
   }
   
-  if (barcode?.label === 'TPC' && barcode?.result != 'positive') {
+  if (barcode?.label.slice(0,3) === 'TPC' && barcode?.result != 'positive') {
     return (
       <div
         className={`checkmark`}

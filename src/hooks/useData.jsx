@@ -94,7 +94,7 @@ export function DataProvider({ children }) {
 
   useEffect(() => {
     setBarcodes(defaultBarcodes(settings));
-  }, [settings.account.autoControl]);
+  }, [settings.account.autoControl, settings.account.autoControlSamples]);
 
   const handleSettingChange = useCallback(
     async (key, value) => {
