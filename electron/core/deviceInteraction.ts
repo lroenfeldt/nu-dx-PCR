@@ -1,10 +1,10 @@
-import { ipcMain } from "electron";
+import { app, ipcMain } from "electron";
 import shutdown from "electron-shutdown-command";
 import isDev from "electron-is-dev";
 import * as fs from "fs";
 import * as path from "path";
 import { getDeviceType } from "../main";
-import { logger } from "./createLogs/logger";
+import { logger } from "../createLogs/logger";
 import macaddress from "macaddress";
 const { SerialPort } = require("serialport");
 
@@ -134,4 +134,34 @@ export function getDeviceInfo() {
       throw err;
     }
   });
+}
+
+// move files from documents to runs/results/folder
+export function moveMatchingFiles() {
+  const documentsFolder = path.resolve(app.getPath("documents"));
+  const runsFolder = path.resolve(app.getPath("userData"), "runs");
+  try {
+    // get list of files in the documents folder
+    const files = fs.readdirSync(documentsFolder);
+    files.forEach((file) => {
+      const fileName = path.parse(file).name;
+      const sourceFile = path.join(documentsFolder, file);
+      // if a file exists in documents
+      if (fs.existsSync(sourceFile)) {
+        // loop threw runs and file an euqal name
+        const resultsFiles = fs.readdirSync(runsFolder);
+        resultsFiles.forEach((folder) => {
+          // egual names
+          if (fileName === folder && fileName !== ".DS_Store") {
+            // target and move the file from documents into the folder in runs
+            const targetFolder = path.join(runsFolder, folder);
+            const targetPath = path.join(targetFolder, file);
+            fs.renameSync(sourceFile, targetPath);
+          } else return;
+        });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
 }

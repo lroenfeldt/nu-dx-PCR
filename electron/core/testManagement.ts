@@ -2,9 +2,9 @@ import { app, ipcMain } from "electron";
 import { ILineGeneSettings, ITestObject } from "../interfaces/interfaces";
 import * as fs from "fs";
 import * as path from "path";
-import { spawn } from "./createLogs/spawn";
+import { spawn } from "../createLogs/spawn";
 import { killProcess, lineGenePath, mainWindow } from "../main";
-import { logger } from "./createLogs/logger";
+import { logger } from "../createLogs/logger";
 
 //Define IntervalId for keeping focus
 let focusInterval: NodeJS.Timeout;

@@ -782,7 +782,7 @@ const BarcodeInput = () => {
                 ...barcode,
                 blocked: false,
                 label: barcode.posName,
-                value: "",
+                // value:""
               };
             } else if (sample.position === "fixed") {
               setTrailing(false);
@@ -790,7 +790,7 @@ const BarcodeInput = () => {
                 ...barcode,
                 blocked: true,
                 label: sample.label,
-                value: sample.label,
+                // value: sample.label
               };
             }
           }
@@ -803,14 +803,18 @@ const BarcodeInput = () => {
   }, [testprocedure, isNinetySix]);
 
   // select the first availlable barcode
-  useEffect(() => {
-    const firstBarcode = barcodes.find((barcode) => {
-      return barcode && !barcode.blocked;
-    });
-    if (firstBarcode) {
-      markActive(firstBarcode.id);
-    }
-  }, [barcodes]);
+  // const selectFirstBarcode = useCallback(() => {
+  //   const firstBarcode = barcodes.find((barcode) => {
+  //     return barcode && !barcode.blocked;
+  //   });
+  //   if (firstBarcode) {
+  //     markActive(firstBarcode.id);
+  //   }
+  // }, [barcodes]);
+
+  // useEffect(() => {
+  //   selectFirstBarcode();
+  // }, [barcodes]);
 
   const handleReset = useCallback(() => {
     setBarcodes(
@@ -962,9 +966,10 @@ const BarcodeInput = () => {
             ) : (
               ""
             )}
-            {!isNinetySix && active < 16 && (
+            {/* {!isNinetySix && active < 16 && (
               <button type="submit">{t("common.continue")}</button>
-            )}
+            )} */}
+            {trailing && <button type="submit">{t("common.continue")}</button>}
           </form>
         </div>
       </div>
