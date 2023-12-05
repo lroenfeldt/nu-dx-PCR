@@ -24,7 +24,6 @@ const Settings: React.FC<SettingsProps> = ({ visible }) => {
     setMenuOpen,
     clearSettings,
     updateAvailable,
-    setSettings,
   } = useData();
 
   const { t, setLocale, locale } = useTranslation();
@@ -54,12 +53,6 @@ const Settings: React.FC<SettingsProps> = ({ visible }) => {
     },
     [locale, setLocale, settings, saveSettings]
   );
-
-  const handleSwitch = useCallback(async () => {
-    const newSettings = settings;
-    newSettings.user.autoUpdate = !settings.user.autoUpdate;
-    await saveSettings(settings);
-  }, [settings.user.autoUpdate]);
 
   return (
     <div>
@@ -112,13 +105,6 @@ const Settings: React.FC<SettingsProps> = ({ visible }) => {
               checked={settings.device.wellCount === 96}
             />
           )}
-
-          <span className="auto-update">{t("common.autoUpdate")}</span>
-          <Switch
-            label={settings.user.autoUpdate ? t("common.on") : t("common.off")}
-            onClick={handleSwitch}
-            checked={settings.user.autoUpdate}
-          />
 
           <span className="serial-number">
             S/N: {settings.account.serialNumber}

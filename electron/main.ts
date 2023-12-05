@@ -1,11 +1,11 @@
 import { app, BrowserWindow } from "electron";
-import path, { dirname } from "path";
+import path from "path";
 import fs from "fs";
 import Store from "electron-store";
 import isDev from "electron-is-dev";
 import AutoLaunch from "auto-launch";
-import { spawn } from "./spawn";
-import { logger } from "./logger";
+import { spawn } from "./createLogs/spawn";
+import { logger } from "./createLogs/logger";
 import { IStore } from "./interfaces/interfaces";
 import { launchUpdates, updater } from "./core/updateManagement";
 import {
@@ -24,6 +24,7 @@ import {
 import {
   checkUSB,
   getDeviceInfo,
+  moveMatchingFiles,
   rebootDevice,
   saveToUSB,
   toggleLid,
@@ -37,9 +38,9 @@ import {
 } from "./core/testManagement";
 import { exit, relaunchApp } from "./core/lifecycleManagement";
 import { copyLogos } from "./core/utilities";
-import { deleteLogs } from "./deleteLogs";
+import { deleteFiles } from "./createLogs/deleteFiles";
 import { logError } from "./core/logging";
-import { createFile } from "./createFile";
+import { createFile } from "./createLogs/createFile";
 
 export let mainWindow: BrowserWindow | undefined;
 export let splash: BrowserWindow | undefined;
@@ -92,13 +93,12 @@ export const getDeviceType = () => {
     try {
       const res = fs.realpathSync(software.path);
       fs.accessSync(res, fs.constants.F_OK);
-
       lineGenePath = res;
       return software.returnType;
     } catch (error) {
       console.log(`${software.name} not found`);
       logger(`${software.name} not found`);
-      return 0;
+      continue;
     }
   }
 
@@ -272,7 +272,8 @@ app.whenReady().then(() => {
   createSplash();
   createWindow();
   createFile();
-  deleteLogs();
+  deleteFiles();
+  moveMatchingFiles();
 
   spawn("taskkill", ["/f", "/im", "PcrServer.exe"]);
 

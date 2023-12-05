@@ -3,7 +3,7 @@ import * as path from "path";
 import { app, ipcMain } from "electron";
 import os from "os";
 import { IGetResultResponse } from "../interfaces/interfaces";
-import { logger } from "../logger";
+import { logger } from "../createLogs/logger";
 
 export function checkResultFileHandler(): void {
   // logic for IPC handler "checkResultFile"

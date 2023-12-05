@@ -23,16 +23,12 @@ export default function useDefaultBarcodes(settings: ISettings): IBarcode[] {
     "K",
     "L",
   ];
-  let demoSet = false;
+  const length = settings?.device?.wellCount == 96 ? 12 : 8;
   const wellCount = settings?.device?.wellCount;
-  const length = wellCount == 96 ? 12 : 8;
 
-  for (let i = 1; i <= +wellCount; i++) {
+  for (let i = 1; i <= wellCount; i++) {
     let rowIndex = Math.ceil(i / length) - 1;
     let blocked = false;
-    // wellCount is working with types. usually its string.
-    // in defaultBarcodes.ts wellCount needs to be a number.
-    // converted wellCount to number by adding a + operator
 
     //Set Position Name
     let posName =
@@ -42,31 +38,6 @@ export default function useDefaultBarcodes(settings: ISettings): IBarcode[] {
     let label = posName;
     let value = "";
     let valid = false;
-    //Set Controls
-    if (posName === settings.user.tpcPos && settings.account.autoControl) {
-      blocked = settings.account.autoControl;
-      label = "TPC";
-      value = "TPC";
-      valid = true;
-    }
-    if (posName === settings.user.ntcPos && settings.account.autoControl) {
-      blocked = settings.account.autoControl;
-      label = "NTC";
-      value = "NTC";
-      valid = true;
-    }
-    //Set Demo Code for Development
-    if (
-      settings.isDev &&
-      settings.account.autoControl &&
-      posName !== settings.user.ntcPos &&
-      posName !== settings.user.tpcPos &&
-      !demoSet
-    ) {
-      value = "3575910784";
-      valid = true;
-      demoSet = true;
-    }
 
     defaultBarcodes.push({
       id: i,
@@ -84,5 +55,5 @@ export default function useDefaultBarcodes(settings: ISettings): IBarcode[] {
     });
   }
 
-  return defaultBarcodes as IBarcode[];
+  return defaultBarcodes;
 }

@@ -1,6 +1,7 @@
 import { useData } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import { TestmethodProps } from "../types/interfaces/interfaces";
+import { useCallback } from "react";
 
 const Testmethod: React.FC<TestmethodProps> = ({ title, status, methodid }) => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const Testmethod: React.FC<TestmethodProps> = ({ title, status, methodid }) => {
       settings.account.hasUserAuthentification ||
       settings.account.askForLot
     ) {
-       navigate("/enterBarcodes");
+      navigate("/enterBarcodes");
       // navigate("/auth");
     } else {
       navigate("/enterBarcodes");
@@ -20,7 +21,7 @@ const Testmethod: React.FC<TestmethodProps> = ({ title, status, methodid }) => {
   };
 
   return (
-    <div className={`Testmethod ${status}`} onClick={() => selectTest()}>
+    <div className={`Testmethod ${status}`} onClick={selectTest}>
       <span>{title as string}</span>
     </div>
   );

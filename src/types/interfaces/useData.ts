@@ -86,8 +86,8 @@ export interface IUseData {
   isStatus: boolean;
   setIsStatus: React.Dispatch<React.SetStateAction<boolean>>;
 
-  selectedMethod: string;
-  setSelectedMethod: React.Dispatch<React.SetStateAction<string>>;
+  selectedMethod: string | null;
+  setSelectedMethod: React.Dispatch<React.SetStateAction<string | null>>;
 
   deviceStatus: string;
   setDeviceStatus: React.Dispatch<React.SetStateAction<string>>;
@@ -147,4 +147,7 @@ export interface IUseData {
 
   resultSubmitted: boolean;
   setResultSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+
+  selectedTestId: string;
+  setSelectedTestId: React.Dispatch<React.SetStateAction<string>>;
 }

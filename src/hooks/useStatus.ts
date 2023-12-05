@@ -1,5 +1,5 @@
 import { ISettings } from "./../types/interfaces/settings";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useApi, useData } from "./";
 import onlineStatus from "../api/onlineStatus";
 import { UseStatusReturnType } from "../types/interfaces/useStatuts";
@@ -14,8 +14,8 @@ export const useStatus = (): UseStatusReturnType => {
     setDbConnection,
     isStatus,
     errors,
-    testid,
     testFinishedAt,
+    selectedMethod,
   } = useData();
 
   const ping = useCallback(async () => {
@@ -26,10 +26,10 @@ export const useStatus = (): UseStatusReturnType => {
           status: deviceStatus,
           timesStamp: new Date().getTime(),
           cyclerVersion: settings.version,
-        },
-        errors,
-        testid,
-        testFinishedAt
+          testId: selectedMethod,
+          testFinishedAt: testFinishedAt,
+          errors: errors,
+        }
       );
       const responseData = response.data as ISettings;
       if (response.ok) {
@@ -68,7 +68,7 @@ export const useStatus = (): UseStatusReturnType => {
     onlineStatusApi,
     isStatus,
     errors,
-    testid,
+    selectedMethod,
     testFinishedAt,
   ]);
 
