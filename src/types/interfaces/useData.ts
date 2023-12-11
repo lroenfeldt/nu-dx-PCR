@@ -18,6 +18,18 @@ export interface IDataProviderProps {
 }
 
 export interface IUseData {
+  info: boolean;
+  setInfo: React.Dispatch<React.SetStateAction<boolean>>;
+
+  filterMenu: boolean;
+  setFilterMenu: React.Dispatch<React.SetStateAction<boolean>>;
+
+  page: string;
+  setPage: React.Dispatch<React.SetStateAction<string>>;
+
+  isVisible: boolean;
+  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+
   currentMenu: any;
   setCurrentMenu: React.Dispatch<React.SetStateAction<any>>;
 

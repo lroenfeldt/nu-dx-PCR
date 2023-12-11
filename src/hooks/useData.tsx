@@ -81,13 +81,17 @@ export function DataProvider({ children }: IDataProviderProps) {
   >([]);
   const [viewType, setViewType] = useState("sample");
   const [resultSubmitted, setResultSubmitted] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [page, setPage] = useState("cards");
+  const [filterMenu, setFilterMenu] = useState(false);
+  const [info, setInfo] = useState(false);
   /**
    * Resets values to default
    * @returns {void}
    **/
   const reset = useCallback(() => {
     setRemTime(0);
-    // removed setTestid("")
+    setTestid("");
     setErrors([]);
     setTestrun(false);
     setTestDone(false);
@@ -373,6 +377,15 @@ export function DataProvider({ children }: IDataProviderProps) {
       setOpenMenu,
       resultSubmitted,
       setResultSubmitted,
+
+      isVisible,
+      setIsVisible,
+      page,
+      setPage,
+      filterMenu,
+      setFilterMenu,
+      info,
+      setInfo,
     }),
     [
       currentMenu,
@@ -477,6 +490,16 @@ export function DataProvider({ children }: IDataProviderProps) {
       setOpenMenu,
       resultSubmitted,
       setResultSubmitted,
+
+      isVisible,
+      setIsVisible,
+      page,
+      setPage,
+
+      filterMenu,
+      setFilterMenu,
+      info,
+      setInfo,
     ]
   );
   return (

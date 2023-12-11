@@ -12,12 +12,6 @@ export default defineConfig({
     electron([
       // Main process configurations
       { entry: "electron/main.ts" },
-      { entry: "electron/logger.ts" },
-      { entry: "electron/createFile.ts" },
-      { entry: "electron/deleteLogs.ts" },
-      { entry: "electron/fileData.ts" },
-      { entry: "electron/spawn.ts" },
-
       // Preload script configuration
       {
         entry: "electron/preload.ts",

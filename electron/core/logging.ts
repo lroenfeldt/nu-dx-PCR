@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { logger } from "../logger";
+import { logger } from "../logs/logger";
 
 export function logError(): void {
   /**

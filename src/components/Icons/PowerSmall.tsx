@@ -1,23 +1,21 @@
 import React from "react";
 import { useTheme } from "../../hooks";
 
-interface IShutDownProps {
+interface IPowerSmallProps {
   onClick?: React.MouseEventHandler<SVGSVGElement>;
   height?: number;
   width?: number;
   color?: string;
 }
-const ShutDown: React.FC<IShutDownProps> = ({
-  onClick,
-  height = 24,
-  width = 24,
+const PowerSmall: React.FC<IPowerSmallProps> = ({
+  height = 22,
+  width = 22,
   color,
 }) => {
   const { colors } = useTheme();
-  color = color || colors.secondary.main;
+  color = color || colors.text.default;
   return (
     <svg
-      onClick={onClick}
       height={height}
       width={width}
       viewBox="0 0 24 24"
@@ -35,4 +33,4 @@ const ShutDown: React.FC<IShutDownProps> = ({
   );
 };
 
-export default ShutDown;
+export default PowerSmall;

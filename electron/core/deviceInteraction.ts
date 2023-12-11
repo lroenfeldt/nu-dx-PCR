@@ -4,7 +4,7 @@ import isDev from "electron-is-dev";
 import * as fs from "fs";
 import * as path from "path";
 import { getDeviceType } from "../main";
-import { logger } from "../logger";
+import { logger } from "../logs/logger";
 import macaddress from "macaddress";
 const { SerialPort } = require("serialport");
 

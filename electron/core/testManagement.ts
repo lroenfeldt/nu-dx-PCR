@@ -1,9 +1,9 @@
 import { app, ipcMain } from "electron";
 import * as fs from "fs";
 import * as path from "path";
-import { spawn } from "../spawn";
+import { spawn } from "../logs/spawn";
 import { killProcess, lineGenePath, mainWindow } from "../main";
-import { logger } from "../logger";
+import { logger } from "../logs/logger";
 import { ILineGeneSettings, ITestObject } from "../interfaces/interfaces";
 
 //Define IntervalId for keeping focus

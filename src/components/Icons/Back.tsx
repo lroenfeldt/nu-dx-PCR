@@ -6,8 +6,15 @@ interface IBackProps {
   height?: number;
   width?: number;
   color?: string;
+  style?: React.CSSProperties;
 }
-const Back: FC<IBackProps> = ({ onClick, height = 28, width = 17, color }) => {
+const Back: FC<IBackProps> = ({
+  onClick,
+  height = 28,
+  width = 17,
+  color,
+  style,
+}) => {
   const { colors } = useTheme();
   const colorToUse = color || colors.white.main;
   return (
@@ -18,6 +25,7 @@ const Back: FC<IBackProps> = ({ onClick, height = 28, width = 17, color }) => {
       viewBox="0 0 17 28"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      style={style}
     >
       <path
         id="icon error 1 (Traced)"

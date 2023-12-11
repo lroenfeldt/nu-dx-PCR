@@ -1,5 +1,5 @@
 import "./App.css";
-import { Block, Layout } from "./components";
+import { Block, Layout, LotPcr } from "./components";
 import {
   Route,
   Routes,
@@ -52,6 +52,7 @@ function App() {
                 <Route path="/debug" element={<Debug />} />
                 <Route path="/pairing" element={<Pairing />} />
                 <Route path="/selectMethod" element={<Home />} />
+                <Route path="/lot-kit" element={<LotPcr />} />
                 <Route path="/auth" element={<Authentication />} />
                 <Route path="/testReady" element={<TestReady />} />
                 <Route path="/testRunning" element={<RunTest />} />

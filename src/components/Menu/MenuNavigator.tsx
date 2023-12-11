@@ -4,13 +4,8 @@ import Profil from "./Profil";
 import { useTranslation } from "../../hooks";
 import Help from "./Help";
 import System from "./System";
+import { Menus } from "../../types/components";
 
-enum Menus {
-  MAIN = "main",
-  HELP = "help",
-  PROFIL = "profil",
-  SYSTEM = "system",
-}
 interface MenuNavigatorProps {
   navigateBack: () => void;
   currentMenu: Menus;
@@ -62,6 +57,7 @@ const MenuNavigator: React.FC<MenuNavigatorProps> = ({
           {currentMenu === Menus.HELP && <Help />}
           {currentMenu === Menus.PROFIL && <Profil />}
           {currentMenu === Menus.SYSTEM && <System />}
+          {currentMenu === Menus.OPENLID && <System />}
         </Block>
       )}
     </Block>

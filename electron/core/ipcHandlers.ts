@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { app, ipcMain } from "electron";
 import os from "os";
-import { logger } from "../logger";
+import { logger } from "../logs/logger";
 import { IGetResultResponse } from "../interfaces/interfaces";
 
 export function checkResultFileHandler(): void {

@@ -211,6 +211,7 @@ export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   neumorphism?: boolean;
   style?: CSSProperties;
   children?: ReactNode;
+  icon?: JSX.Element;
   [key: string]: any;
 }
 
@@ -333,6 +334,8 @@ export enum Menus {
   HELP = "help",
   PROFIL = "profil",
   SYSTEM = "system",
+  SHUTDOWN = "shutdown",
+  OPENLID = "openlid",
 }
 
 export interface TLabelProps {
@@ -356,4 +359,16 @@ export interface IOvalSPinner {
 
 export interface IViewResultsModal {
   onClose: () => void;
+}
+
+export interface IModalProps {
+  children: JSX.Element;
+  isVisible: boolean;
+  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  style?: React.CSSProperties;
+}
+
+export interface ModalProps {
+  isVisible: boolean;
+  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }

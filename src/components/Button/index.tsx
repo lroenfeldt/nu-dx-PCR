@@ -7,6 +7,7 @@ const Button: React.FC<IButtonProps> = (props) => {
     id = "button",
     onClick,
     children,
+    icon,
     navigation,
     style,
     shadow = false,
@@ -146,7 +147,7 @@ const Button: React.FC<IButtonProps> = (props) => {
   } as React.CSSProperties;
 
   return (
-    <button style={{ ...buttonStyles }} {...rest} onClick={onClick}>
+    <button {...icon} style={{ ...buttonStyles }} {...rest} onClick={onClick}>
       {children}
     </button>
   );

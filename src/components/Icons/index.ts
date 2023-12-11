@@ -36,8 +36,18 @@ import CloudSmall from "./CloudSmall";
 import ClosingIcon from "./ClosingIcon";
 import Email from "./Email";
 import Phone from "./Phone";
+import PowerSmall from "./PowerSmall";
+import OpenLid from "./OpenLid";
+import Table from "./Table";
+import Filter from "./Filter";
+import Barcode from "./Barcode";
+import Funnel from "./Funnel";
+import Arrow from "./Arrows";
+import Clock from "./Clock";
 
 export {
+  OpenLid,
+  PowerSmall,
   HomeIcon,
   IFU,
   Off,
@@ -76,4 +86,10 @@ export {
   ClosingIcon,
   Email,
   Phone,
+  Table,
+  Filter,
+  Barcode,
+  Funnel,
+  Arrow,
+  Clock,
 };

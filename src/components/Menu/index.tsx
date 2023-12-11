@@ -3,6 +3,8 @@ import { Block, Help, Info, Profil, RightArrow, Text, Update } from "..";
 import { useData, useTheme } from "../../hooks";
 import MenuNavigator from "./MenuNavigator";
 import { MenuItemProps, Menus } from "../../types/components";
+import { OpenLid, PowerSmall } from "../Icons";
+import ControlMenu from "./ControlMenu";
 
 const MenuItem: React.FC<MenuItemProps> = ({
   IconComponent,
@@ -31,8 +33,8 @@ const MenuItem: React.FC<MenuItemProps> = ({
   );
 };
 
-const Menu = (_props: { onClose: () => void }) => {
-  const { currentMenu, setCurrentMenu } = useData();
+const Menu = () => {
+  const { currentMenu, setCurrentMenu, setControlMenu } = useData();
   const menuItems = [
     {
       IconComponent: Info,
@@ -55,6 +57,16 @@ const Menu = (_props: { onClose: () => void }) => {
       label: "Update",
       onClick: () => setCurrentMenu(Menus.MAIN),
     },
+    {
+      IconComponent: PowerSmall,
+      label: "Shutdown",
+      onClick: () => setControlMenu(true),
+    },
+    {
+      IconComponent: OpenLid,
+      label: "Openlid",
+      onClick: () => setCurrentMenu(Menus.OPENLID),
+    },
   ];
 
   const navigateBack = () => {
@@ -68,28 +80,42 @@ const Menu = (_props: { onClose: () => void }) => {
       case Menus.SYSTEM:
         setCurrentMenu(Menus.MAIN);
         break;
+      case Menus.OPENLID:
+        setCurrentMenu(Menus.MAIN);
+        break;
       default:
         break;
     }
   };
+
   return (
-    <Block>
-      <Block
-        position="fixed"
-        right={0}
-        top={0}
-        white
-        dropShadowLarge
-        style={{ borderBottomLeftRadius: "16px" }}
-      >
-        <Block flex column width={606} padding={32} gap={16} align="flex-start">
-          {menuItems.map((item, index) => (
-            <MenuItem key={index} {...item} />
-          ))}
+    <>
+      <Block>
+        <ControlMenu />
+        <Block
+          position="fixed"
+          right={0}
+          top={0}
+          white
+          dropShadowLarge
+          style={{ borderBottomLeftRadius: "16px" }}
+        >
+          <Block
+            flex
+            column
+            width={606}
+            padding={32}
+            gap={16}
+            align="flex-start"
+          >
+            {menuItems.map((item, index) => (
+              <MenuItem key={index} {...item} />
+            ))}
+          </Block>
         </Block>
+        <MenuNavigator navigateBack={navigateBack} currentMenu={currentMenu} />
       </Block>
-      <MenuNavigator navigateBack={navigateBack} currentMenu={currentMenu} />
-    </Block>
+    </>
   );
 };
 
