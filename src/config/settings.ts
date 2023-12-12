@@ -15,9 +15,9 @@ const submitControlUrl = `https://${import.meta.env.VITE_PROCOMCUREPOC_USER}:${
 const fetchControlUrl = `https://${import.meta.env.VITE_POC_USER}:${
   import.meta.env.VITE_POC_PASSWORD
 }@labordatenbank.com/procomcure/stats/view/526/https_json/`;
-const resultUrl = `https://${import.meta.env.VITE_PROCOMCUREPOC_USER}:${
-  import.meta.env.VITE_PROCOMCUREPOC_PASSWORD
-}@labordatenbank.com/procomcure/imports/import/163/0/https`;
+const resultUrl = `https://${import.meta.env.VITE_NUDX_USER}:${
+  import.meta.env.VITE_NUDX_PASSWORD
+}@labordatenbank.com/nuhc/imports/import/1/0/https`;
 
 export default {
   api,
