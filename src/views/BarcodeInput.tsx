@@ -742,6 +742,7 @@ const BarcodeInput = () => {
 
   //check valid attribure of all barcodes to toggle button for next step
   useEffect(() => {
+    console.log('lol')
     checkAllValid();
   }, [barcodes]);
 
@@ -760,42 +761,37 @@ const BarcodeInput = () => {
     setInputName(getBarcode(active).label);
   }, [active]);
 
-  // Apply control samples
+  //Apply control samples
   useEffect(() => {
-    let updatedBarcodes = [...barcodes];
-    if (testprocedure?.controlSamples) {
-      testprocedure.controlSamples.forEach((sample) => {
-        updatedBarcodes = updatedBarcodes.map((barcode) => {
-          if (
-            isNinetySix
-              ? sample.position96 === barcode.posName
-              : sample.position16 === barcode.posName
-          ) {
-            if (sample.position === "trailing") {
-              setTrailing(true);
-              return {
-                ...barcode,
-                blocked: false,
-                label: barcode.posName,
-                // value:""
-              };
-            } else if (sample.position === "fixed") {
-              setTrailing(false);
-              return {
-                ...barcode,
-                blocked: true,
-                label: sample.label,
-                // value: sample.label
-              };
-            }
+    console.log('reached')
+    if (testprocedure.controlSamples.length > 0) {
+      setBarcodes((prevBarcodes) => {
+        return prevBarcodes.map((barcode) => {
+          const controlSample = testprocedure.controlSamples.find((sample) => {
+            return (
+              (!isNinetySix && barcode.label === sample.position16) ||
+              (isNinetySix && barcode.label === sample.position96)
+            );
+          });
+
+          if (controlSample && controlSample.position === 'fixed') {
+            console.log(controlSample)
+            return {
+              ...barcode,
+              blocked: true,
+              label: controlSample.label,
+              value: controlSample.label,
+              valid: true,
+            };
+          } else {
+            console.log('reached')
+            return barcode;
           }
-          return barcode;
         });
       });
     }
-
-    setBarcodes(updatedBarcodes);
-  }, [testprocedure, isNinetySix]);
+    setControlsApplied(true);
+  }, [settings.account.autoControlSamples, isNinetySix]);
 
   //mark active well after applying controls
   useEffect(() => {
