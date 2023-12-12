@@ -247,7 +247,7 @@ const useResults = () => {
       resultFile = fetchResult.resultFile;
       testConfig = JSON.parse(configFile);
       if (!testConfig.testmethod) {
-        testConfig.testmethod = urls.TESTMETHOD;
+        throw new Error('Testmethod not found in testconfig')
       }
       testmethod = settings.account.testprocedures.find(
         (method) => method.id === testConfig.testmethod
@@ -390,7 +390,7 @@ const useResults = () => {
       barcodes = extractBarcodes(resultFile);
       override = fetchResult.override;
       if (!testConfig.testmethod) {
-        testConfig.testmethod = urls.TESTMETHOD;
+        throw new Error('Testmethod not found in testconfig')
       }
       testmethod = settings.account.testprocedures.find(
         (method) => method.id === testConfig.testmethod
@@ -431,9 +431,12 @@ const useResults = () => {
     const resultUrl = testConfig.account.customSubmitResultsEndpoint
       ? testConfig.account.customSubmitResultsEndpoint
       : urls.resultUrl;
-    //Submit ControlSamples
+    
+    //Submit ControlSamples - not needed right now
+    
     window.api.logEvents(`check for auto controls`);
     if (settings.account.preregisterControlSamples) {
+      console.log('submitting controls')
       try {
         autoControls = await submitAutoControls(
           barcodes,
