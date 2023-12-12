@@ -128,7 +128,7 @@ const BarcodeInput = () => {
   const updateBarcode = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       e.preventDefault();
-
+      console.log(barcodeCheckTimeout);
       clearTimeout(barcodeCheckTimeout as number);
       setInputs({
         ...inputs,
@@ -153,10 +153,13 @@ const BarcodeInput = () => {
         )
       );
 
-      setTimeout(() => {
-        checkBarcode(newBarcode);
-        setBarcodeCheckTimeout(null);
-      }, 500);
+      setBarcodeCheckTimeout(
+        setTimeout(() => {
+          checkBarcode(newBarcode);
+          setBarcodeCheckTimeout(null);
+        }, 1000)
+      );
+
     },
 
     [active, barcodes, barcodeCheckTimeout, setBarcodes, setBarcodeCheckTimeout]
