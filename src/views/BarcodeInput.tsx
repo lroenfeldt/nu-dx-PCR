@@ -750,13 +750,6 @@ const BarcodeInput = () => {
     }
   }, [offlineMode]);
 
-  //mark active well after applying controls
-  useEffect(() => {
-    if (controlsApplied) {
-      nextWell(true);
-    }
-  }, [controlsApplied]);
-
   //open lid and select first active well on startup
   useEffect(() => {
     toggleLid();
@@ -801,6 +794,13 @@ const BarcodeInput = () => {
 
     setBarcodes(updatedBarcodes);
   }, [testprocedure, isNinetySix]);
+
+  //mark active well after applying controls
+  useEffect(() => {
+    if (controlsApplied) {
+      nextWell(true);
+    }
+  }, [controlsApplied]);
 
   // select the first availlable barcode
   // const selectFirstBarcode = useCallback(() => {
