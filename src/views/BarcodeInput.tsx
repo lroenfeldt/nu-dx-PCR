@@ -40,7 +40,7 @@ const BarcodeInput = () => {
     ? settings.account.customCheckBarcodesEndpoint
     : urls.checkBarcodeUrl;
   const [keyboardActive, setKeyboardActive] = useState(false);
-  const [barcodeCheckTimeout, setBarcodeCheckTimeout] = useState<number | null>(
+  const [barcodeCheckTimeout, setBarcodeCheckTimeout] = useState<any>( //@anicet ist nicht ganz sauber, bitte ienmal richtig machen
     null
   );
   const [clear, setClear] = useState(false);
@@ -128,8 +128,7 @@ const BarcodeInput = () => {
   const updateBarcode = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       e.preventDefault();
-      console.log(barcodeCheckTimeout);
-      clearTimeout(barcodeCheckTimeout as number);
+      clearTimeout(barcodeCheckTimeout);
       setInputs({
         ...inputs,
         [inputName]: e.target.value,
@@ -167,7 +166,7 @@ const BarcodeInput = () => {
 
   const onKeyPress = useCallback(
     (value: string) => {
-      clearTimeout(barcodeCheckTimeout as number);
+      clearTimeout(barcodeCheckTimeout);
 
       setBarcodesValid(false);
       setBarcodes((prevBarcodes) =>
