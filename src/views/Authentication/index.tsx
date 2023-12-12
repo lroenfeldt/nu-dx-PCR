@@ -44,9 +44,9 @@ function Authentication() {
       const user = settings.account.users.find(
         (user) => user.id == value
       ) as IAccountUser;
-      const isCertified = user?.certifiedTestprocedureIds?.includes(
-        selectedMethod as string
-      );
+      const isCertified = !!selectedMethod
+        ? user?.certifiedTestprocedureIds?.includes(selectedMethod)
+        : false;
 
       setCurrentUser(user);
       if (user) {
@@ -93,9 +93,9 @@ function Authentication() {
       const user = settings.account.users.find(
         (user) => user.id == value
       ) as IAccountUser;
-      const isCertified = user?.certifiedTestprocedureIds?.includes(
-        selectedMethod as string
-      );
+      const isCertified = !!selectedMethod
+        ? user?.certifiedTestprocedureIds?.includes(selectedMethod)
+        : false;
       setCurrentUser(user);
       if (user) {
         setKeyboardVisible(false);
