@@ -40,9 +40,7 @@ const BarcodeInput = () => {
     ? settings.account.customCheckBarcodesEndpoint
     : urls.checkBarcodeUrl;
   const [keyboardActive, setKeyboardActive] = useState(false);
-  const [barcodeCheckTimeout, setBarcodeCheckTimeout] = useState<any>( //@anicet ist nicht ganz sauber, bitte ienmal richtig machen
-    null
-  );
+  const [barcodeCheckTimeout, setBarcodeCheckTimeout] = useState<any>(null); //@anicet ist nicht ganz sauber, bitte ienmal richtig machen
   const [clear, setClear] = useState(false);
   const [inputs, setInputs] = useState({});
   const [inputName, setInputName] = useState("default");
@@ -158,7 +156,6 @@ const BarcodeInput = () => {
           setBarcodeCheckTimeout(null);
         }, 1000)
       );
-
     },
 
     [active, barcodes, barcodeCheckTimeout, setBarcodes, setBarcodeCheckTimeout]
@@ -742,7 +739,7 @@ const BarcodeInput = () => {
 
   //check valid attribure of all barcodes to toggle button for next step
   useEffect(() => {
-    console.log('lol')
+    console.log("lol");
     checkAllValid();
   }, [barcodes]);
 
@@ -763,7 +760,7 @@ const BarcodeInput = () => {
 
   //Apply control samples
   useEffect(() => {
-    console.log('reached')
+    console.log("reached");
     if (testprocedure.controlSamples.length > 0) {
       setBarcodes((prevBarcodes) => {
         return prevBarcodes.map((barcode) => {
@@ -774,8 +771,8 @@ const BarcodeInput = () => {
             );
           });
 
-          if (controlSample && controlSample.position === 'fixed') {
-            console.log(controlSample)
+          if (controlSample && controlSample.position === "fixed") {
+            console.log(controlSample);
             return {
               ...barcode,
               blocked: true,
@@ -784,7 +781,7 @@ const BarcodeInput = () => {
               valid: true,
             };
           } else {
-            console.log('reached')
+            console.log("reached");
             return barcode;
           }
         });
@@ -799,20 +796,6 @@ const BarcodeInput = () => {
       nextWell(true);
     }
   }, [controlsApplied]);
-
-  // select the first availlable barcode
-  // const selectFirstBarcode = useCallback(() => {
-  //   const firstBarcode = barcodes.find((barcode) => {
-  //     return barcode && !barcode.blocked;
-  //   });
-  //   if (firstBarcode) {
-  //     markActive(firstBarcode.id);
-  //   }
-  // }, [barcodes]);
-
-  // useEffect(() => {
-  //   selectFirstBarcode();
-  // }, [barcodes]);
 
   const handleReset = useCallback(() => {
     setBarcodes(
