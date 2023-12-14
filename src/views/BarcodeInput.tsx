@@ -45,6 +45,7 @@ const BarcodeInput = () => {
   const [inputs, setInputs] = useState({});
   const [inputName, setInputName] = useState("default");
   const [trailing, setTrailing] = useState(false);
+  const [samplePosition, setSamplePosition] = useState("");
   const [controlsApplied, setControlsApplied] = useState(false);
   const testprocedure = settings.account.testprocedures.find(
     (testprocedure) => testprocedure.id === selectedMethod
@@ -739,7 +740,6 @@ const BarcodeInput = () => {
 
   //check valid attribure of all barcodes to toggle button for next step
   useEffect(() => {
-    console.log("lol");
     checkAllValid();
   }, [barcodes]);
 
@@ -760,7 +760,6 @@ const BarcodeInput = () => {
 
   //Apply control samples
   useEffect(() => {
-    console.log("reached");
     if (testprocedure.controlSamples.length > 0) {
       setBarcodes((prevBarcodes) => {
         return prevBarcodes.map((barcode) => {
@@ -770,9 +769,8 @@ const BarcodeInput = () => {
               (isNinetySix && barcode.label === sample.position96)
             );
           });
-
+          console.log(controlSample);
           if (controlSample && controlSample.position === "fixed") {
-            console.log(controlSample);
             return {
               ...barcode,
               blocked: true,
@@ -781,7 +779,6 @@ const BarcodeInput = () => {
               valid: true,
             };
           } else {
-            console.log("reached");
             return barcode;
           }
         });
@@ -821,6 +818,12 @@ const BarcodeInput = () => {
     });
     if (textInput.current) textInput.current.focus();
   }, [barcodes, active]);
+
+  useEffect(() => {
+    testprocedure?.controlSamples.map((sample) => {
+      return setSamplePosition(sample.position);
+    });
+  }, [samplePosition]);
 
   return (
     <>
@@ -947,10 +950,9 @@ const BarcodeInput = () => {
             ) : (
               ""
             )}
-            {/* {!isNinetySix && active < 16 && (
+            {!isNinetySix && active < 16 && (
               <button type="submit">{t("common.continue")}</button>
-            )} */}
-            {trailing && <button type="submit">{t("common.continue")}</button>}
+            )}
           </form>
         </div>
       </div>
@@ -969,9 +971,9 @@ const BarcodeInput = () => {
           onClick={navigateToTestReady}
           className={`${!barcodesValid ? "disabled" : ""}`}
         >
-          {!trailing
-            ? t("default.common.testStart")
-            : t("default.common.continue")}
+          {samplePosition === "trailing"
+            ? t("default.common.continue")
+            : t("default.common.testStart")}
         </button>
       </div>
     </>
