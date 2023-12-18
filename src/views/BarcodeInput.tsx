@@ -202,7 +202,7 @@ const BarcodeInput = () => {
   );
 
   const trailingHandler = () => {
-    settings.account.testprocedures.map((testprocedure, index) => {
+    settings.account.testprocedures.map((testprocedure) => {
       testprocedure.controlSamples.map((sample, index) => {
         if (sample.position == "trailing") {
           setBarcodes((prevBarcodes) => {
@@ -769,7 +769,6 @@ const BarcodeInput = () => {
               (isNinetySix && barcode.label === sample.position96)
             );
           });
-          console.log(controlSample);
           if (controlSample && controlSample.position === "fixed") {
             return {
               ...barcode,
@@ -783,6 +782,12 @@ const BarcodeInput = () => {
           }
         });
       });
+    }
+    setControlsApplied(true);
+  }, [settings.account.autoControlSamples, isNinetySix]);
+
+  useEffect(() => {
+    if (testprocedure.controlSamples.length > 0) {
     }
     setControlsApplied(true);
   }, [settings.account.autoControlSamples, isNinetySix]);
