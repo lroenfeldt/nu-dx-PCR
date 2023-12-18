@@ -40,13 +40,12 @@ const BarcodeInput = () => {
     ? settings.account.customCheckBarcodesEndpoint
     : urls.checkBarcodeUrl;
   const [keyboardActive, setKeyboardActive] = useState(false);
-  const [barcodeCheckTimeout, setBarcodeCheckTimeout] = useState<number | null>(
-    null
-  );
+  const [barcodeCheckTimeout, setBarcodeCheckTimeout] = useState<any>(null); //@anicet ist nicht ganz sauber, bitte ienmal richtig machen
   const [clear, setClear] = useState(false);
   const [inputs, setInputs] = useState({});
   const [inputName, setInputName] = useState("default");
   const [trailing, setTrailing] = useState(false);
+  const [samplePosition, setSamplePosition] = useState("");
   const [controlsApplied, setControlsApplied] = useState(false);
   const testprocedure = settings.account.testprocedures.find(
     (testprocedure) => testprocedure.id === selectedMethod
@@ -128,8 +127,7 @@ const BarcodeInput = () => {
   const updateBarcode = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       e.preventDefault();
-
-      clearTimeout(barcodeCheckTimeout as number);
+      clearTimeout(barcodeCheckTimeout);
       setInputs({
         ...inputs,
         [inputName]: e.target.value,
@@ -153,10 +151,12 @@ const BarcodeInput = () => {
         )
       );
 
-      setTimeout(() => {
-        checkBarcode(newBarcode);
-        setBarcodeCheckTimeout(null);
-      }, 500);
+      setBarcodeCheckTimeout(
+        setTimeout(() => {
+          checkBarcode(newBarcode);
+          setBarcodeCheckTimeout(null);
+        }, 1000)
+      );
     },
 
     [active, barcodes, barcodeCheckTimeout, setBarcodes, setBarcodeCheckTimeout]
@@ -164,7 +164,7 @@ const BarcodeInput = () => {
 
   const onKeyPress = useCallback(
     (value: string) => {
-      clearTimeout(barcodeCheckTimeout as number);
+      clearTimeout(barcodeCheckTimeout);
 
       setBarcodesValid(false);
       setBarcodes((prevBarcodes) =>
@@ -202,7 +202,7 @@ const BarcodeInput = () => {
   );
 
   const trailingHandler = () => {
-    settings.account.testprocedures.map((testprocedure, index) => {
+    settings.account.testprocedures.map((testprocedure) => {
       testprocedure.controlSamples.map((sample, index) => {
         if (sample.position == "trailing") {
           setBarcodes((prevBarcodes) => {
@@ -750,13 +750,6 @@ const BarcodeInput = () => {
     }
   }, [offlineMode]);
 
-  //mark active well after applying controls
-  useEffect(() => {
-    if (controlsApplied) {
-      nextWell(true);
-    }
-  }, [controlsApplied]);
-
   //open lid and select first active well on startup
   useEffect(() => {
     toggleLid();
@@ -765,56 +758,46 @@ const BarcodeInput = () => {
     setInputName(getBarcode(active).label);
   }, [active]);
 
-  // Apply control samples
+  //Apply control samples
   useEffect(() => {
-    let updatedBarcodes = [...barcodes];
-    if (testprocedure?.controlSamples) {
-      testprocedure.controlSamples.forEach((sample) => {
-        updatedBarcodes = updatedBarcodes.map((barcode) => {
-          if (
-            isNinetySix
-              ? sample.position96 === barcode.posName
-              : sample.position16 === barcode.posName
-          ) {
-            if (sample.position === "trailing") {
-              setTrailing(true);
-              return {
-                ...barcode,
-                blocked: false,
-                label: barcode.posName,
-                // value:""
-              };
-            } else if (sample.position === "fixed") {
-              setTrailing(false);
-              return {
-                ...barcode,
-                blocked: true,
-                label: sample.label,
-                // value: sample.label
-              };
-            }
+    if (testprocedure.controlSamples.length > 0) {
+      setBarcodes((prevBarcodes) => {
+        return prevBarcodes.map((barcode) => {
+          const controlSample = testprocedure.controlSamples.find((sample) => {
+            return (
+              (!isNinetySix && barcode.label === sample.position16) ||
+              (isNinetySix && barcode.label === sample.position96)
+            );
+          });
+          if (controlSample && controlSample.position === "fixed") {
+            return {
+              ...barcode,
+              blocked: true,
+              label: controlSample.label,
+              value: controlSample.label,
+              valid: true,
+            };
+          } else {
+            return barcode;
           }
-          return barcode;
         });
       });
     }
+    setControlsApplied(true);
+  }, [settings.account.autoControlSamples, isNinetySix]);
 
-    setBarcodes(updatedBarcodes);
-  }, [testprocedure, isNinetySix]);
+  useEffect(() => {
+    if (testprocedure.controlSamples.length > 0) {
+    }
+    setControlsApplied(true);
+  }, [settings.account.autoControlSamples, isNinetySix]);
 
-  // select the first availlable barcode
-  // const selectFirstBarcode = useCallback(() => {
-  //   const firstBarcode = barcodes.find((barcode) => {
-  //     return barcode && !barcode.blocked;
-  //   });
-  //   if (firstBarcode) {
-  //     markActive(firstBarcode.id);
-  //   }
-  // }, [barcodes]);
-
-  // useEffect(() => {
-  //   selectFirstBarcode();
-  // }, [barcodes]);
+  //mark active well after applying controls
+  useEffect(() => {
+    if (controlsApplied) {
+      nextWell(true);
+    }
+  }, [controlsApplied]);
 
   const handleReset = useCallback(() => {
     setBarcodes(
@@ -840,6 +823,12 @@ const BarcodeInput = () => {
     });
     if (textInput.current) textInput.current.focus();
   }, [barcodes, active]);
+
+  useEffect(() => {
+    testprocedure?.controlSamples.map((sample) => {
+      return setSamplePosition(sample.position);
+    });
+  }, [samplePosition]);
 
   return (
     <>
@@ -966,10 +955,9 @@ const BarcodeInput = () => {
             ) : (
               ""
             )}
-            {/* {!isNinetySix && active < 16 && (
+            {!isNinetySix && active < 16 && (
               <button type="submit">{t("common.continue")}</button>
-            )} */}
-            {trailing && <button type="submit">{t("common.continue")}</button>}
+            )}
           </form>
         </div>
       </div>
@@ -988,9 +976,9 @@ const BarcodeInput = () => {
           onClick={navigateToTestReady}
           className={`${!barcodesValid ? "disabled" : ""}`}
         >
-          {!trailing
-            ? t("default.common.testStart")
-            : t("default.common.continue")}
+          {samplePosition === "trailing"
+            ? t("default.common.continue")
+            : t("default.common.testStart")}
         </button>
       </div>
     </>

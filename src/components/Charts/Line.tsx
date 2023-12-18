@@ -89,13 +89,15 @@ const Line: React.FC<ILineProps> = ({ barcode }) => {
 
   let datasets = [];
   let count = 0;
-  let labelsLength: number[] = [];
+  let labels: number[] = [];
 
   for (let param in barcode.parameters) {
     let parameter = barcode.parameters[param];
     let dataset = {
       label: parameters.find((p) => p.target == param.toUpperCase())?.label,
-      data: parameter.curveData,
+ 
+      data: ["0.0", ...parameter.curveData], // Array of strings
+
       borderColor: parameters.find((p) => p.target == param.toUpperCase())
         ?.color,
       borderWidth: 3,
@@ -103,12 +105,7 @@ const Line: React.FC<ILineProps> = ({ barcode }) => {
     datasets.push(dataset);
 
     count = parameter.curveData.length;
-    const resultArray: number[] = Array.from(
-      { length: count },
-      (_, index) => index + 1
-    );
-    labelsLength = resultArray;
-
+    labels = Array.from({ length: count + 1 }, (_, index) => index + 1);
     const iShowThreshhold = parameters.find(
       (p) => p.target == param.toUpperCase()
     )?.showThreshhold;
@@ -117,7 +114,9 @@ const Line: React.FC<ILineProps> = ({ barcode }) => {
         label:
           parameters.find((p) => p.target == param.toUpperCase())?.label +
           "Threshhold",
-        data: new Array(40).fill(
+
+        data: new Array(labels.length).fill(
+
           parameters.find((p) => p.target == param.toUpperCase())?.threshhold
         ),
         borderColor: parameters.find((p) => p.target == param.toUpperCase())
@@ -128,7 +127,7 @@ const Line: React.FC<ILineProps> = ({ barcode }) => {
       });
     }
   }
-  const labels = labelsLength;
+  labels = [0, ...labels];
   const data = {
     labels,
     datasets,
