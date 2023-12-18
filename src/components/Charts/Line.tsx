@@ -95,7 +95,9 @@ const Line: React.FC<ILineProps> = ({ barcode }) => {
     let parameter = barcode.parameters[param];
     let dataset = {
       label: parameters.find((p) => p.target == param.toUpperCase())?.label,
+ 
       data: ["0.0", ...parameter.curveData], // Array of strings
+
       borderColor: parameters.find((p) => p.target == param.toUpperCase())
         ?.color,
       borderWidth: 3,
@@ -112,7 +114,9 @@ const Line: React.FC<ILineProps> = ({ barcode }) => {
         label:
           parameters.find((p) => p.target == param.toUpperCase())?.label +
           "Threshhold",
+
         data: new Array(labels.length).fill(
+
           parameters.find((p) => p.target == param.toUpperCase())?.threshhold
         ),
         borderColor: parameters.find((p) => p.target == param.toUpperCase())
