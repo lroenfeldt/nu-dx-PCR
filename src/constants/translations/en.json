@@ -61,7 +61,10 @@
     "toTest": "To Test",
     "samples": "Samples",
     "list": "List",
-    "results": "Results"
+    "results": "Results",
+    "sortBy": "Sort by:",
+    "runTime": "Run time",
+    "producer": "Producer"
   },
   "authentication": {
     "title": "Authentication",

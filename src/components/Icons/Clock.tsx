@@ -1,11 +1,14 @@
 import React from "react";
+import { useTheme } from "../../hooks";
 
 interface IClockProps {
   height?: number;
   width?: number;
-  fill?: string;
+  color?: string;
 }
-const Clock: React.FC<IClockProps> = ({ height = 20, width = 20, fill }) => {
+const Clock: React.FC<IClockProps> = ({ height = 20, width = 20, color }) => {
+  const { colors } = useTheme();
+  color = colors.primary.main;
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -19,7 +22,7 @@ const Clock: React.FC<IClockProps> = ({ height = 20, width = 20, fill }) => {
         strokeWidth="2.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        stroke={fill}
+        stroke={color}
       />
     </svg>
   );

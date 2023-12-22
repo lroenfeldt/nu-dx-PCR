@@ -61,7 +61,10 @@
     "toTest": "Zum Test",
     "samples": "Proben",
     "list": "Liste",
-    "results": "Ergebnisse"
+    "results": "Ergebnisse",
+    "sortBy": "Sortieren nach:",
+    "runTime": "Laufzeit",
+    "producer": "Hersteller"
   },
   "authentication": {
     "title": "Authentifizierung",

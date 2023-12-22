@@ -61,7 +61,10 @@
     "toTest": "Aller au test",
     "samples": "Échantillons",
     "list": "Liste",
-    "results": "Résultats"
+    "results": "Résultats",
+    "sortBy": "Trier par:",
+    "runTime": "Durée de la course",
+    "producer": "Producteur"
   },
   "authentication": {
     "title": "Authentification",

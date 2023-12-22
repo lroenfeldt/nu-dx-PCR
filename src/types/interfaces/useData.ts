@@ -179,4 +179,11 @@ export interface IUseData {
 
   resultSubmitted: boolean;
   setResultSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+
+  filterMenuOptions: JSX.Element;
+  setFilterMenuOptions: React.Dispatch<React.SetStateAction<JSX.Element>>;
+
+  runTime: JSX.Element;
+  testName: JSX.Element;
+  producer: JSX.Element;
 }

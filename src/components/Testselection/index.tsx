@@ -10,6 +10,7 @@ import { Block } from "..";
 import PaginationBullets from "./PaginationBullets";
 import TestInfoHolder from "./TestInfoHolder";
 import Header from "./Header";
+import TableView from "./TableView";
 
 const Testselection = () => {
   const { colors } = useTheme();
@@ -84,76 +85,81 @@ const Testselection = () => {
         {info ? <TestInfoHolder /> : null}
 
         <Header />
-
-        <Block
-          position="fixed"
-          top="50%"
-          right={0}
-          transform="translateY(-50%)"
-          transition="all 0.3s ease-in-out"
-          border="0px solid transparent"
-          cursor
-          onMouseDown={() => setScrolling("right")}
-          onClick={() => scroll("right")}
-          onMouseUp={() => setScrolling(null)}
-        >
-          <Next
-            color={
-              currentPage == lastPage
-                ? colors.primary.disabled
-                : colors.primary.main
-            }
-            disabled={currentPage == lastPage ? true : false}
-          />
-        </Block>
-
         {page === "cards" ? (
-          <Block
-            paddingLeft={45}
-            paddingRight={45}
-            grid
-            gap={45}
-            inlineFlex
-            height="auto"
-            width="100%"
-            paddingBottom={40}
-            ref={testSelectionRef}
-            padding={"0px 22px"}
-            align="flex-start"
-            scrollX
-          >
-            {settings.account.testprocedures.map((test, i) => (
-              <Testsmethod
-                key={i}
-                title={(test as any)["label" + locale?.toUpperCase()]}
-                image={imges[i % 3]}
-                methodid={test.id}
-                status={testrun ? "active" : ""}
-                openInfos={() => setInfo(true)}
+          <>
+            <Block
+              position="fixed"
+              top="50%"
+              right={0}
+              transform="translateY(-50%)"
+              transition="all 0.3s ease-in-out"
+              border="0px solid transparent"
+              cursor
+              onMouseDown={() => setScrolling("right")}
+              onClick={() => scroll("right")}
+              onMouseUp={() => setScrolling(null)}
+            >
+              <Next
+                color={
+                  currentPage == lastPage
+                    ? colors.primary.disabled
+                    : colors.primary.main
+                }
+                disabled={currentPage == lastPage ? true : false}
               />
-            ))}
-          </Block>
-        ) : null}
+            </Block>
 
-        <Block
-          position="fixed"
-          top="50%"
-          left={0}
-          transform="translateY(-50%)"
-          transition="all 0.3s ease-in-out"
-          border="0px solid transparent"
-          cursor
-          onMouseDown={() => setScrolling("left")}
-          onClick={() => scroll("left")}
-          onMouseUp={() => setScrolling(null)}
-        >
-          <Prev
-            color={
-              currentPage == 0 ? colors.primary.disabled : colors.primary.main
-            }
-            disabled={currentPage == 0 ? true : false}
-          />
-        </Block>
+            <Block
+              paddingLeft={45}
+              paddingRight={45}
+              grid
+              gap={45}
+              inlineFlex
+              height="auto"
+              width="100%"
+              paddingBottom={40}
+              ref={testSelectionRef}
+              padding={"0px 22px"}
+              align="flex-start"
+              scrollX
+            >
+              {settings.account.testprocedures.map((test, i) => (
+                <Testsmethod
+                  key={i}
+                  title={(test as any)["label" + locale?.toUpperCase()]}
+                  image={imges[i % 3]}
+                  methodid={test.id}
+                  status={testrun ? "active" : ""}
+                  openInfos={() => setInfo(true)}
+                />
+              ))}
+            </Block>
+
+            <Block
+              position="fixed"
+              top="50%"
+              left={0}
+              transform="translateY(-50%)"
+              transition="all 0.3s ease-in-out"
+              border="0px solid transparent"
+              cursor
+              onMouseDown={() => setScrolling("left")}
+              onClick={() => scroll("left")}
+              onMouseUp={() => setScrolling(null)}
+            >
+              <Prev
+                color={
+                  currentPage == 0
+                    ? colors.primary.disabled
+                    : colors.primary.main
+                }
+                disabled={currentPage == 0 ? true : false}
+              />
+            </Block>
+          </>
+        ) : (
+          <TableView />
+        )}
         {testsCount > 3 && (
           <PaginationBullets
             numberOfPages={numberOfPages || 0}

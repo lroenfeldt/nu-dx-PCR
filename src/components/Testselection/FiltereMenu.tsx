@@ -1,95 +1,115 @@
-import { Block, Modal, Text } from "..";
+import { Block, Modal } from "..";
 import { colors } from "../../assets/theme";
-import { useData } from "../../hooks";
+import { useData, useTranslation } from "../../hooks";
 import { Arrow, Clock, Funnel } from "../Icons";
 import ProfileSmall from "../Icons/ProfileSmall";
 
-const MenuButton = (props: {
-  icon: JSX.Element;
-  children: React.ReactNode;
-  rightIcon: JSX.Element;
-}) => {
+const style: React.CSSProperties = {
+  width: "100%",
+  height: "100%",
+  backgroundColor: "transparent",
+  backdropFilter: "blur(0px)",
+  WebkitBackdropFilter: "blur(0px)",
+  alignItems: "flex-start",
+  left: 502,
+};
+
+const blockStyle: React.CSSProperties = {
+  color: colors.primary.main,
+  width: "232px",
+  padding: "13px 30px",
+  borderRadius: "16px",
+  fontFamily: "Inter",
+  fontStyle: "normal",
+  fontWeight: 600,
+  backgroundColor: "#fff",
+  cursor: "pointer",
+  border: `4px solid ${colors.primary.main}`,
+  fontSize: "24px",
+};
+
+const firstBlock: React.CSSProperties = {
+  borderBottomRightRadius: "0px",
+  borderBottomLeftRadius: "0px",
+  borderBottom: `2px solid ${colors.primary.main}`,
+};
+const secondBlock: React.CSSProperties = {
+  borderTopRightRadius: "0px",
+  borderTopLeftRadius: "0px",
+  borderBottomRightRadius: "0px",
+  borderBottomLeftRadius: "0px",
+  borderTop: `2px solid ${colors.primary.main}`,
+  borderBottom: `2px solid ${colors.primary.main}`,
+};
+const thirdBlock: React.CSSProperties = {
+  borderTopRightRadius: "0px",
+  borderTopLeftRadius: "0px",
+  borderTop: `2px solid ${colors.primary.main}`,
+};
+
+const first = { ...blockStyle, ...firstBlock };
+const second = { ...blockStyle, ...secondBlock };
+const third = { ...blockStyle, ...thirdBlock };
+
+const FiltereMenu = () => {
+  const { t } = useTranslation();
+  const {
+    setFilterMenu,
+    filterMenu,
+    setFilterMenuOptions,
+    runTime,
+    testName,
+    producer,
+  } = useData();
+
   return (
-    <Block
-      height={63}
-      padding="12px 24px"
-      flex
-      row
-      spaceBetween
-      alignCenter
-      cursor
+    <Modal
+      style={style}
+      isVisible={filterMenu}
+      setIsVisible={() => setFilterMenu(false)}
     >
-      <Block
-        onClick={() => {
-          // handleChange
-        }}
-        flex
-        row
-        alignCenter
-        gap={10}
-      >
-        {props.icon}
-        <Text color={colors.text.main} h5 style={{ fontWeight: 500 }}>
-          {props.children}
-        </Text>
-      </Block>
-      {props.rightIcon}
-    </Block>
-  );
-};
-
-const FiltereMenu = (_props: { onClose: () => void }) => {
-  return (
-    <Block radius={16} white width={284} dropShadowSmall>
-      <Block borderBottom={`1px solid ${colors.grey[500]}`}>
-        <MenuButton
-          icon={<Funnel fill={colors.text.main} />}
-          children={"Testname"}
-          rightIcon={<Arrow fill={colors.text.main} />}
-        />
-      </Block>
-      <Block borderBottom={`1px solid ${colors.grey[500]}`}>
-        <MenuButton
-          icon={<Clock fill={colors.text.main} />}
-          children={"Laufzeit"}
-          rightIcon={<Arrow fill={colors.text.main} />}
-        />
-      </Block>
-      <MenuButton
-        icon={<ProfileSmall fill={colors.text.main} />}
-        children={"Hersteller"}
-        rightIcon={<Arrow fill={colors.text.main} />}
-      />
-    </Block>
-  );
-};
-
-const FiltereMenuHolder = () => {
-  const { filterMenu, setFilterMenu } = useData();
-  return (
-    <>
-      {filterMenu ? (
-        <Modal
-          style={{
-            right: 0,
-            top: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "transparent",
-            backdropFilter: "blur(0px)",
-            WebkitBackdropFilter: "blur(0px)",
-            alignItems: "flex-start",
-            paddingTop: 87,
-            paddingLeft: 300,
-          }}
-          isVisible={filterMenu}
-          setIsVisible={() => setFilterMenu(false)}
+      <Block>
+        <Block
+          flex
+          row
+          spaceBetween
+          alignCenter
+          height={"100%"}
+          style={first}
+          onClick={() => setFilterMenuOptions(testName)}
         >
-          <FiltereMenu onClose={() => setFilterMenu(false)} />
-        </Modal>
-      ) : null}
-    </>
+          <Funnel />
+          {t("common.testName")}
+          <Arrow />
+        </Block>
+        <Block
+          flex
+          row
+          spaceBetween
+          alignCenter
+          height={"100%"}
+          style={second}
+          onClick={() => setFilterMenuOptions(runTime)}
+        >
+          <Clock />
+          {t("common.runTime")}
+          <Arrow />
+        </Block>
+        <Block
+          flex
+          row
+          spaceBetween
+          alignCenter
+          height={"100%"}
+          style={third}
+          onClick={() => setFilterMenuOptions(producer)}
+        >
+          <ProfileSmall />
+          {t("common.producer")}
+          <Arrow />
+        </Block>
+      </Block>
+    </Modal>
   );
 };
-
-export default FiltereMenuHolder;
+export default FiltereMenu;
