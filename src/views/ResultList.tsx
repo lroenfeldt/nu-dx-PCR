@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Toggle } from "../components";
+import { Errors, Toggle } from "../components";
 import { Oval } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import { BsCloudCheckFill } from "react-icons/bs";
@@ -9,7 +9,6 @@ import { AiFillUsb } from "react-icons/ai";
 import { FaMicroscope, FaCloudUploadAlt, FaCheck } from "react-icons/fa";
 import { useResults, useSticky } from "../hooks";
 import urls from "../config/settings";
-import { errorProps } from "../constants/errorProps";
 
 const ResultList = () => {
   const navigate = useNavigate();
@@ -29,6 +28,9 @@ const ResultList = () => {
     setErrors,
     resultSubmitted,
     setResultSubmitted,
+    errorsCopy,
+    testid,
+    testidCopy,
   } = useData();
   const {
     checkUSB,
@@ -54,14 +56,16 @@ const ResultList = () => {
   };
 
   const openError = () => {
-    setErrors((prevErrors) =>
-      prevErrors
-        .filter((error) => error.type !== "submit")
-        .concat({
-          code: errorProps.submit.code,
-          id: errorProps.submit.id,
-          type: "submit",
-          message: t("errors.failedToSaveControlSample"),
+    setTestid(testid);
+    setErrors(
+      errorsCopy
+        .filter((error) => {
+          return error.testid === testid;
+        })
+        .filter((error, index, array) => {
+          return (
+            array.findIndex((item) => item.testid === error.testid) === index
+          );
         })
     );
   };
@@ -88,7 +92,6 @@ const ResultList = () => {
       let buttonUSB;
       let buttonSubmit;
       let buttonView;
-      let submittingFailed;
 
       //button for db submit
       if (result.isSubmitting) {
@@ -114,6 +117,7 @@ const ResultList = () => {
             className="button"
             onClick={() => {
               setTestid(result.testid);
+              testidCopy.push(result.testid);
               setResultSubmitted(result.submitted);
               submitResult(result.testid, result.submitted);
             }}
@@ -151,6 +155,7 @@ const ResultList = () => {
           </div>
         );
       }
+
       if (result.submitted) {
         buttonSubmit = buttonIsVisible ? (
           <div className="button">
@@ -300,7 +305,6 @@ const ResultList = () => {
             </span>
           </div>
           <div className="buttons">
-            {/* {submittingFailed} */}
             {buttonView}
             {buttonSubmit}
             {buttonUSB}

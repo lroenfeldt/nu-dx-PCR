@@ -199,6 +199,14 @@ export interface IError {
   type: string;
 }
 
+export interface IErrorCopy {
+  testid: string;
+  code: number;
+  id: string;
+  message: string;
+  type: string;
+}
+
 export interface IMoveResult {
   testId: string;
 }
