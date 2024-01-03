@@ -15,6 +15,7 @@ import {
   BarcodeInput,
   Authentication,
   ResultList,
+  TrailingSamples
 } from "./views";
 import { DataProvider, TranslationProvider } from "./hooks";
 
@@ -41,6 +42,7 @@ function App() {
               <Route path="/selectMethod" element={<Home />} />
               <Route path="/auth" element={<Authentication />} />
               <Route path="/testReady" element={<TestReady />} />
+              <Route path="/trailingSamples" element={<TrailingSamples />} />
               <Route path="/testRunning" element={<RunTest />} />
               <Route path="/uploadResults" element={<TestDone />} />
               <Route path="/ViewResults" element={<ViewResults />} />

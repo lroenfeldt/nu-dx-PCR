@@ -289,14 +289,11 @@ const BarcodeInput = () => {
   };
 
   const navigateToTestReady = () => {
-    testprocedure?.controlSamples.map((sample) => {
-      if (sample.position == "trailing" && !trailing) {
-        trailingHandler();
-        setTrailing(true);
+      if (trailing) {
+        navigate("/trailingSamples");
       } else {
         navigate("/testReady");
       }
-    });
   };
 
   const retest = async (barcode: IBarcode) => {
@@ -742,7 +739,6 @@ const BarcodeInput = () => {
 
   //check valid attribure of all barcodes to toggle button for next step
   useEffect(() => {
-    console.log('lol')
     checkAllValid();
   }, [barcodes]);
 
@@ -753,41 +749,68 @@ const BarcodeInput = () => {
     }
   }, [offlineMode]);
 
-  //open lid and select first active well on startup
+  //open lid
   useEffect(() => {
     toggleLid();
   }, []);
+
   useEffect(() => {
     setInputName(getBarcode(active).label);
   }, [active]);
 
   //Apply control samples
   useEffect(() => {
-    console.log('reached')
-    if (testprocedure.controlSamples.length > 0) {
-      setBarcodes((prevBarcodes) => {
-        return prevBarcodes.map((barcode) => {
-          const controlSample = testprocedure.controlSamples.find((sample) => {
+    if (testprocedure.controlSamples.length > 0) { //are there control smaples for that procedure
+      setBarcodes((prevBarcodes) => { 
+        let newBarcodes = prevBarcodes.map((barcode) => {
+
+          //managed fixed controls
+          const fixedControl = testprocedure.controlSamples
+            .filter(sample => sample.position == 'fixed')
+            .find((sample) => {
             return (
               (!isNinetySix && barcode.label === sample.position16) ||
               (isNinetySix && barcode.label === sample.position96)
             );
           });
 
-          if (controlSample && controlSample.position === 'fixed') {
-            console.log(controlSample)
+          if (fixedControl) {
+            console.log(fixedControl)
             return {
               ...barcode,
               blocked: true,
-              label: controlSample.label,
-              value: controlSample.label,
+              label: fixedControl.label,
+              value: fixedControl.label,
               valid: true,
             };
           } else {
-            console.log('reached')
             return barcode;
           }
         });
+
+        //manage trailing
+        const trailingSamples = testprocedure.controlSamples.filter(control => control.position == 'trailing').reverse()
+        const amountTrailing = trailingSamples.length
+        let trailingSet = 0
+        newBarcodes = newBarcodes.reverse()
+        newBarcodes = newBarcodes.map(barcode => {
+          if(trailingSet < amountTrailing && !barcode.blocked){
+              setTrailing(true)
+              trailingSet += 1
+              return {
+                ...barcode,
+                blocked: true,
+                valid: true,
+                trailing: true
+              }
+
+          } else {
+            return barcode
+          }
+        })
+
+        newBarcodes = newBarcodes.reverse()
+        return newBarcodes
       });
     }
     setControlsApplied(true);
@@ -799,20 +822,6 @@ const BarcodeInput = () => {
       nextWell(true);
     }
   }, [controlsApplied]);
-
-  // select the first availlable barcode
-  // const selectFirstBarcode = useCallback(() => {
-  //   const firstBarcode = barcodes.find((barcode) => {
-  //     return barcode && !barcode.blocked;
-  //   });
-  //   if (firstBarcode) {
-  //     markActive(firstBarcode.id);
-  //   }
-  // }, [barcodes]);
-
-  // useEffect(() => {
-  //   selectFirstBarcode();
-  // }, [barcodes]);
 
   const handleReset = useCallback(() => {
     setBarcodes(
@@ -964,10 +973,9 @@ const BarcodeInput = () => {
             ) : (
               ""
             )}
-            {/* {!isNinetySix && active < 16 && (
+            {!isNinetySix && active < 16 && (
               <button type="submit">{t("common.continue")}</button>
-            )} */}
-            {trailing && <button type="submit">{t("common.continue")}</button>}
+            )}
           </form>
         </div>
       </div>

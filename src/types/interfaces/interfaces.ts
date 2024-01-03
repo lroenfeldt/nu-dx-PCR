@@ -73,6 +73,7 @@ export interface IBarcode {
   posName: string;
   oldResult?: string;
   alteredResult?: boolean;
+  trailing?: boolean; 
   name: string;
   error: string;
   askRetest: boolean | null;

@@ -4,6 +4,7 @@ import Bootup from './Bootup';
 import TestDone from './TestDone';
 import Pairing from './Pairing';
 import RunTest from './RunTest';
+import TrailingSamples from './TrailingSamples';
 import TestReady from './TestReady';
 import ViewCurves from './ViewCurves';
 import ViewResults from './ViewResults';
@@ -19,6 +20,7 @@ export {
   RunTest,
   TestDone,
   TestReady,
+  TrailingSamples,
   ViewCurves,
   ResultList,
   ViewResults,

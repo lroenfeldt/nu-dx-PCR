@@ -113,6 +113,9 @@
     "flapClosing": "Bitte warten, Klappe wird geschlossen",
     "ninetySixsInstructions": "Sind alle zu analysierenden Proben eingesetzt? (Klappe schließt automatisch)"
   },
+  "trailingSamples": {
+    "instructions": "Setzen Sie nun die Kontrollproben an den markierten Stellen ein."
+  },
   "testMethod": {
     "covid19": "COVID-19",
     "glutenIntolerance": "Glutenunverträglichkeit",
