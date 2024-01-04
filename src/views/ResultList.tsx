@@ -56,6 +56,17 @@ const ResultList = () => {
   };
 
   const openError = () => {
+    console.log(
+      errorsCopy
+        .filter((error) => {
+          return error.testid === testid;
+        })
+        .filter((error, index, array) => {
+          return (
+            array.findIndex((item) => item.testid === error.testid) === index
+          );
+        })
+    );
     setErrors(
       errorsCopy
         .filter((error) => {
@@ -71,7 +82,7 @@ const ResultList = () => {
 
   useEffect(() => {
     console.log(testid);
-  }, [testid]);
+  }, [testid, errorsCopy]);
 
   useEffect(() => {
     if (resultSubmitted) {
@@ -132,7 +143,6 @@ const ResultList = () => {
           <div
             onClick={() => {
               setTestid(result.testid);
-              console.log("first");
               openError();
             }}
             className="button error"
@@ -177,7 +187,7 @@ const ResultList = () => {
           <div
             onClick={() => {
               setTestid(result.testid);
-              console.log(result.testid);
+              console.log(testid);
               openError();
             }}
             className="button error"

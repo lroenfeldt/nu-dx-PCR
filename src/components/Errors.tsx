@@ -44,20 +44,6 @@ const Errors: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(
-      errorsCopy
-        .filter((error) => {
-          return error.testid === testid;
-        })
-        .filter((error, index, array) => {
-          return (
-            array.findIndex((item) => item.testid === error.testid) === index
-          );
-        })
-    );
-  }, [errorsCopy, testid]);
-
   const cancelTest = () => {
     setErrors((prevErrors: IError[]) =>
       prevErrors.filter((error) => error.type !== "cancelTest")
@@ -78,7 +64,7 @@ const Errors: React.FC = () => {
 
   const handleReadError = useCallback(
     (errIndex: number) => {
-      reset();
+      // reset();
       hideError({ index: errIndex });
       if (location.pathname === "/uploadResults") {
         navigate("/selectMethod");
