@@ -1,7 +1,7 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useData, useResults, useTranslation } from "../hooks";
 import { useNavigate, useLocation } from "react-router-dom";
-import { IError } from "../types/interfaces/interfaces";
+import { IError, IErrorCopy } from "../types/interfaces/interfaces";
 import { IHideErrorProps } from "../types/components";
 import { errorProps } from "../constants/errorProps";
 
@@ -14,8 +14,9 @@ const Errors: React.FC = () => {
     testid,
     setDeviceStatus,
     setErrors,
-    results,
     resultSubmitted,
+    setErrorsCopy,
+    errorsCopy,
   } = useData();
   const { submitResult } = useResults();
   const { t } = useTranslation();
@@ -24,17 +25,39 @@ const Errors: React.FC = () => {
   const startTest = useCallback(() => {
     navigate("/runTest");
   }, [navigate]);
+
   const hideError = ({ type, index, remember }: IHideErrorProps) => {
+    let errObj: IErrorCopy;
+    errors.map((err) => {
+      errObj = { ...err, testid: testid };
+    });
+    setErrorsCopy((errors) => [...errors, errObj]);
     if (type)
       setErrors((prevErrors: IError[]) =>
         prevErrors.filter((error) => error.type !== type)
       );
     if (remember) setOfflineMode(true);
-    if (index || index == 0)
+    if (index || index == 0) {
       setErrors((prevErrors: IError[]) =>
         prevErrors.filter((error, errIndex) => errIndex != index)
       );
+    }
   };
+
+  useEffect(() => {
+    console.log(
+      errorsCopy
+        .filter((error) => {
+          return error.testid === testid;
+        })
+        .filter((error, index, array) => {
+          return (
+            array.findIndex((item) => item.testid === error.testid) === index
+          );
+        })
+    );
+  }, [errorsCopy, testid]);
+
   const cancelTest = () => {
     setErrors((prevErrors: IError[]) =>
       prevErrors.filter((error) => error.type !== "cancelTest")
@@ -52,6 +75,7 @@ const Errors: React.FC = () => {
     setOfflineMode(true);
     hideError({ index: errIndex });
   };
+
   const handleReadError = useCallback(
     (errIndex: number) => {
       reset();

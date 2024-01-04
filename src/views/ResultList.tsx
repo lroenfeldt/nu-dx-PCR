@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Toggle } from "../components";
+import { Errors, Toggle } from "../components";
 import { Oval } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import { BsCloudCheckFill } from "react-icons/bs";
@@ -9,7 +9,6 @@ import { AiFillUsb } from "react-icons/ai";
 import { FaMicroscope, FaCloudUploadAlt, FaCheck } from "react-icons/fa";
 import { useResults, useSticky } from "../hooks";
 import urls from "../config/settings";
-import { errorProps } from "../constants/errorProps";
 
 const ResultList = () => {
   const navigate = useNavigate();
@@ -29,6 +28,8 @@ const ResultList = () => {
     setErrors,
     resultSubmitted,
     setResultSubmitted,
+    errorsCopy,
+    testid,
   } = useData();
   const {
     checkUSB,
@@ -41,6 +42,7 @@ const ResultList = () => {
   const { t, locale } = useTranslation();
   const [buttonIsVisible, setButtonIsVisible] = useState<boolean>(false);
 
+  // let testidCopy: string[] = [];
   const handleSubmitToggleChange = () => {
     getResults(!submitFilter);
     setSubmitFilter(!submitFilter);
@@ -54,17 +56,22 @@ const ResultList = () => {
   };
 
   const openError = () => {
-    setErrors((prevErrors) =>
-      prevErrors
-        .filter((error) => error.type !== "submit")
-        .concat({
-          code: errorProps.submit.code,
-          id: errorProps.submit.id,
-          type: "submit",
-          message: t("errors.failedToSaveControlSample"),
+    setErrors(
+      errorsCopy
+        .filter((error) => {
+          return error.testid === testid;
+        })
+        .filter((error, index, array) => {
+          return (
+            array.findIndex((item) => item.testid === error.testid) === index
+          );
         })
     );
   };
+
+  useEffect(() => {
+    console.log(testid);
+  }, [testid]);
 
   useEffect(() => {
     if (resultSubmitted) {
@@ -88,7 +95,6 @@ const ResultList = () => {
       let buttonUSB;
       let buttonSubmit;
       let buttonView;
-      let submittingFailed;
 
       //button for db submit
       if (result.isSubmitting) {
@@ -123,7 +129,14 @@ const ResultList = () => {
         );
       } else if (failedSubmittingResults.includes(result.testid)) {
         buttonSubmit = (
-          <div onClick={() => openError()} className="button error">
+          <div
+            onClick={() => {
+              setTestid(result.testid);
+              console.log("first");
+              openError();
+            }}
+            className="button error"
+          >
             <PiWarningCircleFill size={30} />
           </div>
         );
@@ -151,6 +164,7 @@ const ResultList = () => {
           </div>
         );
       }
+
       if (result.submitted) {
         buttonSubmit = buttonIsVisible ? (
           <div className="button">
@@ -160,7 +174,14 @@ const ResultList = () => {
       }
       if (failedSubmittingResults.includes(result.testid)) {
         buttonSubmit = (
-          <div onClick={() => openError()} className="button error">
+          <div
+            onClick={() => {
+              setTestid(result.testid);
+              console.log(result.testid);
+              openError();
+            }}
+            className="button error"
+          >
             <PiWarningCircleFill size={30} />
           </div>
         );
@@ -300,7 +321,6 @@ const ResultList = () => {
             </span>
           </div>
           <div className="buttons">
-            {/* {submittingFailed} */}
             {buttonView}
             {buttonSubmit}
             {buttonUSB}

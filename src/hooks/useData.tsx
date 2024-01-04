@@ -9,7 +9,7 @@ import defaultBarcodes from "../utils/defaultBarcodes";
 import { useTranslation } from "./useTranslation";
 import { IUseData } from "../types/interfaces/useData";
 import { IUseTranslation } from "../types/interfaces/useTranslation";
-import { IBarcode, IError } from "../types/interfaces/interfaces";
+import { IBarcode, IError, IErrorCopy } from "../types/interfaces/interfaces";
 import { ITestObject } from "../../electron/interfaces/interfaces";
 import { ISettings } from "../types/interfaces/settings";
 import { errorProps } from "../constants/errorProps";
@@ -30,6 +30,7 @@ export function DataProvider({ children }: DataProviderProps) {
   const { t }: IUseTranslation = useTranslation();
   const [demo, setDemo] = useState(false);
   const [errors, setErrors] = useState<IError[]>([]);
+  const [errorsCopy, setErrorsCopy] = useState<IErrorCopy[]>([]);
   const [testid, setTestid] = useState<string>("");
   const [results, setResults] = useState<ITestObject[]>([]);
   const [reading, setReading] = useState(true);
@@ -106,7 +107,6 @@ export function DataProvider({ children }: DataProviderProps) {
     (code: number, id: string, type: string, message: string) => {
       if (!message) {
       }
-
       setErrors((prevErrors) =>
         prevErrors
           .filter((error) => error.type !== type)
@@ -282,6 +282,8 @@ export function DataProvider({ children }: DataProviderProps) {
       setOpenResults,
 
       errors,
+      errorsCopy,
+      setErrorsCopy,
       handleErrors,
       demo,
       settings,
@@ -383,6 +385,8 @@ export function DataProvider({ children }: DataProviderProps) {
       openResults,
       setOpenResults,
       errors,
+      errorsCopy,
+      setErrorsCopy,
       handleErrors,
       demo,
       settings,
