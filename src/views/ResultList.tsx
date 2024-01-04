@@ -187,7 +187,7 @@ const ResultList = () => {
           <div
             onClick={() => {
               setTestid(result.testid);
-              console.log(result.testid);
+              console.log(testid);
               openError();
             }}
             className="button error"
