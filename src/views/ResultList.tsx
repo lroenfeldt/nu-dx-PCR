@@ -71,7 +71,18 @@ const ResultList = () => {
 
   useEffect(() => {
     console.log(testid);
-  }, [testid]);
+    console.log(
+      errorsCopy
+        .filter((error) => {
+          return error.testid === testid;
+        })
+        .filter((error, index, array) => {
+          return (
+            array.findIndex((item) => item.testid === error.testid) === index
+          );
+        })
+    );
+  }, [testid, errorsCopy]);
 
   useEffect(() => {
     if (resultSubmitted) {
