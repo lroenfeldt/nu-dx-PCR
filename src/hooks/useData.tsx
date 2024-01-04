@@ -32,7 +32,6 @@ export function DataProvider({ children }: DataProviderProps) {
   const [errors, setErrors] = useState<IError[]>([]);
   const [errorsCopy, setErrorsCopy] = useState<IErrorCopy[]>([]);
   const [testid, setTestid] = useState<string>("");
-  const [testidCopy, setTestidCopy] = useState<string[]>([]);
   const [results, setResults] = useState<ITestObject[]>([]);
   const [reading, setReading] = useState(true);
   const [testrun, setTestrun] = useState(false);
@@ -381,8 +380,6 @@ export function DataProvider({ children }: DataProviderProps) {
       setTestFinishedAt,
       resultSubmitted,
       setResultSubmitted,
-      testidCopy,
-      setTestidCopy,
     }),
     [
       openResults,
@@ -484,8 +481,6 @@ export function DataProvider({ children }: DataProviderProps) {
       setTestFinishedAt,
       resultSubmitted,
       setResultSubmitted,
-      testidCopy,
-      setTestidCopy,
     ]
   );
   return (

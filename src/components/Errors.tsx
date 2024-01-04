@@ -16,7 +16,6 @@ const Errors: React.FC = () => {
     setErrors,
     resultSubmitted,
     setErrorsCopy,
-    testidCopy,
     errorsCopy,
   } = useData();
   const { submitResult } = useResults();
@@ -33,7 +32,6 @@ const Errors: React.FC = () => {
       errObj = { ...err, testid: testid };
     });
     setErrorsCopy((errors) => [...errors, errObj]);
-    console.log(testidCopy);
     if (type)
       setErrors((prevErrors: IError[]) =>
         prevErrors.filter((error) => error.type !== type)

@@ -43,9 +43,6 @@ export interface IUseData {
   testid: string;
   setTestid: React.Dispatch<React.SetStateAction<string>>;
 
-  testidCopy: string[];
-  setTestidCopy: React.Dispatch<React.SetStateAction<string[]>>;
-
   testDone: boolean;
   setTestDone: React.Dispatch<React.SetStateAction<boolean>>;
 

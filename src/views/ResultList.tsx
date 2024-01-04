@@ -30,7 +30,6 @@ const ResultList = () => {
     setResultSubmitted,
     errorsCopy,
     testid,
-    testidCopy,
   } = useData();
   const {
     checkUSB,
@@ -43,6 +42,7 @@ const ResultList = () => {
   const { t, locale } = useTranslation();
   const [buttonIsVisible, setButtonIsVisible] = useState<boolean>(false);
 
+  // let testidCopy: string[] = [];
   const handleSubmitToggleChange = () => {
     getResults(!submitFilter);
     setSubmitFilter(!submitFilter);
@@ -56,7 +56,6 @@ const ResultList = () => {
   };
 
   const openError = () => {
-    setTestid(testid);
     setErrors(
       errorsCopy
         .filter((error) => {
@@ -69,6 +68,10 @@ const ResultList = () => {
         })
     );
   };
+
+  useEffect(() => {
+    console.log(testid);
+  }, [testid]);
 
   useEffect(() => {
     if (resultSubmitted) {
@@ -117,7 +120,6 @@ const ResultList = () => {
             className="button"
             onClick={() => {
               setTestid(result.testid);
-              testidCopy.push(result.testid);
               setResultSubmitted(result.submitted);
               submitResult(result.testid, result.submitted);
             }}
@@ -127,7 +129,14 @@ const ResultList = () => {
         );
       } else if (failedSubmittingResults.includes(result.testid)) {
         buttonSubmit = (
-          <div onClick={() => openError()} className="button error">
+          <div
+            onClick={() => {
+              setTestid(result.testid);
+              console.log("first");
+              openError();
+            }}
+            className="button error"
+          >
             <PiWarningCircleFill size={30} />
           </div>
         );
@@ -165,7 +174,14 @@ const ResultList = () => {
       }
       if (failedSubmittingResults.includes(result.testid)) {
         buttonSubmit = (
-          <div onClick={() => openError()} className="button error">
+          <div
+            onClick={() => {
+              setTestid(result.testid);
+              console.log(result.testid);
+              openError();
+            }}
+            className="button error"
+          >
             <PiWarningCircleFill size={30} />
           </div>
         );
