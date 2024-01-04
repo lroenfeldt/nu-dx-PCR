@@ -64,7 +64,7 @@ const Errors: React.FC = () => {
 
   const handleReadError = useCallback(
     (errIndex: number) => {
-      // reset();
+      reset();
       hideError({ index: errIndex });
       if (location.pathname === "/uploadResults") {
         navigate("/selectMethod");
