@@ -56,6 +56,17 @@ const ResultList = () => {
   };
 
   const openError = () => {
+    console.log(
+      errorsCopy
+        .filter((error) => {
+          return error.testid === testid;
+        })
+        .filter((error, index, array) => {
+          return (
+            array.findIndex((item) => item.testid === error.testid) === index
+          );
+        })
+    );
     setErrors(
       errorsCopy
         .filter((error) => {
@@ -71,17 +82,6 @@ const ResultList = () => {
 
   useEffect(() => {
     console.log(testid);
-    console.log(
-      errorsCopy
-        .filter((error) => {
-          return error.testid === testid;
-        })
-        .filter((error, index, array) => {
-          return (
-            array.findIndex((item) => item.testid === error.testid) === index
-          );
-        })
-    );
   }, [testid, errorsCopy]);
 
   useEffect(() => {
