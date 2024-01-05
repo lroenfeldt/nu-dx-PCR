@@ -16,7 +16,6 @@ const Errors: React.FC = () => {
     setErrors,
     resultSubmitted,
     setErrorsCopy,
-    setTestid,
   } = useData();
   const { submitResult } = useResults();
   const { t } = useTranslation();
@@ -64,7 +63,7 @@ const Errors: React.FC = () => {
 
   const handleReadError = useCallback(
     (errIndex: number) => {
-      // reset();
+      reset();
       hideError({ index: errIndex });
       if (location.pathname === "/uploadResults") {
         navigate("/selectMethod");
