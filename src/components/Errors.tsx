@@ -16,7 +16,7 @@ const Errors: React.FC = () => {
     setErrors,
     resultSubmitted,
     setErrorsCopy,
-    errorsCopy,
+    setTestid,
   } = useData();
   const { submitResult } = useResults();
   const { t } = useTranslation();
