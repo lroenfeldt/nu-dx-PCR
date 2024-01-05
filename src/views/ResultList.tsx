@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Errors, Toggle } from "../components";
+import { Toggle } from "../components";
 import { Oval } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import { BsCloudCheckFill } from "react-icons/bs";
@@ -29,7 +29,6 @@ const ResultList = () => {
     resultSubmitted,
     setResultSubmitted,
     errorsCopy,
-    testid,
   } = useData();
   const {
     checkUSB,
@@ -42,7 +41,6 @@ const ResultList = () => {
   const { t, locale } = useTranslation();
   const [buttonIsVisible, setButtonIsVisible] = useState<boolean>(false);
 
-  // let testidCopy: string[] = [];
   const handleSubmitToggleChange = () => {
     getResults(!submitFilter);
     setSubmitFilter(!submitFilter);
@@ -54,35 +52,6 @@ const ResultList = () => {
     setTestDone(done);
     navigate("/ViewResults");
   };
-
-  const openError = () => {
-    console.log(
-      errorsCopy
-        .filter((error) => {
-          return error.testid === testid;
-        })
-        .filter((error, index, array) => {
-          return (
-            array.findIndex((item) => item.testid === error.testid) === index
-          );
-        })
-    );
-    setErrors(
-      errorsCopy
-        .filter((error) => {
-          return error.testid === testid;
-        })
-        .filter((error, index, array) => {
-          return (
-            array.findIndex((item) => item.testid === error.testid) === index
-          );
-        })
-    );
-  };
-
-  useEffect(() => {
-    console.log(testid);
-  }, [testid, errorsCopy]);
 
   useEffect(() => {
     if (resultSubmitted) {
@@ -143,7 +112,16 @@ const ResultList = () => {
           <div
             onClick={() => {
               setTestid(result.testid);
-              openError();
+              setErrors(
+                errorsCopy
+                  .filter((error) => error.testid === result.testid)
+                  .filter(
+                    (error, index, array) =>
+                      array.findIndex(
+                        (item) => item.testid === error.testid
+                      ) === index
+                  )
+              );
             }}
             className="button error"
           >
@@ -187,8 +165,16 @@ const ResultList = () => {
           <div
             onClick={() => {
               setTestid(result.testid);
-              console.log(testid);
-              openError();
+              setErrors(
+                errorsCopy
+                  .filter((error) => error.testid === result.testid)
+                  .filter(
+                    (error, index, array) =>
+                      array.findIndex(
+                        (item) => item.testid === error.testid
+                      ) === index
+                  )
+              );
             }}
             className="button error"
           >
