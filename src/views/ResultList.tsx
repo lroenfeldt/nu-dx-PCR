@@ -29,8 +29,6 @@ const ResultList = () => {
     resultSubmitted,
     setResultSubmitted,
     errorsCopy,
-    setErrorsCopy,
-    testid,
   } = useData();
   const {
     checkUSB,
