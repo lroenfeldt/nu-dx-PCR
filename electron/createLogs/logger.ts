@@ -15,14 +15,26 @@ export const logger = async (message: string): Promise<void> => {
   const dateTime = `${new Date().toLocaleString("DE-de")}`;
   const logItem = `${dateTime}\t${uuid()}\t${JSON.stringify(message)}\n`;
   const logsDir: string = path.resolve(app.getPath("userData"), "logs");
+
+  const files = fs.readdirSync(logsDir);
+  let latestFileDate = 0;
+  let latestFilePath = "";
+
   try {
-    const files = readdirSync(logsDir);
-    const lastFile = files[files.length - 1];
-    const filePath = path.join(logsDir, lastFile);
-    fs.promises.appendFile(filePath, logItem);
-    const { size } = await fs.promises.stat(filePath);
-    if (size > 500000) fs.promises.writeFile(filePath, "");
+    files.forEach((file) => {
+      const filePath = path.join(logsDir, file);
+      const stats = fs.statSync(filePath);
+      if (stats.birthtimeMs > latestFileDate) {
+        latestFileDate = stats.birthtimeMs;
+        latestFilePath = filePath;
+      }
+    });
+
+    if (!latestFilePath) return;
+    fs.promises.appendFile(latestFilePath, logItem);
+    const { size } = await fs.promises.stat(latestFilePath);
+    if (size > 500000) fs.promises.writeFile(latestFilePath, "");
   } catch (error) {
-    console.log(`logger.ts: ${error}`);
+    console.log(error);
   }
 };
