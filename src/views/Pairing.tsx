@@ -35,8 +35,8 @@ const Pairing: FC = () => {
           prevErrors
             .filter((error) => error.type !== "pairing")
             .concat({
-              code: errorProps.pairing.code,
-              id: errorProps.pairing.id,
+              timeStamp: Date.now(),
+              code: 1000,
               type: "pairing",
               message: t("errors.pairingFailed", {
                 message: response.originalError.message,
@@ -52,8 +52,8 @@ const Pairing: FC = () => {
           prevErrors
             .filter((error) => error.type !== "pairing")
             .concat({
-              code: errorProps.pairing.code,
-              id: errorProps.pairing.id,
+              timeStamp: Date.now(),
+              code: 1000,
               type: "pairing",
               message: t("errors.pairingDbError"),
             })
@@ -69,8 +69,8 @@ const Pairing: FC = () => {
           errors
             .filter((error) => error.type !== "pairing")
             .concat({
-              code: errorProps.pairing.code,
-              id: errorProps.pairing.id,
+              timeStamp: Date.now(),
+              code: 1000,
               type: "pairing",
               message: t("errors.pairingFailed", {
                 message: response.originalError.message,
@@ -93,8 +93,8 @@ const Pairing: FC = () => {
           errors
             .filter((error) => error.type !== "pairing")
             .concat({
-              code: errorProps.pairing.code,
-              id: errorProps.pairing.id,
+              timeStamp: Date.now(),
+              code: 1000,
               type: "pairing",
               message: t("errors.pairingFailed", {
                 message: err.message,

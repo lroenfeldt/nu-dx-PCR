@@ -1,22 +1,108 @@
-import { v4 as uuid } from "uuid";
+import { t } from "i18n-js";
 
 export const errorProps = {
-  moveResults: { code: 100, name: "moveResults", id: uuid() },
-  stillOffline: { code: 200, name: "stillOffline", id: uuid() },
-  settings: { code: 300, name: "settings", id: uuid() },
-  saveSettings: { code: 400, name: "saveSettings", id: uuid() },
-  default: { code: 500, name: "default", id: uuid() },
-  lid: { code: 600, name: "lid", id: uuid() },
-  read: { code: 700, name: "read", id: uuid() },
-  submit: { code: 800, name: "submit", id: uuid() },
-  saveToUSB: { code: 900, name: "saveToUSB", id: uuid() },
-  dbCon: { code: 1000, name: "dbCon", id: uuid() },
-  pairing: { code: 2000, name: "pairing", id: uuid() },
-  auth: { code: 2000, name: "auth", id: uuid() },
-  offlineNotAllow: { code: 3000, name: "offlineNotAllow", id: uuid() },
-  offline: { code: 4000, name: "offline", id: uuid() },
-  init: { code: 5000, name: "init", id: uuid() },
-  cancelTest: { code: 6000, name: "cancelTest", id: uuid() },
-  testFailed: { code: 7000, name: "testFailed", id: uuid() },
-  startTest: { code: 8000, name: "startTest", id: uuid() },
+  moveResults: {
+    code: 100,
+    type: "moveResults",
+    message: t("errors.failedToMoveResults"),
+  },
+  stillOffline: {
+    code: 200,
+    type: "stillOffline",
+    message: t("common.stillOffline"),
+  },
+  settings: {
+    code: 300,
+    type: "settings",
+    message: t("errors.failedTosaveSettings"),
+  },
+  saveSettings: {
+    code: 400,
+    type: "saveSettings",
+    message: t("errors.failedTosaveSettings"),
+  },
+  default: {
+    code: 500,
+    type: "default",
+    message: t("default.errors.errorOpenLidWhileRunning"),
+  },
+  lid: { code: 600, type: "lid" },
+  failedToReadTestData: {
+    code: 700,
+    type: "failedToReadTestData",
+    message: t("errors.failedToReadTestData"),
+  },
+  failedToReadResultData: {
+    code: 800,
+    type: "failedToReadResultData",
+    message: t("errors.failedToReadResultData"),
+  },
+  read: { code: 900, type: "read" },
+  failedToSaveControlSample: {
+    code: 1000,
+    type: "failedToSaveControlSample",
+    message: t("errors.failedToSaveControlSample"),
+  },
+  submit: {
+    code: 1000,
+    type: "submit",
+    message: t("errors.failedToSubmitResults"),
+  },
+  failedToMoveSubmittedFiles: {
+    code: 1000,
+    type: "failedToSaveControlSample",
+    message: t("errors.failedToMoveSubmittedFiles"),
+  },
+  saveToUSB: {
+    code: 2000,
+    type: "saveToUSB",
+    message: t("errors.failedToSaveResultData"),
+  },
+  dbCon: { code: 1000, type: "dbCon" },
+  checkInternetConnection: {
+    code: 2000,
+    type: "checkInternetConnection",
+    message: t("errors.checkInternetConnection"),
+  },
+  pairingDbError: {
+    code: 2000,
+    type: "pairingDbError",
+    message: t("errors.pairingDbError"),
+  },
+  deviceRegistrationFailed: {
+    code: 2000,
+    type: "deviceRegistrationFailed",
+    message: t("errors.deviceRegistrationFailed"),
+  },
+  deviceAuthenticationFailedZeroRemDays: {
+    code: 2000,
+    type: "deviceAuthenticationFailedZeroRemDays",
+    message: t("errors.deviceAuthenticationFailedZeroRemDays"),
+  },
+  auth: {
+    code: 2000,
+    type: "auth",
+    message: t("errors.deviceAuthenticationFailedRetry"),
+  },
+  offlineNotAllow: {
+    code: 3000,
+    type: "offlineNotAllow",
+    message: t("errors.checkInternetConnection"),
+  },
+  init: {
+    code: 5000,
+    type: "init",
+    message: t("errors.deviceInitializationFailed"),
+  },
+  cancelTest: {
+    code: 6000,
+    type: "cancelTest",
+    message: t("runTest.cancelTest"),
+  },
+  testFailed: {
+    code: 7000,
+    type: "testFailed",
+    message: t("errors.testFailed"),
+  },
+  startTest: { code: 8000, type: "startTest" },
 };

@@ -3,7 +3,7 @@ import { useData, useResults, useTranslation } from "../hooks";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IError, IErrorCopy } from "../types/interfaces/interfaces";
 import { IHideErrorProps } from "../types/components";
-import { errorProps } from "../constants/errorProps";
+import { useErrors } from "../hooks/useErrors";
 
 const Errors: React.FC = () => {
   const {
@@ -17,6 +17,7 @@ const Errors: React.FC = () => {
     resultSubmitted,
     setErrorsCopy,
   } = useData();
+  const { moveResults, registerErrors } = useErrors();
   const { submitResult } = useResults();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -74,7 +75,15 @@ const Errors: React.FC = () => {
     [reset, hideError]
   );
 
-  const ErrorsType1 = ["pairing", "auth", "init"];
+  const ErrorsType1 = [
+    "pairing",
+    "checkInternetConnection",
+    "pairingDbError",
+    "deviceRegistrationFailed",
+    "auth",
+    "authentication",
+    "init",
+  ];
   const ErrorsType2 = ["stillOffline", "invalid", "testFailed"];
   return (
     <div className="errorContainer">
@@ -86,7 +95,12 @@ const Errors: React.FC = () => {
 
               <button
                 onClick={() => {
-                  if (error.type === "pairing") {
+                  if (
+                    error.type === "pairing" ||
+                    error.type === "checkInternetConnection" ||
+                    error.type === "pairingDbError" ||
+                    error.type === "deviceRegistrationFailed"
+                  ) {
                     navigate("/pairing");
                   } else {
                     window.location.reload();
@@ -135,7 +149,11 @@ const Errors: React.FC = () => {
             </div>
           );
         }
-        if (error.type === "submit") {
+        if (
+          error.type === "submit" ||
+          error.type === "failedToSaveControlSample" ||
+          error.type === "failedToMoveSubmittedFiles"
+        ) {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>
@@ -186,16 +204,8 @@ const Errors: React.FC = () => {
                       window.api.logEvents(
                         `Result for test ${testid} could not be moved`
                       );
-                      setErrors((prevErrors: IError[]) =>
-                        prevErrors
-                          .filter((err) => err.type != "moveResults")
-                          .concat({
-                            code: errorProps.moveResults.code,
-                            id: errorProps.moveResults.id,
-                            type: "moveResults",
-                            message: t("errors.failedToMoveResults"),
-                          })
-                      );
+
+                      registerErrors(moveResults);
                     } else {
                       window.api.logEvents(`attempting to move result file`);
                       setTimeout(() => {
@@ -252,7 +262,11 @@ const Errors: React.FC = () => {
             </div>
           );
         }
-        if (error.type === "read") {
+        if (
+          error.type === "read" ||
+          error.type === "failedToReadTestData" ||
+          error.type === "failedToReadResultData"
+        ) {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>

@@ -347,7 +347,7 @@ const BarcodeInput = () => {
           dbError = true;
           newErrors.push({
             code: errorProps.dbCon.code,
-            id: errorProps.dbCon.id,
+            timeStamp: Date.now(),
             type: "dbCon",
             message: t("errors.checkTestSampleFail"),
           });
@@ -357,7 +357,7 @@ const BarcodeInput = () => {
           dbError = true;
           newErrors.push({
             code: errorProps.dbCon.code,
-            id: errorProps.dbCon.id,
+            timeStamp: Date.now(),
             type: "dbCon",
             message: t("errors.dbConnectionError"),
           });
@@ -367,7 +367,7 @@ const BarcodeInput = () => {
           dbError = true;
           newErrors.push({
             code: errorProps.dbCon.code,
-            id: errorProps.dbCon.id,
+            timeStamp: Date.now(),
             type: "dbCon",
             message: t("errors.dbConnectionError"),
           });
@@ -610,7 +610,7 @@ const BarcodeInput = () => {
                 type: "dbCon",
                 message: t("errors.dbConnectionError"),
                 code: errorProps.dbCon.code,
-                id: errorProps.dbCon.id,
+                timeStamp: Date.now(),
               });
               validationErr = t("errors.notVerifiedDbError");
             }
@@ -634,7 +634,7 @@ const BarcodeInput = () => {
                 type: "dbCon",
                 message: t("errors.dbConnectionError"),
                 code: errorProps.dbCon.code,
-                id: errorProps.dbCon.id,
+                timeStamp: Date.now(),
               });
               validationErr = t("errors.notVerifiedDbError");
             } else {
@@ -644,7 +644,7 @@ const BarcodeInput = () => {
                 type: "dbCon",
                 message: t("errors.dbConnectionError"),
                 code: errorProps.dbCon.code,
-                id: errorProps.dbCon.id,
+                timeStamp: Date.now(),
               });
               validationErr = t("errors.notVerifiedDbError");
             }

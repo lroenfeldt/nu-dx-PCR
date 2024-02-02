@@ -14,6 +14,7 @@ export const useStatus = (): UseStatusReturnType => {
     setDbConnection,
     isStatus,
     errors,
+    errorsCopy,
     testFinishedAt,
     selectedMethod,
   } = useData();
@@ -28,7 +29,11 @@ export const useStatus = (): UseStatusReturnType => {
           cyclerVersion: settings.version,
           testId: selectedMethod,
           testFinishedAt: testFinishedAt,
-          errors: errors,
+          errors: errors.filter((error) => {
+            return !errorsCopy.some(
+              (errCopy) => errCopy.timeStamp === error.timeStamp
+            );
+          }),
         }
       );
       const responseData = response.data as ISettings;

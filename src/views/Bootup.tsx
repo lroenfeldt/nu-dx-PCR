@@ -5,7 +5,7 @@ import { Oval } from "react-loader-spinner";
 import pairingApi from "../api/pairingCode";
 import { useNavigate } from "react-router-dom";
 import { useData, useApi, useTranslation } from "../hooks";
-import { errorProps } from "../constants/errorProps";
+import { useErrors } from "../hooks/useErrors";
 
 const Bootup = () => {
   const navigate = useNavigate();
@@ -22,6 +22,16 @@ const Bootup = () => {
     setPairingCode,
   } = useData();
   const getPairingCodeApi = useApi<any>(pairingApi.pollPairingCode);
+  const {
+    offlineNotAllow,
+    checkInternetConnection,
+    pairingDbError,
+    deviceRegistrationFailed,
+    offline,
+    authentication,
+    init,
+    registerErrors,
+  } = useErrors();
 
   /**
    * @description Get pairing code from server
@@ -32,17 +42,7 @@ const Bootup = () => {
 
     if (settings.device.hardwareId === null) {
       window.api.logEvents("Couldnt read MAC Adress from Settings.");
-      setErrors(
-        errors
-
-          .filter((error) => error.type !== "pairing")
-          .concat({
-            code: errorProps.pairing.code,
-            id: errorProps.pairing.id,
-            type: "pairing",
-            message: t("errors.checkInternetConnection"),
-          })
-      );
+      registerErrors(checkInternetConnection);
     } else {
       try {
         window.api.logEvents("trying to fetch pairing code");
@@ -70,17 +70,7 @@ const Bootup = () => {
           response.problem == "NETWORK_ERROR" ||
           response?.problem == "CONNECTION_ERROR"
         ) {
-          setErrors(
-            errors
-
-              .filter((error) => error.type !== "pairing")
-              .concat({
-                code: errorProps.pairing.code,
-                id: errorProps.pairing.id,
-                type: "pairing",
-                message: t("errors.pairingDbError"),
-              })
-          );
+          registerErrors(pairingDbError);
         }
 
         window.api.logEvents(`getPairingCodeApi: ${JSON.stringify(response)}`);
@@ -99,40 +89,20 @@ const Bootup = () => {
               err.response.status
             )}  data:${JSON.stringify(err.response?.data)} `
           );
-          setErrors(
-            errors
-              .filter((error) => error.type !== "pairing")
-              .concat({
-                code: errorProps.pairing.code,
-                id: errorProps.pairing.id,
-                type: "pairing",
-                message: t("errors.deviceRegistrationFailed"),
-              })
-          );
+          registerErrors(deviceRegistrationFailed);
         } else if (err.request) {
           console.error(err.request);
           window.api.logEvents(`request:${err}`);
-          setErrors(
-            errors
-
-              .filter((error) => error.type !== "pairing")
-              .concat({
-                code: errorProps.pairing.code,
-                id: errorProps.pairing.id,
-                type: "pairing",
-                message: t("errors.pairingDbError"),
-              })
-          );
+          registerErrors(pairingDbError);
         } else {
           console.error("Error", err.message);
           window.api.logEvents(`Error:${JSON.stringify(err.message)}`);
           setErrors(
             errors
-
               .filter((error) => error.type !== "pairing")
               .concat({
-                code: errorProps.pairing.code,
-                id: errorProps.pairing.id,
+                timeStamp: Date.now(),
+                code: 1000,
                 type: "pairing",
                 message: t("errors.pairingFailed", {
                   message: err.message,
@@ -235,8 +205,8 @@ const Bootup = () => {
 
             .filter((error) => error.type !== "auth")
             .concat({
-              code: errorProps.auth.code,
-              id: errorProps.auth.id,
+              timeStamp: Date.now(),
+              code: 10000,
               type: "auth",
               message: t("errors.pairingFailed", {
                 message: response.originalError.message,
@@ -251,26 +221,15 @@ const Bootup = () => {
         window.api.logEvents(`request:${JSON.stringify(response)}`);
         if (settings.account.allowOffline) {
           if (settings.account.allowDaysOffline == 0) {
-            setErrors(
-              errors
-
-                .filter((error) => error.type !== "offline")
-                .concat({
-                  code: errorProps.offline.code,
-                  id: errorProps.offline.id,
-                  type: "offline",
-                  message: t("errors.checkInternetConnection"),
-                })
-            );
+            registerErrors(checkInternetConnection);
           } else if (remDays > 0 && settings.account.allowDaysOffline != 0) {
             setErrors(
               errors
-
                 .filter((error) => error.type !== "init")
                 .filter((error) => error.type !== "offline")
                 .concat({
-                  code: errorProps.offline.code,
-                  id: errorProps.offline.id,
+                  timeStamp: Date.now(),
+                  code: 20000,
                   type: "offline",
                   message: t(
                     "errors.deviceAuthenticationFailedUseOfflineMode",
@@ -281,42 +240,12 @@ const Bootup = () => {
                 })
             );
           } else if (remDays === 0 && settings.account.allowDaysOffline != 0) {
-            setErrors(
-              errors
-
-                .filter((error) => error.type !== "offline")
-                .concat({
-                  code: errorProps.offline.code,
-                  id: errorProps.offline.id,
-                  type: "offline",
-                  message: t("errors.deviceAuthenticationFailedZeroRemDays"),
-                })
-            );
+            registerErrors(offline);
           } else {
-            setErrors(
-              errors
-
-                .filter((error) => error.type !== "auth")
-                .concat({
-                  code: errorProps.auth.code,
-                  id: errorProps.auth.id,
-                  type: "auth",
-                  message: t("errors.deviceAuthenticationFailedRetry"),
-                })
-            );
+            registerErrors(authentication);
           }
         } else {
-          setErrors(
-            errors
-
-              .filter((error) => error.type !== "offlineNotAllow")
-              .concat({
-                code: errorProps.offlineNotAllow.code,
-                id: errorProps.offlineNotAllow.id,
-                type: "offlineNotAllow",
-                message: t("errors.checkInternetConnection"),
-              })
-          );
+          registerErrors(offlineNotAllow);
         }
       }
     } catch (err: any) {
@@ -341,8 +270,8 @@ const Bootup = () => {
 
             .filter((error) => error.type !== "auth")
             .concat({
-              code: errorProps.auth.code,
-              id: errorProps.auth.id,
+              timeStamp: Date.now(),
+              code: 10000,
               type: "auth",
               message: t("errors.pairingFailed", {
                 message: err.message,
@@ -362,17 +291,7 @@ const Bootup = () => {
       getPairingCode();
     }
     if (!settings.device.wellCount || settings.device.wellCount === 0) {
-      setErrors(
-        errors
-
-          .filter((error) => error.type !== "init")
-          .concat({
-            code: errorProps.init.code,
-            id: errorProps.init.id,
-            type: "init",
-            message: t("errors.deviceInitializationFailed"),
-          })
-      );
+      registerErrors(init);
     }
   }, [settings]);
 

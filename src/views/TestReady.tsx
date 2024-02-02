@@ -83,8 +83,8 @@ const TestReady: React.FC = () => {
       setErrors((prevErrors: IError[]) => [
         ...prevErrors,
         {
+          timeStamp: Date.now(),
           code: errorProps.startTest.code,
-          id: errorProps.startTest.id,
           type: "startTest",
           message: t("errors.failedToStartTest"),
         },

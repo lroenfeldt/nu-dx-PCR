@@ -1,5 +1,5 @@
 import { ITestObject } from "../../../electron/interfaces/interfaces";
-import { IBarcode, IError, IErrorCopy } from "./interfaces";
+import { IBarcode, IErrObject, IError, IErrorCopy } from "./interfaces";
 import { IAccountUser, ISettings } from "./settings";
 
 export interface IUseData {

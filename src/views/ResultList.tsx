@@ -26,8 +26,8 @@ const ResultList = () => {
     submitting,
     failedSubmittingResults,
     setErrors,
-    resultSubmitted,
-    setResultSubmitted,
+    resultsSubmitted,
+    setSubmitted,
     errorsCopy,
   } = useData();
   const {
@@ -39,7 +39,7 @@ const ResultList = () => {
     saveAllToUSB,
   } = useResults();
   const { t, locale } = useTranslation();
-  const [buttonIsVisible, setButtonIsVisible] = useState<boolean>(false);
+  const [buttonIsVisible, setButtonIsVisible] = useState(false);
 
   const handleSubmitToggleChange = () => {
     getResults(!submitFilter);
@@ -54,15 +54,18 @@ const ResultList = () => {
   };
 
   useEffect(() => {
-    if (resultSubmitted) {
+    if (resultsSubmitted) {
       setButtonIsVisible(true);
       const timeoutId = setTimeout(() => {
         setButtonIsVisible(false);
+        setSubmitted(false);
       }, 2000);
       // Clear the timeout if the component is unmounted
-      return () => clearTimeout(timeoutId);
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }
-  }, [resultSubmitted, buttonIsVisible]);
+  }, [resultsSubmitted, buttonIsVisible]);
 
   //Create Table
   let tableRows: any[] = [];
@@ -82,7 +85,6 @@ const ResultList = () => {
           <div
             className="button"
             onClick={() => {
-              setResultSubmitted(result.submitted);
               submitResult(result.testid, result.submitted);
             }}
           >
@@ -100,7 +102,6 @@ const ResultList = () => {
             className="button"
             onClick={() => {
               setTestid(result.testid);
-              setResultSubmitted(result.submitted);
               submitResult(result.testid, result.submitted);
             }}
           >
@@ -110,19 +111,7 @@ const ResultList = () => {
       } else if (failedSubmittingResults.includes(result.testid)) {
         buttonSubmit = (
           <div
-            onClick={() => {
-              setTestid(result.testid);
-              setErrors(
-                errorsCopy
-                  .filter((error) => error.testid === result.testid)
-                  .filter(
-                    (error, index, array) =>
-                      array.findIndex(
-                        (item) => item.testid === error.testid
-                      ) === index
-                  )
-              );
-            }}
+            onClick={() => setTestid(result.testid)}
             className="button error"
           >
             <PiWarningCircleFill size={30} />
@@ -160,21 +149,21 @@ const ResultList = () => {
           </div>
         ) : null;
       }
+
       if (failedSubmittingResults.includes(result.testid)) {
         buttonSubmit = (
           <div
             onClick={() => {
               setTestid(result.testid);
-              setErrors(
-                errorsCopy
-                  .filter((error) => error.testid === result.testid)
-                  .filter(
-                    (error, index, array) =>
-                      array.findIndex(
-                        (item) => item.testid === error.testid
-                      ) === index
-                  )
-              );
+
+              const handleErr = errorsCopy.filter((error, index, array) => {
+                return (
+                  error.testid === result.testid &&
+                  array.findIndex((item) => item.testid === error.testid) ===
+                    index
+                );
+              });
+              setErrors(handleErr);
             }}
             className="button error"
           >
