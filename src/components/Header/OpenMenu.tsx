@@ -1,4 +1,3 @@
-import { SetStateAction } from "react";
 import { Menu, Modal } from "..";
 import { useData } from "../../hooks";
 import { Menus } from "../../types/components";

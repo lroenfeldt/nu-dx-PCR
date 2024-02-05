@@ -1,4 +1,4 @@
-import { Block, Button, CustomSelect, Text } from "..";
+import { Block, Button, Text } from "..";
 import { useNavigate } from "react-router-dom";
 import { Barcode } from "../Icons";
 import { useData, useTranslation } from "../../hooks";
@@ -7,7 +7,7 @@ import { colors } from "../../assets/theme";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { setFilterMenu, filterMenu, filterMenuOptions } = useData();
+  const { setFilterMenu, filterMenu, filterMenuOptions, page } = useData();
   const { t } = useTranslation();
   return (
     <Block
@@ -18,7 +18,7 @@ const Header = () => {
       spaceBetween
       width={"100%"}
     >
-      <FiltereMenuHolder />
+      {/* <FiltereMenuHolder /> */}
 
       <Block flex row gap={32}>
         <Text h1>{t("common.testSelection")}</Text>
@@ -31,32 +31,34 @@ const Header = () => {
         </Button>
       </Block>
 
-      <Block flex row gap={10} alignCenter>
-        <Text h4 style={{ fontWeight: 600 }}>
-          {t("common.sortBy")}
-        </Text>
-        <Block
-          height={"100%"}
-          onClick={() => {
-            !filterMenu ? setFilterMenu(true) : setFilterMenu(false);
-          }}
-          style={{
-            color: colors.primary.main,
-            width: "232px",
-            borderRadius: "16px",
-            fontFamily: "Inter",
-            fontStyle: "normal",
-            fontWeight: 600,
-            backgroundColor: "#fff",
-            cursor: "pointer",
-            border: `4px solid ${colors.primary.main}`,
-            fontSize: "24px",
-            padding: "13px 30px",
-          }}
-        >
-          {filterMenuOptions}
+      {page !== "cards" ? (
+        <Block flex row gap={10} alignCenter>
+          <Text h4 style={{ fontWeight: 600 }}>
+            {t("common.sortBy")}
+          </Text>
+          <Block
+            height={"100%"}
+            onClick={() => {
+              !filterMenu ? setFilterMenu(true) : setFilterMenu(false);
+            }}
+            style={{
+              color: colors.primary.main,
+              width: "232px",
+              borderRadius: "16px",
+              fontFamily: "Inter",
+              fontStyle: "normal",
+              fontWeight: 600,
+              backgroundColor: "#fff",
+              cursor: "pointer",
+              border: `4px solid ${colors.primary.main}`,
+              fontSize: "24px",
+              padding: "13px 30px",
+            }}
+          >
+            {filterMenuOptions}
+          </Block>
         </Block>
-      </Block>
+      ) : null}
     </Block>
   );
 };

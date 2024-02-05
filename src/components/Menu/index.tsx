@@ -58,14 +58,14 @@ const Menu = () => {
       onClick: () => setCurrentMenu(Menus.MAIN),
     },
     {
-      IconComponent: PowerSmall,
-      label: "Shutdown",
-      onClick: () => setControlMenu(true),
-    },
-    {
       IconComponent: OpenLid,
       label: "Openlid",
       onClick: () => setCurrentMenu(Menus.OPENLID),
+    },
+    {
+      IconComponent: PowerSmall,
+      label: "Shutdown",
+      onClick: () => setControlMenu(true),
     },
   ];
 

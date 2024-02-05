@@ -11,7 +11,6 @@ const Modal: FC<ModalProps> = ({
   children,
   isVisible,
   setIsVisible,
-
   style,
 }) => {
   const styles = useModalStyle();
