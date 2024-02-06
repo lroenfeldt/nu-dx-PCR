@@ -3,12 +3,12 @@ import useDialogStyle from "./useDialogStyle";
 
 interface DialogProps {
   children: JSX.Element;
-  isVisible?: boolean;
-  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  visible?: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   style?: React.CSSProperties;
 }
 
-const Dialog: FC<DialogProps> = ({ children, isVisible, setIsVisible }) => {
+const Dialog: FC<DialogProps> = ({ children, visible, setVisible }) => {
   const styles = useDialogStyle();
 
   useEffect(() => {
@@ -18,16 +18,16 @@ const Dialog: FC<DialogProps> = ({ children, isVisible, setIsVisible }) => {
 
     window.onclick = (event) => {
       if (dialog && event.target == dialog) {
-        setIsVisible(false);
+        setVisible(false);
       }
     };
-  }, [isVisible]);
+  }, [visible, setVisible]);
 
   return (
     <dialog
       style={{
         ...styles.dialog,
-        display: isVisible ? "flex" : "none",
+        display: visible ? "flex" : "none",
       }}
       id="dialog"
     >

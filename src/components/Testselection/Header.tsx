@@ -1,9 +1,16 @@
-import { Block, Button, Text } from "..";
+import { Block, Button, Modal, Text } from "..";
 import { useNavigate } from "react-router-dom";
 import { Barcode } from "../Icons";
 import { useData, useTranslation } from "../../hooks";
-import FiltereMenuHolder from "./FiltereMenu";
+import FiltereMenu from "./FiltereMenu";
 import { colors } from "../../assets/theme";
+import DropDown from "./DropDown";
+
+const style: React.CSSProperties = {
+  backgroundColor: "transparent",
+  backdropFilter: "blur(0px)",
+  WebkitBackdropFilter: "blur(0px)",
+};
 
 const Header = () => {
   const navigate = useNavigate();
@@ -18,7 +25,13 @@ const Header = () => {
       spaceBetween
       width={"100%"}
     >
-      {/* <FiltereMenuHolder /> */}
+      <Modal
+        style={style}
+        isVisible={filterMenu}
+        setIsVisible={() => setFilterMenu(false)}
+      >
+        <FiltereMenu onClose={() => setFilterMenu(false)} />
+      </Modal>
 
       <Block flex row gap={32}>
         <Text h1>{t("common.testSelection")}</Text>

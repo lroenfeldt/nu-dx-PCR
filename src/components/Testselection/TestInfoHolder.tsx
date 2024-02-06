@@ -19,7 +19,7 @@ const TestInfoHolder = () => {
 
   return (
     <Modal
-      style={{ left: 0, top: 0, width: "100%", height: "100%" }}
+      style={{ top: 0 }}
       isVisible={info}
       setIsVisible={() => setInfo(false)}
     >

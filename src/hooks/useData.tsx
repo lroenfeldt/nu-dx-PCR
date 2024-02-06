@@ -19,7 +19,6 @@ import { Menus } from "../types/components";
 import { Block } from "../components";
 import { Arrow, Clock, Funnel } from "../components/Icons";
 import ProfileSmall from "../components/Icons/ProfileSmall";
-import { colors } from "../assets/theme";
 
 export const DataContext = React.createContext({});
 /**
@@ -40,9 +39,6 @@ export function DataProvider({ children }: IDataProviderProps) {
   const [testrun, setTestrun] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [openMenu, setOpenMenu] = useState(false);
-  const [controlMenu, setControlMenu] = useState(false);
   const [currentMenu, setCurrentMenu] = useState(Menus.MAIN);
   const [testDone, setTestDone] = useState(false);
   const [lotNumber, setLotNumber] = useState(null);
@@ -85,12 +81,16 @@ export function DataProvider({ children }: IDataProviderProps) {
   >([]);
   const [viewType, setViewType] = useState("sample");
   const [resultSubmitted, setResultSubmitted] = useState<boolean>(false);
-  // Modal
+  // Modal beginn
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
+  const [controlMenu, setControlMenu] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [filterMenu, setFilterMenu] = useState(false);
-  const [info, setInfo] = useState(false);
   const [filterMenuOptions, setFilterMenuOptions] = useState();
+  const [info, setInfo] = useState(false);
 
+  // Modal end
   const [page, setPage] = useState("cards");
 
   /**
@@ -279,14 +279,7 @@ export function DataProvider({ children }: IDataProviderProps) {
   }, []);
 
   const testName = (
-    <Block
-      flex
-      row
-      spaceBetween
-      alignCenter
-      height={"100%"}
-      onClick={() => console.log("first")}
-    >
+    <Block flex row spaceBetween alignCenter height={"100%"}>
       <Funnel />
       {t("common.testName")}
       <Arrow />
@@ -294,14 +287,7 @@ export function DataProvider({ children }: IDataProviderProps) {
   );
 
   const runTime = (
-    <Block
-      flex
-      row
-      spaceBetween
-      alignCenter
-      height={"100%"}
-      onClick={() => console.log("second")}
-    >
+    <Block flex row spaceBetween alignCenter height={"100%"}>
       <Clock />
       {t("common.runTime")}
       <Arrow />
@@ -309,14 +295,7 @@ export function DataProvider({ children }: IDataProviderProps) {
   );
 
   const producer = (
-    <Block
-      flex
-      row
-      spaceBetween
-      alignCenter
-      height={"100%"}
-      onClick={() => console.log("third")}
-    >
+    <Block flex row spaceBetween alignCenter height={"100%"}>
       <ProfileSmall />
       {t("common.producer")}
       <Arrow />
@@ -439,7 +418,6 @@ export function DataProvider({ children }: IDataProviderProps) {
       setFilterMenu,
       info,
       setInfo,
-
       filterMenuOptions,
       setFilterMenuOptions,
       runTime,
@@ -559,7 +537,6 @@ export function DataProvider({ children }: IDataProviderProps) {
       setFilterMenu,
       info,
       setInfo,
-
       filterMenuOptions,
       setFilterMenuOptions,
       runTime,

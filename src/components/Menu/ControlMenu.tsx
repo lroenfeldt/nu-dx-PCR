@@ -7,11 +7,8 @@ const ControlMenu = () => {
 
   return (
     <>
-      <Dialog
-        isVisible={controlMenu}
-        setIsVisible={() => setControlMenu(false)}
-      >
-        <ShutDown />
+      <Dialog visible={controlMenu} setVisible={() => setControlMenu(false)}>
+        <ShutDown onClose={() => setControlMenu(false)} />
       </Dialog>
     </>
   );

@@ -3,7 +3,8 @@ import { CSSProperties } from "react";
 const useDialogStyle = () => {
   const dialog: CSSProperties = {
     display: "flex",
-    zIndex: 2,
+    position: "fixed",
+    zIndex: 4,
     left: 0,
     top: 0,
     width: "100%",

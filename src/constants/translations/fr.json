@@ -52,7 +52,7 @@
     "name": "Nom",
     "email": "Email",
     "password": "Mot de passe",
-    "testName": "Nom du test",
+    "testName": "Nom test",
     "selectResult": "Sélectionnez le résultat",
     "resetResult": "Réinitialiser le résultat",
     "deviceTurnOffInfo": "L'appareil va automatiquement s'éteindre dans <strong>%{time}</strong> secondes",

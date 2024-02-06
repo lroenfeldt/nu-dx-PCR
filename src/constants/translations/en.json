@@ -52,7 +52,7 @@
     "name": "Name",
     "email": "Email",
     "password": "Password",
-    "testName": "Test Name",
+    "testName": "Test name",
     "selectResult": "Select Result",
     "resetResult": "Reset Result",
     "deviceTurnOffInfo": "The device will automatically turn off in <strong>%{time}</strong> seconds.",
