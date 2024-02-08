@@ -193,16 +193,22 @@ export interface IErrorObject {
 }
 
 export interface IError {
+  timeStamp: number;
   code: number;
-  id: string;
   message: string;
   type: string;
 }
 
+export interface IErrObject {
+  code: number;
+  type: string;
+  message: string;
+}
+
 export interface IErrorCopy {
+  timeStamp: number;
   testid: string;
   code: number;
-  id: string;
   message: string;
   type: string;
 }

@@ -26,7 +26,8 @@ import {
   TableRow,
 } from "../types/interfaces/interfaces";
 import { IConfigFile, ITestProcedure } from "../types/interfaces/settings";
-import { errorProps } from "../constants/errorProps";
+import { ErrorType } from "../types/interfaces/useErrors";
+import useErrors from "../hooks/useErrors";
 
 const ViewResults: React.FC = () => {
   const [active, setActive] = useState<number>(0);
@@ -42,6 +43,8 @@ const ViewResults: React.FC = () => {
     setViewResults,
     setSelectedMethod,
   } = useData();
+  const { registerErrors } = useErrors();
+
   const [testmethod, setTestmethod] = useState<ITestMethod | null>(null);
   const [testLoaded, setTestLoaded] = useState<boolean>(false);
   const { checkUSB } = useResults();
@@ -94,16 +97,7 @@ const ViewResults: React.FC = () => {
     } catch (err) {
       console.log(err);
       window.api.logEvents(`fetchResult: ${err}`);
-      setErrors((prevErrors: IError[]) =>
-        prevErrors
-          .filter((error) => error.type !== "read")
-          .concat({
-            code: errorProps.read.code,
-            id: errorProps.read.id,
-            type: "read",
-            message: t("errors.failedToReadTestData"),
-          })
-      );
+      registerErrors(ErrorType.failedToReadTestData);
       return;
     }
 
@@ -142,16 +136,7 @@ const ViewResults: React.FC = () => {
     } catch (err) {
       console.log(err);
       window.api.logEvents(`parseResults: ${err}`);
-      setErrors((prevErrors: IError[]) =>
-        prevErrors
-          .filter((error) => error.type !== "submit")
-          .concat({
-            code: errorProps.read.code,
-            id: errorProps.read.id,
-            type: "read",
-            message: t("errors.failedToReadResultData"),
-          })
-      );
+      registerErrors(ErrorType.failedToReadResultData);
       return;
     }
   };

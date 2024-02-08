@@ -10,7 +10,8 @@ import { FiSettings, FiPower, FiList } from "react-icons/fi";
 import SelectTestResults from "./SelectTestResults/SelectTestResults";
 import { useData, useTranslation, useBackgroundProcesses } from "../hooks";
 import nuDiagnostics from "../assets/Logos/nu-diagnostics/nu-diagnostics white.png";
-import { errorProps } from "../constants/errorProps";
+import { ErrorType } from "../types/interfaces/useErrors";
+import useErrors from "../hooks/useErrors";
 
 const Header: FC = () => {
   const {
@@ -32,6 +33,7 @@ const Header: FC = () => {
     updateAvailable,
     failedSubmittingResults,
   } = useData();
+  const { registerErrors } = useErrors();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -106,16 +108,7 @@ const Header: FC = () => {
 
   const handleOffline = useCallback(async () => {
     if (!dbConnection) {
-      setErrors((prevErrors) =>
-        prevErrors
-          .filter((error) => error.type !== "stillOffline")
-          .concat({
-            code: errorProps.stillOffline.code,
-            id: errorProps.stillOffline.id,
-            type: "stillOffline",
-            message: t("common.stillOffline"),
-          })
-      );
+      registerErrors(ErrorType.stillOffline);
     } else {
       setOfflineMode(false);
       setErrors((prevErrors) =>

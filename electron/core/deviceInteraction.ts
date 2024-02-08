@@ -147,6 +147,7 @@ export function moveMatchingFiles() {
       const sourceFile = path.join(documentsFolder, file);
       if (!fs.existsSync(sourceFile)) return;
       const resultsFiles = fs.readdirSync(runsFolder);
+      // for mac because a file .DS_Store is in every folder
       const resultFile = resultsFiles.find(
         (folder) => fileName === folder && fileName !== ".DS_Store"
       );

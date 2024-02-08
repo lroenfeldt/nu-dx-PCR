@@ -13,6 +13,8 @@ import { IBarcode, IError, IErrorCopy } from "../types/interfaces/interfaces";
 import { ITestObject } from "../../electron/interfaces/interfaces";
 import { ISettings } from "../types/interfaces/settings";
 import { errorProps } from "../constants/errorProps";
+import { ErrorType } from "../types/interfaces/useErrors";
+import useErrors from "./useErrors";
 
 export const DataContext = React.createContext({});
 /**
@@ -82,6 +84,8 @@ export function DataProvider({ children }: DataProviderProps) {
   const [testFinishedAt, setTestFinishedAt] = useState(null);
   const [resultSubmitted, setResultSubmitted] = useState<boolean | null>(null);
 
+  const { registerErrors } = useErrors();
+
   /**
    * Resets values to default
    * @returns {void}
@@ -104,16 +108,16 @@ export function DataProvider({ children }: DataProviderProps) {
   }, [settings]);
 
   const handleError = useCallback(
-    (code: number, id: string, type: string, message: string) => {
+    (code: number, type: string, message: string, timeStamp: number) => {
       if (!message) {
       }
       setErrors((prevErrors) =>
         prevErrors
           .filter((error) => error.type !== type)
-          .concat({ code, id, type, message })
+          .concat({ code, type, message, timeStamp })
       );
     },
-    []
+    [errors, setErrors]
   );
 
   /**
@@ -122,12 +126,12 @@ export function DataProvider({ children }: DataProviderProps) {
   const loadSettings = useCallback(async () => {
     window.api.copyLogos();
     setIsStatus(false);
-    let newSettings = await window.api.getConfig();
+    let newSettings = window.api.getConfig();
     setSettings(newSettings);
     window.api.logEvents(`Settings loaded: ${JSON.stringify(newSettings)}`);
     setIsStatus(true);
     return newSettings;
-  }, []);
+  }, [settings]);
 
   useEffect(() => {
     setBarcodes(defaultBarcodes(settings));
@@ -179,14 +183,12 @@ export function DataProvider({ children }: DataProviderProps) {
     setIsStatus(false);
     if (!clear) {
       newErrors.push({
-        code: errorProps.settings.code,
-        id: errorProps.settings.id,
-        type: "settings",
-        message: t("errors.failedTosaveSettings"),
+        ...errorProps.settings,
+        timeStamp: Date.now(),
       });
       response = false;
     } else {
-      let newSettings = await window.api.getConfig();
+      let newSettings = window.api.getConfig();
       setSettings({
         ...newSettings,
         user: {
@@ -215,16 +217,7 @@ export function DataProvider({ children }: DataProviderProps) {
         return true;
       } catch (error) {
         console.error(error);
-        setErrors((prevErrors) =>
-          prevErrors
-            .filter((error) => error.type !== "saveSettings")
-            .concat({
-              code: errorProps.saveSettings.code,
-              id: errorProps.saveSettings.id,
-              type: "saveSettings",
-              message: t("errors.failedTosaveSettings"),
-            })
-        );
+        registerErrors(ErrorType.setting);
         return false;
       }
     },
@@ -235,10 +228,8 @@ export function DataProvider({ children }: DataProviderProps) {
     let newErrors = errors.filter((error) => error.type !== "lid");
     if (deviceStatus == "RUNNING") {
       newErrors.push({
-        code: errorProps.default.code,
-        id: errorProps.default.id,
-        type: "default",
-        message: t("default.errors.errorOpenLidWhileRunning"),
+        timeStamp: Date.now(),
+        ...errorProps.default,
       });
       return;
     }
@@ -251,8 +242,8 @@ export function DataProvider({ children }: DataProviderProps) {
         ? "errorCloseLid"
         : "errorOpenLid";
       newErrors.push({
+        timeStamp: Date.now(),
         code: errorProps.lid.code,
-        id: errorProps.lid.id,
         type: "lid",
         message: t(`default.errors.${errorType}`),
       });
@@ -383,10 +374,8 @@ export function DataProvider({ children }: DataProviderProps) {
     }),
     [
       openResults,
-      setOpenResults,
       errors,
       errorsCopy,
-      setErrorsCopy,
       handleErrors,
       demo,
       settings,
@@ -398,89 +387,49 @@ export function DataProvider({ children }: DataProviderProps) {
       clearSettings,
       saveSettings,
       toggleLid,
-      setErrors,
-      setDemo,
-      setSettings,
-      setResultList,
       barcodes,
-      setBarcodes,
       remTime,
-      setRemTime,
       testrun,
-      setTestrun,
       testid,
-      setTestid,
       testDone,
-      setTestDone,
       pairingCode,
-      setPairingCode,
       resultsSubmitted,
-      setSubmitted,
       reset,
       resetBarcodes,
       loadSettings,
-      setSubmitFilter,
       submitFilter,
       updateAvailable,
-      setUpdateAvailable,
       currentUser,
-      setCurrentUser,
       menuOpen,
-      setMenuOpen,
       loading,
-      setLoading,
       isModal,
-      setIsModal,
-      setIsNinetySix,
       isNinetySix,
       paramTrans,
-      setParamTrans,
       handleSettingChange,
       handleSettings,
       isStatus,
-      setIsStatus,
       selectedMethod,
-      setSelectedMethod,
       deviceStatus,
-      setDeviceStatus,
       USBPresent,
-      setUSBPresent,
       results,
-      setResults,
       reading,
-      setReading,
       submitting,
-      setSubmitting,
       viewResults,
-      setViewResults,
       dbConnection,
-      setDbConnection,
       offlineMode,
-      setOfflineMode,
       isLidOpen,
-      setIsLidOpen,
       selectedPosition,
-      setSelectedPosition,
       handleOpenEdit,
       handleError,
       idleTimestamp,
-      setIdleTimestamp,
       checkForTestResultFile,
-      setCheckForTestResultFile,
       lotNumber,
-      setLotNumber,
       updateType,
-      setUpdateType,
       isResultFilePresent,
-      setIsResultFilePresent,
       failedSubmittingResults,
-      setFailedSubmittingResults,
       viewType,
-      setViewType,
       testFinishedAt,
-      setTestFinishedAt,
       resultSubmitted,
-      setResultSubmitted,
     ]
   );
   return (

@@ -19,7 +19,8 @@ import {
   IExtractedBarcodes,
 } from "../types/interfaces/parseResults";
 import { IConfigFile, ITestProcedure } from "../types/interfaces/settings";
-import { errorProps } from "../constants/errorProps";
+import { ErrorType } from "../types/interfaces/useErrors";
+import useErrors from "./useErrors";
 
 /**
  * hook to handle all the results related functions
@@ -48,6 +49,7 @@ const useResults = () => {
   const location = useLocation();
   const { t } = useTranslation();
   const userId = currentUser ? currentUser?.id : "";
+  const { registerErrors } = useErrors();
 
   /**
    * submit Auto Controls  to db
@@ -247,7 +249,7 @@ const useResults = () => {
       resultFile = fetchResult.resultFile;
       testConfig = JSON.parse(configFile);
       if (!testConfig.testmethod) {
-        throw new Error('Testmethod not found in testconfig')
+        throw new Error("Testmethod not found in testconfig");
       }
       testmethod = settings.account.testprocedures.find(
         (method) => method.id === testConfig.testmethod
@@ -255,16 +257,7 @@ const useResults = () => {
     } catch (err) {
       console.error(err);
       window.api.logEvents(`saveToUSB: ${err}`);
-      setErrors((prevErrors) =>
-        prevErrors
-          .filter((error) => error.type !== "read")
-          .concat({
-            code: errorProps.read.code,
-            id: errorProps.read.id,
-            type: "read",
-            message: t("errors.failedToReadTestData"),
-          })
-      );
+      registerErrors(ErrorType.failedToReadTestData);
       if (location.pathname == "/ResultList") setWriting(testid, false);
       return false;
     }
@@ -283,16 +276,7 @@ const useResults = () => {
     } catch (err) {
       console.error(err);
       window.api.logEvents(`saveToUSB: ${err}`);
-      setErrors((prevErrors) =>
-        prevErrors
-          .filter((error) => error.type !== "read")
-          .concat({
-            code: errorProps.read.code,
-            id: errorProps.read.id,
-            type: "read",
-            message: t("errors.failedToReadResultData"),
-          })
-      );
+      registerErrors(ErrorType.failedToReadResultData);
       if (location.pathname == "/ResultList") setWriting(testid, false);
       return false;
     }
@@ -305,16 +289,7 @@ const useResults = () => {
     } catch (error) {
       console.error(error);
       window.api.logEvents(`saveToUSB: ${error}`);
-      setErrors((prevErrors) =>
-        prevErrors
-          .filter((error) => error.type !== "saveToUSB")
-          .concat({
-            code: errorProps.saveToUSB.code,
-            id: errorProps.saveToUSB.id,
-            type: "read",
-            message: t("errors.failedToSaveResultData"),
-          })
-      );
+      registerErrors(ErrorType.saveIntoUSB);
       if (location.pathname == "/ResultList") setWriting(testid, false);
       return false;
     }
@@ -390,7 +365,7 @@ const useResults = () => {
       barcodes = extractBarcodes(resultFile);
       override = fetchResult.override;
       if (!testConfig.testmethod) {
-        throw new Error('Testmethod not found in testconfig')
+        throw new Error("Testmethod not found in testconfig");
       }
       testmethod = settings.account.testprocedures.find(
         (method) => method.id === testConfig.testmethod
@@ -405,16 +380,7 @@ const useResults = () => {
       );
 
       if (!settings?.account?.autoSubmitResults) {
-        setErrors((prevErrors) =>
-          prevErrors
-            .filter((error) => error.type !== "read")
-            .concat({
-              code: errorProps.read.code,
-              id: errorProps.read.id,
-              type: "read",
-              message: t("errors.failedToReadTestData"),
-            })
-        );
+        registerErrors(ErrorType.failedToReadTestData);
       }
       setSubmitting(false);
       setSubmittingSingle(testid, false);
@@ -431,12 +397,11 @@ const useResults = () => {
     const resultUrl = testConfig.account.customSubmitResultsEndpoint
       ? testConfig.account.customSubmitResultsEndpoint
       : urls.resultUrl;
-    
+
     //Submit ControlSamples - not needed right now
-    
     window.api.logEvents(`check for auto controls`);
     if (settings.account.preregisterControlSamples) {
-      console.log('submitting controls')
+      console.log("submitting controls");
       try {
         autoControls = await submitAutoControls(
           barcodes,
@@ -449,17 +414,7 @@ const useResults = () => {
       } catch (err) {
         console.error(`submitAutoControls failed: ${err}`);
         window.api.logEvents(`submitResult: ${err}`);
-
-        setErrors((prevErrors) =>
-          prevErrors
-            .filter((error) => error.type !== "submit")
-            .concat({
-              code: errorProps.submit.code,
-              id: errorProps.submit.id,
-              type: "submit",
-              message: t("errors.failedToSaveControlSample"),
-            })
-        );
+        registerErrors(ErrorType.failedToSaveControlSample);
         setSubmitting(false);
         setSubmittingSingle(testid, false);
         return false;
@@ -488,16 +443,7 @@ const useResults = () => {
         prevFailedSubmittingResults.filter((id) => id !== testid).concat(testid)
       );
       if (!settings?.account?.autoSubmitResults) {
-        setErrors((prevErrors) =>
-          prevErrors
-            .filter((error) => error.type !== "read")
-            .concat({
-              code: errorProps.read.code,
-              id: errorProps.read.id,
-              type: "read",
-              message: t("errors.failedToReadResultData"),
-            })
-        );
+        registerErrors(ErrorType.failedToReadResultData);
       }
       setSubmitting(false);
       setSubmittingSingle(testid, false);
@@ -513,18 +459,7 @@ const useResults = () => {
       const msg = submitResponse.data.msg;
       const missing = msg.search("Fehlende Proben");
       if (missing !== -1) {
-        setErrors((prevErrors) =>
-          prevErrors
-            .filter((error) => error.type !== "submit")
-            .concat({
-              code: errorProps.submit.code,
-              id: errorProps.submit.id,
-              type: "submit",
-              message: t("errors.failedToSendSomeResults", {
-                missing: msg.substr(missing),
-              }),
-            })
-        );
+        registerErrors(ErrorType.offlineNotAllow);
       }
     } catch (err) {
       console.error(`submitResponse: ${err}`);
@@ -533,16 +468,7 @@ const useResults = () => {
         prevFailedSubmittingResults.filter((id) => id !== testid).concat(testid)
       );
 
-      setErrors((prevErrors) =>
-        prevErrors
-          .filter((error) => error.type !== "submit")
-          .concat({
-            code: errorProps.submit.code,
-            id: errorProps.submit.id,
-            type: "submit",
-            message: t("errors.failedToSubmitResults"),
-          })
-      );
+      registerErrors(ErrorType.submit);
 
       setSubmitting(false);
       setSubmittingSingle(testid, false);
@@ -560,16 +486,7 @@ const useResults = () => {
     } catch (err) {
       console.error(`move result file to done directory: ${err}`);
       window.api.logEvents(`move result file to done directory: ${err}`);
-      setErrors((prevErrors) =>
-        prevErrors
-          .filter((error) => error.type !== "submit")
-          .concat({
-            code: errorProps.submit.code,
-            id: errorProps.submit.id,
-            type: "submit",
-            message: t("errors.failedToMoveSubmittedFiles"),
-          })
-      );
+      registerErrors(ErrorType.failedToMoveSubmittedFiles);
       setSubmitting(false);
       setSubmittingSingle(testid, false);
       return false;

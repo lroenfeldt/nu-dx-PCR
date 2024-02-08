@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import functions from "../utils/functions";
 import { Oval } from "react-loader-spinner";
 import { errorProps } from "../constants/errorProps";
+import { ErrorType } from "../types/interfaces/useErrors";
+import useErrors from "../hooks/useErrors";
 
 const RunTest = () => {
   const navigate = useNavigate();
@@ -19,6 +21,7 @@ const RunTest = () => {
     selectedMethod,
     setTestFinishedAt,
   } = useData();
+  const { registerErrors } = useErrors();
   const procedure = settings.account.testprocedures.find(
     (procedure) => procedure.id === selectedMethod
   );
@@ -36,10 +39,8 @@ const RunTest = () => {
   const showCancel = () => {
     let newErrors = errors.filter((error) => error.type !== "cancelTest");
     newErrors.push({
-      code: errorProps.cancelTest.code,
-      id: errorProps.cancelTest.id,
-      type: "cancelTest",
-      message: t("runTest.cancelTest"),
+      timeStamp: Date.now(),
+      ...errorProps.cancelTest,
     });
     setErrors(newErrors);
   };
@@ -91,16 +92,7 @@ const RunTest = () => {
               window.api.logEvents(
                 `Result for test ${testid} could not be moved`
               );
-              setErrors(
-                errors
-                  .filter((err) => err.type != "moveResults")
-                  .concat({
-                    code: errorProps.moveResults.code,
-                    id: errorProps.moveResults.id,
-                    type: "moveResults",
-                    message: t("errors.failedToMoveResults"),
-                  })
-              );
+              registerErrors(ErrorType.moveResults);
             } else {
               setTimeout(() => {
                 navigate("/uploadResults");
@@ -113,16 +105,7 @@ const RunTest = () => {
 
         if (finishedAt + 60 * 20 < Math.floor(Date.now() / 1000)) {
           setWaitingForResults(false);
-          setErrors(
-            errors
-              .filter((err) => err.type != "testFailed")
-              .concat({
-                code: errorProps.testFailed.code,
-                id: errorProps.testFailed.id,
-                type: "testFailed",
-                message: t("errors.testFailed"),
-              })
-          );
+          registerErrors(ErrorType.testFailed);
           clearInterval(checkFile);
         }
       }
