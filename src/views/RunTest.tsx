@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import functions from "../utils/functions";
 import { Oval } from "react-loader-spinner";
 import { errorProps } from "../constants/errorProps";
-import { useErrors } from "../hooks/useErrors";
+import { ErrorType } from "../types/interfaces/useErrors";
+import useErrors from "../hooks/useErrors";
 
 const RunTest = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const RunTest = () => {
     selectedMethod,
     setTestFinishedAt,
   } = useData();
-  const { moveResults, testFailed, registerErrors } = useErrors();
+  const { registerErrors } = useErrors();
   const procedure = settings.account.testprocedures.find(
     (procedure) => procedure.id === selectedMethod
   );
@@ -91,7 +92,7 @@ const RunTest = () => {
               window.api.logEvents(
                 `Result for test ${testid} could not be moved`
               );
-              registerErrors(moveResults);
+              registerErrors(ErrorType.moveResults);
             } else {
               setTimeout(() => {
                 navigate("/uploadResults");
@@ -104,7 +105,7 @@ const RunTest = () => {
 
         if (finishedAt + 60 * 20 < Math.floor(Date.now() / 1000)) {
           setWaitingForResults(false);
-          registerErrors(testFailed);
+          registerErrors(ErrorType.testFailed);
           clearInterval(checkFile);
         }
       }

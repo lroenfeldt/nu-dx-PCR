@@ -1,9 +1,10 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useData, useResults, useTranslation } from "../hooks";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IError, IErrorCopy } from "../types/interfaces/interfaces";
 import { IHideErrorProps } from "../types/components";
-import { useErrors } from "../hooks/useErrors";
+import { ErrorType } from "../types/interfaces/useErrors";
+import useErrors from "../hooks/useErrors";
 
 const Errors: React.FC = () => {
   const {
@@ -14,10 +15,10 @@ const Errors: React.FC = () => {
     testid,
     setDeviceStatus,
     setErrors,
-    resultSubmitted,
+    resultsSubmitted,
     setErrorsCopy,
   } = useData();
-  const { moveResults, registerErrors } = useErrors();
+  const { registerErrors } = useErrors();
   const { submitResult } = useResults();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -160,7 +161,7 @@ const Errors: React.FC = () => {
               <button
                 onClick={() => {
                   hideError({ index: i });
-                  submitResult(testid, resultSubmitted);
+                  submitResult(testid, resultsSubmitted);
                 }}
               >
                 {t("common.retry")}
@@ -205,7 +206,7 @@ const Errors: React.FC = () => {
                         `Result for test ${testid} could not be moved`
                       );
 
-                      registerErrors(moveResults);
+                      registerErrors(ErrorType.moveResults);
                     } else {
                       window.api.logEvents(`attempting to move result file`);
                       setTimeout(() => {

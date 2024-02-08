@@ -82,21 +82,13 @@ const ResultList = () => {
       //button for db submit
       if (result.isSubmitting) {
         buttonSubmit = (
-          <div
-            className="button"
-            onClick={() => {
-              submitResult(result.testid, result.submitted);
-            }}
-          >
+          <div className="button">
             <div className="spinnerContainer">
               <Oval height="30" width="30" color="white" />
             </div>
           </div>
         );
-      } else if (
-        !result.isSubmitting &&
-        !failedSubmittingResults.includes(result.testid)
-      ) {
+      } else if (!result.isSubmitting) {
         buttonSubmit = (
           <div
             className="button"
@@ -155,7 +147,6 @@ const ResultList = () => {
           <div
             onClick={() => {
               setTestid(result.testid);
-
               const handleErr = errorsCopy.filter((error, index, array) => {
                 return (
                   error.testid === result.testid &&

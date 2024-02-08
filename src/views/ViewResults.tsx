@@ -26,7 +26,8 @@ import {
   TableRow,
 } from "../types/interfaces/interfaces";
 import { IConfigFile, ITestProcedure } from "../types/interfaces/settings";
-import { useErrors } from "../hooks/useErrors";
+import { ErrorType } from "../types/interfaces/useErrors";
+import useErrors from "../hooks/useErrors";
 
 const ViewResults: React.FC = () => {
   const [active, setActive] = useState<number>(0);
@@ -42,8 +43,8 @@ const ViewResults: React.FC = () => {
     setViewResults,
     setSelectedMethod,
   } = useData();
-  const { failedToReadTestData, failedToReadResultData, registerErrors } =
-    useErrors();
+  const { registerErrors } = useErrors();
+
   const [testmethod, setTestmethod] = useState<ITestMethod | null>(null);
   const [testLoaded, setTestLoaded] = useState<boolean>(false);
   const { checkUSB } = useResults();
@@ -96,7 +97,7 @@ const ViewResults: React.FC = () => {
     } catch (err) {
       console.log(err);
       window.api.logEvents(`fetchResult: ${err}`);
-      registerErrors(failedToReadTestData);
+      registerErrors(ErrorType.failedToReadTestData);
       return;
     }
 
@@ -135,7 +136,7 @@ const ViewResults: React.FC = () => {
     } catch (err) {
       console.log(err);
       window.api.logEvents(`parseResults: ${err}`);
-      registerErrors(failedToReadResultData);
+      registerErrors(ErrorType.failedToReadResultData);
       return;
     }
   };

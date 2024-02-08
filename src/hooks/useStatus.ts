@@ -32,6 +32,7 @@ export const useStatus = (): UseStatusReturnType => {
           errors: errors.filter((error) => {
             return !errorsCopy.some(
               (errCopy) => errCopy.timeStamp === error.timeStamp
+              // also with code
             );
           }),
         }

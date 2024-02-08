@@ -13,7 +13,8 @@ import { IBarcode, IError, IErrorCopy } from "../types/interfaces/interfaces";
 import { ITestObject } from "../../electron/interfaces/interfaces";
 import { ISettings } from "../types/interfaces/settings";
 import { errorProps } from "../constants/errorProps";
-import { useErrors } from "./useErrors";
+import { ErrorType } from "../types/interfaces/useErrors";
+import useErrors from "./useErrors";
 
 export const DataContext = React.createContext({});
 /**
@@ -29,7 +30,6 @@ interface DataProviderProps {
 
 export function DataProvider({ children }: DataProviderProps) {
   const { t }: IUseTranslation = useTranslation();
-  const { setting, registerErrors } = useErrors();
   const [demo, setDemo] = useState(false);
   const [errors, setErrors] = useState<IError[]>([]);
   const [errorsCopy, setErrorsCopy] = useState<IErrorCopy[]>([]);
@@ -84,6 +84,8 @@ export function DataProvider({ children }: DataProviderProps) {
   const [testFinishedAt, setTestFinishedAt] = useState(null);
   const [resultSubmitted, setResultSubmitted] = useState<boolean | null>(null);
 
+  const { registerErrors } = useErrors();
+
   /**
    * Resets values to default
    * @returns {void}
@@ -115,7 +117,7 @@ export function DataProvider({ children }: DataProviderProps) {
           .concat({ code, type, message, timeStamp })
       );
     },
-    []
+    [errors, setErrors]
   );
 
   /**
@@ -127,7 +129,6 @@ export function DataProvider({ children }: DataProviderProps) {
     let newSettings = window.api.getConfig();
     setSettings(newSettings);
     window.api.logEvents(`Settings loaded: ${JSON.stringify(newSettings)}`);
-    console.log(newSettings.account.testprocedures);
     setIsStatus(true);
     return newSettings;
   }, [settings]);
@@ -216,7 +217,7 @@ export function DataProvider({ children }: DataProviderProps) {
         return true;
       } catch (error) {
         console.error(error);
-        registerErrors(setting);
+        registerErrors(ErrorType.setting);
         return false;
       }
     },
@@ -370,7 +371,6 @@ export function DataProvider({ children }: DataProviderProps) {
       setTestFinishedAt,
       resultSubmitted,
       setResultSubmitted,
-      registerErrors,
     }),
     [
       openResults,
@@ -430,7 +430,6 @@ export function DataProvider({ children }: DataProviderProps) {
       viewType,
       testFinishedAt,
       resultSubmitted,
-      registerErrors,
     ]
   );
   return (

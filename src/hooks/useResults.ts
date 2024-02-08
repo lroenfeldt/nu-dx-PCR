@@ -19,7 +19,8 @@ import {
   IExtractedBarcodes,
 } from "../types/interfaces/parseResults";
 import { IConfigFile, ITestProcedure } from "../types/interfaces/settings";
-import { useErrors } from "./useErrors";
+import { ErrorType } from "../types/interfaces/useErrors";
+import useErrors from "./useErrors";
 
 /**
  * hook to handle all the results related functions
@@ -48,16 +49,7 @@ const useResults = () => {
   const location = useLocation();
   const { t } = useTranslation();
   const userId = currentUser ? currentUser?.id : "";
-  const {
-    submit,
-    failedToReadTestData,
-    failedToReadResultData,
-    failedToSaveControlSample,
-    offlineNotAllow,
-    failedToMoveSubmittedFiles,
-    saveIntoUSB,
-    registerErrors,
-  } = useErrors();
+  const { registerErrors } = useErrors();
 
   /**
    * submit Auto Controls  to db
@@ -265,7 +257,7 @@ const useResults = () => {
     } catch (err) {
       console.error(err);
       window.api.logEvents(`saveToUSB: ${err}`);
-      registerErrors(failedToReadTestData);
+      registerErrors(ErrorType.failedToReadTestData);
       if (location.pathname == "/ResultList") setWriting(testid, false);
       return false;
     }
@@ -284,7 +276,7 @@ const useResults = () => {
     } catch (err) {
       console.error(err);
       window.api.logEvents(`saveToUSB: ${err}`);
-      registerErrors(failedToReadResultData);
+      registerErrors(ErrorType.failedToReadResultData);
       if (location.pathname == "/ResultList") setWriting(testid, false);
       return false;
     }
@@ -297,7 +289,7 @@ const useResults = () => {
     } catch (error) {
       console.error(error);
       window.api.logEvents(`saveToUSB: ${error}`);
-      registerErrors(saveIntoUSB);
+      registerErrors(ErrorType.saveIntoUSB);
       if (location.pathname == "/ResultList") setWriting(testid, false);
       return false;
     }
@@ -388,7 +380,7 @@ const useResults = () => {
       );
 
       if (!settings?.account?.autoSubmitResults) {
-        registerErrors(failedToReadTestData);
+        registerErrors(ErrorType.failedToReadTestData);
       }
       setSubmitting(false);
       setSubmittingSingle(testid, false);
@@ -407,7 +399,6 @@ const useResults = () => {
       : urls.resultUrl;
 
     //Submit ControlSamples - not needed right now
-
     window.api.logEvents(`check for auto controls`);
     if (settings.account.preregisterControlSamples) {
       console.log("submitting controls");
@@ -423,7 +414,7 @@ const useResults = () => {
       } catch (err) {
         console.error(`submitAutoControls failed: ${err}`);
         window.api.logEvents(`submitResult: ${err}`);
-        registerErrors(failedToSaveControlSample);
+        registerErrors(ErrorType.failedToSaveControlSample);
         setSubmitting(false);
         setSubmittingSingle(testid, false);
         return false;
@@ -452,7 +443,7 @@ const useResults = () => {
         prevFailedSubmittingResults.filter((id) => id !== testid).concat(testid)
       );
       if (!settings?.account?.autoSubmitResults) {
-        registerErrors(failedToReadResultData);
+        registerErrors(ErrorType.failedToReadResultData);
       }
       setSubmitting(false);
       setSubmittingSingle(testid, false);
@@ -468,7 +459,7 @@ const useResults = () => {
       const msg = submitResponse.data.msg;
       const missing = msg.search("Fehlende Proben");
       if (missing !== -1) {
-        registerErrors(offlineNotAllow);
+        registerErrors(ErrorType.offlineNotAllow);
       }
     } catch (err) {
       console.error(`submitResponse: ${err}`);
@@ -477,8 +468,7 @@ const useResults = () => {
         prevFailedSubmittingResults.filter((id) => id !== testid).concat(testid)
       );
 
-      // string arg entfällt. nur noch ein object arg is notwendig.
-      registerErrors(submit);
+      registerErrors(ErrorType.submit);
 
       setSubmitting(false);
       setSubmittingSingle(testid, false);
@@ -496,7 +486,7 @@ const useResults = () => {
     } catch (err) {
       console.error(`move result file to done directory: ${err}`);
       window.api.logEvents(`move result file to done directory: ${err}`);
-      registerErrors(failedToMoveSubmittedFiles);
+      registerErrors(ErrorType.failedToMoveSubmittedFiles);
       setSubmitting(false);
       setSubmittingSingle(testid, false);
       return false;
