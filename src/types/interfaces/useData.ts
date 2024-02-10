@@ -1,8 +1,16 @@
 import { ITestObject } from "../../../electron/interfaces/interfaces";
-import { IBarcode, IErrObject, IError, IErrorCopy } from "./interfaces";
+import {
+  IBarcode,
+  IErrObject,
+  IError,
+  IErrorCopy,
+  IErrorSubmitted,
+} from "./interfaces";
 import { IAccountUser, ISettings } from "./settings";
 
 export interface IUseData {
+  pushErrors: () => void;
+
   openResults: boolean;
   setOpenResults: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -12,6 +20,12 @@ export interface IUseData {
 
   errorsCopy: IErrorCopy[];
   setErrorsCopy: React.Dispatch<React.SetStateAction<IErrorCopy[]>>;
+
+  submittedErrors: IErrorSubmitted[];
+  setSubmittedErrors: React.Dispatch<React.SetStateAction<IErrorSubmitted[]>>;
+
+  errorSubmitted: boolean;
+  setErrorSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 
   demo: boolean;
   setDemo: React.Dispatch<React.SetStateAction<boolean>>;

@@ -9,7 +9,12 @@ import defaultBarcodes from "../utils/defaultBarcodes";
 import { useTranslation } from "./useTranslation";
 import { IUseData } from "../types/interfaces/useData";
 import { IUseTranslation } from "../types/interfaces/useTranslation";
-import { IBarcode, IError, IErrorCopy } from "../types/interfaces/interfaces";
+import {
+  IBarcode,
+  IError,
+  IErrorCopy,
+  IErrorSubmitted,
+} from "../types/interfaces/interfaces";
 import { ITestObject } from "../../electron/interfaces/interfaces";
 import { ISettings } from "../types/interfaces/settings";
 import { errorProps } from "../constants/errorProps";
@@ -33,6 +38,8 @@ export function DataProvider({ children }: DataProviderProps) {
   const [demo, setDemo] = useState(false);
   const [errors, setErrors] = useState<IError[]>([]);
   const [errorsCopy, setErrorsCopy] = useState<IErrorCopy[]>([]);
+  const [submittedErrors, setSubmittedErrors] = useState<IErrorSubmitted[]>([]);
+  const [errorSubmitted, setErrorSubmitted] = useState(false);
   const [testid, setTestid] = useState<string>("");
   const [results, setResults] = useState<ITestObject[]>([]);
   const [reading, setReading] = useState(true);
@@ -267,6 +274,13 @@ export function DataProvider({ children }: DataProviderProps) {
     loadSettings();
   }, []);
 
+  useEffect(() => {
+    if (errors?.length && !submittedErrors.length) {
+      setSubmittedErrors(errors);
+      setErrorSubmitted(true);
+    }
+  }, [errors]);
+
   const contextValue = useMemo(
     () => ({
       openResults,
@@ -275,6 +289,10 @@ export function DataProvider({ children }: DataProviderProps) {
       errors,
       errorsCopy,
       setErrorsCopy,
+      submittedErrors,
+      setSubmittedErrors,
+      errorSubmitted,
+      setErrorSubmitted,
       handleErrors,
       demo,
       settings,
@@ -376,6 +394,8 @@ export function DataProvider({ children }: DataProviderProps) {
       openResults,
       errors,
       errorsCopy,
+      submittedErrors,
+      errorSubmitted,
       handleErrors,
       demo,
       settings,

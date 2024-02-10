@@ -213,6 +213,14 @@ export interface IErrorCopy {
   type: string;
 }
 
+export interface IErrorSubmitted {
+  timeStamp: number;
+  code: number;
+  message: string;
+  type: string;
+  // submitted: boolean;
+}
+
 export interface IMoveResult {
   testId: string;
 }

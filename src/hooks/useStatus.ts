@@ -14,9 +14,11 @@ export const useStatus = (): UseStatusReturnType => {
     setDbConnection,
     isStatus,
     errors,
-    errorsCopy,
     testFinishedAt,
     selectedMethod,
+    errorSubmitted,
+    setErrorSubmitted,
+    submittedErrors,
   } = useData();
 
   const ping = useCallback(async () => {
@@ -29,14 +31,16 @@ export const useStatus = (): UseStatusReturnType => {
           cyclerVersion: settings.version,
           testId: selectedMethod,
           testFinishedAt: testFinishedAt,
-          errors: errors.filter((error) => {
-            return !errorsCopy.some(
-              (errCopy) => errCopy.timeStamp === error.timeStamp
-              // also with code
-            );
-          }),
+          errors: errorSubmitted ? submittedErrors : [],
         }
       );
+
+      const jsonData = JSON.parse(response.config?.data);
+      if (jsonData.errors.length > 0) {
+        setErrorSubmitted(false);
+      }
+      console.log(jsonData.errors);
+
       const responseData = response.data as ISettings;
       if (response.ok) {
         let newSettings = {
@@ -62,7 +66,6 @@ export const useStatus = (): UseStatusReturnType => {
           errors.filter((error: any) => error.type !== "stillOffline")
         );
       }
-
       window.api.logEvents(`ping status response: ${JSON.stringify(response)}`);
     } catch (err: any) {
       console.error(err);

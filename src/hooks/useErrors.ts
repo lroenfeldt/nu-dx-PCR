@@ -2,11 +2,10 @@ import { ErrorType, IErrObj } from "../types/interfaces/useErrors";
 import { IError } from "../types/interfaces/interfaces";
 import { useData } from "./useData";
 import { useTranslation } from "./useTranslation";
-import { useEffect } from "react";
 
 function useErrors() {
   const { t } = useTranslation();
-  const { setErrors, errors } = useData();
+  const { setErrors } = useData();
 
   const errorsHolder: Record<ErrorType, IErrObj> = {
     [ErrorType.moveResults]: {
@@ -127,14 +126,11 @@ function useErrors() {
   };
 
   const registerErrors = (errorType: keyof typeof ErrorType) => {
-    const errorObj = errorsHolder[errorType];
-    if (errorObj) {
-      setErrors((prevErrors: IError[]) =>
-        prevErrors
-          .filter((err) => err.type != errorType)
-          .concat({ ...errorObj, timeStamp: Date.now() })
-      );
-    }
+    setErrors((prevErrors: IError[]) =>
+      prevErrors
+        .filter((err) => err.type != errorType)
+        .concat({ ...errorsHolder[errorType], timeStamp: Date.now() })
+    );
   };
 
   return { registerErrors };
