@@ -10,7 +10,7 @@ import "moment/dist/locale/fr";
 import "moment/dist/locale/en-gb";
 
 const Footer = () => {
-  const { settings, dbConnection } = useData();
+  const { settings, dbConnection, testName } = useData();
   const navigate = useNavigate();
   const { locale } = useTranslation();
   const location = useLocation();
@@ -44,7 +44,7 @@ const Footer = () => {
     <div className="Footer">
       <div className="menu-left">{logo}</div>
       <div className="menu-center">
-        <span></span>
+        <span>{testName}</span>
       </div>
       <div className="menu-right">
         {stateTime}

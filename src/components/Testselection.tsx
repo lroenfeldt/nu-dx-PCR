@@ -6,11 +6,11 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { useEffect } from "react";
 
 const Testselection = () => {
   const { testrun, settings } = useData();
   const { locale } = useTranslation();
-
   return (
     <div className="Testselection">
       <Swiper

@@ -166,4 +166,7 @@ export interface IUseData {
 
   selectedTestId: string;
   setSelectedTestId: React.Dispatch<React.SetStateAction<string>>;
+
+  testName: string;
+  setTestName: React.Dispatch<React.SetStateAction<string>>;
 }

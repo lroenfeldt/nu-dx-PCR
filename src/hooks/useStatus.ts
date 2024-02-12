@@ -19,6 +19,7 @@ export const useStatus = (): UseStatusReturnType => {
     errorSubmitted,
     setErrorSubmitted,
     submittedErrors,
+    setSubmittedErrors,
   } = useData();
 
   const ping = useCallback(async () => {
@@ -38,6 +39,7 @@ export const useStatus = (): UseStatusReturnType => {
       const jsonData = JSON.parse(response.config?.data);
       if (jsonData.errors.length > 0) {
         setErrorSubmitted(false);
+        setSubmittedErrors([]);
       }
       console.log(jsonData.errors);
 

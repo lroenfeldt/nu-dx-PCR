@@ -20,6 +20,7 @@ const RunTest = () => {
     isNinetySix,
     selectedMethod,
     setTestFinishedAt,
+    testName,
   } = useData();
   const { registerErrors } = useErrors();
   const procedure = settings.account.testprocedures.find(
@@ -72,6 +73,11 @@ const RunTest = () => {
     return () => clearInterval(countdown);
   }, [remTime]);
 
+  useEffect(() => {
+    console.log(selectedMethod);
+    console.log(testName);
+  }, [selectedMethod, testName]);
+
   //Check for result file
   useEffect(() => {
     const checkFile = setInterval(() => {
@@ -121,7 +127,7 @@ const RunTest = () => {
         <>
           <h2>
             {flapClosed
-              ? t("runTest.testRunning")
+              ? t("runTest.testRunning") + " " + testName
               : t("runTest.testRunningFlapClose")}
           </h2>
           <div className="progressVisualization">

@@ -65,6 +65,7 @@ export function DataProvider({ children }: DataProviderProps) {
   const [deviceStatus, setDeviceStatus] = useState("IDLE");
   const [idleTimestamp, setIdleTimestamp] = useState(null);
   const [selectedMethod, setSelectedMethod] = useState(null);
+  const [testName, setTestName] = useState("");
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState("");
   const [settings, setSettings] = useState(window.api.getConfig());
@@ -389,6 +390,9 @@ export function DataProvider({ children }: DataProviderProps) {
       setTestFinishedAt,
       resultSubmitted,
       setResultSubmitted,
+
+      testName,
+      setTestName,
     }),
     [
       openResults,
@@ -450,6 +454,7 @@ export function DataProvider({ children }: DataProviderProps) {
       viewType,
       testFinishedAt,
       resultSubmitted,
+      testName,
     ]
   );
   return (
