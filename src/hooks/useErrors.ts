@@ -132,7 +132,7 @@ function useErrors() {
     [ErrorType.startTest]: {
       code: 6000,
       type: ErrorType.startTest,
-      message: t(""),
+      message: t("errors.failtedToStartTest"),
     },
   };
 
