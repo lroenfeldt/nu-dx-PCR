@@ -19,7 +19,6 @@ import {
   IExtractedBarcodes,
 } from "../types/interfaces/parseResults";
 import { IConfigFile, ITestProcedure } from "../types/interfaces/settings";
-import { ErrorType } from "../types/interfaces/useErrors";
 import useErrors from "./useErrors";
 
 /**
@@ -257,7 +256,7 @@ const useResults = () => {
     } catch (err) {
       console.error(err);
       window.api.logEvents(`saveToUSB: ${err}`);
-      registerErrors(ErrorType.failedToReadTestData);
+      registerErrors("failedToReadTestData");
       if (location.pathname == "/ResultList") setWriting(testid, false);
       return false;
     }
@@ -276,7 +275,7 @@ const useResults = () => {
     } catch (err) {
       console.error(err);
       window.api.logEvents(`saveToUSB: ${err}`);
-      registerErrors(ErrorType.failedToReadResultData);
+      registerErrors("failedToReadResultData");
       if (location.pathname == "/ResultList") setWriting(testid, false);
       return false;
     }
@@ -289,7 +288,7 @@ const useResults = () => {
     } catch (error) {
       console.error(error);
       window.api.logEvents(`saveToUSB: ${error}`);
-      registerErrors(ErrorType.saveIntoUSB);
+      registerErrors("saveIntoUSB");
       if (location.pathname == "/ResultList") setWriting(testid, false);
       return false;
     }
@@ -380,7 +379,7 @@ const useResults = () => {
       );
 
       if (!settings?.account?.autoSubmitResults) {
-        registerErrors(ErrorType.failedToReadTestData);
+        registerErrors("failedToReadTestData");
       }
       setSubmitting(false);
       setSubmittingSingle(testid, false);
@@ -414,7 +413,7 @@ const useResults = () => {
       } catch (err) {
         console.error(`submitAutoControls failed: ${err}`);
         window.api.logEvents(`submitResult: ${err}`);
-        registerErrors(ErrorType.failedToSaveControlSample);
+        registerErrors("failedToSaveControlSample");
         setSubmitting(false);
         setSubmittingSingle(testid, false);
         return false;
@@ -443,7 +442,7 @@ const useResults = () => {
         prevFailedSubmittingResults.filter((id) => id !== testid).concat(testid)
       );
       if (!settings?.account?.autoSubmitResults) {
-        registerErrors(ErrorType.failedToReadResultData);
+        registerErrors("failedToReadResultData");
       }
       setSubmitting(false);
       setSubmittingSingle(testid, false);
@@ -459,7 +458,7 @@ const useResults = () => {
       const msg = submitResponse.data.msg;
       const missing = msg.search("Fehlende Proben");
       if (missing !== -1) {
-        registerErrors(ErrorType.offlineNotAllow);
+        registerErrors("offlineNotAllow");
       }
     } catch (err) {
       console.error(`submitResponse: ${err}`);
@@ -468,7 +467,7 @@ const useResults = () => {
         prevFailedSubmittingResults.filter((id) => id !== testid).concat(testid)
       );
 
-      registerErrors(ErrorType.submit);
+      registerErrors("submit");
 
       setSubmitting(false);
       setSubmittingSingle(testid, false);
@@ -486,7 +485,7 @@ const useResults = () => {
     } catch (err) {
       console.error(`move result file to done directory: ${err}`);
       window.api.logEvents(`move result file to done directory: ${err}`);
-      registerErrors(ErrorType.failedToMoveSubmittedFiles);
+      registerErrors("failedToMoveSubmittedFiles");
       setSubmitting(false);
       setSubmittingSingle(testid, false);
       return false;

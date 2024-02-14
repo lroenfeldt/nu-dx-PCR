@@ -1,6 +1,7 @@
 export enum ErrorType {
   moveResults = "moveResults",
   setting = "setting",
+  default = "default",
   lid = "lid",
   read = "read",
   failedToReadTestData = "failedToReadTestData",
@@ -10,6 +11,7 @@ export enum ErrorType {
   failedToMoveSubmittedFiles = "failedToMoveSubmittedFiles",
   saveIntoUSB = "saveIntoUSB",
   dbCon = "dbCon",
+  dbConnection = "dbConnection",
   checkInternetConnection = "checkInternetConnection",
   pairingDbError = "pairingDbError",
   deviceRegistrationFailed = "deviceRegistrationFailed",

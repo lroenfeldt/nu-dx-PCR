@@ -3,7 +3,6 @@ import { useData, useResults, useTranslation } from "../hooks";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IError, IErrorCopy } from "../types/interfaces/interfaces";
 import { IHideErrorProps } from "../types/components";
-import { ErrorType } from "../types/interfaces/useErrors";
 import useErrors from "../hooks/useErrors";
 
 const Errors: React.FC = () => {
@@ -205,8 +204,7 @@ const Errors: React.FC = () => {
                       window.api.logEvents(
                         `Result for test ${testid} could not be moved`
                       );
-
-                      registerErrors(ErrorType.moveResults);
+                      registerErrors("moveResults");
                     } else {
                       window.api.logEvents(`attempting to move result file`);
                       setTimeout(() => {
@@ -277,7 +275,7 @@ const Errors: React.FC = () => {
             </div>
           );
         }
-        if (error.type === "dbCon") {
+        if (error.type === "dbCon" || error.type === "dbConnection") {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>

@@ -197,12 +197,7 @@ export interface IError {
   code: number;
   message: string;
   type: string;
-}
-
-export interface IErrObject {
-  code: number;
-  type: string;
-  message: string;
+  isSubmitted?: boolean;
 }
 
 export interface IErrorCopy {
@@ -211,14 +206,6 @@ export interface IErrorCopy {
   code: number;
   message: string;
   type: string;
-}
-
-export interface IErrorSubmitted {
-  timeStamp: number;
-  code: number;
-  message: string;
-  type: string;
-  // submitted: boolean;
 }
 
 export interface IMoveResult {

@@ -22,6 +22,7 @@ export interface IParsedResult {
   parameters: Record<string, IParameter>;
   result?: string;
   position?: string | number;
+  oldResult?: string;
 }
 
 export interface ITestConfigAccount {

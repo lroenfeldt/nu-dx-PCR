@@ -9,16 +9,9 @@ import defaultBarcodes from "../utils/defaultBarcodes";
 import { useTranslation } from "./useTranslation";
 import { IUseData } from "../types/interfaces/useData";
 import { IUseTranslation } from "../types/interfaces/useTranslation";
-import {
-  IBarcode,
-  IError,
-  IErrorCopy,
-  IErrorSubmitted,
-} from "../types/interfaces/interfaces";
+import { IBarcode, IError, IErrorCopy } from "../types/interfaces/interfaces";
 import { ITestObject } from "../../electron/interfaces/interfaces";
 import { ISettings } from "../types/interfaces/settings";
-import { errorProps } from "../constants/errorProps";
-import { ErrorType } from "../types/interfaces/useErrors";
 import useErrors from "./useErrors";
 
 export const DataContext = React.createContext({});
@@ -38,8 +31,6 @@ export function DataProvider({ children }: DataProviderProps) {
   const [demo, setDemo] = useState(false);
   const [errors, setErrors] = useState<IError[]>([]);
   const [errorsCopy, setErrorsCopy] = useState<IErrorCopy[]>([]);
-  const [submittedErrors, setSubmittedErrors] = useState<IErrorSubmitted[]>([]);
-  const [errorSubmitted, setErrorSubmitted] = useState(false);
   const [testid, setTestid] = useState<string>("");
   const [results, setResults] = useState<ITestObject[]>([]);
   const [reading, setReading] = useState(true);
@@ -65,7 +56,6 @@ export function DataProvider({ children }: DataProviderProps) {
   const [deviceStatus, setDeviceStatus] = useState("IDLE");
   const [idleTimestamp, setIdleTimestamp] = useState(null);
   const [selectedMethod, setSelectedMethod] = useState(null);
-  const [testName, setTestName] = useState("");
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState("");
   const [settings, setSettings] = useState(window.api.getConfig());
@@ -92,7 +82,7 @@ export function DataProvider({ children }: DataProviderProps) {
   const [testFinishedAt, setTestFinishedAt] = useState(null);
   const [resultSubmitted, setResultSubmitted] = useState<boolean | null>(null);
 
-  const { registerErrors } = useErrors();
+  const { registerErrors, clearErrors } = useErrors();
 
   /**
    * Resets values to default
@@ -184,16 +174,13 @@ export function DataProvider({ children }: DataProviderProps) {
   }, []);
 
   const clearSettings = useCallback(async () => {
-    let newErrors = errors.filter((error) => error.type !== "settings");
+    clearErrors("setting");
     let response = true;
     const clear = await window.api.clearConfig();
     await window.api.archiveRun();
     setIsStatus(false);
     if (!clear) {
-      newErrors.push({
-        ...errorProps.settings,
-        timeStamp: Date.now(),
-      });
+      registerErrors("setting");
       response = false;
     } else {
       let newSettings = window.api.getConfig();
@@ -205,7 +192,7 @@ export function DataProvider({ children }: DataProviderProps) {
         },
       });
     }
-    setErrors(newErrors);
+
     setIsStatus(true);
     return response;
   }, [errors, settings, isStatus]);
@@ -225,7 +212,7 @@ export function DataProvider({ children }: DataProviderProps) {
         return true;
       } catch (error) {
         console.error(error);
-        registerErrors(ErrorType.setting);
+        registerErrors("setting");
         return false;
       }
     },
@@ -233,31 +220,20 @@ export function DataProvider({ children }: DataProviderProps) {
   );
 
   const toggleLid = useCallback(() => {
-    let newErrors = errors.filter((error) => error.type !== "lid");
     if (deviceStatus == "RUNNING") {
-      newErrors.push({
-        timeStamp: Date.now(),
-        ...errorProps.default,
-      });
+      registerErrors("default");
       return;
     }
     if (window.api.toggleLid()) {
       setIsLidOpen(!isNinetySix ? true : !isLidOpen);
     } else {
-      let errorType = !isNinetySix
+      !isNinetySix
         ? "errorOpenLid"
         : isLidOpen
         ? "errorCloseLid"
         : "errorOpenLid";
-      newErrors.push({
-        timeStamp: Date.now(),
-        code: errorProps.lid.code,
-        type: "lid",
-        message: t(`default.errors.${errorType}`),
-      });
+      registerErrors("lid");
     }
-
-    setErrors(newErrors);
   }, [deviceStatus, isNinetySix, isLidOpen, errors]);
 
   const handleOpenEdit = useCallback(
@@ -275,25 +251,17 @@ export function DataProvider({ children }: DataProviderProps) {
     loadSettings();
   }, []);
 
-  useEffect(() => {
-    if (errors?.length && !submittedErrors.length) {
-      setSubmittedErrors(errors);
-      setErrorSubmitted(true);
-    }
-  }, [errors]);
+  // useCallback to save memory cause the app will not recreate the function
+  // memo to avoid unnecessary rerendering when usind useData with to many states in components
+  // useMemo avoid recreating variable and constants to avoid space
 
   const contextValue = useMemo(
     () => ({
       openResults,
       setOpenResults,
-
       errors,
       errorsCopy,
       setErrorsCopy,
-      submittedErrors,
-      setSubmittedErrors,
-      errorSubmitted,
-      setErrorSubmitted,
       handleErrors,
       demo,
       settings,
@@ -309,7 +277,6 @@ export function DataProvider({ children }: DataProviderProps) {
       setDemo,
       setSettings,
       setResultList,
-
       barcodes,
       setBarcodes,
       remTime,
@@ -322,7 +289,6 @@ export function DataProvider({ children }: DataProviderProps) {
       setTestDone,
       pairingCode,
       setPairingCode,
-
       resultsSubmitted,
       setSubmitted,
       reset,
@@ -390,27 +356,14 @@ export function DataProvider({ children }: DataProviderProps) {
       setTestFinishedAt,
       resultSubmitted,
       setResultSubmitted,
-
-      testName,
-      setTestName,
     }),
     [
       openResults,
       errors,
       errorsCopy,
-      submittedErrors,
-      errorSubmitted,
-      handleErrors,
       demo,
       settings,
       resultList,
-      toggleDemo,
-      shutdown,
-      reboot,
-      exit,
-      clearSettings,
-      saveSettings,
-      toggleLid,
       barcodes,
       remTime,
       testrun,
@@ -418,9 +371,6 @@ export function DataProvider({ children }: DataProviderProps) {
       testDone,
       pairingCode,
       resultsSubmitted,
-      reset,
-      resetBarcodes,
-      loadSettings,
       submitFilter,
       updateAvailable,
       currentUser,
@@ -429,8 +379,6 @@ export function DataProvider({ children }: DataProviderProps) {
       isModal,
       isNinetySix,
       paramTrans,
-      handleSettingChange,
-      handleSettings,
       isStatus,
       selectedMethod,
       deviceStatus,
@@ -443,8 +391,6 @@ export function DataProvider({ children }: DataProviderProps) {
       offlineMode,
       isLidOpen,
       selectedPosition,
-      handleOpenEdit,
-      handleError,
       idleTimestamp,
       checkForTestResultFile,
       lotNumber,
@@ -454,7 +400,6 @@ export function DataProvider({ children }: DataProviderProps) {
       viewType,
       testFinishedAt,
       resultSubmitted,
-      testName,
     ]
   );
   return (

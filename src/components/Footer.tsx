@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import nuDiagnostics from "../assets/Logos/nu-diagnostics/nu-diagnostics white.png";
 import { useData, useTranslation } from "../hooks";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ import "moment/dist/locale/fr";
 import "moment/dist/locale/en-gb";
 
 const Footer = () => {
-  const { settings, dbConnection, testName } = useData();
+  const { settings, dbConnection, selectedMethod } = useData();
   const navigate = useNavigate();
   const { locale } = useTranslation();
   const location = useLocation();
@@ -39,6 +39,10 @@ const Footer = () => {
     }, 1000);
     return () => clearInterval(interval);
   }, [stateTime]);
+
+  const testName = settings.account.testprocedures.find(
+    (test) => test.id === selectedMethod
+  )?.labelDE;
 
   return (
     <div className="Footer">

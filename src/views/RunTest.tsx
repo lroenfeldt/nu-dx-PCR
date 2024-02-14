@@ -4,8 +4,6 @@ import { useData, useTranslation } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import functions from "../utils/functions";
 import { Oval } from "react-loader-spinner";
-import { errorProps } from "../constants/errorProps";
-import { ErrorType } from "../types/interfaces/useErrors";
 import useErrors from "../hooks/useErrors";
 
 const RunTest = () => {
@@ -20,7 +18,6 @@ const RunTest = () => {
     isNinetySix,
     selectedMethod,
     setTestFinishedAt,
-    testName,
   } = useData();
   const { registerErrors } = useErrors();
   const procedure = settings.account.testprocedures.find(
@@ -38,12 +35,7 @@ const RunTest = () => {
   const finishedAt = startedAt + startTime;
 
   const showCancel = () => {
-    let newErrors = errors.filter((error) => error.type !== "cancelTest");
-    newErrors.push({
-      timeStamp: Date.now(),
-      ...errorProps.cancelTest,
-    });
-    setErrors(newErrors);
+    registerErrors("cancelTest");
   };
 
   useEffect(() => {
@@ -73,11 +65,6 @@ const RunTest = () => {
     return () => clearInterval(countdown);
   }, [remTime]);
 
-  useEffect(() => {
-    console.log(selectedMethod);
-    console.log(testName);
-  }, [selectedMethod, testName]);
-
   //Check for result file
   useEffect(() => {
     const checkFile = setInterval(() => {
@@ -98,7 +85,7 @@ const RunTest = () => {
               window.api.logEvents(
                 `Result for test ${testid} could not be moved`
               );
-              registerErrors(ErrorType.moveResults);
+              registerErrors("moveResults");
             } else {
               setTimeout(() => {
                 navigate("/uploadResults");
@@ -111,7 +98,7 @@ const RunTest = () => {
 
         if (finishedAt + 60 * 20 < Math.floor(Date.now() / 1000)) {
           setWaitingForResults(false);
-          registerErrors(ErrorType.testFailed);
+          registerErrors("testFailed");
           clearInterval(checkFile);
         }
       }
@@ -120,6 +107,9 @@ const RunTest = () => {
   }, []);
 
   const displayTime = functions.secondsToHms(remTime);
+  const testName = settings.account.testprocedures.find(
+    (test) => test.id === selectedMethod
+  )?.labelDE;
 
   return (
     <div className="RunTest">
@@ -127,7 +117,7 @@ const RunTest = () => {
         <>
           <h2>
             {flapClosed
-              ? t("runTest.testRunning") + " " + testName
+              ? `${testName} ${t("runTest.testRunning")}`
               : t("runTest.testRunningFlapClose")}
           </h2>
           <div className="progressVisualization">

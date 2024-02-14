@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useData, useTranslation } from "../hooks";
 import { IBarcode, IError } from "../types/interfaces/interfaces";
 import { ITestProcedure } from "../types/interfaces/settings";
-import { errorProps } from "../constants/errorProps";
+import useErrors from "../hooks/useErrors";
 
 const TestReady: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -25,6 +25,8 @@ const TestReady: React.FC = () => {
     isNinetySix,
     selectedMethod,
   } = useData();
+
+  const { registerErrors } = useErrors();
 
   useEffect(() => {
     setTestid(settings.isDev ? "demo" : uuidv4());
@@ -77,18 +79,10 @@ const TestReady: React.FC = () => {
       xml_output,
       settings,
       barcodes,
-      selectedMethod
+      selectedMethod as string
     );
     if (!testStarted) {
-      setErrors((prevErrors: IError[]) => [
-        ...prevErrors,
-        {
-          timeStamp: Date.now(),
-          code: errorProps.startTest.code,
-          type: "startTest",
-          message: t("errors.failedToStartTest"),
-        },
-      ]);
+      registerErrors("startTest");
       setDeviceStatus("IDLE");
     } else {
       navigate("/testRunning");

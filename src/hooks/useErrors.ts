@@ -2,10 +2,11 @@ import { ErrorType, IErrObj } from "../types/interfaces/useErrors";
 import { IError } from "../types/interfaces/interfaces";
 import { useData } from "./useData";
 import { useTranslation } from "./useTranslation";
+import { useCallback } from "react";
 
 function useErrors() {
   const { t } = useTranslation();
-  const { setErrors } = useData();
+  const { setErrors, errors } = useData();
 
   const errorsHolder: Record<ErrorType, IErrObj> = {
     [ErrorType.moveResults]: {
@@ -18,10 +19,15 @@ function useErrors() {
       type: ErrorType.setting,
       message: t("errors.failedTosaveSettings"),
     },
+    [ErrorType.default]: {
+      code: 300,
+      type: ErrorType.default,
+      message: t("default.errors.errorOpenLidWhileRunning"),
+    },
     [ErrorType.lid]: {
       code: 400,
       type: ErrorType.lid,
-      message: t(""),
+      message: t(`default.errors.${ErrorType.lid}`),
     },
     [ErrorType.read]: {
       code: 500,
@@ -29,27 +35,27 @@ function useErrors() {
       message: t(""),
     },
     [ErrorType.failedToReadTestData]: {
-      code: 500,
+      code: 501,
       type: ErrorType.failedToReadTestData,
       message: t("errors.failedToReadTestData"),
     },
     [ErrorType.failedToReadResultData]: {
-      code: 500,
+      code: 502,
       type: ErrorType.failedToReadResultData,
       message: t("errors.failedToReadResultData"),
     },
     [ErrorType.submit]: {
-      code: 60012132,
+      code: 600,
       type: ErrorType.submit,
       message: t("errors.failedToSubmitResults"),
     },
     [ErrorType.failedToSaveControlSample]: {
-      code: 600,
+      code: 601,
       type: ErrorType.failedToSaveControlSample,
       message: t("errors.failedToSaveControlSample"),
     },
     [ErrorType.failedToMoveSubmittedFiles]: {
-      code: 600,
+      code: 602,
       type: ErrorType.failedToMoveSubmittedFiles,
       message: t("errors.failedToMoveSubmittedFiles"),
     },
@@ -61,7 +67,12 @@ function useErrors() {
     [ErrorType.dbCon]: {
       code: 800,
       type: ErrorType.dbCon,
-      message: t(""),
+      message: t("errors.dbConnectionError"),
+    },
+    [ErrorType.dbConnection]: {
+      code: 800,
+      type: ErrorType.dbConnection,
+      message: t("errors.checkTestSampleFail"),
     },
     [ErrorType.checkInternetConnection]: {
       code: 900,
@@ -84,12 +95,12 @@ function useErrors() {
       message: t("errors.deviceAuthenticationFailedZeroRemDays"),
     },
     [ErrorType.offlineNotAllow]: {
-      code: 1000,
+      code: 1001,
       type: ErrorType.offlineNotAllow,
       message: t("errors.checkInternetConnection"),
     },
     [ErrorType.stillOffline]: {
-      code: 1000,
+      code: 1002,
       type: ErrorType.stillOffline,
       message: t("common.stillOffline"),
     },
@@ -99,7 +110,7 @@ function useErrors() {
       message: t("errors.deviceAuthenticationFailedRetry"),
     },
     [ErrorType.authentication]: {
-      code: 2000,
+      code: 2001,
       type: ErrorType.authentication,
       message: t("errors.deviceAuthenticationFailedRetry"),
     },
@@ -125,15 +136,27 @@ function useErrors() {
     },
   };
 
-  const registerErrors = (errorType: keyof typeof ErrorType) => {
-    setErrors((prevErrors: IError[]) =>
-      prevErrors
-        .filter((err) => err.type != errorType)
-        .concat({ ...errorsHolder[errorType], timeStamp: Date.now() })
-    );
-  };
+  const registerErrors = useCallback(
+    (errorType: keyof typeof ErrorType) => {
+      setErrors((prevErrors: IError[]) =>
+        prevErrors
+          .filter((err) => err.type != errorType)
+          .concat({ ...errorsHolder[errorType], timeStamp: Date.now() })
+      );
+    },
+    [errors]
+  );
 
-  return { registerErrors };
+  const clearErrors = useCallback(
+    (errorType: keyof typeof ErrorType) => {
+      setErrors((prevErrors: IError[]) =>
+        prevErrors.filter((err) => err.type != errorType)
+      );
+    },
+    [errors]
+  );
+
+  return { registerErrors, clearErrors };
 }
 
 export default useErrors;

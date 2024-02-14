@@ -1,11 +1,5 @@
 import { ITestObject } from "../../../electron/interfaces/interfaces";
-import {
-  IBarcode,
-  IErrObject,
-  IError,
-  IErrorCopy,
-  IErrorSubmitted,
-} from "./interfaces";
+import { IBarcode, IError, IErrorCopy } from "./interfaces";
 import { IAccountUser, ISettings } from "./settings";
 
 export interface IUseData {
@@ -20,12 +14,6 @@ export interface IUseData {
 
   errorsCopy: IErrorCopy[];
   setErrorsCopy: React.Dispatch<React.SetStateAction<IErrorCopy[]>>;
-
-  submittedErrors: IErrorSubmitted[];
-  setSubmittedErrors: React.Dispatch<React.SetStateAction<IErrorSubmitted[]>>;
-
-  errorSubmitted: boolean;
-  setErrorSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 
   demo: boolean;
   setDemo: React.Dispatch<React.SetStateAction<boolean>>;
@@ -166,7 +154,4 @@ export interface IUseData {
 
   selectedTestId: string;
   setSelectedTestId: React.Dispatch<React.SetStateAction<string>>;
-
-  testName: string;
-  setTestName: React.Dispatch<React.SetStateAction<string>>;
 }

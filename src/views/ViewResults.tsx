@@ -26,7 +26,6 @@ import {
   TableRow,
 } from "../types/interfaces/interfaces";
 import { IConfigFile, ITestProcedure } from "../types/interfaces/settings";
-import { ErrorType } from "../types/interfaces/useErrors";
 import useErrors from "../hooks/useErrors";
 
 const ViewResults: React.FC = () => {
@@ -97,7 +96,7 @@ const ViewResults: React.FC = () => {
     } catch (err) {
       console.log(err);
       window.api.logEvents(`fetchResult: ${err}`);
-      registerErrors(ErrorType.failedToReadTestData);
+      registerErrors("failedToReadTestData");
       return;
     }
 
@@ -136,7 +135,7 @@ const ViewResults: React.FC = () => {
     } catch (err) {
       console.log(err);
       window.api.logEvents(`parseResults: ${err}`);
-      registerErrors(ErrorType.failedToReadResultData);
+      registerErrors("failedToReadResultData");
       return;
     }
   };

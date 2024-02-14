@@ -12,8 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { useData, useTranslation } from "../hooks";
 import { IoMdCloseCircle } from "react-icons/io";
 import { ITestProcedure } from "../types/interfaces/settings";
-import { errorProps } from "../constants/errorProps";
 import { IBarcode } from "../types/interfaces/interfaces";
+import useErrors from "../hooks/useErrors";
 
 const BarcodeInput = () => {
   const {
@@ -29,7 +29,7 @@ const BarcodeInput = () => {
     isNinetySix,
     selectedMethod,
   } = useData();
-
+  const { registerErrors } = useErrors();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const textInput: React.RefObject<HTMLInputElement> = useRef(null);
@@ -312,7 +312,6 @@ const BarcodeInput = () => {
 
     let retestNumber = 0;
     let newBarcodeValue: string = "";
-    let newErrors = errors.filter((error) => error.type !== "dbCon");
 
     let hit = true;
     let dbError = false;
@@ -345,32 +344,17 @@ const BarcodeInput = () => {
             } data: ${JSON.stringify(err.response.data)}`
           );
           dbError = true;
-          newErrors.push({
-            code: errorProps.dbCon.code,
-            timeStamp: Date.now(),
-            type: "dbCon",
-            message: t("errors.checkTestSampleFail"),
-          });
+          registerErrors("dbConnection");
         } else if (err.request) {
           console.log(err.request);
           window.api.logEvents(`request: ${JSON.stringify(err.request)}`);
           dbError = true;
-          newErrors.push({
-            code: errorProps.dbCon.code,
-            timeStamp: Date.now(),
-            type: "dbCon",
-            message: t("errors.dbConnectionError"),
-          });
+          registerErrors("dbCon");
         } else {
           console.log("Error", err.message);
           window.api.logEvents(`Error: ${err.message}`);
           dbError = true;
-          newErrors.push({
-            code: errorProps.dbCon.code,
-            timeStamp: Date.now(),
-            type: "dbCon",
-            message: t("errors.dbConnectionError"),
-          });
+          registerErrors("dbCon");
         }
       }
     }
@@ -568,7 +552,6 @@ const BarcodeInput = () => {
         setLoading(true);
 
         let askRetest = false;
-        let newErrors = errors.filter((error) => error.type !== "dbCon");
 
         cancelToken = axios.CancelToken.source();
 
@@ -606,12 +589,7 @@ const BarcodeInput = () => {
             if (err.code == "ERR_NETWORK") {
               console.log(err.request);
               window.api.logEvents(`request: ${JSON.stringify(err.request)}`);
-              newErrors.push({
-                type: "dbCon",
-                message: t("errors.dbConnectionError"),
-                code: errorProps.dbCon.code,
-                timeStamp: Date.now(),
-              });
+              registerErrors("dbCon");
               validationErr = t("errors.notVerifiedDbError");
             }
             if (err.response) {
@@ -630,28 +608,18 @@ const BarcodeInput = () => {
               }
             } else if (err.request) {
               window.api.logEvents(`request: ${JSON.stringify(err.request)}`);
-              newErrors.push({
-                type: "dbCon",
-                message: t("errors.dbConnectionError"),
-                code: errorProps.dbCon.code,
-                timeStamp: Date.now(),
-              });
+              registerErrors("dbCon");
+
               validationErr = t("errors.notVerifiedDbError");
             } else {
               console.log("Error", err.message);
               window.api.logEvents(`Error: ${err.message}`);
-              newErrors.push({
-                type: "dbCon",
-                message: t("errors.dbConnectionError"),
-                code: errorProps.dbCon.code,
-                timeStamp: Date.now(),
-              });
+              registerErrors("dbCon");
+
               validationErr = t("errors.notVerifiedDbError");
             }
           }
         } finally {
-          setErrors(newErrors);
-
           newBarcode = {
             ...newBarcode,
             checking: false,

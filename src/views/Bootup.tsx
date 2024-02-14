@@ -5,7 +5,6 @@ import { Oval } from "react-loader-spinner";
 import pairingApi from "../api/pairingCode";
 import { useNavigate } from "react-router-dom";
 import { useData, useApi, useTranslation } from "../hooks";
-import { ErrorType } from "../types/interfaces/useErrors";
 import useErrors from "../hooks/useErrors";
 
 const Bootup = () => {
@@ -34,7 +33,7 @@ const Bootup = () => {
 
     if (settings.device.hardwareId === null) {
       window.api.logEvents("Couldnt read MAC Adress from Settings.");
-      registerErrors(ErrorType.checkInternetConnection);
+      registerErrors("checkInternetConnection");
     } else {
       try {
         window.api.logEvents("trying to fetch pairing code");
@@ -62,7 +61,7 @@ const Bootup = () => {
           response.problem == "NETWORK_ERROR" ||
           response?.problem == "CONNECTION_ERROR"
         ) {
-          registerErrors(ErrorType.pairingDbError);
+          registerErrors("pairingDbError");
         }
 
         window.api.logEvents(`getPairingCodeApi: ${JSON.stringify(response)}`);
@@ -81,11 +80,11 @@ const Bootup = () => {
               err.response.status
             )}  data:${JSON.stringify(err.response?.data)} `
           );
-          registerErrors(ErrorType.deviceRegistrationFailed);
+          registerErrors("deviceRegistrationFailed");
         } else if (err.request) {
           console.error(err.request);
           window.api.logEvents(`request:${err}`);
-          registerErrors(ErrorType.pairingDbError);
+          registerErrors("pairingDbError");
         } else {
           console.error("Error", err.message);
           window.api.logEvents(`Error:${JSON.stringify(err.message)}`);
@@ -213,7 +212,7 @@ const Bootup = () => {
         window.api.logEvents(`request:${JSON.stringify(response)}`);
         if (settings.account.allowOffline) {
           if (settings.account.allowDaysOffline == 0) {
-            registerErrors(ErrorType.checkInternetConnection);
+            registerErrors("checkInternetConnection");
           } else if (remDays > 0 && settings.account.allowDaysOffline != 0) {
             setErrors(
               errors
@@ -232,12 +231,12 @@ const Bootup = () => {
                 })
             );
           } else if (remDays === 0 && settings.account.allowDaysOffline != 0) {
-            registerErrors(ErrorType.offline);
+            registerErrors("offline");
           } else {
-            registerErrors(ErrorType.authentication);
+            registerErrors("authentication");
           }
         } else {
-          registerErrors(ErrorType.offlineNotAllow);
+          registerErrors("offlineNotAllow");
         }
       }
     } catch (err: any) {
@@ -283,7 +282,7 @@ const Bootup = () => {
       getPairingCode();
     }
     if (!settings.device.wellCount || settings.device.wellCount === 0) {
-      registerErrors(ErrorType.init);
+      registerErrors("init");
     }
   }, [settings]);
 

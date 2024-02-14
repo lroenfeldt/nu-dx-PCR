@@ -3,7 +3,6 @@ import QRCode from "qrcode.react";
 import { useApi, useData, useTranslation } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import pairingCodeApi from "../api/pairingCode";
-import { errorProps } from "../constants/errorProps";
 
 const Pairing: FC = () => {
   const navigate = useNavigate();

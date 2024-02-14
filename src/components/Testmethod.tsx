@@ -5,11 +5,10 @@ import { useCallback, useEffect, useState } from "react";
 
 const Testmethod: React.FC<TestmethodProps> = ({ title, status, methodid }) => {
   const navigate = useNavigate();
-  const { settings, setSelectedMethod, setTestName } = useData();
+  const { settings, setSelectedMethod } = useData();
 
   const selectTest = () => {
     setSelectedMethod(methodid as string);
-    setTestName(title);
     if (
       settings.account.hasUserAuthentification ||
       settings.account.askForLot

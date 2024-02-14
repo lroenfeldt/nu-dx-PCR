@@ -16,10 +16,6 @@ export const useStatus = (): UseStatusReturnType => {
     errors,
     testFinishedAt,
     selectedMethod,
-    errorSubmitted,
-    setErrorSubmitted,
-    submittedErrors,
-    setSubmittedErrors,
   } = useData();
 
   const ping = useCallback(async () => {
@@ -32,19 +28,15 @@ export const useStatus = (): UseStatusReturnType => {
           cyclerVersion: settings.version,
           testId: selectedMethod,
           testFinishedAt: testFinishedAt,
-          errors: errorSubmitted ? submittedErrors : [],
+          errors: errors.filter((err) => !err.isSubmitted),
         }
       );
 
-      const jsonData = JSON.parse(response.config?.data);
-      if (jsonData.errors.length > 0) {
-        setErrorSubmitted(false);
-        setSubmittedErrors([]);
-      }
-      console.log(jsonData.errors);
-
       const responseData = response.data as ISettings;
       if (response.ok) {
+        setErrors((prevErr) =>
+          prevErr.map((err) => ({ ...err, isSubmitted: true }))
+        );
         let newSettings = {
           ...settings,
           account: {
