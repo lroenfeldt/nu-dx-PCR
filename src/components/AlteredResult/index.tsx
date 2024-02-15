@@ -1,7 +1,7 @@
+import { IAlteredResult } from "../../types/components/index";
 import { useData } from "../../hooks";
 import { hexToRGB } from "../../utils/helper";
 import { SlPencil } from "react-icons/sl";
-import { IAlteredResult } from "../../types/interfaces/interfaces";
 
 const AlteredResult = ({
   activeBarcode,

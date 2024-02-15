@@ -4,8 +4,7 @@ import jwt_decode from "jwt-decode";
 import { Oval } from "react-loader-spinner";
 import pairingApi from "../api/pairingCode";
 import { useNavigate } from "react-router-dom";
-import { useData, useApi, useTranslation } from "../hooks";
-import useErrors from "../hooks/useErrors";
+import { useData, useApi, useTranslation, useErrors } from "../hooks";
 
 const Bootup = () => {
   const navigate = useNavigate();

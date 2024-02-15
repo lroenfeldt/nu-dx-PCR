@@ -4,7 +4,6 @@ export enum ErrorType {
   default = "default",
   lid = "lid",
   read = "read",
-  failedToReadTestData = "failedToReadTestData",
   failedToReadResultData = "failedToReadResultData",
   submit = "submit",
   failedToSaveControlSample = "failedToSaveControlSample",

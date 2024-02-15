@@ -1,5 +1,5 @@
-import './css/style.css';
-import { IArrowBox } from '../../types/interfaces/interfaces';
+import "./css/style.css";
+import { IArrowBox } from "../../types/components";
 
 function ArrowBox({ children, direction, style }: IArrowBox) {
   return (

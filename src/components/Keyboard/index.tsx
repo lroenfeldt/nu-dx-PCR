@@ -3,7 +3,7 @@ import { IoCloseCircle } from "react-icons/io5";
 import SimpleKeyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
 import { useEffect, useState, useRef, memo } from "react";
-import { IKeyboardRef } from "../../types/interfaces/interfaces";
+import { IKeyboardRef } from "../../types/components/index";
 import { IKeyboard } from "../../types/components";
 
 function Keyboard(props: IKeyboard) {

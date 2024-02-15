@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useState } from "react";
-import { IUseStick } from "../types/interfaces/interfaces";
+import { IUseSticky } from "../types/interfaces/interfaces";
 
-const useSticky = ({ top, id, stickyClass }: IUseStick) => {
+const useSticky = ({ top, id, stickyClass }: IUseSticky) => {
   const [isSticky, setIsSticky] = useState(false);
 
   const handleScroll = useCallback(() => {

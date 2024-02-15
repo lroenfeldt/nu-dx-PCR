@@ -1,6 +1,6 @@
 import { IoClose, IoCheckmarkSharp } from "react-icons/io5";
-import { ICheckmark } from "../types/interfaces/interfaces";
 import { useData } from "../hooks";
+import { ICheckmark } from "../types/components/index";
 
 const Checkmark = ({ barcode, style, testmethod }: ICheckmark) => {
   const { isNinetySix } = useData();

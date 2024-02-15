@@ -1,7 +1,6 @@
+import { TestmethodProps } from "../types/components/index";
 import { useData } from "../hooks";
 import { useNavigate } from "react-router-dom";
-import { TestmethodProps } from "../types/interfaces/interfaces";
-import { useCallback, useEffect, useState } from "react";
 
 const Testmethod: React.FC<TestmethodProps> = ({ title, status, methodid }) => {
   const navigate = useNavigate();

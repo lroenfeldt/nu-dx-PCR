@@ -218,10 +218,16 @@ export function DataProvider({ children }: DataProviderProps) {
     },
     [settings, errors, isNinetySix, barcodes]
   );
-
   const toggleLid = useCallback(() => {
+    let newErrors = errors.filter((error) => error.type !== "lid");
     if (deviceStatus == "RUNNING") {
-      registerErrors("default");
+      newErrors.push({
+        code: 400,
+        type: "default",
+        message: t("errors.errorOpenLidWhileRunning"),
+        timeStamp: Date.now(),
+      });
+      console.log(deviceStatus);
       return;
     }
     if (window.api.toggleLid()) {
@@ -234,6 +240,7 @@ export function DataProvider({ children }: DataProviderProps) {
         : "errorOpenLid";
       registerErrors("lid");
     }
+    setErrors(newErrors);
   }, [deviceStatus, isNinetySix, isLidOpen, errors]);
 
   const handleOpenEdit = useCallback(
@@ -250,10 +257,6 @@ export function DataProvider({ children }: DataProviderProps) {
   useEffect(() => {
     loadSettings();
   }, []);
-
-  // useCallback to save memory cause the app will not recreate the function
-  // memo to avoid unnecessary rerendering when usind useData with to many states in components
-  // useMemo avoid recreating variable and constants to avoid space
 
   const contextValue = useMemo(
     () => ({

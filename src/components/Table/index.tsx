@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { useData, useSticky } from "../../hooks";
 import "./css/table.css";
-import { ITableProps } from "../../types/interfaces/interfaces";
+import { ITableProps } from "../../types/components/index";
 
 const Table: React.FC<ITableProps> = ({ th, tr }) => {
   const { settings, selectedMethod } = useData();

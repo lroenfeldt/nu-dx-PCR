@@ -11,7 +11,6 @@ function useBackgroundProcesses() {
     isLidOpen,
     toggleLid,
     shutdown,
-    loadSettings,
     resultList,
     setResultList,
     setIsResultFilePresent,

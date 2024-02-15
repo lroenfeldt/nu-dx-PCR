@@ -4,12 +4,7 @@ import { VscChromeClose } from "react-icons/vsc";
 import "./css/SelectTestResults.css";
 import { ITestResult } from "../../types/interfaces/settings";
 import { IBarcode } from "../../types/interfaces/interfaces";
-
-interface Props {
-  onSelect: () => void;
-  onClose: () => void;
-  isVisible?: boolean;
-}
+import { Props } from "src/types/components";
 
 const SelectTestResults: React.FC<Props> = ({ onSelect, onClose }) => {
   const {

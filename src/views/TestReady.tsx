@@ -3,10 +3,9 @@ import { v4 as uuidv4 } from "uuid";
 import { Oval } from "react-loader-spinner";
 import { RiAlertFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import { useData, useTranslation } from "../hooks";
+import { useData, useErrors, useTranslation } from "../hooks";
 import { IBarcode, IError } from "../types/interfaces/interfaces";
 import { ITestProcedure } from "../types/interfaces/settings";
-import useErrors from "../hooks/useErrors";
 
 const TestReady: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);

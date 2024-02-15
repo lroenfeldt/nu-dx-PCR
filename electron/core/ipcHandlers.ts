@@ -110,9 +110,7 @@ export function getResultHandler(): void {
         resultFile = fs.readFileSync(filepath, "utf-8");
       } catch (error: any) {
         console.error(`error accessing result file for test ${testid}`);
-
         logger(`error accessing result file for test ${testid}`);
-
         throw error;
       }
 

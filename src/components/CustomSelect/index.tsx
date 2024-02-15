@@ -1,9 +1,15 @@
-import { ChangeEvent, useState } from 'react';
-import './css/styles.css';
-import { ICustomSelect } from '../../types/interfaces/interfaces';
+import { ChangeEvent, useState } from "react";
+import "./css/styles.css";
+import { ICustomSelect } from "../../types/components/index";
 
-const CustomSelect: React.FC<ICustomSelect> = ({ options, defaultValue, onChange }) => {
-  const [selectedOption, setSelectedOption] = useState<string>(defaultValue || options[0]);
+const CustomSelect: React.FC<ICustomSelect> = ({
+  options,
+  defaultValue,
+  onChange,
+}) => {
+  const [selectedOption, setSelectedOption] = useState<string>(
+    defaultValue || options[0]
+  );
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(e.target.value);
@@ -14,7 +20,11 @@ const CustomSelect: React.FC<ICustomSelect> = ({ options, defaultValue, onChange
 
   return (
     <div className="custom-select-container">
-      <select className="custom-select" value={selectedOption} onChange={handleChange}>
+      <select
+        className="custom-select"
+        value={selectedOption}
+        onChange={handleChange}
+      >
         {options.map((option, index) => (
           <option key={index} value={option}>
             {option}

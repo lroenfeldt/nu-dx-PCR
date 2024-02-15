@@ -3,8 +3,6 @@ import { IBarcode, IError, IErrorCopy } from "./interfaces";
 import { IAccountUser, ISettings } from "./settings";
 
 export interface IUseData {
-  pushErrors: () => void;
-
   openResults: boolean;
   setOpenResults: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -143,6 +141,7 @@ export interface IUseData {
 
   failedSubmittingResults: string[];
   setFailedSubmittingResults: React.Dispatch<React.SetStateAction<string[]>>;
+
   viewType: string;
   setViewType: React.Dispatch<React.SetStateAction<string>>;
 
@@ -151,7 +150,4 @@ export interface IUseData {
 
   resultSubmitted: boolean;
   setResultSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-
-  selectedTestId: string;
-  setSelectedTestId: React.Dispatch<React.SetStateAction<string>>;
 }

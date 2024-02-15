@@ -9,34 +9,22 @@ import { ITestProcedure } from "../types/interfaces/settings";
 const TestDone = () => {
   const {
     reset,
-    demo,
     testid,
     errors,
     setErrors,
     settings,
     offlineMode,
     setOfflineMode,
-    barcodes,
-    setBarcodes,
     testDone,
-    setTestDone,
     resultsSubmitted,
-    setSubmitted,
     currentUser,
     setDeviceStatus,
     selectedMethod,
-    USBPresent
+    USBPresent,
   } = useData();
   const userId = currentUser ? currentUser?.id : "";
   const navigate = useNavigate();
-  const {
-    checkUSB,
-    saveToUSB,
-    submitAll,
-    getResults,
-    submitResult,
-    saveAllToUSB,
-  } = useResults();
+  const { checkUSB, saveToUSB, submitResult } = useResults();
   const { t, locale } = useTranslation();
   const testmethod = settings.account.testprocedures.find(
     (testmethod) => testmethod.id === selectedMethod

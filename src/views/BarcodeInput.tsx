@@ -9,20 +9,17 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import axios from "axios";
 import urls from "../config/settings";
 import { useNavigate } from "react-router-dom";
-import { useData, useTranslation } from "../hooks";
+import { useData, useErrors, useTranslation } from "../hooks";
 import { IoMdCloseCircle } from "react-icons/io";
 import { ITestProcedure } from "../types/interfaces/settings";
 import { IBarcode } from "../types/interfaces/interfaces";
-import useErrors from "../hooks/useErrors";
 
 const BarcodeInput = () => {
   const {
     reset,
-    errors,
     barcodes,
     settings,
     toggleLid,
-    setErrors,
     setLoading,
     offlineMode,
     setBarcodes,

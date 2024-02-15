@@ -6,15 +6,9 @@ import AlteredResult from "../AlteredResult";
 import ChangeResults from "../ChangeResults";
 import { VscGraphLine } from "react-icons/vsc";
 import { useLocation } from "react-router-dom";
-import { ITestProcedure } from "../../types/interfaces/settings";
-import { IBarcode } from "../../types/interfaces/interfaces";
 import { useData, useTranslation } from "../../hooks";
 import { useNavigate } from "react-router-dom";
-
-interface ResultsFooterProps {
-  activeBarcode: IBarcode;
-  testmethod: ITestProcedure;
-}
+import { ResultsFooterProps } from "src/types/components";
 
 const ResultsFooter: React.FC<ResultsFooterProps> = ({
   activeBarcode,

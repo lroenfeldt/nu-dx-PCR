@@ -6,7 +6,7 @@ import { VscGraphLine } from "react-icons/vsc";
 import { useNavigate } from "react-router-dom";
 import { TbGripHorizontal } from "react-icons/tb";
 import { parseResults } from "../utils/parseResults";
-import { useData, useTranslation, useResults } from "../hooks";
+import { useData, useTranslation, useResults, useErrors } from "../hooks";
 import urls from "../config/settings";
 import {
   Table,
@@ -26,7 +26,6 @@ import {
   TableRow,
 } from "../types/interfaces/interfaces";
 import { IConfigFile, ITestProcedure } from "../types/interfaces/settings";
-import useErrors from "../hooks/useErrors";
 
 const ViewResults: React.FC = () => {
   const [active, setActive] = useState<number>(0);
@@ -96,7 +95,7 @@ const ViewResults: React.FC = () => {
     } catch (err) {
       console.log(err);
       window.api.logEvents(`fetchResult: ${err}`);
-      registerErrors("failedToReadTestData");
+      registerErrors("read");
       return;
     }
 
@@ -385,7 +384,6 @@ const ViewResults: React.FC = () => {
             <Button onClick={() => window.history.go(-1)}>
               {t("common.back")}
             </Button>
-            {/* {USBPresent ?  <button onClick={() => saveToUSB()}>Auf USB Speichern</button> :  <button className='disabled' onClick={() => saveToUSB()}>Auf USB Speichern</button>} */}
           </ButtonArea>
         </div>
       </>

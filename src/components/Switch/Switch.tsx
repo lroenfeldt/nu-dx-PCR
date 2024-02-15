@@ -1,4 +1,4 @@
-import { ISwitch } from "../../types/interfaces/interfaces";
+import { ISwitch } from "../../types/components/index";
 import "./Switch.css";
 
 const Switch = ({ label, onClick, checked = false }: ISwitch) => {

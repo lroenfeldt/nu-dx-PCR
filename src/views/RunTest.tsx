@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { ProgressBar } from "../components";
-import { useData, useTranslation } from "../hooks";
+import { useData, useErrors, useTranslation } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import functions from "../utils/functions";
 import { Oval } from "react-loader-spinner";
-import useErrors from "../hooks/useErrors";
 
 const RunTest = () => {
   const navigate = useNavigate();
   const {
     demo,
     testid,
-    errors,
     settings,
-    setErrors,
     toggleLid,
     isNinetySix,
     selectedMethod,

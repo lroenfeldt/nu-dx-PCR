@@ -1,9 +1,11 @@
-import { useTranslation } from '../../hooks';
-import { ITestStatus } from '../../types/interfaces/interfaces';
+import { ITestStatus } from "../../types/components";
+import { useTranslation } from "../../hooks";
 
 function TestStatus({ status }: ITestStatus) {
   const { t } = useTranslation();
-  return <div className={`status ${status}`}>{t(`default.common.${status}`)}</div>;
+  return (
+    <div className={`status ${status}`}>{t(`default.common.${status}`)}</div>
+  );
 }
 
 export default TestStatus;

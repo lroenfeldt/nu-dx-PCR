@@ -1,4 +1,4 @@
-import { useData, useTranslation } from "../hooks";
+import { useData } from "../hooks";
 import {
   extractBarcodes,
   parseResultsDB,
@@ -46,7 +46,6 @@ const useResults = () => {
   } = useData();
 
   const location = useLocation();
-  const { t } = useTranslation();
   const userId = currentUser ? currentUser?.id : "";
   const { registerErrors } = useErrors();
 
@@ -256,7 +255,7 @@ const useResults = () => {
     } catch (err) {
       console.error(err);
       window.api.logEvents(`saveToUSB: ${err}`);
-      registerErrors("failedToReadTestData");
+      registerErrors("read");
       if (location.pathname == "/ResultList") setWriting(testid, false);
       return false;
     }
@@ -379,7 +378,7 @@ const useResults = () => {
       );
 
       if (!settings?.account?.autoSubmitResults) {
-        registerErrors("failedToReadTestData");
+        registerErrors("read");
       }
       setSubmitting(false);
       setSubmittingSingle(testid, false);

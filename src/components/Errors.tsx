@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect } from "react";
-import { useData, useResults, useTranslation } from "../hooks";
+import { useData, useErrors, useResults, useTranslation } from "../hooks";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IError, IErrorCopy } from "../types/interfaces/interfaces";
 import { IHideErrorProps } from "../types/components";
-import useErrors from "../hooks/useErrors";
 
 const Errors: React.FC = () => {
   const {
@@ -261,11 +260,7 @@ const Errors: React.FC = () => {
             </div>
           );
         }
-        if (
-          error.type === "read" ||
-          error.type === "failedToReadTestData" ||
-          error.type === "failedToReadResultData"
-        ) {
+        if (error.type === "read" || error.type === "failedToReadResultData") {
           return (
             <div key={i} className="errorMessage">
               <p>{error.message}</p>

@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
+import React, { memo, useCallback } from "react";
 import { FiLogOut } from "react-icons/fi";
 import ArrowBox from "../ArrowBox";
 import deFlag from "../../assets/images/flags/de.png";
@@ -11,10 +11,7 @@ import Dropdown from "../Dropdown/Dropdown";
 import Switch from "../Switch/Switch";
 import defaultBarcodes from "../../utils/defaultBarcodes";
 import "./css/settings.css";
-
-interface SettingsProps {
-  visible: boolean;
-}
+import { SettingsProps } from "src/types/components";
 
 const Settings: React.FC<SettingsProps> = ({ visible }) => {
   const {

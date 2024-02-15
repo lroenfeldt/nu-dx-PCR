@@ -1,4 +1,4 @@
-import { IDropdown } from '../types/interfaces/interfaces';
+import { IDropdown } from "../types/components/index";
 
 export default function Dropdown({ title, elements, handleClick }: IDropdown) {
   return (
@@ -6,7 +6,10 @@ export default function Dropdown({ title, elements, handleClick }: IDropdown) {
       <button className="dropbtn">{title.toUpperCase()}</button>
       <div className="dropdown-content">
         {elements.map((element: string) => (
-          <div onClick={() => handleClick && handleClick(element)} key={element}>
+          <div
+            onClick={() => handleClick && handleClick(element)}
+            key={element}
+          >
             {element}
           </div>
         ))}

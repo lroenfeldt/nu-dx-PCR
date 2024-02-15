@@ -20,12 +20,9 @@ const InputContainer: FunctionComponent<IInputContainerProps> = (
     keyboardVisible,
     setKeyboardVisible,
     setIsChargenNrFocused,
-    isChargenNrFocused,
-    inputName,
     setInputName,
     getInputValue,
     setInputs,
-    inputs,
   } = props;
 
   const textInput = useRef<HTMLInputElement>(null);

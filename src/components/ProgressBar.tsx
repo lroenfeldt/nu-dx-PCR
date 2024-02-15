@@ -1,4 +1,4 @@
-import { IProgressBar } from '../types/interfaces/interfaces';
+import { IProgressBar } from "../types/components";
 
 const ProgressBar = ({ startTime, remTime }: IProgressBar) => {
   let progress = 100 - (100 / startTime) * remTime;

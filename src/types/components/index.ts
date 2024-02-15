@@ -1,7 +1,16 @@
-import { ReactNode, CSSProperties, ButtonHTMLAttributes } from "react";
+import {
+  ReactNode,
+  CSSProperties,
+  ButtonHTMLAttributes,
+  HTMLProps,
+  ReactElement,
+} from "react";
 import { IAccountUser, ITestProcedure } from "../interfaces/settings";
-import { IActiveBarcode, IBarcode } from "../interfaces/interfaces";
-import { ITestMethod } from "../interfaces/parseResults";
+import {
+  IActiveBarcode,
+  IBarcode,
+  ITestMethod,
+} from "../interfaces/interfaces";
 
 export interface TBlockProps {
   row?: boolean;
@@ -216,6 +225,14 @@ export interface IWellVisualProps {
   testmethod: ITestProcedure;
 }
 
+export interface IWellVisual {
+  barcode: IBarcode;
+  active: number;
+  markActive: (arg: number) => void;
+  showResults: boolean;
+  testmethod: ITestMethod | null;
+}
+
 export interface IText {
   [x: string]: any;
   id?: "Text";
@@ -269,4 +286,132 @@ export interface IText {
   paddingVertical?: number;
   paddingRight?: number;
   paddingLeft?: number;
+}
+
+export interface ButtonAreaProps extends HTMLProps<HTMLDivElement> {
+  children?: ReactNode;
+  noborder?: boolean;
+}
+
+export interface DropdownProps {
+  children: ReactNode;
+  onChange?: (item: string) => void;
+}
+
+export interface ResultsFooterProps {
+  activeBarcode: IBarcode;
+  testmethod: ITestProcedure;
+}
+
+export interface Props {
+  onSelect: () => void;
+  onClose: () => void;
+  isVisible?: boolean;
+}
+
+export interface SettingsProps {
+  visible: boolean;
+}
+
+export interface ICheckmark {
+  barcode: IBarcode | IActiveBarcode;
+  style?: React.CSSProperties;
+  isNinetySix?: boolean;
+  testmethod: ITestMethod;
+}
+
+export interface IArrowBox {
+  children: JSX.Element;
+  style?: React.CSSProperties;
+  direction: string;
+}
+
+export interface ICustomSelect {
+  options: string[];
+  defaultValue?: string;
+  onChange?: (value: string) => void;
+}
+
+export interface IDropdown {
+  children: React.ReactNode;
+  title: string;
+  elements: string[];
+  handleClick?: (arg: string) => void;
+}
+
+export interface IInput {
+  type?: React.HTMLInputTypeAttribute | undefined;
+  value?: string | number | readonly string[] | undefined;
+  name?: string | undefined;
+  onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
+  placeholder?: string | undefined;
+  label: string;
+}
+
+export interface IKeyboardRef {
+  clearInput: () => void;
+  setInput: (value: string) => void;
+}
+
+export interface IRadioButton {
+  checked: boolean;
+  label: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
+  value?: string | number | readonly string[];
+  name: string;
+}
+
+export interface ISwitch {
+  label: string | number;
+  onClick: () => void;
+  checked: boolean;
+}
+
+export type TableColumn = string | number | ReactElement | false | null;
+export type TableRow = TableColumn[];
+
+export interface ITableProps {
+  th: TableColumn[];
+  tr: TableRow[];
+}
+
+export interface IActivateKeyboard {
+  onClick: () => void;
+}
+
+export interface IScrollController {
+  onClick: (arg: boolean) => void;
+  disabled?: boolean;
+}
+
+export interface IProgressBar {
+  startTime: number;
+  remTime: number;
+}
+
+export interface IToggle {
+  isOn: boolean;
+  handleToggle: () => void;
+}
+
+export interface TestmethodProps {
+  title: string;
+  status: string;
+  methodid: string | number;
+}
+
+export interface IAlteredResult {
+  activeBarcode: IBarcode;
+  testmethod: ITestMethod;
+  style?: React.CSSProperties;
+}
+
+export interface IChangeResults {
+  activeBarcode: IBarcode;
+  testmethod: ITestMethod;
+  isTable?: boolean;
+}
+
+export interface ITestStatus {
+  status: string;
 }

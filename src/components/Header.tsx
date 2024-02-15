@@ -8,9 +8,13 @@ import { Oval } from "react-loader-spinner";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FiSettings, FiPower, FiList } from "react-icons/fi";
 import SelectTestResults from "./SelectTestResults/SelectTestResults";
-import { useData, useTranslation, useBackgroundProcesses } from "../hooks";
+import {
+  useData,
+  useTranslation,
+  useBackgroundProcesses,
+  useErrors,
+} from "../hooks";
 import nuDiagnostics from "../assets/Logos/nu-diagnostics/nu-diagnostics white.png";
-import useErrors from "../hooks/useErrors";
 
 const Header: FC = () => {
   const {
@@ -20,7 +24,6 @@ const Header: FC = () => {
     shutdown,
     menuOpen,
     toggleLid,
-    setErrors,
     toggleDemo,
     resultList,
     offlineMode,

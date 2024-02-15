@@ -1,5 +1,5 @@
-import { BsKeyboard } from 'react-icons/bs';
-import { IActivateKeyboard } from '../types/interfaces/interfaces';
+import { BsKeyboard } from "react-icons/bs";
+import { IActivateKeyboard } from "../types/components/index";
 
 const ActivateKeyboard = ({ onClick }: IActivateKeyboard) => {
   return (

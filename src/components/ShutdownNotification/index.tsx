@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useData, useTranslation } from "../../hooks";
 import "./style.css";
+
 const ShutdownNotification = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [countdown, setCountdown] = useState(60);

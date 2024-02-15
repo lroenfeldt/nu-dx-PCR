@@ -5,13 +5,10 @@ import { IoCloseCircle } from "react-icons/io5";
 import { ILotDokuProps } from "../../types/components";
 
 const LotDoku: React.FC<ILotDokuProps> = ({
-  inputs,
   setClear,
-  inputName,
   setInputName,
   keyboardVisible,
   setKeyboardVisible,
-  isChargenNrFocused,
   setIsChargenNrFocused,
 }) => {
   const textInput = useRef<HTMLInputElement>(null);
