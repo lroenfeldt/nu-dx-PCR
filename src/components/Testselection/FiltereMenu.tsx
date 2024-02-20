@@ -8,7 +8,7 @@ import ProfileSmall from "../Icons/ProfileSmall";
 const blockStyle: React.CSSProperties = {
   color: colors.primary.main,
   width: "232px",
-  padding: "13px 30px",
+  padding: "13.2px 30px",
   borderRadius: "16px",
   fontFamily: "Inter",
   fontStyle: "normal",
@@ -46,14 +46,8 @@ const FiltereMenu = ({ onClose }: { onClose: () => void }) => {
   const [defaultState, setDefaultState] = useState(null);
 
   const { t } = useTranslation();
-  const {
-    setFilterMenu,
-    setFilterMenuOptions,
-    runTime,
-    testName,
-    producer,
-    filterMenuOptions,
-  } = useData();
+  const { setFilterMenu, setFilterMenuOptions, runTime, testName, producer } =
+    useData();
 
   useEffect(() => {
     if (defaultState == null) {
@@ -62,7 +56,7 @@ const FiltereMenu = ({ onClose }: { onClose: () => void }) => {
   }, [defaultState]);
 
   return (
-    <Block paddingLeft={1004} paddingBottom={18}>
+    <Block position="absolute" top={46} right={66.8}>
       <Block
         flex
         row
@@ -73,7 +67,6 @@ const FiltereMenu = ({ onClose }: { onClose: () => void }) => {
         onClick={() => {
           setFilterMenuOptions(testName);
           setFilterMenu(false);
-          console.log(filterMenuOptions.props);
         }}
       >
         <Funnel />

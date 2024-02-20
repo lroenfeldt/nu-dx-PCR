@@ -44,8 +44,10 @@ import Barcode from "./Barcode";
 import Funnel from "./Funnel";
 import Arrow from "./Arrows";
 import Clock from "./Clock";
+import ProfileSmall from "./ProfileSmall";
 
 export {
+  ProfileSmall,
   OpenLid,
   PowerSmall,
   HomeIcon,

@@ -319,7 +319,7 @@ const ResultList = () => {
         </Block>
         <Errors />
         {openMenu ? (
-          <Modal isVisible={openMenu} setIsvisible={() => setOpenMenu(false)}>
+          <Modal isVisible={openMenu} setIsVisible={() => setOpenMenu(false)}>
             <ViewResultsModal onClose={() => setOpenMenu(false)} />
           </Modal>
         ) : null}

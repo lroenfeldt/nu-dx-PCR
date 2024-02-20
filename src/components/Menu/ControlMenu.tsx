@@ -6,11 +6,9 @@ const ControlMenu = () => {
   const { controlMenu, setControlMenu } = useData();
 
   return (
-    <>
-      <Dialog visible={controlMenu} setVisible={() => setControlMenu(false)}>
-        <ShutDown onClose={() => setControlMenu(false)} />
-      </Dialog>
-    </>
+    <Dialog visible={controlMenu} setVisible={() => setControlMenu(false)}>
+      <ShutDown onClose={() => setControlMenu(false)} />
+    </Dialog>
   );
 };
 

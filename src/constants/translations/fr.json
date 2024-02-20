@@ -30,6 +30,8 @@
     "testRestart": "Redémarrer le test",
     "testReset": "Réinitialiser le test",
     "testRun": "Lancer le test",
+    "testInfo": "Testinfo",
+    "directTest": "Accès direct au test",
     "defaultsettings": "Paramètres par défaut",
     "retry": "Réessayer",
     "offline": "Continuer hors ligne",

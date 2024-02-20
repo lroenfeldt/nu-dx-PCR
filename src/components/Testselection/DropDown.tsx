@@ -1,52 +1,73 @@
-import { colors } from "../../assets/theme";
-import { Arrow } from "../Icons";
+import React, { useEffect, useState } from "react";
+import "./drobdown.css";
+import { useTranslation } from "../../hooks";
+import { Arrow, Clock, Funnel, ProfileSmall } from "../Icons";
 
-const divStyle: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  position: "relative",
-  width: "232px",
-  border: `4px solid ${colors.primary.main}`,
-  borderRadius: "16px",
-  backgroundColor: "#fff",
+interface DropdownProps {
+  children: JSX.Element;
+  onChange?: (item: JSX.Element) => void;
+}
+
+type ChildProps = {
+  children: JSX.Element;
+  onClick?: () => void;
+  className?: string;
 };
 
-const selectStyle: React.CSSProperties = {
-  height: "100%",
-  width: "100%",
-  border: "none",
-  borderRadius: "16px",
-  outline: "none",
-  appearance: "none",
-  padding: "12px 24px",
-  color: colors.primary.main,
-  fontFamily: "Inter",
-  fontStyle: "normal",
-  fontWeight: 600,
-  fontSize: "24px",
-  cursor: "pointer",
-};
+const DropDown = ({ children, onChange }: DropdownProps) => {
+  const { locale, t } = useTranslation();
+  const [isActive, setIsActive] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<JSX.Element>(
+    <>
+      <Funnel />
+      {t("common.testName")}
+      <Arrow />
+    </>
+  );
 
-const iconStyle: React.CSSProperties = {
-  position: "absolute",
-  right: 15,
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-};
+  const languageMap: { [key: string]: string } = {
+    en: "English",
+    fr: "Français",
+    de: "Deutsch",
+  };
 
-const DropDown = () => {
+  useEffect(() => {
+    // setSelectedItem(languageMap[locale]);
+  }, [locale]);
+
+  const handleItemClick = (item: JSX.Element) => {
+    // setSelectedItem(item);
+    setIsActive(!isActive);
+
+    if (onChange) {
+      onChange(item);
+    }
+  };
+
+  const handleDropdownClick = () => {
+    setIsActive(!isActive);
+  };
+
+  const renderedChildren = React.Children.map(children, (child) => {
+    if (React.isValidElement<ChildProps>(child)) {
+      return React.cloneElement(child, {
+        onClick: () => handleItemClick(child.props.children as JSX.Element),
+        className: child.props.children === selectedItem ? "selected" : "",
+      });
+    }
+    return child;
+  });
+
   return (
-    <div style={divStyle}>
-      <select style={selectStyle}>
-        <option value="test-name">Test name</option>
-        <option value="runtime">Runtime</option>
-        <option value="producer">Producer</option>
-      </select>
-      {/* <div style={iconStyle}>
-        <Arrow />
-      </div> */}
+    <div
+      id="dropdown"
+      className={`dropdown ${isActive ? "active" : ""}`}
+      onClick={handleDropdownClick}
+    >
+      <div className="textBox">
+        <div className="children">{selectedItem}</div>
+      </div>
+      <div className="option">{renderedChildren}</div>
     </div>
   );
 };
