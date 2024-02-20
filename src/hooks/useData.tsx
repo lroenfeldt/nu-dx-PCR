@@ -141,6 +141,7 @@ export function DataProvider({ children }: DataProviderProps) {
     },
     [settings, setSettings]
   );
+
   const handleSettings = useCallback(
     (newSettings: ISettings) => {
       setSettings(newSettings);

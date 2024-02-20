@@ -138,8 +138,12 @@ function useErrors() {
           .filter((err) => err.type != errorType)
           .concat({ ...errorsHolder[errorType], timeStamp: Date.now() })
       );
-      window.api.logEvents(errorsHolder[errorType].message);
-      console.log(errorsHolder[errorType].message);
+      window.api.logEvents(
+        `Error ${errorsHolder[errorType].code}: ${errorsHolder[errorType].message}`
+      );
+      console.log(
+        `Error ${errorsHolder[errorType].code}: ${errorsHolder[errorType].message}`
+      );
     },
     [errors]
   );
