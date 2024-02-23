@@ -45,8 +45,10 @@ import Funnel from "./Funnel";
 import Arrow from "./Arrows";
 import Clock from "./Clock";
 import ProfileSmall from "./ProfileSmall";
+import ArrowOutlined from "./ArrowOutlined";
 
 export {
+  ArrowOutlined,
   ProfileSmall,
   OpenLid,
   PowerSmall,

@@ -21,9 +21,6 @@ export interface IUseData {
   info: boolean;
   setInfo: React.Dispatch<React.SetStateAction<boolean>>;
 
-  filterMenu: boolean;
-  setFilterMenu: React.Dispatch<React.SetStateAction<boolean>>;
-
   page: string;
   setPage: React.Dispatch<React.SetStateAction<string>>;
 
@@ -168,6 +165,7 @@ export interface IUseData {
 
   failedSubmittingResults: string[];
   setFailedSubmittingResults: React.Dispatch<React.SetStateAction<string[]>>;
+
   viewType: string;
   setViewType: React.Dispatch<React.SetStateAction<string>>;
 
@@ -180,10 +178,9 @@ export interface IUseData {
   resultSubmitted: boolean;
   setResultSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 
-  filterMenuOptions: JSX.Element;
-  setFilterMenuOptions: React.Dispatch<React.SetStateAction<JSX.Element>>;
+  dropDownValue: string;
+  setDropDownValue: React.Dispatch<React.SetStateAction<string>>;
 
-  runTime: JSX.Element;
-  testName: JSX.Element;
-  producer: JSX.Element;
+  selectedItem: JSX.Element;
+  setSelectedItem: React.Dispatch<React.SetStateAction<JSX.Element>>;
 }

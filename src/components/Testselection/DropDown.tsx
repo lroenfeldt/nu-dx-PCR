@@ -1,73 +1,40 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./drobdown.css";
-import { useTranslation } from "../../hooks";
-import { Arrow, Clock, Funnel, ProfileSmall } from "../Icons";
+import { useData, useDropdownValues } from "../../hooks";
+import { Block } from "..";
+import { colors } from "../../assets/theme";
 
-interface DropdownProps {
-  children: JSX.Element;
-  onChange?: (item: JSX.Element) => void;
-}
-
-type ChildProps = {
-  children: JSX.Element;
-  onClick?: () => void;
-  className?: string;
-};
-
-const DropDown = ({ children, onChange }: DropdownProps) => {
-  const { locale, t } = useTranslation();
+const DropDown = () => {
   const [isActive, setIsActive] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<JSX.Element>(
-    <>
-      <Funnel />
-      {t("common.testName")}
-      <Arrow />
-    </>
-  );
+  const { valuesArr, renderedChildren } = useDropdownValues();
 
-  const languageMap: { [key: string]: string } = {
-    en: "English",
-    fr: "Français",
-    de: "Deutsch",
-  };
+  const { dropDownValue, selectedItem, setSelectedItem } = useData();
+  const [filteredChildren, setFilteredChildren] =
+    useState<JSX.Element[]>(renderedChildren);
 
   useEffect(() => {
-    // setSelectedItem(languageMap[locale]);
-  }, [locale]);
-
-  const handleItemClick = (item: JSX.Element) => {
-    // setSelectedItem(item);
-    setIsActive(!isActive);
-
-    if (onChange) {
-      onChange(item);
+    if (dropDownValue === "testName") {
+      setSelectedItem(valuesArr[0].comp);
     }
-  };
+    if (dropDownValue === "runTime") {
+      setSelectedItem(valuesArr[1].comp);
+    }
+    if (dropDownValue === "producer") {
+      setSelectedItem(valuesArr[2].comp);
+    }
+  }, [dropDownValue]);
 
   const handleDropdownClick = () => {
     setIsActive(!isActive);
   };
 
-  const renderedChildren = React.Children.map(children, (child) => {
-    if (React.isValidElement<ChildProps>(child)) {
-      return React.cloneElement(child, {
-        onClick: () => handleItemClick(child.props.children as JSX.Element),
-        className: child.props.children === selectedItem ? "selected" : "",
-      });
-    }
-    return child;
-  });
-
   return (
     <div
-      id="dropdown"
       className={`dropdown ${isActive ? "active" : ""}`}
       onClick={handleDropdownClick}
     >
-      <div className="textBox">
-        <div className="children">{selectedItem}</div>
-      </div>
-      <div className="option">{renderedChildren}</div>
+      <div className="children">{selectedItem}</div>
+      <div className="option">{filteredChildren}</div>
     </div>
   );
 };

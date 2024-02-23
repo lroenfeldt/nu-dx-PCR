@@ -352,3 +352,9 @@ export interface IDecoded {
   exp: number;
   jwt_decode: (arg0: string) => void;
 }
+
+export interface IValuesArr {
+  id: number;
+  comp: JSX.Element;
+  value: string;
+}

@@ -16,9 +16,6 @@ import { IUseTranslation } from "../types/interfaces/useTranslation";
 import { IBarcode, IError } from "../types/interfaces/interfaces";
 import { ITestObject } from "../../electron/interfaces/interfaces";
 import { Menus } from "../types/components";
-import { Block } from "../components";
-import { Arrow, Clock, Funnel } from "../components/Icons";
-import ProfileSmall from "../components/Icons/ProfileSmall";
 
 export const DataContext = React.createContext({});
 /**
@@ -86,12 +83,11 @@ export function DataProvider({ children }: IDataProviderProps) {
   const [openMenu, setOpenMenu] = useState(false);
   const [controlMenu, setControlMenu] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [filterMenu, setFilterMenu] = useState(false);
-  const [filterMenuOptions, setFilterMenuOptions] = useState();
   const [info, setInfo] = useState(false);
-
   // Modal end
   const [page, setPage] = useState("cards");
+  const [dropDownValue, setDropDownValue] = useState("");
+  const [selectedItem, setSelectedItem] = useState<JSX.Element>();
 
   /**
    * Resets values to default
@@ -278,30 +274,6 @@ export function DataProvider({ children }: IDataProviderProps) {
     loadSettings();
   }, []);
 
-  const testName = (
-    <Block flex row spaceBetween alignCenter height={"100%"}>
-      <Funnel />
-      {t("common.testName")}
-      <Arrow />
-    </Block>
-  );
-
-  const runTime = (
-    <Block flex row spaceBetween alignCenter height={"100%"}>
-      <Clock />
-      {t("common.runTime")}
-      <Arrow />
-    </Block>
-  );
-
-  const producer = (
-    <Block flex row spaceBetween alignCenter height={"100%"}>
-      <ProfileSmall />
-      {t("common.producer")}
-      <Arrow />
-    </Block>
-  );
-
   const contextValue = useMemo(
     () => ({
       currentMenu,
@@ -414,15 +386,12 @@ export function DataProvider({ children }: IDataProviderProps) {
       setIsVisible,
       page,
       setPage,
-      filterMenu,
-      setFilterMenu,
       info,
       setInfo,
-      filterMenuOptions,
-      setFilterMenuOptions,
-      runTime,
-      testName,
-      producer,
+      dropDownValue,
+      setDropDownValue,
+      selectedItem,
+      setSelectedItem,
     }),
     [
       currentMenu,
@@ -470,12 +439,9 @@ export function DataProvider({ children }: IDataProviderProps) {
       resultSubmitted,
       isVisible,
       page,
-      filterMenu,
       info,
-      filterMenuOptions,
-      runTime,
-      testName,
-      producer,
+      dropDownValue,
+      selectedItem,
     ]
   );
   return (
