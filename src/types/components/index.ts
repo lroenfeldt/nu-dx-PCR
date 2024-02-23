@@ -372,3 +372,9 @@ export interface ModalProps {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+export interface IOptions {
+  leftIcon: JSX.Element;
+  value: string;
+  arrowIcon: JSX.Element;
+}

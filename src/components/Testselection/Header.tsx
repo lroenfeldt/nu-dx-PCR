@@ -2,8 +2,7 @@ import { Block, Button, Text } from "..";
 import { useNavigate } from "react-router-dom";
 import { Barcode } from "../Icons";
 import { useTranslation } from "../../hooks";
-import DropDown from "./DropDown";
-import "./drobdown.css";
+import DropDown from "./DropDown/DropDown";
 
 const Header = () => {
   const navigate = useNavigate();

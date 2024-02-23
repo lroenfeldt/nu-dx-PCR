@@ -178,9 +178,6 @@ export interface IUseData {
   resultSubmitted: boolean;
   setResultSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 
-  dropDownValue: string;
-  setDropDownValue: React.Dispatch<React.SetStateAction<string>>;
-
-  selectedItem: JSX.Element;
-  setSelectedItem: React.Dispatch<React.SetStateAction<JSX.Element>>;
+  isActive: boolean;
+  setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 }

@@ -86,8 +86,7 @@ export function DataProvider({ children }: IDataProviderProps) {
   const [info, setInfo] = useState(false);
   // Modal end
   const [page, setPage] = useState("cards");
-  const [dropDownValue, setDropDownValue] = useState("");
-  const [selectedItem, setSelectedItem] = useState<JSX.Element>();
+  const [isActive, setIsActive] = useState(false);
 
   /**
    * Resets values to default
@@ -388,10 +387,8 @@ export function DataProvider({ children }: IDataProviderProps) {
       setPage,
       info,
       setInfo,
-      dropDownValue,
-      setDropDownValue,
-      selectedItem,
-      setSelectedItem,
+      isActive,
+      setIsActive,
     }),
     [
       currentMenu,
@@ -440,8 +437,7 @@ export function DataProvider({ children }: IDataProviderProps) {
       isVisible,
       page,
       info,
-      dropDownValue,
-      selectedItem,
+      isActive,
     ]
   );
   return (
