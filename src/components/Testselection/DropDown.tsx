@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import "./drobdown.css";
 import { useData, useDropdownValues } from "../../hooks";
-import { Block } from "..";
-import { colors } from "../../assets/theme";
+3;
 
 const DropDown = () => {
   const [isActive, setIsActive] = useState(false);

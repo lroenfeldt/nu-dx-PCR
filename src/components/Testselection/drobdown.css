@@ -1,8 +1,10 @@
 .dropdown {
+  position: relative;
   width: 232px;
   height: 59.5px;
   border: 3.5px solid #0d77d9;
   border-radius: 16px;
+  cursor: pointer;
 }
 
 .dropdown .children {
@@ -13,7 +15,6 @@
   width: 100%;
   padding: 12px 24px;
   cursor: pointer;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
   color: #0d77d9;
   font-family: Inter;
   font-style: normal;
@@ -22,6 +23,7 @@
 }
 
 .dropdown .option {
+  position: absolute;
   top: 52.5px;
   left: -3.3px;
   width: 232px;
@@ -37,6 +39,10 @@
 }
 
 .dropdown .option div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   padding: 12px 24px;
   cursor: pointer;
   color: #0d77d9;
@@ -52,11 +58,6 @@
 .option div:nth-child(3) {
   border-top: 3.5px solid #0d77d9;
 }
-
-/* .dropdown .option div:hover {
-  background-color: #fff;
-  color: #0d77d9;
-} */
 
 .dropdown::before {
   display: none;
