@@ -4,8 +4,8 @@ import fs from "fs";
 import Store from "electron-store";
 import isDev from "electron-is-dev";
 import AutoLaunch from "auto-launch";
-import { spawn } from "./logs/spawn";
-import { logger } from "./logs/logger";
+import { spawn } from "./createLogs/spawn";
+import { logger } from "./createLogs/logger";
 import { IStore } from "./interfaces/interfaces";
 import {
   downloadUpdates,
@@ -41,9 +41,9 @@ import {
 } from "./core/testManagement";
 import { exit, relaunchApp } from "./core/lifecycleManagement";
 import { copyLogos } from "./core/utilities";
-import { deleteLogs } from "./logs/deleteLogs";
+import { deleteFiles } from "./createLogs/deleteFiles";
 import { logError } from "./core/logging";
-import { createFile } from "./logs/createFile";
+import { createFile } from "./createLogs/createFile";
 
 export let mainWindow: BrowserWindow | undefined;
 export let splash: BrowserWindow | undefined;
@@ -273,7 +273,7 @@ app.whenReady().then(() => {
   createSplash();
   createWindow();
   createFile();
-  deleteLogs();
+  deleteFiles();
 
   spawn("taskkill", ["/f", "/im", "PcrServer.exe"]);
 

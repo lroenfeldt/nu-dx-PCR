@@ -2,7 +2,7 @@ import { app, ipcMain } from "electron";
 import { getDeviceType, store } from "../main";
 import isDev from "electron-is-dev";
 import macaddress from "macaddress";
-import { logger } from "../logs/logger";
+import { logger } from "../createLogs/logger";
 
 export async function getConfig(): Promise<void> {
   //fetch config from config.json and hardware
