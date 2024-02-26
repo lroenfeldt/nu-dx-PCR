@@ -1,12 +1,13 @@
 import { Block, Button, Text } from "..";
 import { useNavigate } from "react-router-dom";
 import { Barcode } from "../Icons";
-import { useTranslation } from "../../hooks";
+import { useData, useTranslation } from "../../hooks";
 import DropDown from "./DropDown/DropDown";
 
 const Header = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { page } = useData();
 
   return (
     <Block
@@ -29,12 +30,14 @@ const Header = () => {
         </Button>
       </Block>
 
-      <Block flex row gap={10} alignCenter>
-        <Text h4 style={{ fontWeight: 600 }}>
-          {t("common.sortBy")}
-        </Text>
-        <DropDown />
-      </Block>
+      {page === "table" && (
+        <Block flex row gap={10} alignCenter>
+          <Text h4 style={{ fontWeight: 600 }}>
+            {t("common.sortBy")}
+          </Text>
+          <DropDown />
+        </Block>
+      )}
     </Block>
   );
 };

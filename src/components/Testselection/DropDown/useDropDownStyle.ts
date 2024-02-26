@@ -12,16 +12,24 @@ const useDropDownStyle = () => {
     cursor: "pointer",
     borderBottomLeftRadius: isActive ? "0px" : "16px",
     borderBottomRightRadius: isActive ? "0px" : "16px",
+    backgroundColor: "#fff",
   };
 
   const valuesStyle: React.CSSProperties = {
     padding: "12px 24px",
     cursor: "pointer",
-    color: "#0d77d9",
     fontFamily: "Inter",
     fontStyle: "normal",
     fontWeight: 600,
     fontSize: "24px",
+  };
+
+  const selectedItemColor: React.CSSProperties = {
+    color: "#0d77d9",
+  };
+
+  const iconColors: React.CSSProperties = {
+    color: "#0d77d9",
   };
 
   const option: React.CSSProperties = {
@@ -38,13 +46,21 @@ const useDropDownStyle = () => {
     zIndex: 1,
     border: "3.5px solid #0d77d9",
     cursor: "pointer",
+    backgroundColor: "#fff",
   };
 
   const child: React.CSSProperties = {
     borderTop: "3.5px solid #0d77d9",
   };
 
-  return { dropDown, option, valuesStyle, child };
+  return {
+    dropDown,
+    option,
+    valuesStyle,
+    child,
+    selectedItemColor,
+    iconColors,
+  };
 };
 
 export default useDropDownStyle;

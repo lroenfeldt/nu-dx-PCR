@@ -5,11 +5,10 @@ import { Block } from "../..";
 import useDropDownStyle from "./useDropDownStyle";
 
 const DropDown = () => {
-  const [selectedItem, setSelectedItem] = useState<JSX.Element>();
   const [dropDownValue, setDropDownValue] = useState("");
-  const { isActive, setIsActive } = useData();
+  const { isActive, setIsActive, selectedItem, setSelectedItem } = useData();
   const { valuesArr } = useDropdownValues();
-  const { dropDown, option, child } = useDropDownStyle();
+  const { dropDown, option, child, selectedItemColor } = useDropDownStyle();
 
   useEffect(() => {
     if (dropDownValue === "testName") {
@@ -33,7 +32,7 @@ const DropDown = () => {
       className={`dropdown ${isActive ? "active" : ""}`}
       onClick={handleDropdownClick}
     >
-      <Block>{selectedItem}</Block>
+      <Block style={selectedItemColor}>{selectedItem}</Block>
       <Block style={option}>
         {valuesArr
           .filter((value) => value.value !== dropDownValue)

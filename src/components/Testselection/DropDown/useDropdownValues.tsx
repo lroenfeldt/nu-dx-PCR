@@ -21,7 +21,9 @@ const Options = ({ leftIcon, value, arrowIcon }: IOptions) => {
         {leftIcon}
         {value}
       </Block>
-      <>{arrowIcon}</>
+      <Block flex row center alignCenter>
+        {arrowIcon}
+      </Block>
     </Block>
   );
 };

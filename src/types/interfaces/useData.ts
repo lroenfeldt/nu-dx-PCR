@@ -17,12 +17,17 @@ export interface IDataProviderProps {
   children: JSX.Element;
 }
 
+enum Page {
+  cards = "cards",
+  table = "table",
+}
+
 export interface IUseData {
   info: boolean;
   setInfo: React.Dispatch<React.SetStateAction<boolean>>;
 
-  page: string;
-  setPage: React.Dispatch<React.SetStateAction<string>>;
+  page: keyof typeof Page;
+  setPage: React.Dispatch<React.SetStateAction<keyof typeof Page>>;
 
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -180,4 +185,10 @@ export interface IUseData {
 
   isActive: boolean;
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
+
+  selectedItem: JSX.Element;
+  setSelectedItem: React.Dispatch<React.SetStateAction<JSX.Element>>;
+
+  isSelected: boolean;
+  setIsSelected: React.Dispatch<React.SetStateAction<boolean>>;
 }

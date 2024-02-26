@@ -87,6 +87,8 @@ export function DataProvider({ children }: IDataProviderProps) {
   // Modal end
   const [page, setPage] = useState("cards");
   const [isActive, setIsActive] = useState(false);
+  const [selectedItem, setSelectedItem] = useState();
+  const [isSelected, setIsSelected] = useState(false);
 
   /**
    * Resets values to default
@@ -389,6 +391,10 @@ export function DataProvider({ children }: IDataProviderProps) {
       setInfo,
       isActive,
       setIsActive,
+      selectedItem,
+      setSelectedItem,
+      isSelected,
+      setIsSelected,
     }),
     [
       currentMenu,
@@ -438,6 +444,8 @@ export function DataProvider({ children }: IDataProviderProps) {
       page,
       info,
       isActive,
+      selectedItem,
+      isSelected,
     ]
   );
   return (
