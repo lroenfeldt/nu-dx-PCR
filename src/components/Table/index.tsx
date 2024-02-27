@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { useData, useSticky } from "../../hooks";
-import "./css/table.css";
+// import "./css/table.css";
 import { ITableProps } from "../../types/interfaces/interfaces";
 
 const Table: React.FC<ITableProps> = ({ th, tr }) => {
@@ -70,7 +70,6 @@ const Table: React.FC<ITableProps> = ({ th, tr }) => {
         </thead>
         <tbody>
           {tr
-
             .filter((item) => typeof item !== undefined)
             .map((element, index) => {
               // Remove the last element in the row if showCurves is false

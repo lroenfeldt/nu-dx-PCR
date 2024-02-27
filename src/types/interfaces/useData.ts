@@ -22,6 +22,12 @@ enum Page {
   table = "table",
 }
 
+export enum Values {
+  testName = "testName",
+  runTime = "runTime",
+  producer = "producer",
+}
+
 export interface IUseData {
   info: boolean;
   setInfo: React.Dispatch<React.SetStateAction<boolean>>;
@@ -191,4 +197,10 @@ export interface IUseData {
 
   isSelected: boolean;
   setIsSelected: React.Dispatch<React.SetStateAction<boolean>>;
+
+  selected: boolean;
+  setSelected: React.Dispatch<React.SetStateAction<boolean>>;
+
+  dropDownValue: keyof typeof Values;
+  setDropDownValue: React.Dispatch<React.SetStateAction<keyof typeof Values>>;
 }

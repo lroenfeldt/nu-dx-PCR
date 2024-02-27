@@ -10,7 +10,7 @@ import { Block } from "..";
 import PaginationBullets from "./PaginationBullets";
 import TestInfoHolder from "./TestInfoHolder";
 import Header from "./Header";
-import TableView from "./TableView";
+import TableView from "./table/TableView";
 
 const Testselection = () => {
   const { colors } = useTheme();
@@ -168,7 +168,7 @@ const Testselection = () => {
           ) : (
             <TableView />
           )}
-          {testsCount > 3 && (
+          {testsCount > 3 && page === "cards" && (
             <PaginationBullets
               numberOfPages={numberOfPages || 0}
               currentPage={currentPage}

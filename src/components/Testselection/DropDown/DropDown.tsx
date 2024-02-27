@@ -3,10 +3,19 @@ import { useEffect, useState } from "react";
 import { useData, useDropdownValues } from "../../../hooks";
 import { Block } from "../..";
 import useDropDownStyle from "./useDropDownStyle";
+import { Values } from "../../../types/interfaces/useData";
 
 const DropDown = () => {
-  const [dropDownValue, setDropDownValue] = useState("");
-  const { isActive, setIsActive, selectedItem, setSelectedItem } = useData();
+  const {
+    isActive,
+    setIsActive,
+    selectedItem,
+    setSelectedItem,
+    setSelected,
+    dropDownValue,
+    setDropDownValue,
+    selected,
+  } = useData();
   const { valuesArr } = useDropdownValues();
   const { dropDown, option, child, selectedItemColor } = useDropDownStyle();
 
@@ -26,13 +35,25 @@ const DropDown = () => {
     setIsActive(!isActive);
   };
 
+  // useEffect(() => {
+  //   console.log(selected);
+  // }, [selected]);
+
   return (
     <Block
       style={dropDown}
       className={`dropdown ${isActive ? "active" : ""}`}
       onClick={handleDropdownClick}
     >
-      <Block style={selectedItemColor}>{selectedItem}</Block>
+      <Block
+        onClick={() => {
+          isActive ? setSelected(true) : null;
+          isActive ? console.log("first") : null;
+        }}
+        style={selectedItemColor}
+      >
+        {selectedItem}
+      </Block>
       <Block style={option}>
         {valuesArr
           .filter((value) => value.value !== dropDownValue)
@@ -41,7 +62,9 @@ const DropDown = () => {
               <Block
                 style={index >= 1 ? child : undefined}
                 onClick={() => {
-                  setDropDownValue(value.value);
+                  setSelected(false);
+                  setDropDownValue(value.value as Values);
+                  console.log("ahdjlk");
                 }}
                 key={value.id}
               >

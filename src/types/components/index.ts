@@ -377,4 +377,5 @@ export interface IOptions {
   leftIcon: JSX.Element;
   value: string;
   arrowIcon: JSX.Element;
+  style: React.CSSProperties;
 }

@@ -31,6 +31,7 @@
     "testReset": "Réinitialiser le test",
     "testRun": "Lancer le test",
     "testInfo": "Testinfo",
+    "select": "Choisir",
     "directTest": "Accès direct au test",
     "defaultsettings": "Paramètres par défaut",
     "retry": "Réessayer",
@@ -65,7 +66,7 @@
     "list": "Liste",
     "results": "Résultats",
     "sortBy": "Trier par:",
-    "runTime": "Durée de la course",
+    "runTime": "Durée course",
     "producer": "Producteur"
   },
   "authentication": {

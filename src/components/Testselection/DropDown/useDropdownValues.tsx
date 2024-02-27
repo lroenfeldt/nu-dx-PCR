@@ -1,11 +1,12 @@
 import { ArrowOutlined, Clock, Funnel, ProfileSmall } from "../../Icons";
-import { useTranslation } from "../../../hooks";
+import { useData, useTranslation } from "../../../hooks";
 import { IValuesArr } from "../../../types/interfaces/interfaces";
 import { Block } from "../..";
 import useDropDownStyle from "./useDropDownStyle";
 import { IOptions } from "../../../types/components";
+import { useEffect } from "react";
 
-const Options = ({ leftIcon, value, arrowIcon }: IOptions) => {
+const Options = ({ leftIcon, value, arrowIcon, style }: IOptions) => {
   const { valuesStyle } = useDropDownStyle();
   return (
     <Block
@@ -21,7 +22,7 @@ const Options = ({ leftIcon, value, arrowIcon }: IOptions) => {
         {leftIcon}
         {value}
       </Block>
-      <Block flex row center alignCenter>
+      <Block style={style} flex row center alignCenter>
         {arrowIcon}
       </Block>
     </Block>
@@ -31,12 +32,17 @@ const Options = ({ leftIcon, value, arrowIcon }: IOptions) => {
 const useDropdownValues = () => {
   const { t } = useTranslation();
   const values = ["testName", "runTime", "producer"];
+  const { selected, dropDownValue } = useData();
 
   const testName = (
     <Options
       leftIcon={<Funnel />}
       value={t("common.testName")}
       arrowIcon={<ArrowOutlined />}
+      style={{
+        transform:
+          selected && dropDownValue === "testName" ? "rotate(180deg)" : "",
+      }}
     />
   );
 
@@ -45,6 +51,10 @@ const useDropdownValues = () => {
       leftIcon={<Clock />}
       value={t("common.runTime")}
       arrowIcon={<ArrowOutlined />}
+      style={{
+        transform:
+          selected && dropDownValue === "runTime" ? "rotate(180deg)" : "",
+      }}
     />
   );
 
@@ -53,6 +63,10 @@ const useDropdownValues = () => {
       leftIcon={<ProfileSmall />}
       value={t("common.producer")}
       arrowIcon={<ArrowOutlined />}
+      style={{
+        transform:
+          selected && dropDownValue === "producer" ? "rotate(180deg)" : "",
+      }}
     />
   );
 

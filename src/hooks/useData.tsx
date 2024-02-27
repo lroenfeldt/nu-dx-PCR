@@ -86,9 +86,12 @@ export function DataProvider({ children }: IDataProviderProps) {
   const [info, setInfo] = useState(false);
   // Modal end
   const [page, setPage] = useState("cards");
+  // select options
   const [isActive, setIsActive] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [isSelected, setIsSelected] = useState(false);
+  const [dropDownValue, setDropDownValue] = useState("testName");
+  const [selected, setSelected] = useState(false);
 
   /**
    * Resets values to default
@@ -275,6 +278,10 @@ export function DataProvider({ children }: IDataProviderProps) {
     loadSettings();
   }, []);
 
+  useEffect(() => {
+    console.log(selectedMethod);
+  }, [selectedMethod]);
+
   const contextValue = useMemo(
     () => ({
       currentMenu,
@@ -395,6 +402,10 @@ export function DataProvider({ children }: IDataProviderProps) {
       setSelectedItem,
       isSelected,
       setIsSelected,
+      selected,
+      setSelected,
+      dropDownValue,
+      setDropDownValue,
     }),
     [
       currentMenu,
@@ -446,6 +457,9 @@ export function DataProvider({ children }: IDataProviderProps) {
       isActive,
       selectedItem,
       isSelected,
+      selected,
+      dropDownValue,
+      setDropDownValue,
     ]
   );
   return (
