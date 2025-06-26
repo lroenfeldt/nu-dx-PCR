@@ -52,10 +52,6 @@ export const parseResults = (resultFile, testid, testConfig, testmethod, overrid
   if (!testConfig) throw Error('Invalid settings: ' + testConfig);
   if (!testmethod) throw Error('Invalid testmethod: ' + testmethod);
 
-  //Check Threshholds and provide fallback
-  let hecThreshFl = testConfig.account.hecThreshFl || 0;
-  let virusThreshFl = testConfig.account.virusThreshFl || 0;
-
   //split by linebreak
   let parsedResults = resultFile.split(/\r?\n/);
 
@@ -319,6 +315,7 @@ export const parseResultsDB = (
   lotNumber = ''
 ) => {
   const parsedData = parseResults(resultFile, testid, testConfig, testmethod, override);
+  console.log('parsedData', parsedData);
 
   let results = ['Results'];
   let rawData = ['AmpData'];
@@ -349,7 +346,7 @@ export const parseResultsDB = (
         parameter: testmethod.parameters.find((param) => param.target === paramName)?.dbTransformation || paramName,
         ct: paramData.ct,
         testStarted,
-        orderKey: testConfig.account.orderKey,
+        orderKey: 'dd039c5f-7f46-4561-92ed-b7f75c764ffa',
         threshhold: testmethod.parameters.find((param) => param.target === paramName)?.threshhold || '',
         hecThreshFl: testConfig.account.hecThreshFl,
         virusThreshFl: testConfig.account.virusThreshFl,

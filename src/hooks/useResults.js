@@ -350,48 +350,10 @@ const useResults = () => {
     }
 
     //define urls
-    //presubmit of controls no longer viable
-    const submitControlUrl = testConfig.account.customSubmitAutoControlEndpoint
-      ? testConfig.account.customSubmitAutoControlEndpoint
-      : urls.submitControlUrl;
-    const fetchControlUrl = testConfig.account.customFetchAutoControlEndpoint
-      ? testConfig.account.customFetchAutoControlEndpoint
-      : urls.fetchControlUrl;
-    
+
     const resultUrl = settings.account.customSubmitResultsEndpoint //changed result url to always use current url set in account, not testconfig
       ? settings.account.customSubmitResultsEndpoint
       : urls.resultUrl;
-
-    //Submit ControlSamples
-    if (settings.account.preregisterControlSamples) { //added check whether option to preregister controls is set in ACCOUNT (not testconfig)
-      console.log('check for auto controls');
-      window.api.logEvents(`check for auto controls`, 'logInfos.txt');
-      try {
-        autoControls = await submitAutoControls(
-          barcodes,
-          testid,
-          orderKey,
-          hardwareId,
-          submitControlUrl,
-          fetchControlUrl
-        );
-      } catch (err) {
-        console.log(`submitAutoControls failed: ${JSON.stringify(err)}`);
-        window.api.logEvents(`submitResult: ${JSON.stringify(err)}`, 'logErrors.txt');
-        setErrors((prevErrors) =>
-          prevErrors
-            .filter((error) => error.type !== 'submit')
-            .concat({
-              type: 'submit',
-              message: t('errors.failedToSaveControlSample'),
-            })
-        );
-        setSubmitting(false);
-        setSubmittingSingle(testid, false);
-        return false;
-      }
-    }
-    
 
     //Parse Results
     console.log('parse results');
