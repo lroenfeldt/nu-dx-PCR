@@ -308,91 +308,59 @@ export const parseResultsDB = (
   resultFile,
   testmethod,
   testConfig,
-  autoControls = [],
   testStarted,
   userId = '',
   override,
-  lotNumber = ''
+  lotNumber = '',
+  token = null
 ) => {
   const parsedData = parseResults(resultFile, testid, testConfig, testmethod, override);
-  console.log('parsedData', parsedData);
 
-  let results = ['Results'];
-  let rawData = ['AmpData'];
+  const resultData = {
+    runData: {
+      run: testid,
+      testmethod: testmethod.id,
+      device: testConfig.device.hardwareId,
+      wellcount: testConfig.device.wellCount || 16,
+      customerId: testConfig.account.data.id,
+      userId,
+      testStarted,
+    },
+    samples: [],
+    token: token,
+  };
 
   for (let position in parsedData) {
-    let data = parsedData[position];
+    const sampleData = {
+      position,
+      controlType: parsedData[position].isControl || false,
+      barcode: parsedData[position].barcode,
+      label: parsedData[position].label || '',
+      pcrLOT: lotNumber || '',
+      pureLOT: '',
+      originalResult: parsedData[position].oldResult || '',
+      expectedResult: null, //need to be set later
+      result: parsedData[position].result || '',
+      parameters: [],
+    };
 
-    //replace autoControl if present
-    autoControls.forEach((autoControl) => {
-      if (autoControl.position === position) {
-        window.api.logEvents(
-          `replacing placeholder barcode"${data.barcode}" with "${autoControl.barcode}" on position "${position}"`,
-          'logInfos.txt'
-        );
-        data.barcode = autoControl.barcode;
-      }
-    });
+    let data = parsedData[position];
 
     for (let paramName in data.parameters) {
       let paramData = data.parameters[paramName];
 
-      //Add result entry for each parameter
-      results.push({
-        barcode: data.barcode,
-        device: testConfig.device.hardwareId,
-        run: testid,
-        position,
-        parameter: testmethod.parameters.find((param) => param.target === paramName)?.dbTransformation || paramName,
-        ct: paramData.ct,
-        testStarted,
-        orderKey: 'dd039c5f-7f46-4561-92ed-b7f75c764ffa',
+      sampleData.parameters.push({
+        parameter: paramName,
+        ct: paramData.ct || '',
+        curveData: paramData.curveData || [],
         threshhold: testmethod.parameters.find((param) => param.target === paramName)?.threshhold || '',
-        hecThreshFl: testConfig.account.hecThreshFl,
-        virusThreshFl: testConfig.account.virusThreshFl,
-        userId,
-        testmethod: testmethod.id,
-        result: '',
-        alteredResult: data.alteredResult,
-        wellCount: testConfig.device.wellCount,
-        isControl: data.isControl,
-      });
-
-      //Add curve entries for each parameter
-      paramData.curveData.forEach((value, index) => {
-        rawData.push({
-          barcode: data.barcode,
-          parameter: testmethod.parameters.find((param) => param.target === paramName)?.dbTransformation || paramName,
-          cycle: index + 1,
-          value: parseFloat(value).toFixed(3),
-        });
       });
     }
 
-    //Add Result parameter
-    results.push({
-      barcode: data.barcode,
-      device: testConfig.device.hardwareId,
-      run: testid,
-      position,
-      parameter: testmethod.resultParameter,
-      ct: '',
-      testStarted,
-      orderKey: testConfig.account.orderKey,
-      threshhold: '',
-      hecThreshFl: testConfig.account.hecThreshFl,
-      virusThreshFl: testConfig.account.virusThreshFl,
-      userId,
-      testmethod: testmethod.id,
-      result: data.result,
-      alteredResult: data.alteredResult,
-      wellCount: testConfig.device.wellCount,
-      specificationId: testmethod.specificationId,
-      isControl: data.isControl,
-      lotNumber,
-    });
+    resultData.samples.push(sampleData);
   }
 
-  const dbSubmit = results.concat(rawData);
-  return dbSubmit;
+  console.log('submitData:', resultData);
+
+  return resultData;
 };

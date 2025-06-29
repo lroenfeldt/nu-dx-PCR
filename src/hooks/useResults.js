@@ -38,83 +38,6 @@ const useResults = () => {
   const { t } = useTranslation();
   const userId = currentUser ? currentUser?.id : '';
 
-  /**
-   * submit Auto Controls  to db
-   * @param {Array} barcodes - barcodes of the auto controls
-   * @param {string} testid - testid of the test
-   * @param {string} orderKey - orderKey of the test
-   * @param {string} hardwareId - hardwareId of the device
-   * @param {string} submitControlUrl - url to submit the auto controls
-   * @param {string} fetchControlUrl - url to fetch the auto controls
-   * @returns {object} - The parsed results
-   */
-  const submitAutoControls = async (barcodes, testid, orderKey, hardwareId, submitControlUrl, fetchControlUrl) => {
-    console.log(`Arguemnts: ${testid} ${orderKey} ${submitControlUrl} ${fetchControlUrl}`);
-    window.api.logEvents(`Arguemnts: ${testid} ${orderKey} ${submitControlUrl} ${fetchControlUrl}`, 'logInfos.txt');
-    //validate input
-    if (!Array.isArray(barcodes)) {
-      throw Error('Invalid barcodes provdided: ' + barcodes);
-    }
-    if (!(testid && orderKey && submitControlUrl && fetchControlUrl)) {
-      throw Error('insufficient arguments');
-    }
-    //process barcodes
-    let autoControls = [];
-    let placeholders = ['Placeholder_NTC', 'Placeholder_TPC', 'NTC', 'TPC', 'SC2NTC', 'SC2TPC'];
-    barcodes.forEach((barcode) => {
-      if (placeholders.includes(barcode.value) || barcode.value.indexOf('-R') !== -1) {
-        let dbLabel = barcode.value;
-        const ntcPlaceholders = ['Placeholder_NTC', 'NTC', 'SC2NTC'];
-        const tpcPlaceholders = ['Placeholder_TPC', 'TPC', 'SC2TPC'];
-
-        if (ntcPlaceholders.includes(barcode.value)) {
-          dbLabel = 'NTC';
-        }
-        if (tpcPlaceholders.includes(barcode.value)) {
-          dbLabel = 'TPC';
-        }
-
-        autoControls.push({
-          type: dbLabel,
-          position: barcode.position,
-          run: testid,
-          order: orderKey,
-          device: hardwareId,
-        });
-      }
-    });
-    //check if autocontrols present
-    if (autoControls.length === 0) {
-      console.log('No Auto Control Placeholders found');
-      return autoControls;
-    }
-
-    //submit to db
-    try {
-      const response = await axios.post(submitControlUrl, autoControls);
-
-      window.api.logEvents(`submitAutoControls response: ${JSON.stringify(response)}`, 'logInfos.txt');
-      const createdSamples = response.data.imported_data[0].save_response;
-      window.api.logEvents(`submitAutoControls createdSamples: ${JSON.stringify(createdSamples)}`, 'logInfos.txt');
-      for (let i = 0; i < autoControls.length; i++) {
-        try {
-          const generatedBarcode = await axios.get(`${fetchControlUrl}${createdSamples[i].sample_id}`);
-          autoControls[i].barcode = generatedBarcode.data.sample;
-        } catch (err) {
-          console.log(err);
-          window.api.logEvents(`submitAutoControls error: ${JSON.stringify(err)}`, 'logErrors.txt');
-          throw err;
-        }
-      }
-    } catch (err) {
-      console.log(err);
-      window.api.logEvents(`submitAutoControls error: ${JSON.stringify(err)}`, 'logErrors.txt');
-      throw err;
-    }
-
-    return autoControls;
-  };
-
   const setSubmittingSingle = (testid, isSubmitting) => {
     setResults((prevUnsubmittedResults) =>
       prevUnsubmittedResults.map((result) => {
@@ -128,6 +51,7 @@ const useResults = () => {
       })
     );
   };
+
   const setWritingSuccess = (testid, isSuccess) => {
     setResults((prevUnsubmittedResults) =>
       prevUnsubmittedResults.map((result) => {
@@ -306,33 +230,31 @@ const useResults = () => {
    * @returns void
    */
   const submitResult = async (testid, done) => {
+    //log, set loading state & reset errors
     console.log('attempting submit');
     window.api.logEvents(`attempting submit`, 'logInfos.txt');
     setSubmitting(true);
     setSubmittingSingle(testid, true);
-    //reset errors
     setErrors((prevErrors) => prevErrors.filter((error) => error.type !== 'submit'));
-    //init data & fetch file
-    let testConfig, barcodes, resultFile, orderKey, hardwareId, testStarted, testmethod, override;
-    let autoControls = [];
 
+    //init data & fetch file
+    let testConfig, resultFile, testStarted, testmethod, override, token;
     try {
       console.log('fetching result files');
       window.api.logEvents(`fetching result files`, 'logInfos.txt');
-
       let fetchResult = await window.api.getResult(testid, done);
       const configFile = fetchResult.configFile;
       resultFile = fetchResult.resultFile;
       testConfig = JSON.parse(configFile);
       testStarted = fetchResult.testStarted;
-      barcodes = extractBarcodes(resultFile);
       override = fetchResult.override;
+      token = settings.account.authToken;
+      console.log('token: ', token);
+
       if (!testConfig.testmethod) {
         testConfig.testmethod = urls.TESTMETHOD;
       }
       testmethod = settings.account.testprocedures.find((method) => method.id === testConfig.testmethod);
-      orderKey = testConfig.account.orderKey;
-      hardwareId = testConfig.device.hardwareId;
     } catch (err) {
       console.log('failedToReadTestData: ' + err);
       window.api.logEvents(`submitResult: ${JSON.stringify(err)}`, 'logErrors.txt');
@@ -365,11 +287,11 @@ const useResults = () => {
         resultFile,
         testmethod,
         testConfig,
-        autoControls,
         testStarted,
         userId,
         override,
-        lotNumber
+        lotNumber,
+        token
       );
     } catch (err) {
       console.log(`parseResultsDB failed: ${err}`);
@@ -394,19 +316,8 @@ const useResults = () => {
       let submitResponse = await axios.post(resultUrl, parsedResults);
       console.log(submitResponse);
       window.api.logEvents(`submit to db: ${JSON.stringify(submitResponse)}`, 'logInfos.txt');
-      const msg = submitResponse.data.msg;
-      const missing = msg.search('Fehlende Proben');
-      if (missing !== -1) {
-        setErrors((prevErrors) =>
-          prevErrors
-            .filter((error) => error.type !== 'submit')
-            .concat({
-              type: 'submit',
-              message: t('errors.failedToSendSomeResults', {
-                missing: msg.substr(missing),
-              }),
-            })
-        );
+      if (submitResponse.status !== 200) {
+        throw new Error('Failed to submit results');
       }
     } catch (err) {
       console.log(`submitResponse: ${JSON.stringify(err)}`);
@@ -458,7 +369,6 @@ const useResults = () => {
     getResults,
     submitResult,
     saveAllToUSB,
-    submitAutoControls,
   };
 };
 
