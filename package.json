@@ -1,6 +1,6 @@
 {
   "name": "nu-dx-pcr",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "author": "nu:healthcare GmbH",
   "description": "Frontend app to operate BIOER PCR-Cycler and connect to nu:dx cloud platform",
   "repository": {
@@ -10,7 +10,7 @@
   "build": {
     "appId": "com.nudx.pcr",
     "productName": "nu:dx PCR",
-    "icon": "build/assets/icon",
+    "icon": "build/icon",
     "publish": [
       {
         "provider": "github",
